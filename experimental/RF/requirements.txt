@@ -83,5 +83,5 @@ typing==3.6.6
 typing-extensions==3.7.2
 urllib3==1.24.1
 wcwidth==0.1.7
-Werkzeug==0.15.1
+Werkzeug==0.15.3
 wrapt==1.11.1
