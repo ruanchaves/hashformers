@@ -69,7 +69,7 @@ scipy==1.2.1
 semantic-version==2.6.0
 six==1.12.0
 tensorboard==1.12.2
-tensorflow-gpu==1.12.0
+tensorflow-gpu==1.15.2
 tensorflow-probability==0.6.0
 termcolor==1.1.0
 Theano==1.0.4+unknown
