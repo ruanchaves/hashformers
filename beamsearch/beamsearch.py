@@ -20,6 +20,8 @@ from transformers import (
     BertForMaskedLM,
     BertTokenizer,
     HfArgumentParser,
+    GPT2LMHeadModel, 
+    GPT2Tokenizer
 )
 
 from metrics import (
@@ -85,6 +87,7 @@ class BeamsearchArguments:
 class DatasetReader(object):
 
     def __init__(self, dataset_file, dataset_format):
+        print(dataset_file)
         self.dataset_file = dataset_file
         self.format = dataset_format
         self.dataset = []
@@ -185,7 +188,32 @@ class GPT2LM(object):
 
     def __init__(self, model_name_or_path, device='cuda', gpu_batch_size=20):
         self.scorer = LMScorer.from_pretrained(model_name_or_path, device=device, batch_size=gpu_batch_size)
-    
+        self.tokenizer = GPT2Tokenizer.from_pretrained(model_name_or_path)
+        self.model = GPT2LMHeadModel.from_pretrained("gpt2", pad_token_id=tokenizer.eos_token_id)
+        self.model.to(device)
+
+    def greedy_generation(self, sentence, max_length=30, skip_special_tokens=True):
+        input_ids = self.tokenizer.encode(sentence)
+        greedy_output = self.model.generate(input_ids, max_length=max_length)
+        result = self.tokenizer.decode(greedy_output[0], skip_special_tokens=skip_special_tokens)
+        return result
+
+    def get_best_candidate(self, list_of_candidates, search='greedy', expansions=10, **kwargs):
+        scores = []
+        for item in list_of_candidates:
+            candidate_expansions = []
+            for i in range(expansions):
+                if search == 'greedy':
+                    expansion = self.greedy_generation(item, **kwargs)
+                else:
+                    raise NotImplementedError
+                candidate_expansions.append(expansion)
+            candidate_scores = self.get_probs(candidate_expansions)
+            candidate_average_scores = np.average(candidate_scores)
+            scores.append(candidate_average_scores)
+        chosen_candidate = list_of_candidates[np.argmin(scores)]
+        return chosen_candidate
+
     def get_probs(self, list_of_candidates):
         scores =  self.scorer.sentence_score(list_of_candidates, log=True)
         scores = [ 1.0 - x for x in scores ]
@@ -282,22 +310,42 @@ class Beamsearch(ModelLM):
         
         return self.convert_dataset()
 
-def evaluate_word_segmentation_model(segmented_data, original_data):
+def evaluate_word_segmentation_model(segmented_data, original_data, save_report=True, report_file='report.json'):
     pairs = list(zip(segmented_data, original_data))
     metrics = {
         "recall": 0.,
         "precision": 0.,
         "F1": 0.
     }
+    report = []
     for idx, item in enumerate(pairs):
-        metrics['recall'] += calculate_recall(*item)
-        metrics['precision'] += calculate_precision(*item)
-        metrics['F1'] += calculate_f1(*item)
+        recall = calculate_recall(*item)
+        precision = calculate_precision(*item)
+        F1 = calculate_f1(*item)
+        metrics['recall'] += recall
+        metrics['precision'] += precision
+        metrics['F1'] += F1
+        report_row = {
+            "gold": item[1],
+            "hypothesis": item[0],
+            "recall": recall,
+            "precision": precision,
+            "F1": F1
+        }
+        report.append(report_row)
     
     for k,v in metrics.items():
         metrics[k] = v / len(pairs)
     
+    if save_report:
+        with open(report_file,'w+') as f:
+            json.dump(report, f)
+
     return metrics
+
+def gather_n_candidates(prob_dict, segmented_data, n=2):
+    raise NotImplementedError
+    return [], 0
 
 def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments))
@@ -315,11 +363,27 @@ def main():
     segmented_data = beamsearch.run(beam_args.topk, beam_args.steps)
     end_time = timer()
     elapsed_time = end_time - start_time
-    result = evaluate_word_segmentation_model(segmented_data, reader.test)
+    result = evaluate_word_segmentation_model(segmented_data, reader.test, save_report=True, report_file='report.json')
+
     print(result)
     print('characters / second: ', reader.character_count / elapsed_time)
+
     with open('dict.json', 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
+    
+    if model_args.model_type == 'gpt2':
+        groups, groups_character_count = gather_n_candidates(beamsearch.prob_dict, segmented_data, n=2)
+
+        start_time = timer()
+        new_segmented_data = [ beamsearch.model.get_best_candidate(group) for group in groups ]
+        end_time = timer()
+        elapsed_time = end_time - start_time
+    
+    new_result = evaluate_word_segmentation_model(new_segmented_data, reader.test, save_report=True, report_file='report.json')
+    print(new_result)
+    print('characters / second: ', groups_character_count / elapsed_time)
+
+    
 
 if __name__ == '__main__':
     main()
