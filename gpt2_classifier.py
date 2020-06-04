@@ -3,7 +3,8 @@ import numpy as np
 import torch
 from transformers import (
     GPT2LMHeadModel, 
-    GPT2Tokenizer
+    GPT2Tokenizer,
+    GPT2Model
 )
 
 

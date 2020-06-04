@@ -1,5 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Optional
+import json 
+
+def parameters_to_string(*args):
+    parameters = [ { item.__class__.__name__ : vars(item) } \
+        for item in args ]
+    parameters = json.dumps(parameters, indent=4, sort_keys=True)
+    return parameters
 
 @dataclass
 class ModelArguments:
@@ -51,12 +58,28 @@ class DataEvaluationArguments:
         default="report.json"
     )
 
+    validation_expansions_file: str = field(
+        default="expansions_validation.json"
+    )
+
+    validation_dict_file: str = field(
+        default="dict_validation.json"
+    )
+
+    validation_report_file: str = field(
+        default="report_validation.json"
+    )
+
     index: Optional[int] = field(
         default=-1
     )
 
     n_chunks: Optional[int] = field(
         default=-1
+    )
+
+    logfile: str = field(
+        default='model.log'
     )
 
 @dataclass
@@ -96,20 +119,12 @@ class CNNArguments:
         default=1
     )
 
-    dropout: int = field(
+    dropout: float = field(
         default=0.5
     )
 
-    device: str = field(
+    cnn_device: str = field(
         default='cuda'
-    )
-
-    dropout: int = field(
-        default=0.5
-    )
-
-    output_dim: int = field(
-        default=1
     )
 
     token_embedding_size: int = field(
@@ -120,16 +135,20 @@ class CNNArguments:
         default=768
     )
 
-    learning_rate: float = field(
+    cnn_learning_rate: float = field(
         default=0.001
     )
 
     cnn_training_epochs: int = field(
-        default=2
+        default=1
     )
 
     cnn_save_path: str = field(
             default='cnn_model.pth'
+    )
+
+    cnn_missed_epoch_limit: int = field(
+        default=10
     )
 
 @dataclass
@@ -149,4 +168,33 @@ class EncoderArguments:
 
     generations_file: str = field(
         default='generations.csv'
+    )
+
+@dataclass
+class MLPArguments:
+
+    mlp_device: str = field(
+        default='cuda'
+    )
+
+    mlp_training_epochs: int = field(
+        default=1
+    )
+
+    mlp_save_path: str = field(
+        default='mlp_model.pth'
+    )
+
+    mlp_learning_rate: float = field(
+        default=0.001
+    )
+
+    mlp_missed_epoch_limit: int = field(
+        default=10
+    )
+
+@dataclass
+class ModelEvaluationArguments:
+    model_evaluation_save_path: str = field(
+        default='output/evaluation.csv'
     )

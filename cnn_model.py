@@ -10,6 +10,7 @@ from collections import defaultdict
 import pandas as pd
 
 from configuration_classes import (
+    parameters_to_string,
     ModelArguments,
     DataEvaluationArguments,
     CNNArguments
@@ -22,6 +23,15 @@ from transformers import (
 )
 
 from gpt2_encoder import GPT2Encoder
+
+import logging 
+
+def epoch_time(start_time, end_time):
+    elapsed_time = end_time - start_time
+    elapsed_mins = int(elapsed_time / 60)
+    elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
+    return elapsed_mins, elapsed_secs
+
 
 def parse_to_integer_list(comma_separated_values):
     return [int(x) for x in comma_separated_values.split(',') ]
@@ -88,40 +98,62 @@ class CNNModel(object):
             cnn_args.output_dim,
             cnn_args.dropout,
             model_args.model_name_or_path,
-            cnn_args.device)
+            cnn_args.cnn_device)
 
-        self.model = self.model.to(cnn_args.device)
+        self.model = self.model.to(cnn_args.cnn_device)
 
-        self.gpt2 = GPT2Encoder(model_args.model_name_or_path, data_args.expansions_file, data_args.report_file, data_args.dict_file)
-        self.input_ids, self.labels = self.gpt2.get_input_ids_and_labels()
+        self.logger = None
 
     def train(self):
-
+        self.logger.info('CNN training.')
+        
         model_args = self.model_args
         data_args = self.data_args
         cnn_args = self.cnn_args
-
         model = self.model
-        input_ids = self.input_ids
-        labels = self.labels
 
-        print(f'The model has {count_parameters(model):,} trainable parameters')
+        gpt2_encoder = GPT2Encoder(
+            model_args.model_name_or_path, 
+            data_args.expansions_file, 
+            data_args.report_file, 
+            data_args.dict_file)
+
+        gpt2_encoder.compile_generations_df()
+        input_ids, labels = gpt2_encoder.get_input_ids_and_labels()        
+    
+        validation_gpt2_encoder = GPT2Encoder(
+            model_args.model_name_or_path, 
+            data_args.validation_expansions_file, 
+            data_args.validation_report_file, 
+            data_args.validation_dict_file)
+
+        validation_gpt2_encoder.compile_generations_df()
+        validation_input_ids, validation_labels = validation_gpt2_encoder.get_input_ids_and_labels()   
+
+        self.logger.info(f'The model has {count_parameters(model):,} trainable parameters')
 
         num_epochs = cnn_args.cnn_training_epochs
         loss_function = nn.CrossEntropyLoss()
-        loss_function.to(cnn_args.device)
-        optimizer = optim.Adam(model.parameters(), lr=model_args.learning_rate)
+        loss_function.to(cnn_args.cnn_device)
+        optimizer = optim.Adam(model.parameters(), lr=cnn_args.cnn_learning_rate)
 
-        model.train()
+        best_validation_loss = float('inf')
+        missed_epoch = 0
         for epoch in range(num_epochs):
-            print("Epoch" + str(epoch + 1))
+
+            start_time = time.time()
             train_loss = 0
+            validation_loss = 0
+
+            # Training
+
+            model.train()
             for idx, sequence in enumerate(input_ids):
 
                 model.zero_grad()
 
                 probs = model(sequence)
-                target = torch.tensor([labels[idx]], dtype=torch.long, device=cnn_args.device)
+                target = torch.tensor([labels[idx]], dtype=torch.long, device=cnn_args.cnn_device)
 
                 loss = loss_function(probs, target)
                 train_loss += loss.item()
@@ -130,50 +162,76 @@ class CNNModel(object):
 
                 optimizer.step()
 
-        torch.save(model.state_dict(), cnn_args.cnn_save_path)
 
-    def from_pretrained(self, model_path=None):
-        if not model_path:
-            model_path = self.cnn_args.cnn_save_path
-        self.model.load_state_dict(model_path)
-        self.model.eval()
+            # Validation
+
+            model.eval()
+            with torch.no_grad():
+                for idx, sequence in enumerate(validation_input_ids):
+
+                    probs = model(sequence)
+                    target = torch.tensor([validation_labels[idx]], dtype=torch.long, device=cnn_args.cnn_device)
+
+                    loss = loss_function(probs, target)
+                    validation_loss += loss.item()
+
+            # Saving
+
+            end_time = time.time()
+
+            epoch_mins, epoch_secs = epoch_time(start_time, end_time)
+            logging_message = "\nEpoch {0} : {1}m{2}s \n Train loss: {3} \n Validation loss: {4}"\
+                .format(epoch, epoch_mins, epoch_secs, train_loss, validation_loss)
+            self.logger.info(logging_message)
+
+
+            if validation_loss < best_validation_loss:
+                best_validation_loss = validation_loss
+                torch.save(model.state_dict(), cnn_args.cnn_save_path)
+            else:
+                missed_epoch += 1
+                if missed_epoch == cnn_args.cnn_missed_epoch_limit:
+                    break
 
     def predict(self, input_ids):
         with torch.no_grad():
             for sequence in input_ids:
                 probs = self.model(sequence)
-                print(probs)
+                yield probs
 
-def predict():
-    parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, CNNArguments))
-    model_args, data_args, cnn_args = parser.parse_args_into_dataclasses()
-
-    gpt2 = GPT2Encoder(model_args.model_name_or_path, data_args.expansions_file, data_args.report_file, data_args.dict_file)
-    input_ids, _ = gpt2.get_input_ids_and_labels()
-    
-    model = CNN(cnn_args.token_embedding_size, 
-        cnn_args.n_filters, 
-        parse_to_integer_list(cnn_args.filter_sizes), 
-        cnn_args.output_dim,
-        cnn_args.dropout,
-        model_args.model_name_or_path,
-        cnn_args.device)    
-
-    model.load_state_dict(cnn_args.cnn_save_path)
-    model.eval()
-    with torch.no_grad():
-        for idx, sequence in enumerate(input_ids):
-            probs = model(sequence)
-            print(probs)
+    def from_pretrained(self, model_path=None):
+        if not model_path:
+            model_path = self.cnn_args.cnn_save_path
+        self.model.load_state_dict(torch.load(model_path))
+        self.model.eval()
 
 def main():
+
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, CNNArguments))
     model_args, data_args, cnn_args = parser.parse_args_into_dataclasses()
+   
+    # create logger with __file__
+    logger = logging.getLogger(__file__)
+    logger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    fh = logging.FileHandler(data_args.logfile)
+    fh.setLevel(logging.DEBUG)
+    # create console handler with a higher log level
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+    # add the handlers to the logger
+    logger.addHandler(fh)
+    logger.addHandler(ch)   
+
+    logger.info('\n' + parameters_to_string(model_args, data_args, cnn_args))
+
     cnn_model = CNNModel(model_args, data_args, cnn_args)
-    if cnn_args.do_training:
-        cnn_model.train()
-    if cnn_args.do_evaluation:
-        cnn_model.predict()
+    cnn_model.logger = logger
+    cnn_model.train()
 
 if __name__ == '__main__':
     main()

@@ -5,7 +5,6 @@ import copy
 class DatasetReader(object):
 
     def __init__(self, dataset_file, dataset_format):
-        print(dataset_file)
         self.dataset_file = dataset_file
         self.format = dataset_format
         self.dataset = []

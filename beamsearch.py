@@ -16,8 +16,8 @@ from concurrent.futures import ThreadPoolExecutor
 from gpt2_lm import GPT2LM
 from bert_lm import BertLM
 from reader import DatasetReader
-
 from configuration_classes import (
+    parameters_to_string,
     ModelArguments,
     DataEvaluationArguments,
     BeamsearchArguments,
@@ -34,7 +34,7 @@ from metrics import (
     calculate_f1
 )
 
-logger = logging.getLogger(__name__)
+import logging
 
 class ModelLM(object):
 
@@ -173,8 +173,28 @@ def gather_n_candidates(prob_dict, segmented_data, n=2):
     return guesses, character_count
 
 def main():
+
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments))
     model_args, data_args, beam_args, ranking_args = parser.parse_args_into_dataclasses()
+
+    # create logger with __file__
+    logger = logging.getLogger(__file__)
+    logger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    fh = logging.FileHandler(data_args.logfile)
+    fh.setLevel(logging.DEBUG)
+    # create console handler
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+    # add the handlers to the logger
+    logger.addHandler(fh)
+    logger.addHandler(ch)
+
+    logger.info('\n' + parameters_to_string(model_args, data_args, beam_args, ranking_args))
     reader = DatasetReader(data_args.eval_data_file, data_args.eval_dataset_format)
     reader.read()
     if data_args.n_chunks != -1 and data_args.index != -1:
@@ -191,15 +211,16 @@ def main():
     end_time = timer()
 
     elapsed_time = end_time - start_time
-    print('elapsed time: ', elapsed_time)
     segmented_data = beamsearch.convert_dataset()
     result = evaluate_word_segmentation_model(
                     segmented_data, 
                     reader.test, 
                     save_report=True, 
                     report_file=data_args.report_file)
-    print(result)
-    print('characters / second: ', reader.character_count / elapsed_time)
+    
+    logger.info(str(result))
+    logger.info('elapsed time: {0}'.format(elapsed_time))    
+    logger.info('characters / second: {0}'.format(reader.character_count / elapsed_time))
 
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
@@ -208,15 +229,17 @@ def main():
         groups, groups_character_count = \
             gather_n_candidates(beamsearch.prob_dict, segmented_data, n=ranking_args.topn)
         start_time = timer()
+
         beamsearch.model.gpu_expansion_batch_size = ranking_args.gpu_expansion_batch_size
         for group in groups:
             beamsearch.model.generate_expansions(group)
         new_segmented_data = beamsearch.model.expansions
         end_time = timer()
+
         elapsed_time = end_time - start_time
 
-        print('elapsed time: ', elapsed_time)    
-        print('characters / second: ', groups_character_count / elapsed_time)
+        logger.info('elapsed time: {0}'.format(elapsed_time))    
+        logger.info('characters / second: {0}'.format(groups_character_count / elapsed_time))
 
         with open(data_args.expansions_file, 'w+') as f:
             json.dump(new_segmented_data, f)

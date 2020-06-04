@@ -138,19 +138,23 @@ class GPT2Encoder(object):
     def _get_generations_and_labels(self):
         generations_list = self.generations_df.generations.values.tolist()
         labels_list = self.generations_df.labels.values.tolist()
-        generations_list = [' '.join(x) for x in generations_list]
         return generations_list, labels_list
 
-    def get_input_ids_and_labels(self, trim=True, max_length=None):
+    def get_input_ids_and_labels(self, trim=True, max_length=None, max_model_length=1024):
         generations_list, labels_list = self._get_generations_and_labels()
         input_ids = [ self.tokenizer.encode(x) for x in generations_list ]
         input_ids = [ torch.tensor(x) for x in input_ids ]
         if not max_length:
             max_length = min([x.shape[0] for x in input_ids])
+        if max_length > max_model_length:
+            max_length = max_model_length
         if trim:
             input_ids = [ x[0:max_length] for x in input_ids ]
         labels = torch.tensor(labels_list)
         return input_ids, labels
+
+    def update_cnn_values(self, cnn_values):
+        self.generations_df['cnn_score'] = pd.Series(cnn_values)
 
 if __name__ == '__main__':
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, CNNArguments, EncoderArguments))
