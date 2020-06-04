@@ -1,11 +1,6 @@
 #!/bin/bash
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-VALIDATION_SET='/home/datasets/hashtag_segmentation/gpt2/validation'
-TRAINING_SET_1='/home/datasets/hashtag_segmentation/gpt2/artificial_1'
-TRAINING_SET_2='/home/datasets/hashtag_segmentation/gpt2/artificial_2'
-EVALUATION_SET='/home/datasets/hashtag_segmentation/gpt2/natural'
-
 ### Validation set
 
 python beamsearch.py \
@@ -55,7 +50,7 @@ python cnn_model.py \
     --cnn_learning_rate=0.001 \
     --cnn_training_epochs=100 \
     --cnn_missed_epoch_limit=10 \
-    --cnn_save_path='/home/models/gpt2_cnn/cnn_model.pth'
+    --cnn_save_path=${CNN_SAVE_PATH}
 
 # ### MLP model training
 
@@ -85,7 +80,8 @@ python mlp_model.py \
     --mlp_training_epochs=100 \
     --mlp_missed_epoch_limit=10 \
     --mlp_learning_rate=0.001 \
-    --mlp_save_path='/home/models/gpt2_mlp/mlp_model.pth'
+    --cnn_save_path=${CNN_SAVE_PATH} \
+    --mlp_save_path=${MLP_SAVE_PATH}
 
 # ### GPT2 -> CNN -> MLP evaluation
 
@@ -108,5 +104,5 @@ python model_evaluation.py \
     --expansions_file='output/expansions_natural.json' \
     --dict_file='output/dict_natural.json' \
     --report_file='output/report_natural.json' \
-    --cnn_save_path='/home/models/gpt2_cnn/cnn_model.pth' \
-    --mlp_save_path='/home/models/gpt2_mlp/mlp_model.pth'
+    --cnn_save_path=${CNN_SAVE_PATH} \
+    --mlp_save_path=${MLP_SAVE_PATH}
