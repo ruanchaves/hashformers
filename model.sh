@@ -51,7 +51,7 @@ python cnn_model.py \
     --cnn_training_epochs=100 \
     --cnn_missed_epoch_limit=10 \
     --cnn_save_path=${CNN_SAVE_PATH} \
-    --cnn_batch_size=8
+    --cnn_batch_size=${CNN_BATCH_SIZE}
 
 # MLP model training
 
@@ -83,7 +83,7 @@ python mlp_model.py \
     --mlp_learning_rate=0.001 \
     --cnn_save_path=${CNN_SAVE_PATH} \
     --mlp_save_path=${MLP_SAVE_PATH} \
-    --mlp_batch_size=8
+    --mlp_batch_size=${MLP_BATCH_SIZE}
 
 # GPT2 -> CNN -> MLP evaluation
 
