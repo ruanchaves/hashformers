@@ -80,38 +80,42 @@ class WordSegmentationHypothesis(object):
         else:
             return False      
 
-def record_to_ranking(record):
-    if record['left_gpt2_score'] < record['right_gpt2_score']:
+def record_to_ranking(record,
+    left_hypothesis_field='hypothesis_1',
+    right_hypothesis_field='hypothesis_2',
+    left_gpt2_score_field='gpt2_score_1',
+    right_gpt2_score_field='gpt2_score_2'):
+    if record[left_gpt2_score_field] < record[right_gpt2_score_field]:
         gpt2_ranking = {
-            'good': record['left_hypothesis'], 
-            'bad' : record['right_hypothesis'] 
+            'good': record[left_hypothesis_field], 
+            'bad' : record[right_hypothesis_field] 
         }
     else:
         gpt2_ranking = {
-            'bad': record['left_hypothesis'], 
-            'good' : record['right_hypothesis']             
+            'bad': record[left_hypothesis_field], 
+            'good' : record[right_hypothesis_field]             
         }
         
     if record['predicted_distance_score'] <= 0.0:
         mlp_ranking = {
-            'good': record['left_hypothesis'], 
-            'bad' : record['right_hypothesis'] 
+            'good': record[left_hypothesis_field], 
+            'bad' : record[right_hypothesis_field] 
         }        
     else:
         mlp_ranking = {
-            'bad': record['left_hypothesis'], 
-            'good' : record['right_hypothesis']             
+            'bad': record[left_hypothesis_field], 
+            'good' : record[right_hypothesis_field]             
         }
         
     if record['distance_score'] <= 0.0:
         gold_ranking = {
-            'good': record['left_hypothesis'], 
-            'bad' : record['right_hypothesis'] 
+            'good': record[left_hypothesis_field], 
+            'bad' : record[right_hypothesis_field] 
         }
     else:
         gold_ranking = {
-            'bad': record['left_hypothesis'], 
-            'good' : record['right_hypothesis']             
+            'bad': record[left_hypothesis_field], 
+            'good' : record[right_hypothesis_field]             
         }
         
     ranking = {
@@ -159,8 +163,8 @@ def calculate_kendall(gold_dict_ids, model_dict_ids):
     }
     return result
 
-def calculate_metrics(df):
-    df['characters'] = df['left_hypothesis'].str.replace(" ","")
+def calculate_metrics(df, logger=None):
+    df['characters'] = df['hypothesis_1'].str.replace(" ","")
     df_items = df.to_dict('records')
     characters_dict = defaultdict(list)
                     
@@ -169,6 +173,8 @@ def calculate_metrics(df):
 
     for key, value in characters_dict.items():
         characters_dict[key] = [ record_to_ranking(x) for x in value ]
+
+    logger.debug('characters_dict length: {0}'.format(len(characters_dict)))
         
     mlp_dict = defaultdict(list)
     gpt2_dict = defaultdict(list)
@@ -183,15 +189,22 @@ def calculate_metrics(df):
     for key, value in characters_dict.items():
         gpt2_dict[key] = sort_pairwise(value, model_key="gpt2_ranking")
 
+    logger.debug("\n gold_dict length: {0} \n mlp_dict length: {1} \n gpt2_dict length:{2}"\
+        .format(len(gold_dict), len(mlp_dict), len(gpt2_dict)))
+
     unit_size = len(list(gold_dict.values())[0])
 
-    hypothesis_to_id = { hypothesis: idx  for idx, hypothesis in enumerate(list(itertools.chain(*gold_dict.values()))) }
+    hypothesis_to_id = { hypothesis: idx  \
+        for idx, hypothesis in enumerate(list(itertools.chain(*gold_dict.values()))) }
 
-    gold_dict_ids = [ hypothesis_to_id[hypothesis] for idx, hypothesis in enumerate(list(itertools.chain(*gold_dict.values()))) ]
+    gold_dict_ids = [ hypothesis_to_id[hypothesis] \
+        for idx, hypothesis in enumerate(list(itertools.chain(*gold_dict.values()))) ]
 
-    gpt2_dict_ids = [ hypothesis_to_id[hypothesis] for idx, hypothesis in enumerate(list(itertools.chain(*gpt2_dict.values()))) ]
+    gpt2_dict_ids = [ hypothesis_to_id[hypothesis] \
+        for idx, hypothesis in enumerate(list(itertools.chain(*gpt2_dict.values()))) ]
 
-    mlp_dict_ids = [ hypothesis_to_id[hypothesis] for idx, hypothesis in enumerate(list(itertools.chain(*mlp_dict.values()))) ]
+    mlp_dict_ids = [ hypothesis_to_id[hypothesis] \
+        for idx, hypothesis in enumerate(list(itertools.chain(*mlp_dict.values()))) ]
 
     gold_dict_ids = [gold_dict_ids[x:x+unit_size] for x in range(0, len(gold_dict_ids), unit_size)]
     gpt2_dict_ids = [gpt2_dict_ids[x:x+unit_size] for x in range(0, len(gpt2_dict_ids), unit_size)]
@@ -222,7 +235,10 @@ def calculate_metrics(df):
 
     evaluation_df = better_gpt2_dict_df.merge(better_mlp_dict_df, how='outer', on='characters')
     evaluation_df = evaluation_df.merge(better_gold_dict_df, how='outer', on='characters')
-    assert(evaluation_df.shape[0] == evaluation_df.dropna().shape[0])
+
+    evaluation_df['gpt2_hypothesis'] = evaluation_df['gpt2_hypothesis'].astype(str)
+    evaluation_df['gold_hypothesis'] = evaluation_df['gold_hypothesis'].astype(str)
+    evaluation_df['mlp_hypothesis'] = evaluation_df['mlp_hypothesis'].astype(str)
 
     evaluation_df['gpt2_recall'] = evaluation_df['gpt2_hypothesis'].combine(evaluation_df['gold_hypothesis'], calculate_recall)
     evaluation_df['gpt2_f1'] = evaluation_df['gpt2_hypothesis'].combine(evaluation_df['gold_hypothesis'], calculate_f1)
@@ -250,23 +266,9 @@ def main():
         ModelEvaluationArguments))
     model_args, data_args, cnn_args, encoder_args, mlp_args, model_evaluation_args = parser.parse_args_into_dataclasses()
 
-
-    # create logger with __file__
+    logging.config.fileConfig('logging.conf', \
+        defaults={'logfilename': data_args.logfile})
     logger = logging.getLogger(__file__)
-    logger.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(data_args.logfile)
-    fh.setLevel(logging.DEBUG)
-    # create console handler
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-    # add the handlers to the logger
-    logger.addHandler(fh)
-    logger.addHandler(ch)
 
     logger.info('\n' + parameters_to_string(model_args, data_args, cnn_args, encoder_args, mlp_args, model_evaluation_args))
  
@@ -285,34 +287,30 @@ def main():
     gpt2_encoder.compile_generations_df()
     input_ids, _ = gpt2_encoder.get_input_ids_and_labels()
 
+    batch_size = 1
+    input_ids = [torch.stack(input_ids[i:i+batch_size]) for i in range(0, len(input_ids), batch_size)]
+
     cnn_probs = [ x.item() for x in \
         cnn_model.predict(input_ids) ]
 
     gpt2_encoder.update_cnn_values(cnn_probs)
-    
-    gpt2_encoder.compile_pairs_df()
 
-    features_df = gpt2_encoder.pairs_df[[
-        'left_gpt2_score',
-        'left_cnn_score',
-        'right_gpt2_score',
-        'right_cnn_score',
-        'distance_score'
-    ]]
+    pairs_array = gpt2_encoder.compile_pairs_df(keep_df=True)
+    features = [ x[0:-1] for x in pairs_array ]
 
-    features_df_values = features_df.values.tolist()
-    features = [ x[0:4] for x in features_df_values ]
     features = torch.tensor(features, 
         dtype=torch.float, 
         device=mlp_args.mlp_device)
     
     results = []
+    features = torch.split(features, 1)
+    features = torch.stack(features)
     for result_tensor in mlp_model.predict(features):
         pair_prediction = result_tensor.item()
         results.append(pair_prediction)
 
     gpt2_encoder.pairs_df['predicted_distance_score'] = pd.Series(results)
-    results = calculate_metrics(gpt2_encoder.pairs_df)
+    results = calculate_metrics(gpt2_encoder.pairs_df, logger=logger)
     logger.info('\n{0}\n{1}'.format(
         results['kendall'].to_string(index=False), 
         results['other'].to_string()))

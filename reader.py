@@ -9,20 +9,14 @@ class DatasetReader(object):
         self.format = dataset_format
         self.dataset = []
         self.test = []
-        self.character_count = 0
-        self.original_dataset = []
-
-    def trim(self, index, n_chunks):
-        step = len(self.dataset) // n_chunks
-        self.original_dataset = copy.deepcopy(self.dataset)
-        chunks = [ self.dataset[i:i+step] for i in range(0, len(self.dataset), step)]
-        self.dataset = chunks[index]
         
     def read(self):
         def error_handling():
             self.default()
         getattr(self,self.format,error_handling)()
-        self.character_count = sum([len(x) for x in self.dataset])
+
+    def get_character_count(self):
+        return sum([len(x) for x in self.dataset])
 
     def default(self):
         self.BOUN()
@@ -30,10 +24,21 @@ class DatasetReader(object):
     def BOUN(self):
         with open(self.dataset_file,'r') as f:
             data = f.read().split('\n')
-        data = [ x.strip() for x in data ]
-        self.test = data[::]
-        data = [ x.replace(" ","") for x in data ]
-        self.dataset = data[::]
+
+        self.test = [ x.strip() for x in data ]
+        self.dataset = [ x.replace(" ","") for x in data ]
+
+    def trim(self, n_chunks=-1, index=-1):
+        def trim_dataset(dataset, n_chunks, index):
+            step = len(dataset) // n_chunks
+            chunks = [ dataset[i:i+step] for i in range(0, len(dataset), step)]
+            dataset = chunks[index]
+            return dataset
+
+        if n_chunks != -1 and index != -1:
+            pass
+            self.dataset = trim_dataset(self.dataset, n_chunks, index)
+            self.test = trim_dataset(self.test, n_chunks, index)
 
     def glushkova(self):
         data = pd.read_csv(self.dataset_file)

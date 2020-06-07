@@ -35,6 +35,7 @@ from metrics import (
 )
 
 import logging
+import logging.config
 
 class ModelLM(object):
 
@@ -177,28 +178,14 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments))
     model_args, data_args, beam_args, ranking_args = parser.parse_args_into_dataclasses()
 
-    # create logger with __file__
+    logging.config.fileConfig('logging.conf', \
+        defaults={'logfilename': data_args.logfile})
     logger = logging.getLogger(__file__)
-    logger.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(data_args.logfile)
-    fh.setLevel(logging.DEBUG)
-    # create console handler
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-    # add the handlers to the logger
-    logger.addHandler(fh)
-    logger.addHandler(ch)
 
     logger.info('\n' + parameters_to_string(model_args, data_args, beam_args, ranking_args))
     reader = DatasetReader(data_args.eval_data_file, data_args.eval_dataset_format)
     reader.read()
-    if data_args.n_chunks != -1 and data_args.index != -1:
-        reader.trim(data_args.index, data_args.n_chunks)
+    reader.trim(n_chunks=data_args.n_chunks, index=data_args.index)
     
     beamsearch = Beamsearch(
         dataset=reader.dataset, 
@@ -220,7 +207,7 @@ def main():
     
     logger.info(str(result))
     logger.info('elapsed time: {0}'.format(elapsed_time))    
-    logger.info('characters / second: {0}'.format(reader.character_count / elapsed_time))
+    logger.info('characters / second: {0}'.format(reader.get_character_count() / elapsed_time))
 
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)

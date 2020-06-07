@@ -6,6 +6,12 @@ import json
 import torch
 import pandas as pd
 import numpy as np
+# import dask.dataframe as dd
+# import dask
+# import h5py
+import logging
+import logging.config
+from scipy.stats import skew, kurtosis
 
 from transformers import (
     GPT2Model,
@@ -19,6 +25,7 @@ from configuration_classes import (
    EncoderArguments, 
    CNNArguments,
 )
+
 
 class GPT2Encoder(object):
 
@@ -43,6 +50,7 @@ class GPT2Encoder(object):
             self.expansions_json_list = json.load(f)
         with open(self.report_json_file,'r') as f:
             self.report_json_list = json.load(f)
+        self.logger = logging.getLogger(__name__)
 
     def compile_generations_df(self):
 
@@ -67,20 +75,27 @@ class GPT2Encoder(object):
         input_df['cnn_score'] = 0.0
 
         input_df = input_df.sort_values(by='hypothesis')
-
-        input_df['generations'] = input_df['generations'].apply(lambda x: ' '.join(x))
-        input_df['generations'] = input_df['generations'].str.replace("\n"," ")
+        input_df = input_df.explode('generations').reset_index(drop=True)
 
         input_df['characters'] = input_df['hypothesis'].str.replace(" ","")
         input_df = input_df.sort_values(by=['characters', 'gold']).fillna(method='ffill')
+
+        input_df = input_df.astype({
+            "hypothesis": "str",
+            "generations": "str",
+            "gold": "str",
+            "labels": "int64",
+            "gpt2_score": "float64",
+            "cnn_score": "float64",
+            "characters": "str"
+        })
+
         input_df['distance_score'] = input_df['hypothesis'].combine(input_df['gold'], edit_distance)
 
         input_df = input_df.sort_values(by=['characters', 'hypothesis'])
         self.generations_df = input_df
 
-    def compile_pairs_df(self):
-        pairs = self.generations_df[['hypothesis', 'characters', 'gpt2_score', 'cnn_score', 'distance_score']]
-
+    def _generate_combinations(self, pairs):
         combinations_1 = pairs\
             .groupby('characters')['hypothesis']\
             .apply(lambda x: pd.DataFrame(list(itertools.combinations(x,2))))\
@@ -96,56 +111,119 @@ class GPT2Encoder(object):
         combinations['characters'] = combinations[0].str.replace(" ","")
         combinations = combinations.sort_values('characters')
         combinations = combinations.drop('characters', axis=1)
-
-        pairs = pairs.merge(combinations, left_on='hypothesis', right_on=0, how='left')
-        pairs = pairs.drop('hypothesis', axis=1)
-        pairs = pairs.drop('characters', axis=1)
-        pairs = pairs.rename(columns={
-            "gpt2_score" : "left_gpt2_score",
-            "cnn_score": "left_cnn_score",
-            "distance_score": "left_distance_score",
-            0: "left_hypothesis",
-            1: "right_hypothesis"
+        combinations = combinations.rename(columns={
+            0: 'hypothesis',
+            1: 'hypothesis_2'
         })
-        pairs = pairs.merge(pairs, left_on='right_hypothesis', right_on='left_hypothesis', how='left')
-        pairs = pairs.drop("left_hypothesis_y", axis=1)
-        pairs = pairs.drop("right_hypothesis_y", axis=1)
+        return combinations
 
-        pairs = pairs.rename(columns={
-            "left_gpt2_score_x": "left_gpt2_score",
-            "left_cnn_score_x": "left_cnn_score",
-            "left_distance_score_x": "left_distance_score",
-            "left_hypothesis_x": "left_hypothesis",
-            "right_hypothesis_x": "right_hypothesis",
-            "left_gpt2_score_y": "right_gpt2_score",
-            "left_cnn_score_y": "right_cnn_score",
-            "left_distance_score_y": "right_distance_score"
-        })
+    def _merge_pairs_and_combinations(self, pairs, combinations):
+        pairs = pairs.merge(combinations, on='hypothesis', how='left')
 
-        pairs["distance_score"] = pairs["left_distance_score"]\
-            .combine(pairs["right_distance_score"], lambda x, y: x - y)
-        cols = pairs.columns.values.tolist()
-        move_first = [
-            'left_gpt2_score', 
-            'left_cnn_score', 
-            'right_gpt2_score', 
-            'right_cnn_score', 
-            'distance_score']
-        cols = [ x for x in cols if x not in move_first ]
-        pairs = pairs[[*move_first, *cols]]
-        self.pairs_df = pairs
+        pairs_mirror = pairs.copy()
+        pairs_mirror = pairs_mirror.drop(['hypothesis_2','characters'], axis=1)
+
+        pairs = pairs.merge(pairs_mirror, 
+            left_on='hypothesis_2', 
+            right_on='hypothesis', 
+            how='left', 
+            suffixes=('_1', '_2'))
+
+        pairs = pairs.loc[:,~pairs.columns.duplicated()]
+        pairs['distance_score'] = pairs['distance_score_1'] - pairs['distance_score_2']
+        return pairs
+
+    def _generate_stats(self, pairs_df):
+        stats_df = pairs_df[['hypothesis', 'cnn_score']].groupby('hypothesis').agg([
+            np.mean, 
+            np.std, 
+            np.max, 
+            np.min, 
+            skew, 
+            kurtosis]).reset_index(drop=False)
+        stats_df.columns = stats_df.columns.droplevel(-2)
+        stats_df = stats_df.rename(columns={stats_df.columns[0]: 'hypothesis'})
+        pairs_df = pairs_df.drop_duplicates(subset=[
+            'hypothesis', 
+            'characters', 
+            'gpt2_score', 
+            'distance_score'])
+        pairs_df = pairs_df.merge(stats_df, on='hypothesis', how='outer')
+        pairs_df = pairs_df.drop('cnn_score',axis=1)
+        return pairs_df
+
+    def compile_pairs_df(self, keep_df=False):
+
+        pairs = self.generations_df[[
+            'hypothesis', 
+            'characters', 
+            'gpt2_score', 
+            'cnn_score', 
+            'distance_score']]
+
+        pairs = self._generate_stats(pairs)
+
+        pairs = pairs[[
+            'mean',
+            'std',
+            'amax',
+            'amin',
+            'skew',
+            'kurtosis',
+            'gpt2_score',
+            'distance_score',
+            'hypothesis',
+            'characters'
+        ]]
+
+        combinations = self._generate_combinations(pairs)
+
+        pairs = self._merge_pairs_and_combinations(pairs, combinations)
+
+        if keep_df:
+            self.pairs_df = pairs.copy()
+            self.logger.debug('pairs_df shape: {0}'.format(self.pairs_df.shape))
+
+        pairs = pairs[[
+                'mean_1',
+                'std_1',
+                'amax_1',
+                'amin_1',
+                'skew_1',
+                'kurtosis_1',
+                'gpt2_score_1',
+                'mean_2',
+                'std_2',
+                'amax_2',
+                'amin_2',
+                'skew_2',
+                'kurtosis_2',
+                'gpt2_score_2',
+                'distance_score']]
+
+        pairs_array = np.array(pairs.values.tolist())
+        self.logger.debug('pairs_array shape: {0}'.format(pairs_array.shape))
+        return pairs_array
+
 
     def _get_generations_and_labels(self):
         generations_list = self.generations_df.generations.values.tolist()
         labels_list = self.generations_df.labels.values.tolist()
         return generations_list, labels_list
 
-    def get_input_ids_and_labels(self, trim=True, max_length=None, max_model_length=1024):
+    def get_input_ids_and_labels(self, trim=True, min_length=None, max_length=None, max_model_length=1024):
         generations_list, labels_list = self._get_generations_and_labels()
         input_ids = [ self.tokenizer.encode(x) for x in generations_list ]
         input_ids = [ torch.tensor(x) for x in input_ids ]
+
+        if not min_length:
+            min_length = int(np.average([len(x) for x in input_ids]))
+        
+        input_ids = [ x for x in input_ids if len(x) >= min_length ]
+
         if not max_length:
             max_length = min([x.shape[0] for x in input_ids])
+
         if max_length > max_model_length:
             max_length = max_model_length
         if trim:

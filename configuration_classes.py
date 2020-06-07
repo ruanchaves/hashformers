@@ -8,6 +8,13 @@ def parameters_to_string(*args):
     parameters = json.dumps(parameters, indent=4, sort_keys=True)
     return parameters
 
+def parameters_to_command(program, *args):
+    parameters = []
+    for item in args:
+        parameters += ['--{0}={1}'.format(k,v) for k,v in vars(item).items() ]
+    cmd = ['python', program] + parameters
+    return cmd
+
 @dataclass
 class ModelArguments:
 
@@ -151,6 +158,10 @@ class CNNArguments:
         default=10
     )
 
+    cnn_batch_size: int = field(
+        default=8
+    )
+
 @dataclass
 class EncoderArguments:
 
@@ -193,8 +204,19 @@ class MLPArguments:
         default=10
     )
 
+    mlp_batch_size: int = field(
+        default=8
+    )
+
 @dataclass
 class ModelEvaluationArguments:
     model_evaluation_save_path: str = field(
         default='output/evaluation.csv'
+    )
+
+@dataclass
+class BeamsearchManagerArguments:
+
+    expected_worker_load: str = field(
+        default=2.5e+9
     )

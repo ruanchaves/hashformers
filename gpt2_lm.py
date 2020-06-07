@@ -80,7 +80,9 @@ class GPT2LM(object):
                 top_p=top_p,
                 num_return_sequences=num_return_sequences
             )
+
             batch_result = [ self.tokenizer.decode(greedy_output[i], skip_special_tokens=skip_special_tokens) for i in range(len(greedy_output))]
+
             result.extend(batch_result)
         result = self.sort_generations_by_input_sequence(sentences, result)
         self.expansions.append(result)
