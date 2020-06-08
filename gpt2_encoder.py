@@ -182,7 +182,7 @@ class GPT2Encoder(object):
 
         if keep_df:
             self.pairs_df = pairs.copy()
-            self.logger.debug('pairs_df shape: {0}'.format(self.pairs_df.shape))
+            assert(self.pairs_df.shape == self.pairs_df.dropna().shape)
 
         pairs = pairs[[
                 'mean_1',
@@ -215,24 +215,28 @@ class GPT2Encoder(object):
         generations_list, labels_list = self._get_generations_and_labels()
         input_ids = [ self.tokenizer.encode(x) for x in generations_list ]
         input_ids = [ torch.tensor(x) for x in input_ids ]
-
-        if not min_length:
-            min_length = int(np.average([len(x) for x in input_ids]))
         
-        input_ids = [ x for x in input_ids if len(x) >= min_length ]
-
-        if not max_length:
-            max_length = min([x.shape[0] for x in input_ids])
-
-        if max_length > max_model_length:
-            max_length = max_model_length
         if trim:
+            if not min_length:
+                min_length = int(np.average([len(x) for x in input_ids]))
+
+            input_ids = [ x for x in input_ids if len(x) >= min_length ]
+
+            if not max_length:
+                max_length = min([x.shape[0] for x in input_ids])
+
+            if max_length > max_model_length:
+                max_length = max_model_length
+
             input_ids = [ x[0:max_length] for x in input_ids ]
+        
         labels = torch.tensor(labels_list)
+        
         return input_ids, labels
 
     def update_cnn_values(self, cnn_values):
         self.generations_df['cnn_score'] = pd.Series(cnn_values)
+        assert(self.generations_df.dropna().shape == self.generations_df.shape)
 
 if __name__ == '__main__':
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, CNNArguments, EncoderArguments))

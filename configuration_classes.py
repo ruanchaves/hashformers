@@ -218,5 +218,5 @@ class ModelEvaluationArguments:
 class BeamsearchManagerArguments:
 
     expected_worker_load: str = field(
-        default=2.5e+9
+        default=3.0e+9
     )

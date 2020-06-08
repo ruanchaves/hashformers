@@ -267,7 +267,7 @@ def main():
     model_args, data_args, cnn_args, encoder_args, mlp_args, model_evaluation_args = parser.parse_args_into_dataclasses()
 
     logging.config.fileConfig('logging.conf', \
-        defaults={'logfilename': data_args.logfile})
+        defaults={'logfilename': 'evaluation.log'})
     logger = logging.getLogger(__file__)
 
     logger.info('\n' + parameters_to_string(model_args, data_args, cnn_args, encoder_args, mlp_args, model_evaluation_args))
@@ -285,7 +285,7 @@ def main():
     data_args.dict_file)
 
     gpt2_encoder.compile_generations_df()
-    input_ids, _ = gpt2_encoder.get_input_ids_and_labels()
+    input_ids, _ = gpt2_encoder.get_input_ids_and_labels(trim=False)
 
     batch_size = 1
     input_ids = [torch.stack(input_ids[i:i+batch_size]) for i in range(0, len(input_ids), batch_size)]
@@ -310,7 +310,15 @@ def main():
         results.append(pair_prediction)
 
     gpt2_encoder.pairs_df['predicted_distance_score'] = pd.Series(results)
+
+    gpt2_encoder.pairs_df.to_csv('final_pairs_df.csv')
+    gpt2_encoder.generations_df.to_csv('final_generations_df.csv')
+
     results = calculate_metrics(gpt2_encoder.pairs_df, logger=logger)
+
+    results['kendall'].to_csv('kendall.csv')
+    results['other'].to_csv('other.csv')
+
     logger.info('\n{0}\n{1}'.format(
         results['kendall'].to_string(index=False), 
         results['other'].to_string()))

@@ -75,12 +75,10 @@ class MLPModel(object):
 
         self.logger.debug("Compiling generations df.")
         gpt2_encoder.compile_generations_df()
-        input_ids, _ = gpt2_encoder.get_input_ids_and_labels()
+        input_ids, _ = gpt2_encoder.get_input_ids_and_labels(trim=False)
 
         batch_size = 1
         input_ids = [torch.stack(input_ids[i:i+batch_size]) for i in range(0, len(input_ids), batch_size)]
-
-        cnn_output = [ x for x in self.cnn_model.predict(input_ids) ]
 
         cnn_probs = [ x.item() for x in self.cnn_model.predict(input_ids) ]
         gpt2_encoder.update_cnn_values(cnn_probs)
