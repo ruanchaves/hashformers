@@ -10,8 +10,8 @@ pip install -r requirements.txt
 # EVALUATION_SET='/home/datasets/hashtag_segmentation/gpt2/natural' \
 # CNN_SAVE_PATH='/home/models/gpt2_cnn/test_run/cnn_model.pth' \
 # MLP_SAVE_PATH='/home/models/gpt2_mlp/test_run/mlp_model.pth' \
-# CNN_BATCH_SIZE=8 \
-# MLP_BATCH_SIZE=8 \
+# CNN_BATCH_SIZE=128 \
+# MLP_BATCH_SIZE=128 \
 # bash model.sh
 
 # VALIDATION_SET='/home/datasets/hashtag_segmentation/BOUN/Dev-BOUN_and_Dev-Stanford' \
@@ -60,6 +60,6 @@ TRAINING_SET_2='/home/datasets/hashtag_segmentation/BOUN/sample_10000_clean.SNAP
 EVALUATION_SET='/home/datasets/hashtag_segmentation/BOUN/Test-BOUN' \
 CNN_SAVE_PATH='/home/models/gpt2_cnn/sample_10000_snap/cnn_model.pth' \
 MLP_SAVE_PATH='/home/models/gpt2_mlp/sample_10000_snap/mlp_model.pth' \
-CNN_BATCH_SIZE=1024 \
-MLP_BATCH_SIZE=1024 \
+CNN_BATCH_SIZE=128 \
+MLP_BATCH_SIZE=128 \
 bash model.sh

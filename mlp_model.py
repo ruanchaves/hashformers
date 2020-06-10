@@ -75,7 +75,7 @@ class MLPModel(object):
 
         self.logger.debug("Compiling generations df.")
         gpt2_encoder.compile_generations_df()
-        input_ids, _ = gpt2_encoder.get_input_ids_and_labels(trim=False)
+        input_ids, _ = gpt2_encoder.get_input_ids_and_labels(trim=False, pad=True)
 
         batch_size = 1
         input_ids = [torch.stack(input_ids[i:i+batch_size]) for i in range(0, len(input_ids), batch_size)]
@@ -281,8 +281,8 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, CNNArguments, EncoderArguments, MLPArguments))
     model_args, data_args, cnn_args, encoder_args, mlp_args = parser.parse_args_into_dataclasses()
 
-    logging.config.fileConfig('logging.conf', \
-        defaults={'logfilename': data_args.logfile})
+    # logging.config.fileConfig('logging.conf', \
+    #     defaults={'logfilename': data_args.logfile})
     logger = logging.getLogger(__file__)
 
     logger.info('\n' + parameters_to_string(model_args, data_args, cnn_args, encoder_args, mlp_args))

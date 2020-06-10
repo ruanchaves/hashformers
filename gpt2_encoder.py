@@ -211,12 +211,23 @@ class GPT2Encoder(object):
         labels_list = self.generations_df.labels.values.tolist()
         return generations_list, labels_list
 
-    def get_input_ids_and_labels(self, trim=True, min_length=None, max_length=None, max_model_length=1024):
+    def get_input_ids_and_labels(self, trim=True, pad=False, min_length=None, max_length=None, max_model_length=1024):
+        eos_token_id = 50256
         generations_list, labels_list = self._get_generations_and_labels()
         input_ids = [ self.tokenizer.encode(x) for x in generations_list ]
-        input_ids = [ torch.tensor(x) for x in input_ids ]
+
         
-        if trim:
+        if pad:
+            max_length = max([len(x) for x in input_ids])
+            for idx, item in enumerate(input_ids):
+                padding = max_length - len(item)
+                input_ids[idx] = np.pad(item, (0, padding), constant_values=(0, eos_token_id))
+
+        input_ids = [ torch.tensor(x) for x in input_ids ]
+
+        if trim and pad:
+            raise NotImplementedError
+        elif trim:
             if not min_length:
                 min_length = int(np.average([len(x) for x in input_ids]))
 
