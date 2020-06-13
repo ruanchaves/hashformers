@@ -1,3 +1,8 @@
+#!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")"
+cd ..
+cd ..
+
 # GPT2 medium : Test-BOUN
 
 python ranking.py \
