@@ -3,22 +3,10 @@ import pandas as pd
 import numpy as np 
 import itertools 
 import os
+import os.path
 import json 
-
-from transformers import (
-    HfArgumentParser
-)
-
-from configuration_classes import (
-    parameters_to_command,
-    parameters_to_string,
-    ModelArguments, 
-    DataEvaluationArguments, 
-    BeamsearchArguments, 
-    RankingArguments,
-    BeamsearchManagerArguments
-)
-
+import sys
+import math 
 
 class Ranking(object):
 
@@ -52,12 +40,16 @@ class Ranking(object):
         std = np.std(combinations_1['score'].astype(float).values.tolist())
         return std
 
-    def rerank(self, decimal, fractional, method='std', order=0.0001):
-        if method == 'std':
-            decimal = float(int(decimal))
-            fractional = order * fractional
-            output = decimal + fractional
-            return output 
+    def convert_to_fractional(self, decimal, fractional):
+        decimal = float(decimal)
+        fractional = float(fractional)
+
+        decimal = float(int(decimal))
+        fractional_len = len(str(int(fractional)))
+        correction = float(10 ** fractional_len)
+        fractional = fractional / correction
+        output = decimal + fractional
+        return output
 
     def rerank_dict(self, dict_file, expansions_file):
         with open(dict_file, 'r') as f:
@@ -68,29 +60,46 @@ class Ranking(object):
         for key, value in dict_object.items():
             std = self.get_key_std(key, value, expansions_object)
             if std:
-                new_value = self.rerank(value, std)
+                new_value = self.convert_to_fractional(value, std)
                 output[key] = new_value
             else:
                 output[key] = value
         return output
 
-def write_dict_file(filename, output):
-    with open(filename, 'w+') as f:
-        json.dump(output, f)
+def write_reranked_dicts(file_groups, model_dict, 
+    dict_identifier='dict.json', 
+    expansions_identifier='expansions.json', 
+    prefix='reranked_',
+    output_dir='./output'):
+    file_list = []
+    for path, subpaths, files in os.walk(output_dir):
+        for filename in files:
+            if filename.endswith(dict_identifier):
+                file_list.append(path)
 
-def write_reranked_dicts(model_name_or_path, dict_file, expansions_file, prefix='rerank_'):
-    dict_filename = os.path.split(dict_file)[1]
-    dict_path = os.path.split(dict_file)[0]
-    new_dict_file = os.path.join(dict_path, prefix + dict_filename)
-    if not os.path.isfile(new_dict_file):
-        rerank = Ranking(model_name_or_path)
-        output = rerank.rerank_dict(dict_file, expansions_file)
-        write_dict_file(new_dict_file, output)
+    file_dict = {}
+    for key in file_groups:
+        file_dict[key] = [ x for x in file_list if key in x]
+    
+    for key in file_dict.keys():
+        rerank = Ranking(model_dict[key])
+        for path in file_dict[key]:
+            new_dict_file = os.path.join(path, prefix + dict_identifier)
+            if os.path.isfile(new_dict_file):
+                continue 
+            expansions_file = os.path.join(path, expansions_identifier)
+            dict_file = os.path.join(path, dict_identifier)
+            output = rerank.rerank_dict(dict_file, expansions_file)
+            with open(new_dict_file, 'w+') as f:
+                json.dump(output, f)
+
 
 def main():
-    parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments, BeamsearchManagerArguments))
-    model_args, data_args, beam_args, ranking_args, manager_args = parser.parse_args_into_dataclasses()
-    write_reranked_dicts(model_args.model_name_or_path, data_args.dict_file, data_args.expansions_file)
+    file_groups = [sys.argv[1]]
+    model_dict = {
+        sys.argv[1] : sys.argv[2]
+    }
+    write_reranked_dicts(file_groups, model_dict, output_dir=sys.argv[3])
 
 if __name__ == '__main__':
     main()
