@@ -22,7 +22,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_stanford.log' &
+    --logfile='small_stanford.log'
 
 ## Test-BOUN
 
@@ -42,7 +42,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_test_boun.log' &
+    --logfile='small_test_boun.log'
 
 ## Stanford
 
@@ -62,7 +62,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_stanford.log' &
+    --logfile='small_stanford.log'
 
 ## Test-BOUN
 
@@ -82,7 +82,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_test_boun.log' &
+    --logfile='small_test_boun.log'
 
 ## Test-BOUN
 
@@ -102,7 +102,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_test_boun.log' &
+    --logfile='small_test_boun.log'
 
 
 
@@ -126,7 +126,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_glushkova_rus.log' &
+    --logfile='small_glushkova_rus.log'
 
 
 ## glushkova (eng)
@@ -147,7 +147,7 @@ python ranking.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile='small_glushkova_eng.log' &
+    --logfile='small_glushkova_eng.log'
 
 
 ## Stanford
