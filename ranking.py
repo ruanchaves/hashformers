@@ -59,17 +59,28 @@ class Ranking(object):
             output = decimal + fractional
             return output 
 
+    def get_allowed_items(dict_object, span=4):
+        df = pd.DataFrame([ {'hypothesis': k, 'perplexity': v} for k,v in dict_object.items() ])
+        df['characters'] = df['hypothesis'].str.replace(" ", "")
+        df = df.sort_values('perplexity',ascending=True).groupby('characters', sort=False).head(span)
+        allowed_items = df['hypothesis'].values.tolist()
+        return allowed_items
+
     def rerank_dict(self, dict_file, expansions_file):
         with open(dict_file, 'r') as f:
             dict_object = json.load(f)
         with open(expansions_file,'r') as f:
             expansions_object = json.load(f)
         output = {}
+        allowed_items = self.get_allowed_items(dict_object)
         for key, value in dict_object.items():
-            std = self.get_key_std(key, value, expansions_object)
-            if std:
-                new_value = self.rerank(value, std)
-                output[key] = new_value
+            if key in allowed_items:
+                std = self.get_key_std(key, value, expansions_object)
+                if std:
+                    new_value = self.rerank(value, std)
+                    output[key] = new_value
+                else:
+                    output[key] = value
             else:
                 output[key] = value
         return output
