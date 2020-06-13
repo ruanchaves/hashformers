@@ -21,6 +21,7 @@ import torch.cuda
 import shutil
 import itertools
 import json 
+import logging 
 
 def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments, BeamsearchManagerArguments))
@@ -28,7 +29,7 @@ def main():
 
     # Calculate required workers
     total_memory_bytes = torch.cuda.get_device_properties(0).total_memory
-    total_num_workers = total_memory_bytes // manager_args.expected_worker_load
+    total_num_workers = int(total_memory_bytes) // int(manager_args.expected_worker_load)
     total_num_workers = int(total_num_workers)
     cmd = parameters_to_command('beamsearch.py', model_args, data_args, beam_args, ranking_args)
 

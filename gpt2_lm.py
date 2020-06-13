@@ -1,4 +1,4 @@
-from lm_scorer.models.auto import AutoLMScorer as LMScorer
+from lm_scorer.models.auto import GPT2LMScorer as LMScorer
 import numpy as np
 import torch
 from transformers import (
@@ -9,7 +9,7 @@ from transformers import (
 class GPT2LM(object):
 
     def __init__(self, model_name_or_path, device='cuda', gpu_batch_size=20, gpu_expansion_batch_size=2):
-        self.scorer = LMScorer.from_pretrained(model_name_or_path, device=device, batch_size=gpu_batch_size)
+        self.scorer = LMScorer(model_name_or_path, device=device, batch_size=gpu_batch_size)
         self.tokenizer = GPT2Tokenizer.from_pretrained(model_name_or_path)
         self.model = GPT2LMHeadModel.from_pretrained(model_name_or_path, pad_token_id=self.tokenizer.eos_token_id)
         self.device = device

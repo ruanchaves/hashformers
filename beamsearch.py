@@ -14,7 +14,6 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from transformers import BertForMaskedLM, BertTokenizer
 from concurrent.futures import ThreadPoolExecutor
 from gpt2_lm import GPT2LM
-from bert_lm import BertLM
 from reader import DatasetReader
 from configuration_classes import (
     parameters_to_string,
@@ -37,13 +36,14 @@ from metrics import (
 import logging
 import logging.config
 
+import os
+import pathlib
+
 class ModelLM(object):
 
     def __init__(self, model_name_or_path=None, model_type=None, device=None, gpu_batch_size=None):
         if model_type == 'gpt2':
             self.model = GPT2LM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size)
-        elif model_type == 'bert':
-            self.model = BertLM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size)
         else:
             raise NotImplementedError
 
@@ -154,6 +154,8 @@ def evaluate_word_segmentation_model(segmented_data, original_data, save_report=
         metrics[k] = v / len(pairs)
     
     if save_report:
+        report_dir = os.path.split(report_file)[0]
+        pathlib.Path(report_dir).mkdir(parents=True, exist_ok=True)
         with open(report_file,'w+') as f:
             json.dump(report, f)
 
@@ -199,16 +201,18 @@ def main():
 
     elapsed_time = end_time - start_time
     segmented_data = beamsearch.convert_dataset()
-    result = evaluate_word_segmentation_model(
-                    segmented_data, 
-                    reader.test, 
-                    save_report=True, 
-                    report_file=data_args.report_file)
+    # result = evaluate_word_segmentation_model(
+    #                 segmented_data, 
+    #                 reader.test, 
+    #                 save_report=True, 
+    #                 report_file=data_args.report_file)
     
-    logger.info(str(result))
+    # logger.info(str(result))
     logger.info('elapsed time: {0}'.format(elapsed_time))    
     logger.info('characters / second: {0}'.format(reader.get_character_count() / elapsed_time))
 
+    dict_dir = os.path.split(data_args.dict_file)[0]
+    pathlib.Path(dict_dir).mkdir(parents=True, exist_ok=True)
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
     
@@ -228,6 +232,9 @@ def main():
         logger.info('elapsed time: {0}'.format(elapsed_time))    
         logger.info('characters / second: {0}'.format(groups_character_count / elapsed_time))
 
+
+        expansions_dir = os.path.split(data_args.expansions_file)[0]
+        pathlib.Path(expansions_dir).mkdir(parents=True, exist_ok=True)
         with open(data_args.expansions_file, 'w+') as f:
             json.dump(new_segmented_data, f)
 
