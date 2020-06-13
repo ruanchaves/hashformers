@@ -59,7 +59,7 @@ class Ranking(object):
             output = decimal + fractional
             return output 
 
-    def get_allowed_items(dict_object, span=4):
+    def get_allowed_items(self, dict_object, span=4):
         df = pd.DataFrame([ {'hypothesis': k, 'perplexity': v} for k,v in dict_object.items() ])
         df['characters'] = df['hypothesis'].str.replace(" ", "")
         df = df.sort_values('perplexity',ascending=True).groupby('characters', sort=False).head(span)
