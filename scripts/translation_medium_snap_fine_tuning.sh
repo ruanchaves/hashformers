@@ -18,7 +18,7 @@ python run_language_modeling.py \
     --evaluate_during_training \
     --logging_steps=500 \
     --save_steps=500 \
-    --train_data_file='/home/datasets/hashtag_segmentation/BOUN/clean.SNAP.Hashtags.Segmented.w.Heuristics /home/datasets/hashtag_segmentation/BOUN/translate_task_snap' \
+    --train_data_file='/home/datasets/hashtag_segmentation/BOUN/translate_task_snap' \
     --do_eval \
     --eval_data_file='/home/datasets/hashtag_segmentation/BOUN/translate_task_dev' \
     --per_gpu_train_batch_size=30 \
