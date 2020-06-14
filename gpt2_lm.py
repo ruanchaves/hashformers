@@ -58,6 +58,23 @@ class GPT2LM(object):
                     sorted_output.append({'hypothesis': sentence, 'generation': generation})
         return sorted_output
 
+    def greedy_generation(self, sentences, max_length=256, skip_special_tokens=True):
+        input_ids = [ self.tokenizer.encode(x) for x in sentences ]
+        input_ids_batches = self.group_batches_by_length(input_ids)
+        result = []
+        for batch in input_ids_batches:
+            batch_tensor = torch.tensor(batch)
+            batch_tensor = batch_tensor.to(self.device)
+
+            output = self.model.generate(batch_tensor, max_length=max_length)
+
+            batch_result = [ self.tokenizer.decode(output[i], skip_special_tokens=skip_special_tokens) for i in range(len(output))]
+
+            result.extend(batch_result)
+
+        result = self.sort_generations_by_input_sequence(sentences, result)
+        self.expansions.append(result)
+
     def generate_expansions(self, 
                             sentences,  
                             skip_special_tokens=True, 
@@ -72,7 +89,7 @@ class GPT2LM(object):
         for batch in input_ids_batches:
             batch_tensor = torch.tensor(batch)
             batch_tensor = batch_tensor.to(self.device)
-            greedy_output = self.model.generate(
+            output = self.model.generate(
                 batch_tensor,
                 do_sample=do_sample,
                 max_length=max_length, 
@@ -81,7 +98,7 @@ class GPT2LM(object):
                 num_return_sequences=num_return_sequences
             )
 
-            batch_result = [ self.tokenizer.decode(greedy_output[i], skip_special_tokens=skip_special_tokens) for i in range(len(greedy_output))]
+            batch_result = [ self.tokenizer.decode(output[i], skip_special_tokens=skip_special_tokens) for i in range(len(output))]
 
             result.extend(batch_result)
         result = self.sort_generations_by_input_sequence(sentences, result)
