@@ -51,9 +51,15 @@ def format_expansions(expansions_list):
             if len(output.replace(" ", "")) == len(hypothesis):
                 break
             output += character
+        
         if len(output) < len(hypothesis):
             output = hypothesis
+
+        if output.replace(" ", "") != hypothesis:
+            output = hypothesis
+        
         formatted_result_list.append(output)
+    
     return formatted_result_list
 
 def main():
