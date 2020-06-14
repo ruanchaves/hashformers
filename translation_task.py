@@ -89,7 +89,7 @@ def main():
     logger.info('elapsed time: {0}'.format(elapsed_time))    
     logger.info('characters / second: {0}'.format(character_count / elapsed_time))
     result = format_expansions(gpt2_lm.expansions)
-    result = { 'hypothesis': item, 'value': idx for idx, item in enumerate(result)}
+    result = { item: idx for idx, item in enumerate(result)}
 
     dict_dir = os.path.split(data_args.dict_file)[0]
     pathlib.Path(dict_dir).mkdir(parents=True, exist_ok=True)
