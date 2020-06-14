@@ -184,6 +184,9 @@ def main():
         defaults={'logfilename': data_args.logfile})
     logger = logging.getLogger(__file__)
 
+    if os.path.isfile(data_args.dict_file):
+        sys.exit()
+
     logger.info('\n' + parameters_to_string(model_args, data_args, beam_args, ranking_args))
     reader = DatasetReader(data_args.eval_data_file, data_args.eval_dataset_format)
     reader.read()
@@ -217,6 +220,10 @@ def main():
         json.dump(beamsearch.prob_dict, f)
     
     if model_args.model_type == 'gpt2':
+
+        if os.path.isfile(data_args.expansions_file):
+            sys.exit()
+
         groups, groups_character_count = \
             gather_n_candidates(beamsearch.prob_dict, segmented_data, n=ranking_args.topn)
         start_time = timer()

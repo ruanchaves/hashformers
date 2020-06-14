@@ -65,10 +65,12 @@ def main():
         defaults={'logfilename': data_args.logfile})
     logger = logging.getLogger(__file__)
 
+    if os.path.isfile(data_args.dict_file):
+        sys.exit()
+
     logger.info('\n' + parameters_to_string(model_args, data_args, beam_args, ranking_args))
     reader = DatasetReader(data_args.eval_data_file, data_args.eval_dataset_format)
     reader.read()
-    reader.trim(n_chunks=data_args.n_chunks, index=data_args.index)
     
     gpt2_lm = GPT2LM(model_args.model_name_or_path, device='cuda', gpu_batch_size=model_args.gpu_batch_size)
     character_count = sum([len(x) for x in reader.dataset])
@@ -81,9 +83,12 @@ def main():
     logger.info('elapsed time: {0}'.format(elapsed_time))    
     logger.info('characters / second: {0}'.format(character_count / elapsed_time))
     result = format_expansions(gpt2_lm.expansions)
-    result = '\n'.join(result)
-    with open(data_args.report_file, 'w+') as f:
-        print(result, file=f)
+    result = { 'hypothesis': item, 'value': idx for idx, item in enumerate(result)}
+
+    dict_dir = os.path.split(data_args.dict_file)[0]
+    pathlib.Path(dict_dir).mkdir(parents=True, exist_ok=True)
+    with open(data_args.dict_file, 'w+') as f:
+        json.dump(result, f)
 
 
 if __name__ == '__main__':
