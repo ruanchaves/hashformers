@@ -3,7 +3,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 cd ..
 
 python dataset_translation_format.py /home/datasets/hashtag_segmentation/BOUN/clean.SNAP.Hashtags.Segmented.w.Heuristics /home/datasets/hashtag_segmentation/BOUN/translate_task_snap
-python dataset_translation_format /home/datasets/hashtag_segmentation/BOUN/Dev-BOUN_and_Dev-Stanford /home/datasets/hashtag_segmentation/BOUN/translate_task_dev
+python dataset_translation_format.py /home/datasets/hashtag_segmentation/BOUN/Dev-BOUN_and_Dev-Stanford /home/datasets/hashtag_segmentation/BOUN/translate_task_dev
 
 dt=$(date '+%d/%m/%Y %H:%M:%S');
 echo "$dt"
