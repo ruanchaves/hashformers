@@ -6,7 +6,7 @@ dt=$(date '+%d/%m/%Y %H:%M:%S');
 echo "$dt"
 
 python run_language_modeling.py \
-    --output_dir='/home/models/gpt2-small-snap-512' \
+    --output_dir='/home/models/gpt2-512-small-snap' \
     --model_type=gpt2 \
     --model_name_or_path=gpt2 \
     --save_total_limit=5 \
