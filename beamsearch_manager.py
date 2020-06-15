@@ -27,6 +27,8 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments, BeamsearchManagerArguments))
     model_args, data_args, beam_args, ranking_args, manager_args = parser.parse_args_into_dataclasses()
 
+    print(parameters_to_string(model_args, data_args, beam_args, ranking_args))
+
     # Calculate required workers
     total_memory_bytes = torch.cuda.get_device_properties(0).total_memory
     total_num_workers = int(total_memory_bytes) // int(manager_args.expected_worker_load)
