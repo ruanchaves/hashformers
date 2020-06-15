@@ -6,7 +6,7 @@ cd ..
 
 # GPT2 extra-large : Test-BOUN
 
-python beamsearch.py \
+python beamsearch_manager.py \
     --model_name_or_path='/home/models/gpt2-512-small-snap' \
     --model_type='gpt2' \
     --gpu_batch_size=1 \
@@ -19,13 +19,14 @@ python beamsearch.py \
     --steps=5 \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
+    --expected_worker_load=12000000000 \
     --logfile='512_small_test_boun.log'
 
 ## Stanford
 
 # GPT2 extra-large : Stanford
 
-python beamsearch.py \
+python beamsearch_manager.py \
     --model_name_or_path='/home/models/gpt2-512-small-snap' \
     --model_type='gpt2' \
     --gpu_batch_size=1 \
@@ -38,4 +39,5 @@ python beamsearch.py \
     --steps=5 \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
+    --expected_worker_load=12000000000 \
     --logfile='512_small_stanford.log'
