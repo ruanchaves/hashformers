@@ -30,7 +30,7 @@ class DatasetReader(object):
         self.dataset = [ x.replace(" ","") for x in data ]
 
     def doval(self):
-        df = pd.read_csv(self.dataset_file, sep='\t', header='None')
+        df = pd.read_csv(self.dataset_file, sep='\t', header=None)
         self.test = df[0].values.tolist()
         self.test = [ x.strip() for x in self.test ]
         self.test = [ ftfy.fix_text(x) for x in self.test ]
