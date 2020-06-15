@@ -19,6 +19,7 @@ python beamsearch_manager.py \
     --steps=5 \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
+    --expected_worker_load=9000000000 \
     --logfile='512_large_test_boun.log'
 
 ## Stanford
@@ -38,4 +39,5 @@ python beamsearch_manager.py \
     --steps=5 \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
+    --expected_worker_load=9000000000 \
     --logfile='512_large_stanford.log'
