@@ -219,7 +219,7 @@ def main():
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
     
-    if model_args.model_type == 'gpt2':
+    if model_args.model_type == 'gpt2' and data_args.expansions_file:
 
         if os.path.isfile(data_args.expansions_file):
             sys.exit()

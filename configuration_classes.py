@@ -54,7 +54,7 @@ class DataEvaluationArguments:
     )
 
     expansions_file: str = field(
-        default="expansions.json"
+        default=None
     )
 
     dict_file: str = field(

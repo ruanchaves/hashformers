@@ -1,6 +1,7 @@
 import itertools
 import pandas as pd
 import copy 
+import ftfy 
 
 class DatasetReader(object):
 
@@ -27,6 +28,13 @@ class DatasetReader(object):
 
         self.test = [ x.strip() for x in data ]
         self.dataset = [ x.replace(" ","") for x in data ]
+
+    def doval(self):
+        df = pd.read_csv(self.dataset_file, sep='\t', header='None')
+        self.test = df[0].values.tolist()
+        self.test = [ x.strip() for x in self.test ]
+        self.test = [ ftfy.fix_text(x) for x in self.test ]
+        self.dataset = [ x.replace(" ","") for x in self.test ]        
 
     def trim(self, n_chunks=-1, index=-1):
         def trim_dataset(dataset, n_chunks, index):
