@@ -219,31 +219,31 @@ def main():
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
     
-    if model_args.model_type == 'gpt2' and data_args.expansions_file:
+    # if model_args.model_type == 'gpt2' and data_args.expansions_file:
 
-        if os.path.isfile(data_args.expansions_file):
-            sys.exit()
+    #     if os.path.isfile(data_args.expansions_file):
+    #         sys.exit()
 
-        groups, groups_character_count = \
-            gather_n_candidates(beamsearch.prob_dict, segmented_data, n=ranking_args.topn)
-        start_time = timer()
+    #     groups, groups_character_count = \
+    #         gather_n_candidates(beamsearch.prob_dict, segmented_data, n=ranking_args.topn)
+    #     start_time = timer()
 
-        beamsearch.model.gpu_expansion_batch_size = ranking_args.gpu_expansion_batch_size
-        for group in groups:
-            beamsearch.model.generate_expansions(group)
-        new_segmented_data = beamsearch.model.expansions
-        end_time = timer()
+    #     beamsearch.model.gpu_expansion_batch_size = ranking_args.gpu_expansion_batch_size
+    #     for group in groups:
+    #         beamsearch.model.generate_expansions(group)
+    #     new_segmented_data = beamsearch.model.expansions
+    #     end_time = timer()
 
-        elapsed_time = end_time - start_time
+    #     elapsed_time = end_time - start_time
 
-        logger.info('elapsed time: {0}'.format(elapsed_time))    
-        logger.info('characters / second: {0}'.format(groups_character_count / elapsed_time))
+    #     logger.info('elapsed time: {0}'.format(elapsed_time))    
+    #     logger.info('characters / second: {0}'.format(groups_character_count / elapsed_time))
 
 
-        expansions_dir = os.path.split(data_args.expansions_file)[0]
-        pathlib.Path(expansions_dir).mkdir(parents=True, exist_ok=True)
-        with open(data_args.expansions_file, 'w+') as f:
-            json.dump(new_segmented_data, f)
+    #     expansions_dir = os.path.split(data_args.expansions_file)[0]
+    #     pathlib.Path(expansions_dir).mkdir(parents=True, exist_ok=True)
+    #     with open(data_args.expansions_file, 'w+') as f:
+    #         json.dump(new_segmented_data, f)
 
 if __name__ == '__main__':
     main()
