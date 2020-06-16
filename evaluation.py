@@ -84,7 +84,7 @@ def main():
         "de_news": "doval"
     }
 
-    OUTPUT_DIR = './output/depth_13'
+    OUTPUT_DIR = './output'
     DATASET_DIR = "../../datasets"
     output = read_dataset_dir(allowed_types, dataset_dict, type_dict, OUTPUT_DIR, DATASET_DIR)
     result = []
