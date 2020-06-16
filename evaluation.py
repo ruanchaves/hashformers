@@ -8,7 +8,7 @@ def read_json(filename):
     with open(filename,'r') as f:
         return json.load(f)
 
-def read_dataset_dir(allowed_types, dataset_dict, OUTPUT_DIR, DATASET_DIR, dict_identifier='dict.json'):
+def read_dataset_dir(allowed_types, dataset_dict, type_dict, OUTPUT_DIR, DATASET_DIR, dict_identifier='dict.json'):
     output = []
     for path, subpaths, files in os.walk(OUTPUT_DIR):
         for filename in files:
@@ -18,7 +18,7 @@ def read_dataset_dir(allowed_types, dataset_dict, OUTPUT_DIR, DATASET_DIR, dict_
                 test_dataset_type = [ x for x in allowed_types if x.lower() in full_path][0]
                 test_dataset_name = [ x for x in dataset_dict.keys() if x.lower() in full_path][0]
                 test_dataset_path = os.path.join(DATASET_DIR, dataset_dict[test_dataset_name])
-                test_dataset = DatasetReader(test_dataset_path, test_dataset_type)
+                test_dataset = DatasetReader(test_dataset_path, type_dict[test_dataset_type])
                 test_dataset.read()
                 row['gold'] = test_dataset.test
                 row['eval'] = read_json(full_path)
@@ -67,18 +67,26 @@ def main():
     allowed_types = [
         "glushkova",
         "BOUN",
-        "stanford"
+        "stanford",
+        "de_news"
     ]
     dataset_dict = {
         "glushkova_eng": "hashtag_segmentation/glushkova/test_eng.csv",
         "glushkova_rus": "hashtag_segmentation/glushkova/test_rus.csv",
         "BOUN": "hashtag_segmentation/BOUN/Test-BOUN",
-        "stanford": "hashtag_segmentation/Stanford/stanford_dataset.txt"
+        "stanford": "hashtag_segmentation/Stanford/stanford_dataset.txt",
+        "de_news": "word_segmentation/doval/news/de_news.tsv"
+    }
+    type_dict = {
+        "glushkova": "glushkova",
+        "BOUN": "BOUN",
+        "stanford": "stanford",
+        "de_news": "doval"
     }
 
     OUTPUT_DIR = './output/depth_13'
     DATASET_DIR = "../../datasets"
-    output = read_dataset_dir(allowed_types, dataset_dict, OUTPUT_DIR, DATASET_DIR)
+    output = read_dataset_dir(allowed_types, dataset_dict, type_dict, OUTPUT_DIR, DATASET_DIR)
     result = []
     for idx, item in enumerate(output):
         try:
