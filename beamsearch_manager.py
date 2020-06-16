@@ -100,31 +100,34 @@ def main():
                     merge_dict[flag].append(parameter.split(flag)[1].lstrip('='))
 
     for value in merge_dict.values():
-        first = value[0]
-        target_destination, file_extension = first.split('.')
-        target_destination = target_destination.strip('_' + string.digits) + '.' + file_extension
-        if first.endswith('.json'):
-            content = []
-            for item in value:
-                with open(item, 'r') as f:
-                    content.append(json.load(f))
+        try:
+            first = value[0]
+            target_destination, file_extension = first.split('.')
+            target_destination = target_destination.strip('_' + string.digits) + '.' + file_extension
+            if first.endswith('.json'):
+                content = []
+                for item in value:
+                    with open(item, 'r') as f:
+                        content.append(json.load(f))
 
-            if isinstance(content[0], list):
-                output = list(itertools.chain(*content))
-            elif isinstance(content[0], dict):
-                output = dict(ChainMap(*content))
+                if isinstance(content[0], list):
+                    output = list(itertools.chain(*content))
+                elif isinstance(content[0], dict):
+                    output = dict(ChainMap(*content))
+                else:
+                    raise NotImplementedError
+                
+                with open(target_destination, 'w+') as f:
+                    json.dump(output, f)
+
             else:
-                raise NotImplementedError
-            
-            with open(target_destination, 'w+') as f:
-                json.dump(output, f)
-
-        else:
-            with open(target_destination, 'a+') as target_f:
-                for filename in value:
-                    with open(filename,'r') as file_f:
-                        filename_content = file_f.read()
-                        print(filename_content, file=target_f)
+                with open(target_destination, 'a+') as target_f:
+                    for filename in value:
+                        with open(filename,'r') as file_f:
+                            filename_content = file_f.read()
+                            print(filename_content, file=target_f)
+        except:
+            continue
 
 if __name__ == '__main__':
     main()
