@@ -16,7 +16,7 @@ python beamsearch_manager.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=3000000000 \
-    --logfile="gpt2_small.topk_$TOPK.steps_$STEPS.$LOG.log"
+    --logfile="gpt2_small&topk_$TOPK&steps_$STEPS&$LOG.log"
 
 python beamsearch_manager.py \
     --model_name_or_path="gpt2-medium" \
@@ -31,7 +31,7 @@ python beamsearch_manager.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=6000000000 \
-    --logfile="gpt2_medium.topk_$TOPK.steps_$STEPS.$LOG.log"
+    --logfile="gpt2_medium&topk_$TOPK&steps_$STEPS&$LOG.log"
 
 python beamsearch_manager.py \
     --model_name_or_path="gpt2-large" \
@@ -46,7 +46,7 @@ python beamsearch_manager.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=9000000000 \
-    --logfile="gpt2_large.topk_$TOPK.steps_$STEPS.$LOG.log"
+    --logfile="gpt2_large&topk_$TOPK&steps_$STEPS&$LOG.log"
 
 python beamsearch_manager.py \
     --model_name_or_path="gpt2-xl" \
@@ -61,5 +61,5 @@ python beamsearch_manager.py \
     --topn=4 \
     --gpu_expansion_batch_size=50 \
     --expected_worker_load=15000000000 \
-    --logfile="gpt2_xl.topk_$TOPK.steps_$STEPS.$LOG.log"
+    --logfile="gpt2_xl&topk_$TOPK&steps_$STEPS&$LOG.log"
 
