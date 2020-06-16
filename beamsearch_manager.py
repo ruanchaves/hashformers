@@ -22,10 +22,15 @@ import shutil
 import itertools
 import json 
 import logging 
+import os
+import sys
 
 def main():
     parser = HfArgumentParser((ModelArguments, DataEvaluationArguments, BeamsearchArguments, RankingArguments, BeamsearchManagerArguments))
     model_args, data_args, beam_args, ranking_args, manager_args = parser.parse_args_into_dataclasses()
+
+    if os.path.isfile(data_args.dict_file):
+        sys.exit()
 
     print(parameters_to_string(model_args, data_args, beam_args, ranking_args))
 
