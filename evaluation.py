@@ -92,6 +92,7 @@ def main():
         try:
             evaluation_df = build_evaluation_pairs(item['eval'], item['gold'])
             path_as_fname = item['full_path'].replace("/", "_")
+            metrics = generate_metrics(evaluation_df)
             metrics = metrics.reset_index()
             metrics = metrics.to_dict('records')
             metrics = [ x for x in metrics if x['index']=='mean']
