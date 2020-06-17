@@ -101,9 +101,9 @@ def main():
                 metrics = generate_metrics(evaluation_df)
             print(metrics)
         
-        metrics = metrics.reset_index()
-        metrics = metrics.to_dict('records')
-        print(metrics)
+            metrics = metrics.reset_index()
+            metrics = metrics.to_dict('records')
+            print(metrics)
 
         except Exception as e:
             print(e, item['full_path'])
