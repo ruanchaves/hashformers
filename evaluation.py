@@ -90,23 +90,16 @@ def main():
     result = []
     for idx, item in enumerate(output):
         try:
-            print(item['full_path'])
             evaluation_df = build_evaluation_pairs(item['eval'], item['gold'])
-
             path_as_fname = item['full_path'].replace("/", "_")
-            evaluation_df.to_csv('./logs/tmp_{0}.csv'.format(path_as_fname))
-            if 'glushkova_eng' in item['full_path']:
-                metrics = generate_metrics(evaluation_df, target='tmp.csv')
-            else:
-                metrics = generate_metrics(evaluation_df)
-            print(metrics)
-        
             metrics = metrics.reset_index()
             metrics = metrics.to_dict('records')
-            print(metrics)
-
+            metrics = [ x for x in metrics if x['index']=='mean']
+            metrics[0]['full_path'] = item['full_path']
+            result.append(metrics[0])
         except Exception as e:
             print(e, item['full_path'])
+    pd.DataFrame(result).to_csv('results.csv')
 
 if __name__ == '__main__':
     main()
