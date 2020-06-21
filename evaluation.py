@@ -29,7 +29,7 @@ def read_dataset_dir(allowed_types, dataset_dict, type_dict, OUTPUT_DIR, DATASET
                 output.append(row)
     return output
 
-def build_evaluation_pairs(dict_file, gold_list):
+def build_evaluation_pairs(dict_file, gold_list, curve_range=100):
     gold_list = [ x for x in gold_list if x.strip() ]
     gold_list = [ x.strip() for x in gold_list ]
     gold_df = pd.DataFrame(gold_list)
@@ -49,9 +49,21 @@ def build_evaluation_pairs(dict_file, gold_list):
     eval_df = pd.merge(gold_df, test_df, on='characters', how='inner')
     assert( eval_df.shape == eval_df.dropna().shape )
 
-    eval_df = eval_df.sort_values('value',ascending=True).groupby('gold', sort=False).head(1)
+    def best_n(df, n=1):
+        tmp = df.sort_values('value', ascending=True).groupby('gold', sort=False).head(n)
+        df_size = df.drop_duplicates('gold')
+        tmp = tmp[tmp['hypothesis']==tmp['gold']].drop_duplicates('gold')
+        return tmp.shape[0] / df_size.shape[0]
+    
+    curve = []
+    for i in range(curve_range):
+        try:
+            curve.append(best_n(eval_df, n=i))
+        except:
+            continue
 
-    return eval_df
+    eval_df = eval_df.sort_values('value',ascending=True).groupby('gold', sort=False).head(1)
+    return curve, eval_df
 
 def generate_metrics(df, target=None):
     df['f1'] = df['gold'].combine(df['hypothesis'], calculate_f1)
@@ -75,13 +87,19 @@ def main():
         "glushkova_rus": "hashtag_segmentation/glushkova/test_rus.csv",
         "BOUN": "hashtag_segmentation/BOUN/Test-BOUN",
         "stanford": "hashtag_segmentation/Stanford/stanford_dataset.txt",
-        "de_news": "word_segmentation/doval/news/de_news.tsv"
+        "de_news": "word_segmentation/doval/news/de_news.tsv",
+        "en_news": "word_segmentation/doval/news/en_news.tsv",
+        "fi_news": "word_segmentation/doval/news/fi_news.tsv",
+        "tr_news": "word_segmentation/doval/news/tr_news.tsv"
     }
     type_dict = {
         "glushkova": "glushkova",
         "BOUN": "BOUN",
         "stanford": "stanford",
-        "de_news": "doval"
+        "de_news": "doval",
+        "en_news": "doval",
+        "fi_news": "doval",
+        "tr_news": "doval"
     }
 
     OUTPUT_DIR = './output'
@@ -90,13 +108,15 @@ def main():
     result = []
     for idx, item in enumerate(output):
         try:
-            evaluation_df = build_evaluation_pairs(item['eval'], item['gold'])
+            print(item['full_path'])
+            curve, evaluation_df = build_evaluation_pairs(item['eval'], item['gold'])
             path_as_fname = item['full_path'].replace("/", "_")
             metrics = generate_metrics(evaluation_df)
             metrics = metrics.reset_index()
             metrics = metrics.to_dict('records')
             metrics = [ x for x in metrics if x['index']=='mean']
             metrics[0]['full_path'] = item['full_path']
+            metrics[0]['curve'] = curve
             result.append(metrics[0])
         except Exception as e:
             print(e, item['full_path'])
