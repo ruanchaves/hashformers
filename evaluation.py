@@ -93,7 +93,9 @@ def main():
         "de_news": "word_segmentation/doval/news/de_news.tsv",
         "en_news": "word_segmentation/doval/news/en_news.tsv",
         "fi_news": "word_segmentation/doval/news/fi_news.tsv",
-        "tr_news": "word_segmentation/doval/news/tr_news.tsv"
+        "tr_news": "word_segmentation/doval/news/tr_news.tsv",
+        "tweets": "word_segmentation/doval/tweets/tweets.tsv",
+        "wiki": "word_segmentation/doval/wiki/wiki.tsv"
     }
     type_dict = {
         "glushkova": "glushkova",
@@ -102,7 +104,9 @@ def main():
         "de_news": "doval",
         "en_news": "doval",
         "fi_news": "doval",
-        "tr_news": "doval"
+        "tr_news": "doval",
+        "tweets": "doval",
+        "wiki": "doval"
     }
 
     OUTPUT_DIR = './output'
