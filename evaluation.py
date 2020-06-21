@@ -12,21 +12,24 @@ def read_dataset_dir(allowed_types, dataset_dict, type_dict, OUTPUT_DIR, DATASET
     output = []
     for path, subpaths, files in os.walk(OUTPUT_DIR):
         for filename in files:
-            if filename.endswith(dict_identifier):
-                row = {}
-                full_path = os.path.join(path, filename)
-                test_dataset_type = [ x for x in allowed_types if x.lower() in full_path][0]
-                test_dataset_name = [ x for x in dataset_dict.keys() if x.lower() in full_path][0]
-                test_dataset_path = os.path.join(DATASET_DIR, dataset_dict[test_dataset_name])
-                test_dataset = DatasetReader(test_dataset_path, type_dict[test_dataset_type])
-                test_dataset.read()
-                row['gold'] = test_dataset.test
-                row['eval'] = read_json(full_path)
-                row['full_path'] = full_path
-                row['test_dataset_type'] = test_dataset_type
-                row['test_dataset_name'] = test_dataset_name
-                row['test_dataset_path'] = test_dataset_path
-                output.append(row)
+            try:
+                if filename.endswith(dict_identifier):
+                    row = {}
+                    full_path = os.path.join(path, filename)
+                    test_dataset_type = [ x for x in allowed_types if x.lower() in full_path][0]
+                    test_dataset_name = [ x for x in dataset_dict.keys() if x.lower() in full_path][0]
+                    test_dataset_path = os.path.join(DATASET_DIR, dataset_dict[test_dataset_name])
+                    test_dataset = DatasetReader(test_dataset_path, type_dict[test_dataset_type])
+                    test_dataset.read()
+                    row['gold'] = test_dataset.test
+                    row['eval'] = read_json(full_path)
+                    row['full_path'] = full_path
+                    row['test_dataset_type'] = test_dataset_type
+                    row['test_dataset_name'] = test_dataset_name
+                    row['test_dataset_path'] = test_dataset_path
+                    output.append(row)
+            except Exception as e:
+                print('read_dataset_dir Exception ', e, full_path)
     return output
 
 def build_evaluation_pairs(dict_file, gold_list, curve_range=100):
