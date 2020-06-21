@@ -83,7 +83,12 @@ def main():
         "glushkova",
         "BOUN",
         "stanford",
-        "de_news"
+        "de_news",
+        "en_news",
+        "fi_news",
+        "tr_news",
+        "tweets",
+        "wiki"
     ]
     dataset_dict = {
         "glushkova_eng": "hashtag_segmentation/glushkova/test_eng.csv",
