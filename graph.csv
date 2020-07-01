@@ -1,0 +1,201 @@
+,models,Accuracy,Candidates,dataset
+19,2117,0.759,1,English hashtags (Glushkova et al.)
+19,2117,0.95,2,English hashtags (Glushkova et al.)
+19,2117,0.975,3,English hashtags (Glushkova et al.)
+19,2117,0.985,4,English hashtags (Glushkova et al.)
+19,2117,0.986,5,English hashtags (Glushkova et al.)
+19,2117,0.989,6,English hashtags (Glushkova et al.)
+19,2117,0.99,7,English hashtags (Glushkova et al.)
+19,2117,0.993,8,English hashtags (Glushkova et al.)
+19,2117,0.993,9,English hashtags (Glushkova et al.)
+19,2117,0.994,10,English hashtags (Glushkova et al.)
+25,2345,0.771,1,English hashtags (Glushkova et al.)
+25,2345,0.969,2,English hashtags (Glushkova et al.)
+25,2345,0.984,3,English hashtags (Glushkova et al.)
+25,2345,0.988,4,English hashtags (Glushkova et al.)
+25,2345,0.991,5,English hashtags (Glushkova et al.)
+25,2345,0.991,6,English hashtags (Glushkova et al.)
+25,2345,0.991,7,English hashtags (Glushkova et al.)
+25,2345,0.992,8,English hashtags (Glushkova et al.)
+25,2345,0.994,9,English hashtags (Glushkova et al.)
+25,2345,0.995,10,English hashtags (Glushkova et al.)
+18,2774,0.775,1,English hashtags (Glushkova et al.)
+18,2774,0.964,2,English hashtags (Glushkova et al.)
+18,2774,0.98,3,English hashtags (Glushkova et al.)
+18,2774,0.986,4,English hashtags (Glushkova et al.)
+18,2774,0.989,5,English hashtags (Glushkova et al.)
+18,2774,0.992,6,English hashtags (Glushkova et al.)
+18,2774,0.996,7,English hashtags (Glushkova et al.)
+18,2774,0.996,8,English hashtags (Glushkova et al.)
+18,2774,0.996,9,English hashtags (Glushkova et al.)
+18,2774,0.996,10,English hashtags (Glushkova et al.)
+46,21558,0.782,1,English hashtags (Glushkova et al.)
+46,21558,0.96,2,English hashtags (Glushkova et al.)
+46,21558,0.981,3,English hashtags (Glushkova et al.)
+46,21558,0.991,4,English hashtags (Glushkova et al.)
+46,21558,0.993,5,English hashtags (Glushkova et al.)
+46,21558,0.993,6,English hashtags (Glushkova et al.)
+46,21558,0.994,7,English hashtags (Glushkova et al.)
+46,21558,0.995,8,English hashtags (Glushkova et al.)
+46,21558,0.995,9,English hashtags (Glushkova et al.)
+46,21558,0.995,10,English hashtags (Glushkova et al.)
+26,2117,0.812,1,Russian hashtags (Glushkova et al.)
+26,2117,0.904,2,Russian hashtags (Glushkova et al.)
+26,2117,0.938,3,Russian hashtags (Glushkova et al.)
+26,2117,0.958,4,Russian hashtags (Glushkova et al.)
+26,2117,0.967,5,Russian hashtags (Glushkova et al.)
+26,2117,0.973,6,Russian hashtags (Glushkova et al.)
+26,2117,0.978,7,Russian hashtags (Glushkova et al.)
+26,2117,0.982,8,Russian hashtags (Glushkova et al.)
+26,2117,0.983,9,Russian hashtags (Glushkova et al.)
+26,2117,0.984,10,Russian hashtags (Glushkova et al.)
+27,2345,0.836,1,Russian hashtags (Glushkova et al.)
+27,2345,0.925,2,Russian hashtags (Glushkova et al.)
+27,2345,0.946,3,Russian hashtags (Glushkova et al.)
+27,2345,0.965,4,Russian hashtags (Glushkova et al.)
+27,2345,0.973,5,Russian hashtags (Glushkova et al.)
+27,2345,0.978,6,Russian hashtags (Glushkova et al.)
+27,2345,0.983,7,Russian hashtags (Glushkova et al.)
+27,2345,0.985,8,Russian hashtags (Glushkova et al.)
+27,2345,0.986,9,Russian hashtags (Glushkova et al.)
+27,2345,0.989,10,Russian hashtags (Glushkova et al.)
+29,2774,0.848,1,Russian hashtags (Glushkova et al.)
+29,2774,0.931,2,Russian hashtags (Glushkova et al.)
+29,2774,0.947,3,Russian hashtags (Glushkova et al.)
+29,2774,0.962,4,Russian hashtags (Glushkova et al.)
+29,2774,0.97,5,Russian hashtags (Glushkova et al.)
+29,2774,0.975,6,Russian hashtags (Glushkova et al.)
+29,2774,0.984,7,Russian hashtags (Glushkova et al.)
+29,2774,0.985,8,Russian hashtags (Glushkova et al.)
+29,2774,0.987,9,Russian hashtags (Glushkova et al.)
+29,2774,0.989,10,Russian hashtags (Glushkova et al.)
+47,21558,0.849,1,Russian hashtags (Glushkova et al.)
+47,21558,0.929,2,Russian hashtags (Glushkova et al.)
+47,21558,0.956,3,Russian hashtags (Glushkova et al.)
+47,21558,0.968,4,Russian hashtags (Glushkova et al.)
+47,21558,0.976,5,Russian hashtags (Glushkova et al.)
+47,21558,0.983,6,Russian hashtags (Glushkova et al.)
+47,21558,0.986,7,Russian hashtags (Glushkova et al.)
+47,21558,0.991,8,Russian hashtags (Glushkova et al.)
+47,21558,0.993,9,Russian hashtags (Glushkova et al.)
+47,21558,0.994,10,Russian hashtags (Glushkova et al.)
+21,2117,0.824,1,Test-BOUN (Çelebi et al.)
+21,2117,0.964,2,Test-BOUN (Çelebi et al.)
+21,2117,0.98,3,Test-BOUN (Çelebi et al.)
+21,2117,0.988,4,Test-BOUN (Çelebi et al.)
+21,2117,0.988,5,Test-BOUN (Çelebi et al.)
+21,2117,0.988,6,Test-BOUN (Çelebi et al.)
+21,2117,0.988,7,Test-BOUN (Çelebi et al.)
+21,2117,0.99,8,Test-BOUN (Çelebi et al.)
+21,2117,0.992,9,Test-BOUN (Çelebi et al.)
+21,2117,0.992,10,Test-BOUN (Çelebi et al.)
+20,2345,0.86,1,Test-BOUN (Çelebi et al.)
+20,2345,0.968,2,Test-BOUN (Çelebi et al.)
+20,2345,0.986,3,Test-BOUN (Çelebi et al.)
+20,2345,0.986,4,Test-BOUN (Çelebi et al.)
+20,2345,0.988,5,Test-BOUN (Çelebi et al.)
+20,2345,0.988,6,Test-BOUN (Çelebi et al.)
+20,2345,0.99,7,Test-BOUN (Çelebi et al.)
+20,2345,0.99,8,Test-BOUN (Çelebi et al.)
+20,2345,0.99,9,Test-BOUN (Çelebi et al.)
+20,2345,0.992,10,Test-BOUN (Çelebi et al.)
+23,2774,0.852,1,Test-BOUN (Çelebi et al.)
+23,2774,0.97,2,Test-BOUN (Çelebi et al.)
+23,2774,0.988,3,Test-BOUN (Çelebi et al.)
+23,2774,0.994,4,Test-BOUN (Çelebi et al.)
+23,2774,0.996,5,Test-BOUN (Çelebi et al.)
+23,2774,0.996,6,Test-BOUN (Çelebi et al.)
+23,2774,0.996,7,Test-BOUN (Çelebi et al.)
+23,2774,0.996,8,Test-BOUN (Çelebi et al.)
+23,2774,0.996,9,Test-BOUN (Çelebi et al.)
+23,2774,0.996,10,Test-BOUN (Çelebi et al.)
+48,21558,0.85,1,Test-BOUN (Çelebi et al.)
+48,21558,0.968,2,Test-BOUN (Çelebi et al.)
+48,21558,0.99,3,Test-BOUN (Çelebi et al.)
+48,21558,0.994,4,Test-BOUN (Çelebi et al.)
+48,21558,0.996,5,Test-BOUN (Çelebi et al.)
+48,21558,0.996,6,Test-BOUN (Çelebi et al.)
+48,21558,0.996,7,Test-BOUN (Çelebi et al.)
+48,21558,0.998,8,Test-BOUN (Çelebi et al.)
+48,21558,0.998,9,Test-BOUN (Çelebi et al.)
+48,21558,0.998,10,Test-BOUN (Çelebi et al.)
+32,2117,0.897,1,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.962,2,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.984,3,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.992,4,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.994,5,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.996,6,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.996,7,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.996,8,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.996,9,"Test-BOUN (Çelebi et al.), fine-tuned"
+32,2117,0.996,10,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.901,1,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.958,2,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.984,3,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.992,4,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.994,5,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.996,6,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.996,7,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.996,8,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.996,9,"Test-BOUN (Çelebi et al.), fine-tuned"
+33,2117,0.996,10,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.896,1,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.972,2,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.988,3,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.99,4,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.99,5,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.992,6,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.992,7,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.992,8,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.994,9,"Test-BOUN (Çelebi et al.), fine-tuned"
+30,2345,0.994,10,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.904,1,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.97,2,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.984,3,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.99,4,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.99,5,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.992,6,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.992,7,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.992,8,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.994,9,"Test-BOUN (Çelebi et al.), fine-tuned"
+31,2345,0.994,10,"Test-BOUN (Çelebi et al.), fine-tuned"
+22,2117,0.729,1,Test-Stanford (Çelebi et al.)
+22,2117,0.918,2,Test-Stanford (Çelebi et al.)
+22,2117,0.963,3,Test-Stanford (Çelebi et al.)
+22,2117,0.978,4,Test-Stanford (Çelebi et al.)
+22,2117,0.985,5,Test-Stanford (Çelebi et al.)
+22,2117,0.988,6,Test-Stanford (Çelebi et al.)
+22,2117,0.991,7,Test-Stanford (Çelebi et al.)
+22,2117,0.993,8,Test-Stanford (Çelebi et al.)
+22,2117,0.993,9,Test-Stanford (Çelebi et al.)
+22,2117,0.994,10,Test-Stanford (Çelebi et al.)
+28,2345,0.742,1,Test-Stanford (Çelebi et al.)
+28,2345,0.94,2,Test-Stanford (Çelebi et al.)
+28,2345,0.977,3,Test-Stanford (Çelebi et al.)
+28,2345,0.984,4,Test-Stanford (Çelebi et al.)
+28,2345,0.988,5,Test-Stanford (Çelebi et al.)
+28,2345,0.99,6,Test-Stanford (Çelebi et al.)
+28,2345,0.991,7,Test-Stanford (Çelebi et al.)
+28,2345,0.992,8,Test-Stanford (Çelebi et al.)
+28,2345,0.994,9,Test-Stanford (Çelebi et al.)
+28,2345,0.995,10,Test-Stanford (Çelebi et al.)
+24,2774,0.745,1,Test-Stanford (Çelebi et al.)
+24,2774,0.934,2,Test-Stanford (Çelebi et al.)
+24,2774,0.975,3,Test-Stanford (Çelebi et al.)
+24,2774,0.98,4,Test-Stanford (Çelebi et al.)
+24,2774,0.984,5,Test-Stanford (Çelebi et al.)
+24,2774,0.989,6,Test-Stanford (Çelebi et al.)
+24,2774,0.995,7,Test-Stanford (Çelebi et al.)
+24,2774,0.996,8,Test-Stanford (Çelebi et al.)
+24,2774,0.996,9,Test-Stanford (Çelebi et al.)
+24,2774,0.996,10,Test-Stanford (Çelebi et al.)
+49,21558,0.748,1,Test-Stanford (Çelebi et al.)
+49,21558,0.928,2,Test-Stanford (Çelebi et al.)
+49,21558,0.967,3,Test-Stanford (Çelebi et al.)
+49,21558,0.983,4,Test-Stanford (Çelebi et al.)
+49,21558,0.989,5,Test-Stanford (Çelebi et al.)
+49,21558,0.989,6,Test-Stanford (Çelebi et al.)
+49,21558,0.991,7,Test-Stanford (Çelebi et al.)
+49,21558,0.992,8,Test-Stanford (Çelebi et al.)
+49,21558,0.992,9,Test-Stanford (Çelebi et al.)
+49,21558,0.993,10,Test-Stanford (Çelebi et al.)

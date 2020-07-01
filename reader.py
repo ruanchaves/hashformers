@@ -85,10 +85,7 @@ class DatasetReader(object):
         return new_tokens
 
 def main():
-    reader = DatasetReader('/run/media/user/DADOS/NLP/datasets/hashtag_segmentation/glushkova/test_eng.csv', 'glushkova')
-    reader.read()
-    print(reader.dataset[0:10])
-    print(reader.test[0:10])
+    pass
 
 if __name__ == '__main__':
     main()
