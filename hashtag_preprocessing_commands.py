@@ -22,7 +22,7 @@ def main():
         --topn=4 \\
         --gpu_expansion_batch_size=50 \\
         --expected_worker_load=3000000000 \\
-        --logfile='output/enacomp2020/{2}/logfile.log'
+        --logfile='logfile_enacomp2020_{2}.log'
 
     """
 

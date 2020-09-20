@@ -13,7 +13,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_13/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_13.log'
 
     
 
@@ -31,7 +31,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_61/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_61.log'
 
     
 
@@ -49,7 +49,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_147/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_147.log'
 
     
 
@@ -67,7 +67,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_65/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_65.log'
 
     
 
@@ -85,7 +85,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_11/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_11.log'
 
     
 
@@ -103,7 +103,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_27/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_27.log'
 
     
 
@@ -121,7 +121,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_264/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_264.log'
 
     
 
@@ -139,7 +139,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_103/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_103.log'
 
     
 
@@ -157,7 +157,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_172/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_172.log'
 
     
 
@@ -175,7 +175,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_39/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_39.log'
 
     
 
@@ -193,7 +193,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_108/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_108.log'
 
     
 
@@ -211,7 +211,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_67/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_67.log'
 
     
 
@@ -229,7 +229,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_283/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_283.log'
 
     
 
@@ -247,7 +247,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_251/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_251.log'
 
     
 
@@ -265,7 +265,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_106/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_106.log'
 
     
 
@@ -283,7 +283,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_124/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_124.log'
 
     
 
@@ -301,7 +301,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_121/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_121.log'
 
     
 
@@ -319,7 +319,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_134/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_134.log'
 
     
 
@@ -337,7 +337,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_210/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_210.log'
 
     
 
@@ -355,7 +355,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_171/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_171.log'
 
     
 
@@ -373,7 +373,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_159/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_159.log'
 
     
 
@@ -391,7 +391,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_0.log'
 
     
 
@@ -409,7 +409,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_18/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_18.log'
 
     
 
@@ -427,7 +427,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_180/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_180.log'
 
     
 
@@ -445,7 +445,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_129/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_129.log'
 
     
 
@@ -463,7 +463,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_280/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_280.log'
 
     
 
@@ -481,7 +481,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_190/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_190.log'
 
     
 
@@ -499,7 +499,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_26/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_26.log'
 
     
 
@@ -517,7 +517,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_17/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_17.log'
 
     
 
@@ -535,7 +535,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_93/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_93.log'
 
     
 
@@ -553,7 +553,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_85/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_85.log'
 
     
 
@@ -571,7 +571,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_126/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_126.log'
 
     
 
@@ -589,7 +589,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_59/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_59.log'
 
     
 
@@ -607,7 +607,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_98/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_98.log'
 
     
 
@@ -625,7 +625,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_138/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_138.log'
 
     
 
@@ -643,7 +643,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_3.log'
 
     
 
@@ -661,7 +661,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_163/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_163.log'
 
     
 
@@ -679,7 +679,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_65/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_65.log'
 
     
 
@@ -697,7 +697,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_160/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_160.log'
 
     
 
@@ -715,7 +715,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_30/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_30.log'
 
     
 
@@ -733,7 +733,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_46/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_46.log'
 
     
 
@@ -751,7 +751,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_6.log'
 
     
 
@@ -769,7 +769,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_81/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_81.log'
 
     
 
@@ -787,7 +787,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_225/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_225.log'
 
     
 
@@ -805,7 +805,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_246/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_246.log'
 
     
 
@@ -823,7 +823,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_174/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_174.log'
 
     
 
@@ -841,7 +841,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_59/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_59.log'
 
     
 
@@ -859,7 +859,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_248/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_248.log'
 
     
 
@@ -877,7 +877,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_141/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_141.log'
 
     
 
@@ -895,7 +895,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_5.log'
 
     
 
@@ -913,7 +913,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_143/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_143.log'
 
     
 
@@ -931,7 +931,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_47/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_47.log'
 
     
 
@@ -949,7 +949,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_188/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_188.log'
 
     
 
@@ -967,7 +967,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_281/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_281.log'
 
     
 
@@ -985,7 +985,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_204/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_204.log'
 
     
 
@@ -1003,7 +1003,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_25/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_25.log'
 
     
 
@@ -1021,7 +1021,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_22/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_22.log'
 
     
 
@@ -1039,7 +1039,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_153/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_153.log'
 
     
 
@@ -1057,7 +1057,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_144/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_144.log'
 
     
 
@@ -1075,7 +1075,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_125/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_125.log'
 
     
 
@@ -1093,7 +1093,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_113/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_113.log'
 
     
 
@@ -1111,7 +1111,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_170/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_170.log'
 
     
 
@@ -1129,7 +1129,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_120/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_120.log'
 
     
 
@@ -1147,7 +1147,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_122/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_122.log'
 
     
 
@@ -1165,7 +1165,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_43/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_43.log'
 
     
 
@@ -1183,7 +1183,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_130/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_130.log'
 
     
 
@@ -1201,7 +1201,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_8.log'
 
     
 
@@ -1219,7 +1219,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_8.log'
 
     
 
@@ -1237,7 +1237,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_127/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_127.log'
 
     
 
@@ -1255,7 +1255,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_168/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_168.log'
 
     
 
@@ -1273,7 +1273,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_152/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_152.log'
 
     
 
@@ -1291,7 +1291,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_74/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_74.log'
 
     
 
@@ -1309,7 +1309,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_15/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_15.log'
 
     
 
@@ -1327,7 +1327,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_273/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_273.log'
 
     
 
@@ -1345,7 +1345,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_69/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_69.log'
 
     
 
@@ -1363,7 +1363,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_7.log'
 
     
 
@@ -1381,7 +1381,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_13/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_13.log'
 
     
 
@@ -1399,7 +1399,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_76/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_76.log'
 
     
 
@@ -1417,7 +1417,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_121/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_121.log'
 
     
 
@@ -1435,7 +1435,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_60/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_60.log'
 
     
 
@@ -1453,7 +1453,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_102/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_102.log'
 
     
 
@@ -1471,7 +1471,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_94/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_94.log'
 
     
 
@@ -1489,7 +1489,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_12/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_12.log'
 
     
 
@@ -1507,7 +1507,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_132/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_132.log'
 
     
 
@@ -1525,7 +1525,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_120/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_120.log'
 
     
 
@@ -1543,7 +1543,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_198/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_198.log'
 
     
 
@@ -1561,7 +1561,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_75/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_75.log'
 
     
 
@@ -1579,7 +1579,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_2.log'
 
     
 
@@ -1597,7 +1597,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_290/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_290.log'
 
     
 
@@ -1615,7 +1615,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_55/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_55.log'
 
     
 
@@ -1633,7 +1633,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_277/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_277.log'
 
     
 
@@ -1651,7 +1651,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_160/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_160.log'
 
     
 
@@ -1669,7 +1669,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_45/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_45.log'
 
     
 
@@ -1687,7 +1687,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_58/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_58.log'
 
     
 
@@ -1705,7 +1705,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_64/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_64.log'
 
     
 
@@ -1723,7 +1723,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_17/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_17.log'
 
     
 
@@ -1741,7 +1741,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_236/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_236.log'
 
     
 
@@ -1759,7 +1759,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_91/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_91.log'
 
     
 
@@ -1777,7 +1777,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_226/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_226.log'
 
     
 
@@ -1795,7 +1795,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_173/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_173.log'
 
     
 
@@ -1813,7 +1813,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_12/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_12.log'
 
     
 
@@ -1831,7 +1831,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_149/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_149.log'
 
     
 
@@ -1849,7 +1849,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_69/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_69.log'
 
     
 
@@ -1867,7 +1867,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_51/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_51.log'
 
     
 
@@ -1885,7 +1885,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_93/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_93.log'
 
     
 
@@ -1903,7 +1903,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_254/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_254.log'
 
     
 
@@ -1921,7 +1921,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_76/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_76.log'
 
     
 
@@ -1939,7 +1939,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_106/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_106.log'
 
     
 
@@ -1957,7 +1957,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_29/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_29.log'
 
     
 
@@ -1975,7 +1975,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_25/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_25.log'
 
     
 
@@ -1993,7 +1993,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_120/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_120.log'
 
     
 
@@ -2011,7 +2011,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_110/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_110.log'
 
     
 
@@ -2029,7 +2029,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_135/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_135.log'
 
     
 
@@ -2047,7 +2047,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_220/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_220.log'
 
     
 
@@ -2065,7 +2065,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_276/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_276.log'
 
     
 
@@ -2083,7 +2083,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_68/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_68.log'
 
     
 
@@ -2101,7 +2101,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_224/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_224.log'
 
     
 
@@ -2119,7 +2119,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_30/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_30.log'
 
     
 
@@ -2137,7 +2137,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_88/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_88.log'
 
     
 
@@ -2155,7 +2155,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_168/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_168.log'
 
     
 
@@ -2173,7 +2173,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_261/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_261.log'
 
     
 
@@ -2191,7 +2191,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_144/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_144.log'
 
     
 
@@ -2209,7 +2209,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_18/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_18.log'
 
     
 
@@ -2227,7 +2227,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_73/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_73.log'
 
     
 
@@ -2245,7 +2245,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_100/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_100.log'
 
     
 
@@ -2263,7 +2263,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_103/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_103.log'
 
     
 
@@ -2281,7 +2281,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_5.log'
 
     
 
@@ -2299,7 +2299,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_36/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_36.log'
 
     
 
@@ -2317,7 +2317,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_39/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_39.log'
 
     
 
@@ -2335,7 +2335,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_86/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_86.log'
 
     
 
@@ -2353,7 +2353,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_123/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_123.log'
 
     
 
@@ -2371,7 +2371,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_24/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_24.log'
 
     
 
@@ -2389,7 +2389,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_181/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_181.log'
 
     
 
@@ -2407,7 +2407,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_148/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_148.log'
 
     
 
@@ -2425,7 +2425,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_92/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_92.log'
 
     
 
@@ -2443,7 +2443,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_71/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_71.log'
 
     
 
@@ -2461,7 +2461,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_117/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_117.log'
 
     
 
@@ -2479,7 +2479,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_90/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_90.log'
 
     
 
@@ -2497,7 +2497,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_177/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_177.log'
 
     
 
@@ -2515,7 +2515,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_96/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_96.log'
 
     
 
@@ -2533,7 +2533,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_17/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_17.log'
 
     
 
@@ -2551,7 +2551,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_269/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_269.log'
 
     
 
@@ -2569,7 +2569,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_140/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_140.log'
 
     
 
@@ -2587,7 +2587,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_182/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_182.log'
 
     
 
@@ -2605,7 +2605,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_176/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_176.log'
 
     
 
@@ -2623,7 +2623,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_177/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_177.log'
 
     
 
@@ -2641,7 +2641,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_44/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_44.log'
 
     
 
@@ -2659,7 +2659,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_40/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_40.log'
 
     
 
@@ -2677,7 +2677,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_116/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_116.log'
 
     
 
@@ -2695,7 +2695,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_127/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_127.log'
 
     
 
@@ -2713,7 +2713,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_52/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_52.log'
 
     
 
@@ -2731,7 +2731,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_289/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_289.log'
 
     
 
@@ -2749,7 +2749,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_89/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_89.log'
 
     
 
@@ -2767,7 +2767,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_59/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_59.log'
 
     
 
@@ -2785,7 +2785,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_7.log'
 
     
 
@@ -2803,7 +2803,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_66/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_66.log'
 
     
 
@@ -2821,7 +2821,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_175/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_175.log'
 
     
 
@@ -2839,7 +2839,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_15/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_15.log'
 
     
 
@@ -2857,7 +2857,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_155/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_155.log'
 
     
 
@@ -2875,7 +2875,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_54/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_54.log'
 
     
 
@@ -2893,7 +2893,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_14/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_14.log'
 
     
 
@@ -2911,7 +2911,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_71/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_71.log'
 
     
 
@@ -2929,7 +2929,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_88/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_88.log'
 
     
 
@@ -2947,7 +2947,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_129/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_129.log'
 
     
 
@@ -2965,7 +2965,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_41/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_41.log'
 
     
 
@@ -2983,7 +2983,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_86/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_86.log'
 
     
 
@@ -3001,7 +3001,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_244/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_244.log'
 
     
 
@@ -3019,7 +3019,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_268/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_268.log'
 
     
 
@@ -3037,7 +3037,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_81/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_81.log'
 
     
 
@@ -3055,7 +3055,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_112/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_112.log'
 
     
 
@@ -3073,7 +3073,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_23/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_23.log'
 
     
 
@@ -3091,7 +3091,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_79/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_79.log'
 
     
 
@@ -3109,7 +3109,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_92/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_92.log'
 
     
 
@@ -3127,7 +3127,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_109/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_109.log'
 
     
 
@@ -3145,7 +3145,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_63/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_63.log'
 
     
 
@@ -3163,7 +3163,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_164/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_164.log'
 
     
 
@@ -3181,7 +3181,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_131/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_131.log'
 
     
 
@@ -3199,7 +3199,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_162/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_162.log'
 
     
 
@@ -3217,7 +3217,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_165/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_165.log'
 
     
 
@@ -3235,7 +3235,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_82/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_82.log'
 
     
 
@@ -3253,7 +3253,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_41/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_41.log'
 
     
 
@@ -3271,7 +3271,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_33/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_33.log'
 
     
 
@@ -3289,7 +3289,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_86/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_86.log'
 
     
 
@@ -3307,7 +3307,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_217/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_217.log'
 
     
 
@@ -3325,7 +3325,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_67/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_67.log'
 
     
 
@@ -3343,7 +3343,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_193/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_193.log'
 
     
 
@@ -3361,7 +3361,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_22/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_22.log'
 
     
 
@@ -3379,7 +3379,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_202/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_202.log'
 
     
 
@@ -3397,7 +3397,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_63/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_63.log'
 
     
 
@@ -3415,7 +3415,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_139/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_139.log'
 
     
 
@@ -3433,7 +3433,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_112/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_112.log'
 
     
 
@@ -3451,7 +3451,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_49/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_49.log'
 
     
 
@@ -3469,7 +3469,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_94/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_94.log'
 
     
 
@@ -3487,7 +3487,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_10.log'
 
     
 
@@ -3505,7 +3505,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_47/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_47.log'
 
     
 
@@ -3523,7 +3523,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_73/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_73.log'
 
     
 
@@ -3541,7 +3541,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_158/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_158.log'
 
     
 
@@ -3559,7 +3559,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_113/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_113.log'
 
     
 
@@ -3577,7 +3577,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_74/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_74.log'
 
     
 
@@ -3595,7 +3595,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_147/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_147.log'
 
     
 
@@ -3613,7 +3613,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_117/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_117.log'
 
     
 
@@ -3631,7 +3631,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_7.log'
 
     
 
@@ -3649,7 +3649,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_31/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_31.log'
 
     
 
@@ -3667,7 +3667,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_106/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_106.log'
 
     
 
@@ -3685,7 +3685,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_50/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_50.log'
 
     
 
@@ -3703,7 +3703,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_50/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_50.log'
 
     
 
@@ -3721,7 +3721,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_33/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_33.log'
 
     
 
@@ -3739,7 +3739,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_20/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_20.log'
 
     
 
@@ -3757,7 +3757,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_76/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_76.log'
 
     
 
@@ -3775,7 +3775,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_156/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_156.log'
 
     
 
@@ -3793,7 +3793,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_37/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_37.log'
 
     
 
@@ -3811,7 +3811,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_57/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_57.log'
 
     
 
@@ -3829,7 +3829,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_52/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_52.log'
 
     
 
@@ -3847,7 +3847,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_58/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_58.log'
 
     
 
@@ -3865,7 +3865,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_42/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_42.log'
 
     
 
@@ -3883,7 +3883,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_282/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_282.log'
 
     
 
@@ -3901,7 +3901,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_162/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_162.log'
 
     
 
@@ -3919,7 +3919,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_49/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_49.log'
 
     
 
@@ -3937,7 +3937,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_119/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_119.log'
 
     
 
@@ -3955,7 +3955,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_42/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_42.log'
 
     
 
@@ -3973,7 +3973,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_172/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_172.log'
 
     
 
@@ -3991,7 +3991,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_215/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_215.log'
 
     
 
@@ -4009,7 +4009,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_255/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_255.log'
 
     
 
@@ -4027,7 +4027,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_14/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_14.log'
 
     
 
@@ -4045,7 +4045,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_2.log'
 
     
 
@@ -4063,7 +4063,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_136/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_136.log'
 
     
 
@@ -4081,7 +4081,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_176/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_176.log'
 
     
 
@@ -4099,7 +4099,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_2.log'
 
     
 
@@ -4117,7 +4117,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_48/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_48.log'
 
     
 
@@ -4135,7 +4135,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_47/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_47.log'
 
     
 
@@ -4153,7 +4153,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_10.log'
 
     
 
@@ -4171,7 +4171,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_104/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_104.log'
 
     
 
@@ -4189,7 +4189,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_44/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_44.log'
 
     
 
@@ -4207,7 +4207,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_13/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_13.log'
 
     
 
@@ -4225,7 +4225,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_97/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_97.log'
 
     
 
@@ -4243,7 +4243,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_207/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_207.log'
 
     
 
@@ -4261,7 +4261,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_92/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_92.log'
 
     
 
@@ -4279,7 +4279,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_235/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_235.log'
 
     
 
@@ -4297,7 +4297,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_90/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_90.log'
 
     
 
@@ -4315,7 +4315,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_124/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_124.log'
 
     
 
@@ -4333,7 +4333,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_249/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_249.log'
 
     
 
@@ -4351,7 +4351,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_114/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_114.log'
 
     
 
@@ -4369,7 +4369,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_16/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_16.log'
 
     
 
@@ -4387,7 +4387,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_60/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_60.log'
 
     
 
@@ -4405,7 +4405,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_272/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_272.log'
 
     
 
@@ -4423,7 +4423,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_64/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_64.log'
 
     
 
@@ -4441,7 +4441,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_211/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_211.log'
 
     
 
@@ -4459,7 +4459,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_167/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_167.log'
 
     
 
@@ -4477,7 +4477,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_51/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_51.log'
 
     
 
@@ -4495,7 +4495,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_275/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_275.log'
 
     
 
@@ -4513,7 +4513,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_87/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_87.log'
 
     
 
@@ -4531,7 +4531,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_231/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_231.log'
 
     
 
@@ -4549,7 +4549,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_19/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_19.log'
 
     
 
@@ -4567,7 +4567,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_67/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_67.log'
 
     
 
@@ -4585,7 +4585,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_271/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_271.log'
 
     
 
@@ -4603,7 +4603,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_137/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_137.log'
 
     
 
@@ -4621,7 +4621,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_118/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_118.log'
 
     
 
@@ -4639,7 +4639,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_28/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_28.log'
 
     
 
@@ -4657,7 +4657,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_288/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_288.log'
 
     
 
@@ -4675,7 +4675,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_146/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_146.log'
 
     
 
@@ -4693,7 +4693,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_118/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_118.log'
 
     
 
@@ -4711,7 +4711,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_154/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_154.log'
 
     
 
@@ -4729,7 +4729,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_21/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_21.log'
 
     
 
@@ -4747,7 +4747,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_80/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_80.log'
 
     
 
@@ -4765,7 +4765,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_83/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_83.log'
 
     
 
@@ -4783,7 +4783,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_8.log'
 
     
 
@@ -4801,7 +4801,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_263/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_263.log'
 
     
 
@@ -4819,7 +4819,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_24/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_24.log'
 
     
 
@@ -4837,7 +4837,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_179/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_179.log'
 
     
 
@@ -4855,7 +4855,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_64/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_64.log'
 
     
 
@@ -4873,7 +4873,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_208/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_208.log'
 
     
 
@@ -4891,7 +4891,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_21/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_21.log'
 
     
 
@@ -4909,7 +4909,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_31/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_31.log'
 
     
 
@@ -4927,7 +4927,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_27/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_27.log'
 
     
 
@@ -4945,7 +4945,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_143/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_143.log'
 
     
 
@@ -4963,7 +4963,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_174/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_174.log'
 
     
 
@@ -4981,7 +4981,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_87/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_87.log'
 
     
 
@@ -4999,7 +4999,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_161/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_161.log'
 
     
 
@@ -5017,7 +5017,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_80/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_80.log'
 
     
 
@@ -5035,7 +5035,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_43/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_43.log'
 
     
 
@@ -5053,7 +5053,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_101/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_101.log'
 
     
 
@@ -5071,7 +5071,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_125/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_125.log'
 
     
 
@@ -5089,7 +5089,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_197/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_197.log'
 
     
 
@@ -5107,7 +5107,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_36/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_36.log'
 
     
 
@@ -5125,7 +5125,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_79/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_79.log'
 
     
 
@@ -5143,7 +5143,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_38/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_38.log'
 
     
 
@@ -5161,7 +5161,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_194/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_194.log'
 
     
 
@@ -5179,7 +5179,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_68/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_68.log'
 
     
 
@@ -5197,7 +5197,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_259/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_259.log'
 
     
 
@@ -5215,7 +5215,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_212/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_212.log'
 
     
 
@@ -5233,7 +5233,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_48/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_48.log'
 
     
 
@@ -5251,7 +5251,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_11/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_11.log'
 
     
 
@@ -5269,7 +5269,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_110/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_110.log'
 
     
 
@@ -5287,7 +5287,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_221/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_221.log'
 
     
 
@@ -5305,7 +5305,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_74/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_74.log'
 
     
 
@@ -5323,7 +5323,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_54/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_54.log'
 
     
 
@@ -5341,7 +5341,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_199/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_199.log'
 
     
 
@@ -5359,7 +5359,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_266/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_266.log'
 
     
 
@@ -5377,7 +5377,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_100/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_100.log'
 
     
 
@@ -5395,7 +5395,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_115/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_115.log'
 
     
 
@@ -5413,7 +5413,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_205/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_205.log'
 
     
 
@@ -5431,7 +5431,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_53/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_53.log'
 
     
 
@@ -5449,7 +5449,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_133/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_133.log'
 
     
 
@@ -5467,7 +5467,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_40/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_40.log'
 
     
 
@@ -5485,7 +5485,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_122/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_122.log'
 
     
 
@@ -5503,7 +5503,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_49/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_49.log'
 
     
 
@@ -5521,7 +5521,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_108/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_108.log'
 
     
 
@@ -5539,7 +5539,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_213/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_213.log'
 
     
 
@@ -5557,7 +5557,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_111/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_111.log'
 
     
 
@@ -5575,7 +5575,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_56/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_56.log'
 
     
 
@@ -5593,7 +5593,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_201/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_201.log'
 
     
 
@@ -5611,7 +5611,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_53/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_53.log'
 
     
 
@@ -5629,7 +5629,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_242/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_242.log'
 
     
 
@@ -5647,7 +5647,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_196/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_196.log'
 
     
 
@@ -5665,7 +5665,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_95/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_95.log'
 
     
 
@@ -5683,7 +5683,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_62/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_62.log'
 
     
 
@@ -5701,7 +5701,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_1.log'
 
     
 
@@ -5719,7 +5719,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_27/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_27.log'
 
     
 
@@ -5737,7 +5737,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_94/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_94.log'
 
     
 
@@ -5755,7 +5755,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_218/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_218.log'
 
     
 
@@ -5773,7 +5773,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_24/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_24.log'
 
     
 
@@ -5791,7 +5791,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_192/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_192.log'
 
     
 
@@ -5809,7 +5809,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_265/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_265.log'
 
     
 
@@ -5827,7 +5827,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_104/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_104.log'
 
     
 
@@ -5845,7 +5845,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_45/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_45.log'
 
     
 
@@ -5863,7 +5863,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_105/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_105.log'
 
     
 
@@ -5881,7 +5881,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_101/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_101.log'
 
     
 
@@ -5899,7 +5899,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_240/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_240.log'
 
     
 
@@ -5917,7 +5917,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_125/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_125.log'
 
     
 
@@ -5935,7 +5935,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_123/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_123.log'
 
     
 
@@ -5953,7 +5953,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_260/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_260.log'
 
     
 
@@ -5971,7 +5971,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_98/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_98.log'
 
     
 
@@ -5989,7 +5989,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_227/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_227.log'
 
     
 
@@ -6007,7 +6007,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_247/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_247.log'
 
     
 
@@ -6025,7 +6025,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_84/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_84.log'
 
     
 
@@ -6043,7 +6043,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_216/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_216.log'
 
     
 
@@ -6061,7 +6061,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_43/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_43.log'
 
     
 
@@ -6079,7 +6079,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_151/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_151.log'
 
     
 
@@ -6097,7 +6097,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_233/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_233.log'
 
     
 
@@ -6115,7 +6115,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_101/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_101.log'
 
     
 
@@ -6133,7 +6133,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_127/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_127.log'
 
     
 
@@ -6151,7 +6151,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_150/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_150.log'
 
     
 
@@ -6169,7 +6169,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_52/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_52.log'
 
     
 
@@ -6187,7 +6187,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_34/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_34.log'
 
     
 
@@ -6205,7 +6205,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_22/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_22.log'
 
     
 
@@ -6223,7 +6223,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_238/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_238.log'
 
     
 
@@ -6241,7 +6241,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_123/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_123.log'
 
     
 
@@ -6259,7 +6259,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_128/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_128.log'
 
     
 
@@ -6277,7 +6277,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_258/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_258.log'
 
     
 
@@ -6295,7 +6295,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_15/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_15.log'
 
     
 
@@ -6313,7 +6313,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_98/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_98.log'
 
     
 
@@ -6331,7 +6331,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_155/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_155.log'
 
     
 
@@ -6349,7 +6349,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_103/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_103.log'
 
     
 
@@ -6367,7 +6367,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_91/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_91.log'
 
     
 
@@ -6385,7 +6385,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_87/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_87.log'
 
     
 
@@ -6403,7 +6403,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_178/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_178.log'
 
     
 
@@ -6421,7 +6421,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_85/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_85.log'
 
     
 
@@ -6439,7 +6439,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_96/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_96.log'
 
     
 
@@ -6457,7 +6457,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_19/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_19.log'
 
     
 
@@ -6475,7 +6475,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_214/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_214.log'
 
     
 
@@ -6493,7 +6493,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_257/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_257.log'
 
     
 
@@ -6511,7 +6511,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_161/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_161.log'
 
     
 
@@ -6529,7 +6529,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_270/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_270.log'
 
     
 
@@ -6547,7 +6547,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_26/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_26.log'
 
     
 
@@ -6565,7 +6565,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_124/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_124.log'
 
     
 
@@ -6583,7 +6583,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_42/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_42.log'
 
     
 
@@ -6601,7 +6601,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_274/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_274.log'
 
     
 
@@ -6619,7 +6619,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_229/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_229.log'
 
     
 
@@ -6637,7 +6637,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_61/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_61.log'
 
     
 
@@ -6655,7 +6655,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_9.log'
 
     
 
@@ -6673,7 +6673,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_252/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_252.log'
 
     
 
@@ -6691,7 +6691,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_56/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_56.log'
 
     
 
@@ -6709,7 +6709,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_91/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_91.log'
 
     
 
@@ -6727,7 +6727,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_223/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_223.log'
 
     
 
@@ -6745,7 +6745,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_138/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_138.log'
 
     
 
@@ -6763,7 +6763,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_61/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_61.log'
 
     
 
@@ -6781,7 +6781,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_173/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_173.log'
 
     
 
@@ -6799,7 +6799,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_116/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_116.log'
 
     
 
@@ -6817,7 +6817,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_153/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_153.log'
 
     
 
@@ -6835,7 +6835,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_70/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_70.log'
 
     
 
@@ -6853,7 +6853,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_140/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_140.log'
 
     
 
@@ -6871,7 +6871,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_157/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_157.log'
 
     
 
@@ -6889,7 +6889,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_200/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_200.log'
 
     
 
@@ -6907,7 +6907,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_45/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_45.log'
 
     
 
@@ -6925,7 +6925,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_130/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_130.log'
 
     
 
@@ -6943,7 +6943,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_139/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_139.log'
 
     
 
@@ -6961,7 +6961,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_39/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_39.log'
 
     
 
@@ -6979,7 +6979,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_55/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_55.log'
 
     
 
@@ -6997,7 +6997,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_23/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_23.log'
 
     
 
@@ -7015,7 +7015,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_137/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_137.log'
 
     
 
@@ -7033,7 +7033,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_112/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_112.log'
 
     
 
@@ -7051,7 +7051,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_32/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_32.log'
 
     
 
@@ -7069,7 +7069,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_151/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_151.log'
 
     
 
@@ -7087,7 +7087,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_54/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_54.log'
 
     
 
@@ -7105,7 +7105,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_68/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_68.log'
 
     
 
@@ -7123,7 +7123,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_60/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_60.log'
 
     
 
@@ -7141,7 +7141,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_6.log'
 
     
 
@@ -7159,7 +7159,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_169/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_169.log'
 
     
 
@@ -7177,7 +7177,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_32/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_32.log'
 
     
 
@@ -7195,7 +7195,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_9.log'
 
     
 
@@ -7213,7 +7213,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_234/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_234.log'
 
     
 
@@ -7231,7 +7231,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_19/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_19.log'
 
     
 
@@ -7249,7 +7249,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_89/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_89.log'
 
     
 
@@ -7267,7 +7267,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_267/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_267.log'
 
     
 
@@ -7285,7 +7285,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_115/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_115.log'
 
     
 
@@ -7303,7 +7303,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_46/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_46.log'
 
     
 
@@ -7321,7 +7321,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_126/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_126.log'
 
     
 
@@ -7339,7 +7339,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_80/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_80.log'
 
     
 
@@ -7357,7 +7357,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_191/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_191.log'
 
     
 
@@ -7375,7 +7375,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_195/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_195.log'
 
     
 
@@ -7393,7 +7393,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_134/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_134.log'
 
     
 
@@ -7411,7 +7411,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_78/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_78.log'
 
     
 
@@ -7429,7 +7429,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_95/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_95.log'
 
     
 
@@ -7447,7 +7447,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_170/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_170.log'
 
     
 
@@ -7465,7 +7465,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_62/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_62.log'
 
     
 
@@ -7483,7 +7483,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_157/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_157.log'
 
     
 
@@ -7501,7 +7501,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_142/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_142.log'
 
     
 
@@ -7519,7 +7519,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_72/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_72.log'
 
     
 
@@ -7537,7 +7537,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_26/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_26.log'
 
     
 
@@ -7555,7 +7555,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_166/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_166.log'
 
     
 
@@ -7573,7 +7573,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_35/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_35.log'
 
     
 
@@ -7591,7 +7591,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_136/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_136.log'
 
     
 
@@ -7609,7 +7609,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_237/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_237.log'
 
     
 
@@ -7627,7 +7627,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_186/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_186.log'
 
     
 
@@ -7645,7 +7645,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_20/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_20.log'
 
     
 
@@ -7663,7 +7663,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_115/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_115.log'
 
     
 
@@ -7681,7 +7681,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_114/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_114.log'
 
     
 
@@ -7699,7 +7699,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_75/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_75.log'
 
     
 
@@ -7717,7 +7717,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_66/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_66.log'
 
     
 
@@ -7735,7 +7735,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_183/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_183.log'
 
     
 
@@ -7753,7 +7753,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_175/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_175.log'
 
     
 
@@ -7771,7 +7771,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_113/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_113.log'
 
     
 
@@ -7789,7 +7789,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_117/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_117.log'
 
     
 
@@ -7807,7 +7807,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_163/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_163.log'
 
     
 
@@ -7825,7 +7825,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_20/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_20.log'
 
     
 
@@ -7843,7 +7843,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_102/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_102.log'
 
     
 
@@ -7861,7 +7861,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_85/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_85.log'
 
     
 
@@ -7879,7 +7879,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_230/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_230.log'
 
     
 
@@ -7897,7 +7897,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_57/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_57.log'
 
     
 
@@ -7915,7 +7915,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_189/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_189.log'
 
     
 
@@ -7933,7 +7933,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_159/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_159.log'
 
     
 
@@ -7951,7 +7951,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_75/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_75.log'
 
     
 
@@ -7969,7 +7969,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_46/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_46.log'
 
     
 
@@ -7987,7 +7987,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_4.log'
 
     
 
@@ -8005,7 +8005,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_111/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_111.log'
 
     
 
@@ -8023,7 +8023,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_243/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_243.log'
 
     
 
@@ -8041,7 +8041,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_206/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_206.log'
 
     
 
@@ -8059,7 +8059,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_145/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_145.log'
 
     
 
@@ -8077,7 +8077,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_38/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_38.log'
 
     
 
@@ -8095,7 +8095,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_146/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_146.log'
 
     
 
@@ -8113,7 +8113,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_72/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_72.log'
 
     
 
@@ -8131,7 +8131,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_70/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_70.log'
 
     
 
@@ -8149,7 +8149,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_77/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_77.log'
 
     
 
@@ -8167,7 +8167,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_70/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_70.log'
 
     
 
@@ -8185,7 +8185,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_33/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_33.log'
 
     
 
@@ -8203,7 +8203,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_38/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_38.log'
 
     
 
@@ -8221,7 +8221,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_154/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_154.log'
 
     
 
@@ -8239,7 +8239,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_12/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_12.log'
 
     
 
@@ -8257,7 +8257,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_166/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_166.log'
 
     
 
@@ -8275,7 +8275,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_88/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_88.log'
 
     
 
@@ -8293,7 +8293,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_48/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_48.log'
 
     
 
@@ -8311,7 +8311,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_114/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_114.log'
 
     
 
@@ -8329,7 +8329,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_104/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_104.log'
 
     
 
@@ -8347,7 +8347,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_291/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_291.log'
 
     
 
@@ -8365,7 +8365,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_105/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_105.log'
 
     
 
@@ -8383,7 +8383,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_232/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_232.log'
 
     
 
@@ -8401,7 +8401,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_141/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_141.log'
 
     
 
@@ -8419,7 +8419,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_62/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_62.log'
 
     
 
@@ -8437,7 +8437,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_78/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_78.log'
 
     
 
@@ -8455,7 +8455,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_23/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_23.log'
 
     
 
@@ -8473,7 +8473,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_184/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_184.log'
 
     
 
@@ -8491,7 +8491,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_81/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_81.log'
 
     
 
@@ -8509,7 +8509,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_107/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_107.log'
 
     
 
@@ -8527,7 +8527,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_150/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_150.log'
 
     
 
@@ -8545,7 +8545,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_28/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_28.log'
 
     
 
@@ -8563,7 +8563,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_279/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_279.log'
 
     
 
@@ -8581,7 +8581,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_25/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_25.log'
 
     
 
@@ -8599,7 +8599,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_77/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_77.log'
 
     
 
@@ -8617,7 +8617,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_167/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_167.log'
 
     
 
@@ -8635,7 +8635,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_35/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_35.log'
 
     
 
@@ -8653,7 +8653,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_90/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_90.log'
 
     
 
@@ -8671,7 +8671,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_41/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_41.log'
 
     
 
@@ -8689,7 +8689,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_228/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_228.log'
 
     
 
@@ -8707,7 +8707,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_102/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_102.log'
 
     
 
@@ -8725,7 +8725,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_11/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_11.log'
 
     
 
@@ -8743,7 +8743,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_5.log'
 
     
 
@@ -8761,7 +8761,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_187/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_187.log'
 
     
 
@@ -8779,7 +8779,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_100/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_100.log'
 
     
 
@@ -8797,7 +8797,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_93/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_93.log'
 
     
 
@@ -8815,7 +8815,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_121/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_121.log'
 
     
 
@@ -8833,7 +8833,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_53/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_53.log'
 
     
 
@@ -8851,7 +8851,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_256/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_256.log'
 
     
 
@@ -8869,7 +8869,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_3.log'
 
     
 
@@ -8887,7 +8887,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_99/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_99.log'
 
     
 
@@ -8905,7 +8905,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_29/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_29.log'
 
     
 
@@ -8923,7 +8923,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_36/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_36.log'
 
     
 
@@ -8941,7 +8941,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_32/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_32.log'
 
     
 
@@ -8959,7 +8959,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_245/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_245.log'
 
     
 
@@ -8977,7 +8977,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_107/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_107.log'
 
     
 
@@ -8995,7 +8995,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_0.log'
 
     
 
@@ -9013,7 +9013,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_89/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_89.log'
 
     
 
@@ -9031,7 +9031,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_83/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_83.log'
 
     
 
@@ -9049,7 +9049,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_118/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_118.log'
 
     
 
@@ -9067,7 +9067,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_132/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_132.log'
 
     
 
@@ -9085,7 +9085,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_219/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_219.log'
 
     
 
@@ -9103,7 +9103,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_111/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_111.log'
 
     
 
@@ -9121,7 +9121,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_171/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_171.log'
 
     
 
@@ -9139,7 +9139,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_50/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_50.log'
 
     
 
@@ -9157,7 +9157,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_128/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_128.log'
 
     
 
@@ -9175,7 +9175,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_78/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_78.log'
 
     
 
@@ -9193,7 +9193,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_149/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_149.log'
 
     
 
@@ -9211,7 +9211,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_4.log'
 
     
 
@@ -9229,7 +9229,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_44/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_44.log'
 
     
 
@@ -9247,7 +9247,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_110/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_110.log'
 
     
 
@@ -9265,7 +9265,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_284/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_284.log'
 
     
 
@@ -9283,7 +9283,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_287/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_287.log'
 
     
 
@@ -9301,7 +9301,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_84/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_84.log'
 
     
 
@@ -9319,7 +9319,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_56/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_56.log'
 
     
 
@@ -9337,7 +9337,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_99/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_99.log'
 
     
 
@@ -9355,7 +9355,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_73/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_73.log'
 
     
 
@@ -9373,7 +9373,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_77/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_77.log'
 
     
 
@@ -9391,7 +9391,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_133/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_133.log'
 
     
 
@@ -9409,7 +9409,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_82/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_82.log'
 
     
 
@@ -9427,7 +9427,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_203/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_203.log'
 
     
 
@@ -9445,7 +9445,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_57/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_57.log'
 
     
 
@@ -9463,7 +9463,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_119/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_119.log'
 
     
 
@@ -9481,7 +9481,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_40/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_40.log'
 
     
 
@@ -9499,7 +9499,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_35/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_35.log'
 
     
 
@@ -9517,7 +9517,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_108/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_108.log'
 
     
 
@@ -9535,7 +9535,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_65/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_65.log'
 
     
 
@@ -9553,7 +9553,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_51/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_51.log'
 
     
 
@@ -9571,7 +9571,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_109/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_109.log'
 
     
 
@@ -9589,7 +9589,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_34/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_34.log'
 
     
 
@@ -9607,7 +9607,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_69/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_69.log'
 
     
 
@@ -9625,7 +9625,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_16/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_16.log'
 
     
 
@@ -9643,7 +9643,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_178/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_178.log'
 
     
 
@@ -9661,7 +9661,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_148/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_148.log'
 
     
 
@@ -9679,7 +9679,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_185/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_185.log'
 
     
 
@@ -9697,7 +9697,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_116/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_116.log'
 
     
 
@@ -9715,7 +9715,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_169/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_169.log'
 
     
 
@@ -9733,7 +9733,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_131/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_131.log'
 
     
 
@@ -9751,7 +9751,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_145/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_145.log'
 
     
 
@@ -9769,7 +9769,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_72/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_72.log'
 
     
 
@@ -9787,7 +9787,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_1.log'
 
     
 
@@ -9805,7 +9805,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_109/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_109.log'
 
     
 
@@ -9823,7 +9823,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_99/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_99.log'
 
     
 
@@ -9841,7 +9841,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_9.log'
 
     
 
@@ -9859,7 +9859,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_55/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_55.log'
 
     
 
@@ -9877,7 +9877,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_262/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_262.log'
 
     
 
@@ -9895,7 +9895,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_6.log'
 
     
 
@@ -9913,7 +9913,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_0.log'
 
     
 
@@ -9931,7 +9931,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_1.log'
 
     
 
@@ -9949,7 +9949,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_241/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_241.log'
 
     
 
@@ -9967,7 +9967,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_156/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_156.log'
 
     
 
@@ -9985,7 +9985,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_105/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_105.log'
 
     
 
@@ -10003,7 +10003,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_122/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_122.log'
 
     
 
@@ -10021,7 +10021,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_97/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_97.log'
 
     
 
@@ -10039,7 +10039,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_14/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_14.log'
 
     
 
@@ -10057,7 +10057,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_222/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_222.log'
 
     
 
@@ -10075,7 +10075,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_66/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_66.log'
 
     
 
@@ -10093,7 +10093,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_28/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_28.log'
 
     
 
@@ -10111,7 +10111,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_31/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_31.log'
 
     
 
@@ -10129,7 +10129,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_285/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_285.log'
 
     
 
@@ -10147,7 +10147,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_34/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_34.log'
 
     
 
@@ -10165,7 +10165,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_126/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_126.log'
 
     
 
@@ -10183,7 +10183,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_97/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_97.log'
 
     
 
@@ -10201,7 +10201,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_164/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_164.log'
 
     
 
@@ -10219,7 +10219,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_16/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_16.log'
 
     
 
@@ -10237,7 +10237,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_286/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_286.log'
 
     
 
@@ -10255,7 +10255,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_278/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_278.log'
 
     
 
@@ -10273,7 +10273,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_253/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_253.log'
 
     
 
@@ -10291,7 +10291,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_83/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_83.log'
 
     
 
@@ -10309,7 +10309,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_209/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_209.log'
 
     
 
@@ -10327,7 +10327,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_152/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_152.log'
 
     
 
@@ -10345,7 +10345,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_142/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_142.log'
 
     
 
@@ -10363,7 +10363,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_37/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_37.log'
 
     
 
@@ -10381,7 +10381,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_119/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_119.log'
 
     
 
@@ -10399,7 +10399,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_37/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_37.log'
 
     
 
@@ -10417,7 +10417,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_63/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_63.log'
 
     
 
@@ -10435,7 +10435,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_250/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_250.log'
 
     
 
@@ -10453,7 +10453,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_10.log'
 
     
 
@@ -10471,7 +10471,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_79/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_79.log'
 
     
 
@@ -10489,7 +10489,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_29/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_29.log'
 
     
 
@@ -10507,7 +10507,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_96/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_96.log'
 
     
 
@@ -10525,7 +10525,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_158/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_158.log'
 
     
 
@@ -10543,7 +10543,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_95/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_95.log'
 
     
 
@@ -10561,7 +10561,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_135/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_135.log'
 
     
 
@@ -10579,7 +10579,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_58/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_58.log'
 
     
 
@@ -10597,7 +10597,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_30/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_30.log'
 
     
 
@@ -10615,7 +10615,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_107/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_107.log'
 
     
 
@@ -10633,7 +10633,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_3.log'
 
     
 
@@ -10651,7 +10651,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_84/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_84.log'
 
     
 
@@ -10669,7 +10669,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_4.log'
 
     
 
@@ -10687,7 +10687,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_82/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_82.log'
 
     
 
@@ -10705,7 +10705,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2019-05-14_part_18/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_18.log'
 
     
 
@@ -10723,7 +10723,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2020-01-28_part_21/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_21.log'
 
     
 
@@ -10741,7 +10741,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_239/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_239.log'
 
     
 
@@ -10759,7 +10759,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_71/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_71.log'
 
     
 
@@ -10777,7 +10777,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_en_2018-11-04_part_165/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_165.log'
 
     
 
@@ -10795,7 +10795,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_9.log'
 
     
 
@@ -10813,7 +10813,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_1.log'
 
     
 
@@ -10831,7 +10831,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_13/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_13.log'
 
     
 
@@ -10849,7 +10849,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_3.log'
 
     
 
@@ -10867,7 +10867,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_1.log'
 
     
 
@@ -10885,7 +10885,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_0.log'
 
     
 
@@ -10903,7 +10903,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_5.log'
 
     
 
@@ -10921,7 +10921,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_3.log'
 
     
 
@@ -10939,7 +10939,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_4.log'
 
     
 
@@ -10957,7 +10957,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_0.log'
 
     
 
@@ -10975,7 +10975,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_4.log'
 
     
 
@@ -10993,7 +10993,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_10.log'
 
     
 
@@ -11011,7 +11011,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_11/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_11.log'
 
     
 
@@ -11029,7 +11029,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_6.log'
 
     
 
@@ -11047,7 +11047,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_4/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_4.log'
 
     
 
@@ -11065,7 +11065,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_8.log'
 
     
 
@@ -11083,7 +11083,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_0/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_0.log'
 
     
 
@@ -11101,7 +11101,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_2.log'
 
     
 
@@ -11119,7 +11119,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_7.log'
 
     
 
@@ -11137,7 +11137,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_8.log'
 
     
 
@@ -11155,7 +11155,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_8/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_8.log'
 
     
 
@@ -11173,7 +11173,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_11/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_11.log'
 
     
 
@@ -11191,7 +11191,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_5.log'
 
     
 
@@ -11209,7 +11209,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_2.log'
 
     
 
@@ -11227,7 +11227,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_6.log'
 
     
 
@@ -11245,7 +11245,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_7.log'
 
     
 
@@ -11263,7 +11263,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_5/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_5.log'
 
     
 
@@ -11281,7 +11281,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_10.log'
 
     
 
@@ -11299,7 +11299,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_7/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_7.log'
 
     
 
@@ -11317,7 +11317,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_3/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_3.log'
 
     
 
@@ -11335,7 +11335,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_6/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_6.log'
 
     
 
@@ -11353,7 +11353,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_15/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_15.log'
 
     
 
@@ -11371,7 +11371,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2019-05-14_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2019-05-14_part_9.log'
 
     
 
@@ -11389,7 +11389,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_14/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_14.log'
 
     
 
@@ -11407,7 +11407,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2020-01-28_part_2/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2020-01-28_part_2.log'
 
     
 
@@ -11425,7 +11425,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_10/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_10.log'
 
     
 
@@ -11443,7 +11443,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_9/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_9.log'
 
     
 
@@ -11461,7 +11461,7 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_12/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_12.log'
 
     
 
@@ -11479,6 +11479,6 @@
         --topn=4 \
         --gpu_expansion_batch_size=50 \
         --expected_worker_load=3000000000 \
-        --logfile='output/enacomp2020/hashtags_pt_2018-11-04_part_1/logfile.log'
+        --logfile='logfile_enacomp2020_hashtags_pt_2018-11-04_part_1.log'
 
     
