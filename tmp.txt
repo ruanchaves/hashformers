@@ -1,1 +1,0 @@
-cat small_test_boun_1.log | grep 'elapsed' | sed -n -e 's/^.*elapsed time: //p' | sort -g | tail -n 1
