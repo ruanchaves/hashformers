@@ -1,235 +1,235 @@
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_13.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_13.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_13.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_13/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_13.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_61.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_61.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_61.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_61/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_61.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_147.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_147.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_147.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_147/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_147.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_65.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_65.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_65.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_65/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_65.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_11.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_11.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2019-05-14_part_11.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2019-05-14_part_11/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2019-05-14_part_11.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_27.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_27.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_27.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_27/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_27.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_264.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_264.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_264.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_264/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_264.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_103.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_103.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_103.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_103/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_103.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_172.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_172.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_172.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_172/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_172.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_39.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_39.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2020-01-28_part_39.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2020-01-28_part_39/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2020-01-28_part_39.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_108.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_108.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_108.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_108/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_108.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_67.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_67.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_67.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_67/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_67.log'
 
     
 
-    python beamsearch_manager.py \
-        --model_name_or_path='gpt2' \
-        --model_type='gpt2' \
-        --gpu_batch_size=1 \
-        --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_283.txt' \
-        --eval_dataset_format='BOUN' \
-        --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/expansions.json' \
-        --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/dict.json' \
-        --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/report.json' \
-        --topk=20 \
-        --steps=5 \
-        --topn=4 \
-        --gpu_expansion_batch_size=50 \
-        --expected_worker_load=3000000000 \
-        --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_283.log'
+    # python beamsearch_manager.py \
+    #     --model_name_or_path='gpt2' \
+    #     --model_type='gpt2' \
+    #     --gpu_batch_size=1 \
+    #     --eval_data_file='/home/datasets/hashtags/hashtags_en_2018-11-04_part_283.txt' \
+    #     --eval_dataset_format='BOUN' \
+    #     --expansions_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/expansions.json' \
+    #     --dict_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/dict.json' \
+    #     --report_file='output/enacomp2020/hashtags_en_2018-11-04_part_283/report.json' \
+    #     --topk=20 \
+    #     --steps=5 \
+    #     --topn=4 \
+    #     --gpu_expansion_batch_size=50 \
+    #     --expected_worker_load=3000000000 \
+    #     --logfile='logfile_enacomp2020_hashtags_en_2018-11-04_part_283.log'
 
     
 
