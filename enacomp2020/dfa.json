@@ -1,0 +1,42 @@
+{
+    "s0": {
+        "CHAR": "s1",
+        "SPACE": "s0",
+        "PUNCT": "S"
+    },
+    "s1": {
+        "CHAR": "B",
+        "SPACE": "S",
+        "PUNCT": "SS"
+    },
+    "S": {
+        "CHAR": "s1",
+        "SPACE": "s0",
+        "PUNCT": "S"
+    },
+    "SS": {
+        "CHAR": "s1",
+        "SPACE": "s0",
+        "PUNCT": "S"
+    },
+    "B": {
+        "CHAR": "M",
+        "SPACE": "E",
+        "PUNCT": "ES"
+    },
+    "M": {
+        "CHAR": "M",
+        "SPACE": "E",
+        "PUNCT": "ES"
+    },
+    "ES": {
+        "CHAR": "s1",
+        "SPACE": "s0",
+        "PUNCT": "S"
+    },
+    "E": {
+        "CHAR": "s1",
+        "SPACE": "s0",
+        "PUNCT": "S"
+    }
+}
