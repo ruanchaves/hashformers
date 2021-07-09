@@ -14,6 +14,7 @@ from pathos.multiprocessing import ProcessingPool as Pool
 from transformers import BertForMaskedLM, BertTokenizer
 from concurrent.futures import ThreadPoolExecutor
 from gpt2_lm import GPT2LM
+from bert_lm import BertLM
 from reader import DatasetReader
 from configuration_classes import (
     parameters_to_string,
@@ -44,8 +45,8 @@ class ModelLM(object):
     def __init__(self, model_name_or_path=None, model_type=None, device=None, gpu_batch_size=None):
         if model_type == 'gpt2':
             self.model = GPT2LM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size)
-        else:
-            raise NotImplementedError
+        elif model_type == 'bert':
+            self.model = BertLM(model_name_or_path)
 
 class Beamsearch(ModelLM):
 
