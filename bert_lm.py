@@ -1,4 +1,4 @@
-import mx
+import mxnet as mx
 import numpy as np
 import pandas as pd
 from mlm.models import get_pretrained
