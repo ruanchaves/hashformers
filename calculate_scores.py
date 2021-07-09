@@ -33,7 +33,7 @@ def calculate_scores(
     else:
         raise NotImplementedError
 
-    model = ModelLM(
+    lm = ModelLM(
         model_name_or_path=model_name_or_path,
         model_type=model_type,
         device='cuda',
@@ -43,7 +43,7 @@ def calculate_scores(
     output = {}
 
     for entry in dataset:
-        perplexity = model.get_probs([entry])[0]
+        perplexity = lm.model.get_probs([entry])[0]
         output[entry] = perplexity
 
     return output
