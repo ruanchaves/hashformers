@@ -1,20 +1,10 @@
 import copy
 import itertools
-import multiprocessing
 import re
 import sys
-import numpy as np
-import torch
-import pandas as pd
 import logging
 import json
 from timeit import default_timer as timer
-from collections import defaultdict
-from pathos.multiprocessing import ProcessingPool as Pool
-from transformers import BertForMaskedLM, BertTokenizer
-from concurrent.futures import ThreadPoolExecutor
-from gpt2_lm import GPT2LM
-from bert_lm import BertLM
 from reader import DatasetReader
 from configuration_classes import (
     parameters_to_string,
@@ -44,8 +34,10 @@ class ModelLM(object):
 
     def __init__(self, model_name_or_path=None, model_type=None, device=None, gpu_batch_size=None):
         if model_type == 'gpt2':
+            from gpt2_lm import GPT2LM
             self.model = GPT2LM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size)
         elif model_type == 'bert':
+            from bert_lm import BertLM
             self.model = BertLM(model_name_or_path)
 
 class Beamsearch(ModelLM):
@@ -205,13 +197,6 @@ def main():
 
     elapsed_time = end_time - start_time
     segmented_data = beamsearch.convert_dataset()
-    # result = evaluate_word_segmentation_model(
-    #                 segmented_data, 
-    #                 reader.test, 
-    #                 save_report=True, 
-    #                 report_file=data_args.report_file)
-    
-    # logger.info(str(result))
     logger.info('elapsed time: {0}'.format(elapsed_time))    
     logger.info('characters / second: {0}'.format(reader.get_character_count() / elapsed_time))
 
@@ -219,32 +204,6 @@ def main():
     pathlib.Path(dict_dir).mkdir(parents=True, exist_ok=True)
     with open(data_args.dict_file, 'w+') as f:
         json.dump(beamsearch.prob_dict, f)
-    
-    # if model_args.model_type == 'gpt2' and data_args.expansions_file:
-
-    #     if os.path.isfile(data_args.expansions_file):
-    #         sys.exit()
-
-    #     groups, groups_character_count = \
-    #         gather_n_candidates(beamsearch.prob_dict, segmented_data, n=ranking_args.topn)
-    #     start_time = timer()
-
-    #     beamsearch.model.gpu_expansion_batch_size = ranking_args.gpu_expansion_batch_size
-    #     for group in groups:
-    #         beamsearch.model.generate_expansions(group)
-    #     new_segmented_data = beamsearch.model.expansions
-    #     end_time = timer()
-
-    #     elapsed_time = end_time - start_time
-
-    #     logger.info('elapsed time: {0}'.format(elapsed_time))    
-    #     logger.info('characters / second: {0}'.format(groups_character_count / elapsed_time))
-
-
-    #     expansions_dir = os.path.split(data_args.expansions_file)[0]
-    #     pathlib.Path(expansions_dir).mkdir(parents=True, exist_ok=True)
-    #     with open(data_args.expansions_file, 'w+') as f:
-    #         json.dump(new_segmented_data, f)
 
 if __name__ == '__main__':
     main()
