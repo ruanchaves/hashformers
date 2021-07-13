@@ -1,79 +1,59 @@
+from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from word_segmentation.evaluation.modeler import Modeler
-import pandas as pd
-import copy
-import numpy as np
 
-def evaluate_df(
-    df, 
-    gold_field='gold', 
-    segmentation_field='segmentation'
-):
-  evaluator = Modeler()
-
-  df['truth_value'] = df['gold'].combine(
-    df['segmentation'],
-    lambda x,y: x == y
-  )
-
-  df = df\
-    .sort_values(
-      by=[
-        gold_field, 
-        'truth_value'
-      ], 
-      ascending=False)\
-    .groupby(gold_field)\
-    .head(1)
-
-  records = df.to_dict('records')
-  for row in records:
-    evaluator.countEntry(
-      row[segmentation_field],
-      row[gold_field]
-    )
-  metrics = {
-      'f1': evaluator.calculateFScore(),
-      'acc': evaluator.calculateAccuracy()
-  }
-  return metrics
-
-def filter_top_k(
-    input_df, 
-    k, 
-    gold_field='gold', 
-    score_field='score',
-    segmentation_field='segmentation',
-    fill=False):
-  
-  df = copy.deepcopy(input_df)
-  
-  df = df\
-    .sort_values(by=score_field, ascending=True)\
-    .groupby(gold_field)\
-    .head(k)
-
-  if fill:
-    df['group_length'] = df.groupby(gold_field)[segmentation_field].transform(len)
-    df['group_length'] = df['group_length'] * -1 + k + 1
-    len_array = df['group_length'].values
+def evaluate_dictionary(data, gold, n=11):
     
-    df = df.drop(columns=['group_length'])
-    records = np.array(df.to_dict('records'))
-    cloned_records = list(np.repeat(records, len_array))
-    df = pd.DataFrame(cloned_records)
+    gold_dict = {}
+    for item in gold:
+        gold_dict.update({item.replace(" ", ""): item})
+
+    input_data = enforce_prob_dict(data)
+
+    final_metrics = {}
+    for i in range(1, n):
+        df = input_data.get_top_k(
+            self,
+            k=i,
+            characters_field="characters",
+            segmentation_field="segmentation",
+            score_field="score",
+            return_dataframe=True
+        )
+
+        df['gold'] = df['characters'].apply(
+            lambda x: gold_dict[x]
+        )
+
+        if i > 1:
+            df['truth_field'] = df['gold'].combine(
+                df['segmentation'],
+                lambda x,y: int(x == y)
+            )
+            df = df.sort_values(
+                by='truth_field',
+                ascending=False)
+            df = df.groupby('gold').head(1)
+
+        records = df.to_dict('records')
+        modeler = Modeler()
+        for item in records:
+            modeler.countEntry(
+             records['gold'],
+             records['segmentation']   
+            )
+        
+        metrics = {
+                'f1': modeler.calculateFScore(),
+                'accuracy': modeler.calculateAccuracy(),
+                'precision': modeler.calculatePrecision(),
+                'recall': modeler.calculateRecall()
+            }
+
+        if i > 1:
+            metrics = {
+                f"top_{i}_{key}" for key, value in metrics.items()
+            }
+
+        final_metrics.update(metrics)
     
-    df = df\
-      .sort_values(by=score_field, ascending=True)\
-      .groupby(gold_field)\
-      .head(k)
-
-    length = df.groupby(gold_field).size().values
-    assert (length == k).all()
-  
-  return df
-
-
-def read_experiment_dataset(data, dataset, model):
-    selected_data = [ x for x in data if x['dataset']==dataset and x['model']==model][0]['data']
-    output = pd.DataFrame(selected_data)
-    return output
+    return final_metrics

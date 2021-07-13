@@ -1,12 +1,11 @@
-from word_segmentation.ensemble.utils import build_ensemble_df
-from word_segmentation.evaluation.utils import (
+from word_segmentation.experiments.utils import build_ensemble_df
+from word_segmentation.experiments.evaluation import (
     read_experiment_dataset,
     evaluate_df,
     filter_top_k
 )
 import numpy as np 
 import itertools
-import logging
 from joblib import Parallel, delayed
 import multiprocessing
 import pandas as pd

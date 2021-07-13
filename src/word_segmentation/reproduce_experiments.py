@@ -1,4 +1,4 @@
-from word_segmentation.ensemble.architectures import grid_search_and_evaluate
+from word_segmentation.experiments.architectures import grid_search_and_evaluate
 import json
 import copy
 from argparse import ArgumentParser

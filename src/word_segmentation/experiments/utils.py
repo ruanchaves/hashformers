@@ -1,6 +1,5 @@
 import pandas as pd
 import copy
-from pandas.testing import assert_series_equal
 import numpy as np 
 
 from word_segmentation.evaluation.utils import (

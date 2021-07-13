@@ -13,7 +13,7 @@
 # 
 # Arda Celebi, TABI Labs, CMPE, Bogazici University, 
 #
- 
+
 class Modeler(object):
     
     hashtagSegmentor = None
