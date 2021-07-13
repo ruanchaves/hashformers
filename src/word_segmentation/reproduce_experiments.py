@@ -1,24 +1,14 @@
 from word_segmentation.ensemble.architectures import grid_search_and_evaluate
-from word_segmentation.ensemble.architectures import build_ensemble_df_from_data
-from word_segmentation.ensemble.architectures import grid_search
-from word_segmentation.ensemble.architectures import evaluate_ensemble
-from word_segmentation.ensemble.utils import build_ensemble_df
-import numpy as np
 import json
 import copy
 from argparse import ArgumentParser
 import logging
 import datetime
-from word_segmentation.ensemble.utils import (
-    project_scores
-)
-
+import os
 import pandas as pd
-from pandas.testing import assert_series_equal
 import pathlib 
 
 from word_segmentation.evaluation.utils import (
-    read_experiment_dataset,
     evaluate_df,
     filter_top_k
 )
@@ -46,7 +36,9 @@ def configure_logging():
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     timestamp = int(datetime.datetime.now().timestamp())
-    fh = logging.FileHandler(f"word_segmentation_experiments_{timestamp}.log")
+    fh = logging.FileHandler(
+        os.path.join("./logs", f"word_segmentation_experiments_{timestamp}.log")
+        )
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
@@ -56,8 +48,8 @@ def log_dataframe(dataframe, logger_name="word_segmentation_experiments"):
     logger = logging.getLogger(logger_name)
     logger.info('\n\t'+dataframe.to_string().replace('\n', '\n\t'))
 
-def evaluate_single_runs(data):
-    evaluate_dataset = lambda x: evaluate_df(filter_top_k(x, 1))
+def evaluate_single_runs(data, k=1):
+    evaluate_dataset = lambda x: evaluate_df(filter_top_k(x, k))
     eval_df = copy.deepcopy(data)
     eval_df = [ x for x in eval_df if x['model'] ]
     for idx, item in enumerate(eval_df):
@@ -87,8 +79,10 @@ def main():
     with open(args.source, 'r') as f:
         data = json.load(f)
     
-    evaluation = evaluate_single_runs(data)
-    log_dataframe(evaluation)
+    for k in range(1, 10):
+        logger.info(f'k = {k}')
+        evaluation = evaluate_single_runs(data, k=k)
+        log_dataframe(evaluation)
 
     boun_test_metrics = grid_search_and_evaluate(
         data,

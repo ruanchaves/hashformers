@@ -3,11 +3,34 @@ import pandas as pd
 import copy
 import numpy as np
 
-def evaluate_df(df, gold_field='gold', segmentation_field='segmentation', score_field='score'):
+def evaluate_df(
+    df, 
+    gold_field='gold', 
+    segmentation_field='segmentation'
+):
   evaluator = Modeler()
+
+  df['truth_value'] = df['gold'].combine(
+    df['segmentation'],
+    lambda x,y: x == y
+  )
+
+  df = df\
+    .sort_values(
+      by=[
+        gold_field, 
+        'truth_value'
+      ], 
+      ascending=False)\
+    .groupby(gold_field)\
+    .head(1)
+
   records = df.to_dict('records')
   for row in records:
-    evaluator.countEntry(row[segmentation_field], row[gold_field])
+    evaluator.countEntry(
+      row[segmentation_field],
+      row[gold_field]
+    )
   metrics = {
       'f1': evaluator.calculateFScore(),
       'acc': evaluator.calculateAccuracy()
