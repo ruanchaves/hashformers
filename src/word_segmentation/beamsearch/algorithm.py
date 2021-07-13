@@ -82,5 +82,5 @@ class Beamsearch(ModelLM):
             tree = self.reshape_tree(tree, self.gpu_batch_size)
             prob_dict = self.update_probabilities(tree, prob_dict)
             tree = self.flatten_list(tree)
-            tree = self.trim_tree(tree, topk)
+            tree = self.trim_tree(tree, prob_dict, topk)
         return ProbabilityDictionary(prob_dict)
