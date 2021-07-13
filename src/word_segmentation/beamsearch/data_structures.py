@@ -33,11 +33,11 @@ class ProbabilityDictionary(object):
             segmentation_field=segmentation_field,
             score_field=score_field
         )
+        df = df\
+        .sort_values(by=score_field, ascending=True)\
+        .groupby(characters_field)\
+        .head(k)
         if fill == False and return_dataframe == True:
-            df = df\
-            .sort_values(by=score_field, ascending=True)\
-            .groupby(characters_field)\
-            .head(k)
             return df
         elif fill == True and return_dataframe == True:
             df['group_length'] = df.groupby(characters_field)[segmentation_field].transform(len)
@@ -47,10 +47,6 @@ class ProbabilityDictionary(object):
             records = np.array(df.to_dict('records'))
             cloned_records = list(np.repeat(records, len_array))
             df = pd.DataFrame(cloned_records)
-            df = df\
-            .sort_values(by=score_field, ascending=True)\
-            .groupby(characters_field)\
-            .head(k)
             return df
         elif fill == False and return_dataframe == False:
             keys = df[segmentation_field].values
