@@ -8,7 +8,7 @@ class Reranker(ModelLM):
         model_name_or_path='bert-base-uncased',
         model_type='bert'
     ):
-        super.__init__(
+        super().__init__(
             model_name_or_path=model_name_or_path,
             model_type=model_type,
         )
