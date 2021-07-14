@@ -117,6 +117,7 @@ def main():
 
     dataset = load_dataset('text', data_files={'test': data_args.source})
     gold = dataset['test'].to_dict()['text']
+    gold = [ x.strip() for x in gold ]
     hashtags = [x.replace(" ", "") for x in gold]
 
     if data_args.sample:
