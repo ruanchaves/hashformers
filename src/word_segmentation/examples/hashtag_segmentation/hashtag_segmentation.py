@@ -39,7 +39,7 @@ class BeamsearchArguments:
         default='cuda'
     )
 
-    gpu_batch_size: int = field(
+    decoder_gpu_batch_size: int = field(
         default=1
     )
 
