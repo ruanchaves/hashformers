@@ -158,7 +158,7 @@ def main():
     ensemble_metrics = evaluate_dictionary(
         candidates,
         gold,
-        n=2
+        n=1
     )
 
     logger.info("Ensemble metrics:")

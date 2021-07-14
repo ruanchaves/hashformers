@@ -3,7 +3,8 @@ import numpy as np
 
 def calculate_top2_rank(scores):
     x = scores.reshape(-1,2)
-    return x.argsort().flatten()
+    x = x.argsort().flatten()
+    return x
 
 def calculate_top2_diff(scores):
     x = scores.reshape(-1,2)
@@ -41,18 +42,44 @@ def top2_ensemble(
         return_dataframe=True,
         fill=True
     )
-        
-    ref_scores = reference_df['score'].values
-    aux_scores = reference_df['segmentation'].apply(
+
+    reference_df['ref_score'] = reference_df['score']
+    reference_df['aux_score'] = reference_df['segmentation'].apply(
         lambda x: b.dictionary[x]
-    ).values
+    )
 
-    ref_rank = calculate_top2_rank(ref_scores)
-    aux_rank = calculate_top2_rank(aux_scores)
+    reference_df = reference_df.sort_values(
+        by=['characters', 'ref_score']
+    )
 
-    ref_diff = calculate_top2_diff(ref_scores)
-    aux_diff = calculate_top2_diff(aux_scores)
+    reference_df['ref_diff'] = calculate_top2_diff(
+        reference_df['ref_score'].values
+    )
 
+    reference_df = reference_df.sort_values(
+        by=['characters', 'aux_score']
+    )
+
+    reference_df['aux_diff'] = calculate_top2_diff(
+        reference_df['aux_score'].values
+    )
+
+    reference_df = reference_df.sort_values(
+        by=["characters", "ref_score"]
+    )
+
+    ref_rank = calculate_top2_rank(
+        reference_df["ref_score"].values
+    )
+    aux_rank = calculate_top2_rank(
+        reference_df["aux_score"].values
+    )
+
+    ref_diff = reference_df["ref_diff"].values
+    aux_diff = reference_df["aux_diff"].values
+    ref_rank = reference_df["ref_rank"].values
+    aux_rank = reference_df["aux_rank"].values
+    
     reference_df['ensemble_rank'] = run_ensemble(
         ref_diff,
         aux_diff,
