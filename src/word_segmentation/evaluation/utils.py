@@ -37,8 +37,8 @@ def evaluate_dictionary(data, gold, n=10):
         modeler = Modeler()
         for item in records:
             modeler.countEntry(
-             records['gold'],
-             records['segmentation']   
+             item['gold'],
+             item['segmentation']   
             )
         
         metrics = {
