@@ -52,12 +52,20 @@ def top2_ensemble(
         by=['characters', 'ref_score']
     )
 
+    reference_df["ref_rank"] = calculate_top2_rank(
+        reference_df["ref_score"].values
+    )
+
     reference_df['ref_diff'] = calculate_top2_diff(
         reference_df['ref_score'].values
     )
 
     reference_df = reference_df.sort_values(
         by=['characters', 'aux_score']
+    )
+
+    reference_df["aux_rank"] = calculate_top2_rank(
+        reference_df["aux_score"].values
     )
 
     reference_df['aux_diff'] = calculate_top2_diff(
@@ -68,15 +76,8 @@ def top2_ensemble(
         by=["characters", "ref_score"]
     )
 
-    reference_df["ref_rank"] = calculate_top2_rank(
-        reference_df["ref_score"].values
-    )
-    reference_df["aux_rank"] = calculate_top2_rank(
-        reference_df["aux_score"].values
-    )
-
-    ref_diff = reference_df["ref_diff"].values
-    aux_diff = reference_df["aux_diff"].values
+    ref_diff = np.abs(reference_df["ref_diff"].values)
+    aux_diff = np.abs(reference_df["aux_diff"].values)
     ref_rank = reference_df["ref_rank"].values
     aux_rank = reference_df["aux_rank"].values
 
@@ -97,7 +98,7 @@ def top2_ensemble(
         return reference_df
     elif return_dataframe == False:
         reference_df = reference_df\
-            .sort_values(by=["characters", "ensemble_rank", "score"])\
+            .sort_values(by=["characters", "ensemble_rank", "ref_score"])\
             .groupby("characters")\
             .head(1)
         segs = reference_df['segmentation'].values.tolist()
