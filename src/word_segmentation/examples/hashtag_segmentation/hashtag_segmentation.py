@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from itertools import starmap
 from word_segmentation.beamsearch.algorithm import Beamsearch
 from word_segmentation.beamsearch.reranker import Reranker
 from word_segmentation.evaluation.utils import evaluate_dictionary
@@ -12,6 +13,7 @@ from datasets import load_dataset
 logger = logging.getLogger(__name__)
 import os 
 import sys
+from typing import Optional
 
 @dataclass
 class DataArguments:
@@ -22,6 +24,10 @@ class DataArguments:
 
     evaluate_top_k: int = field(
         default=10
+    )
+
+    sample: Optional[int] = field(
+        default=None
     )
 
 @dataclass
@@ -112,6 +118,10 @@ def main():
     dataset = load_dataset('text', data_files={'test': data_args.source})
     gold = dataset['test'].to_dict()['text']
     hashtags = [x.replace(" ", "") for x in gold]
+
+    if data_args.sample:
+        gold = gold[0:data_args.sample]
+        hashtags = hashtags[0:data_args.sample]
 
     gpt2_run = gpt2_model.run(
         hashtags,
