@@ -8,7 +8,7 @@ from transformers import HfArgumentParser
 import logging 
 import transformers
 import datasets 
-from datasets import read_dataset
+from datasets import load_dataset
 logger = logging.getLogger(__name__)
 import os 
 import sys
@@ -73,16 +73,6 @@ class EnsembleArguments:
         default=0.1
     )
 
-def read_dataset(dataset_path):
-  output = {}
-  with open(dataset_path,'r') as f:
-      data = f.read().split('\n')
-  for line in data:
-    output.update({
-        line.strip().replace(" ", ""): line.strip()
-    })
-  return output
-
 def main():
     parser = HfArgumentParser((BeamsearchArguments, RerankerArguments, EnsembleArguments, DataArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -120,7 +110,7 @@ def main():
         encoder_model_type=reranker_args.encoder_model_type
     )
 
-    dataset = read_dataset('text', data_files={'test': data_args.source})
+    dataset = load_dataset('text', data_files={'test': data_args.source})
     gold = dataset['test'].to_dict()['text']
     hashtags = [x.replace(" ", "") for x in gold]
 
