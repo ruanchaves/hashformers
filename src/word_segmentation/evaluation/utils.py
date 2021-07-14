@@ -50,7 +50,7 @@ def evaluate_dictionary(data, gold, n=10):
 
         if i > 1:
             metrics = {
-                f"top_{i}_{key}" for key, value in metrics.items()
+                f"top_{i}_{key}":value for key, value in metrics.items()
             }
 
         final_metrics.update(metrics)
