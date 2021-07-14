@@ -1,7 +1,7 @@
 from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from word_segmentation.evaluation.modeler import Modeler
 
-def evaluate_dictionary(data, gold, n=11):
+def evaluate_dictionary(data, gold, n=10):
     
     gold_dict = {}
     for item in gold:
@@ -10,7 +10,7 @@ def evaluate_dictionary(data, gold, n=11):
     input_data = enforce_prob_dict(data)
 
     final_metrics = {}
-    for i in range(1, n):
+    for i in range(1, n+1):
         df = input_data.get_top_k(
             self,
             k=i,

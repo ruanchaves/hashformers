@@ -7,7 +7,7 @@ def calculate_top2_rank(scores):
 
 def calculate_top2_diff(scores):
     x = scores.reshape(-1,2)
-    np.repeat(np.subtract.reduce(x, axis=1).flatten(), 2)
+    x = np.repeat(np.subtract.reduce(x, axis=1).flatten(), 2)
     x = np.nan_to_num(x)
     return x
 
@@ -42,10 +42,10 @@ def top2_ensemble(
         fill=True
     )
         
-    ref_scores = reference_df['score']
-    aux_scores = reference_df['segmentations'].apply(
+    ref_scores = reference_df['score'].values
+    aux_scores = reference_df['segmentation'].apply(
         lambda x: b.dictionary[x]
-    )
+    ).values
 
     ref_rank = calculate_top2_rank(ref_scores)
     aux_rank = calculate_top2_rank(aux_scores)
@@ -69,9 +69,10 @@ def top2_ensemble(
     if return_dataframe == True:
         return reference_df
     elif return_dataframe == False:
-        reference_df = reference_df[
-            reference_df['ensemble_rank']==0
-        ]
+        reference_df = reference_df\
+            .sort_values(by=["characters", "ensemble_rank", "score"])\
+            .groupby("characters")\
+            .head(1)
         segs = reference_df['segmentation'].values.tolist()
         chars = [ x.replace(" ", "") for x in segs ]
         output = {

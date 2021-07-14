@@ -14,10 +14,14 @@ class ProbabilityDictionary(object):
     dictionary: dict
 
     def get_segmentations(
-        self
+        self,
+        astype='dict'
     ):
         top_1 = self.get_top_k(k=1)
-        return { k.replace(" ", ""):k for k,v in top_1.items() }
+        if astype == 'dict':
+            return { k.replace(" ", ""):k for k,v in top_1.items() }
+        elif astype == 'list':
+            return list(top_1.keys())
 
     def get_top_k(
         self,
