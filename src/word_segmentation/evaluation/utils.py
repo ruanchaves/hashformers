@@ -12,7 +12,6 @@ def evaluate_dictionary(data, gold, n=10):
     final_metrics = {}
     for i in range(1, n+1):
         df = input_data.get_top_k(
-            self,
             k=i,
             characters_field="characters",
             segmentation_field="segmentation",
