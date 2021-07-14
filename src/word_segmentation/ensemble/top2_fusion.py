@@ -68,10 +68,10 @@ def top2_ensemble(
         by=["characters", "ref_score"]
     )
 
-    ref_rank = calculate_top2_rank(
+    reference_df["ref_rank"] = calculate_top2_rank(
         reference_df["ref_score"].values
     )
-    aux_rank = calculate_top2_rank(
+    reference_df["aux_rank"] = calculate_top2_rank(
         reference_df["aux_score"].values
     )
 
@@ -79,7 +79,7 @@ def top2_ensemble(
     aux_diff = reference_df["aux_diff"].values
     ref_rank = reference_df["ref_rank"].values
     aux_rank = reference_df["aux_rank"].values
-    
+
     reference_df['ensemble_rank'] = run_ensemble(
         ref_diff,
         aux_diff,
