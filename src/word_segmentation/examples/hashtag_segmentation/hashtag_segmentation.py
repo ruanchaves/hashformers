@@ -105,8 +105,8 @@ def main():
     )
 
     bert_model = Reranker(
-        encoder_model_name_or_path=reranker_args.encoder_model_name_or_path,
-        encoder_model_type=reranker_args.encoder_model_type
+        model_name_or_path=reranker_args.encoder_model_name_or_path,
+        model_type=reranker_args.encoder_model_type
     )
 
     dataset = load_dataset('text', data_files={'test': data_args.source})
