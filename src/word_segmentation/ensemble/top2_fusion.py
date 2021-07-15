@@ -32,7 +32,7 @@ def run_ensemble(
 def filter_top_k(
     input_df, 
     k, 
-    gold_field='gold', 
+    characters_field='characters', 
     score_field='score',
     segmentation_field='segmentation',
     fill=False):
@@ -41,11 +41,11 @@ def filter_top_k(
   
   df = df\
     .sort_values(by=score_field, ascending=True)\
-    .groupby(gold_field)\
+    .groupby(characters_field)\
     .head(k)
 
   if fill:
-    df['group_length'] = df.groupby(gold_field)[segmentation_field].transform(len)
+    df['group_length'] = df.groupby(characters_field)[segmentation_field].transform(len)
     df['group_length'] = df['group_length'] * -1 + k + 1
     len_array = df['group_length'].values
     
@@ -56,7 +56,7 @@ def filter_top_k(
     
     df = df\
       .sort_values(by=score_field, ascending=True)\
-      .groupby(gold_field)\
+      .groupby(characters_field)\
       .head(k)
   return df
 
