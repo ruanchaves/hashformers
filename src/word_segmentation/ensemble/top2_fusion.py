@@ -100,6 +100,9 @@ def build_ensemble_df(
 ):
     a, b = filter_and_project_scores(a, b)
 
+    print(a.columns)
+    print(b.columns)
+
     a = calculate_diff_scores(a)
     b = calculate_diff_scores(b)
     
