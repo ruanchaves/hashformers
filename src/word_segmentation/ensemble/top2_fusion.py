@@ -80,7 +80,7 @@ def calculate_diff_scores(
     character_field='characters',
     score_field='score',
     diff_field='diff'):
-    a = a.sort_values(character_field, score_field)
+    a = a.sort_values(by=[character_field, score_field])
     a[diff_field] = calculate_top2_diff(a[score_field].values)
     return a
 
@@ -89,7 +89,7 @@ def calculate_rank(
     character_field='characters',
     score_field='score',
     rank_field='rank'):    
-    a = a.sort_values(character_field, score_field)
+    a = a.sort_values(by=[character_field, score_field])
     a[rank_field] = calculate_top2_rank(a[score_field].values)
     return a
 
@@ -99,9 +99,6 @@ def build_ensemble_df(
     b
 ):
     a, b = filter_and_project_scores(a, b)
-
-    print(a.columns)
-    print(b.columns)
 
     a = calculate_diff_scores(a)
     b = calculate_diff_scores(b)
