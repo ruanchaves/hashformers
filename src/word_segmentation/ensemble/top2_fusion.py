@@ -1,9 +1,6 @@
 from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from word_segmentation.experiments.utils import build_ensemble_df
 from word_segmentation.experiments.architectures import run_ensemble
-import numpy as np
-import copy
-import pandas as pd
 
 def top2_ensemble(
     dict_1, 

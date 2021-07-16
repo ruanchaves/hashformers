@@ -1,5 +1,5 @@
 from word_segmentation.beamsearch.model_lm import ModelLM
-from word_segmentation.beamsearch.data_structures import ProbabilityDictionary
+from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 
 class Reranker(ModelLM):
 
@@ -17,15 +17,9 @@ class Reranker(ModelLM):
         self,
         data
     ):
-        if isinstance(data, ProbabilityDictionary):
-            input_data = data
-        elif isinstance(data, dict):
-            input_data = ProbabilityDictionary(data)
-        else:
-            raise NotImplementedError
-        
-        top_2 = input_data.get_top_k(k=2)
-        candidates = list(top_2.keys())
+
+        input_data = enforce_prob_dict(data)
+        candidates = list(input_data.dictionary.keys())
         scores = self.model.get_probs(candidates)
         rank = { k:v for k,v in list(zip(candidates, scores))}
         return rank
