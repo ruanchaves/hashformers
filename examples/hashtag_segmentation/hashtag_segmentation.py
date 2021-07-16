@@ -150,7 +150,9 @@ def main():
         beta=ensemble_args.beta
     )
 
-    ensemble = enforce_prob_dict(ensemble)
+    ensemble = enforce_prob_dict(
+        ensemble,
+        score_field="ensemble_rank")
 
     ensemble_metrics = evaluate_dictionary(
         ensemble,
