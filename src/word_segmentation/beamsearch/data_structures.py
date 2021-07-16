@@ -94,7 +94,6 @@ class ProbabilityDictionary(object):
 def enforce_prob_dict(
     dictionary,
     score_field="score",
-    characters_field="hashtag",
     segmentation_field="segmentation"):
     if isinstance(dictionary, ProbabilityDictionary):
         return dictionary
@@ -107,10 +106,7 @@ def enforce_prob_dict(
         }
         return ProbabilityDictionary(dct)
     elif isinstance(dictionary, pd.DataFrame):
-        df = dictionary\
-            .sort_values(by=score_field)\
-            .groupby(characters_field)\
-            .head(1)
+        df = dictionary
         df_scores = df[score_field].values.tolist()
         df_segs = df[segmentation_field].values.tolist()
         dct = {

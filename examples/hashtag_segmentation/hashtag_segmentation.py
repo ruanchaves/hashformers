@@ -4,6 +4,7 @@ from word_segmentation.beamsearch.algorithm import Beamsearch
 from word_segmentation.beamsearch.reranker import Reranker
 from word_segmentation.evaluation.utils import evaluate_dictionary
 from word_segmentation.ensemble.top2_fusion import top2_ensemble
+from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from dataclasses import dataclass, field
 from transformers import HfArgumentParser
 import logging 
@@ -61,7 +62,7 @@ class BeamsearchArguments:
 class RerankerArguments:
 
     encoder_model_name_or_path: str = field(
-        default="bert-large-cased-whole-word-masking",
+        default="bert-large-uncased-whole-word-masking",
     )
 
     encoder_model_type: str = field(
@@ -130,12 +131,9 @@ def main():
         steps=beamsearch_args.steps
     )
 
-    gpt2_candidates = gpt2_run.get_segmentations(
-        astype='list'
-    )
 
     gpt2_metrics = evaluate_dictionary(
-        gpt2_candidates,
+        gpt2_run,
         gold,
         n=data_args.evaluate_top_k
     )
@@ -152,17 +150,12 @@ def main():
         beta=ensemble_args.beta
     )
 
-    # get candidates from df - to-do
-
-    ensemble = ensemble\
-            .sort_values(by=["hashtag", "ensemble_rank"])\
-            .groupby("hashtag")\
-            .head(1)
+    ensemble = enforce_prob_dict(ensemble)
 
     ensemble_metrics = evaluate_dictionary(
         ensemble,
         gold,
-        n=1
+        n=2
     )
 
     logger.info("Ensemble metrics:")
