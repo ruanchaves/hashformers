@@ -45,8 +45,8 @@ def evaluate_ensemble(
     df_1 = filter_top_k(
         df,
         1,
-        gold_field='gold',
-        score_field='ensemble_rank'
+        characters_field="gold",
+        score_field="ensemble_rank"
     )
 
     metrics_df_1 = evaluate_df(df_1)
@@ -66,24 +66,24 @@ def evaluate_ensemble(
 def build_ensemble_df_from_data(
     data,
     dataset,
-    bert_model='bert_from_gpt2',
-    gpt2_model='gpt2'
+    aux_model='bert_from_gpt2',
+    ref_model='gpt2'
 ):
-    bert = read_experiment_dataset(
+    aux = read_experiment_dataset(
         data,
         dataset,
-        bert_model
+        aux_model
     )
 
-    gpt2 = read_experiment_dataset(
+    ref = read_experiment_dataset(
         data,
         dataset,
-        gpt2_model
+        ref_model
     )
 
-    assert bert.shape == gpt2.shape
+    assert aux.shape == ref.shape
 
-    ensemble_df = build_ensemble_df(gpt2, bert)
+    ensemble_df = build_ensemble_df(ref, aux)
 
     return ensemble_df
 
@@ -97,8 +97,8 @@ def grid_search(
     ensemble_df = build_ensemble_df_from_data(
         data,
         dataset,
-        bert_model=bert_model,
-        gpt2_model=gpt2_model
+        ref_model=bert_model,
+        aux_model=gpt2_model
     )
 
     alpha = np.linspace(0.0, 1.0, num=num_params).round(3)
@@ -145,8 +145,8 @@ def grid_search_and_evaluate(
     ensemble_df = build_ensemble_df_from_data(
         data,
         test_set,
-        bert_model=bert_model,
-        gpt2_model=gpt2_model
+        ref_model=bert_model,
+        aux_model=gpt2_model
     )
 
     ensemble_metrics = evaluate_ensemble(

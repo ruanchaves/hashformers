@@ -5,13 +5,14 @@ import numpy as np
 
 def evaluate_df(
     df, 
-    gold_field='gold', 
-    segmentation_field='segmentation'
+    gold_field="gold", 
+    segmentation_field="segmentation",
+    truth_value_field="truth_value"
 ):
   evaluator = Modeler()
 
-  df['truth_value'] = df['gold'].combine(
-    df['segmentation'],
+  df[truth_value_field] = df[gold_field].combine(
+    df[segmentation_field],
     lambda x,y: x == y
   )
 
@@ -19,7 +20,7 @@ def evaluate_df(
     .sort_values(
       by=[
         gold_field, 
-        'truth_value'
+        truth_value_field
       ], 
       ascending=False)\
     .groupby(gold_field)\
@@ -40,40 +41,46 @@ def evaluate_df(
 def filter_top_k(
     input_df, 
     k, 
-    gold_field='gold', 
-    score_field='score',
-    segmentation_field='segmentation',
+    characters_field="hashtag",
+    score_field="score",
+    segmentation_field="segmentation",
+    group_length_field="group_length",
     fill=False):
   
   df = copy.deepcopy(input_df)
   
   df = df\
     .sort_values(by=score_field, ascending=True)\
-    .groupby(gold_field)\
+    .groupby(characters_field)\
     .head(k)
 
   if fill:
-    df['group_length'] = df.groupby(gold_field)[segmentation_field].transform(len)
-    df['group_length'] = df['group_length'] * -1 + k + 1
-    len_array = df['group_length'].values
+    df[group_length_field] = \
+      df.groupby(characters_field)[segmentation_field].transform(len)
+    df[group_length_field] = \
+      df[group_length_field] * -1 + k + 1
+    len_array = \
+      df[group_length_field].values
     
-    df = df.drop(columns=['group_length'])
+    df = \
+      df.drop(columns=[group_length_field])
     records = np.array(df.to_dict('records'))
     cloned_records = list(np.repeat(records, len_array))
     df = pd.DataFrame(cloned_records)
     
     df = df\
       .sort_values(by=score_field, ascending=True)\
-      .groupby(gold_field)\
+      .groupby(characters_field)\
       .head(k)
 
-    length = df.groupby(gold_field).size().values
+    length = df.groupby(characters_field).size().values
     assert (length == k).all()
   
   return df
 
 
 def read_experiment_dataset(data, dataset, model):
-    selected_data = [ x for x in data if x['dataset']==dataset and x['model']==model][0]['data']
+    selected_data = \
+      [ x for x in data if x['dataset']==dataset and x['model']==model][0]['data']
     output = pd.DataFrame(selected_data)
     return output

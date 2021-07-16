@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import pathlib 
 
-from word_segmentation.evaluation.utils import (
+from word_segmentation.experiments.evaluation import (
     evaluate_df,
     filter_top_k
 )
