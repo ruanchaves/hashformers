@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from itertools import starmap
+from json import encoder
 from word_segmentation.beamsearch.algorithm import Beamsearch
 from word_segmentation.beamsearch.reranker import Reranker
 from word_segmentation.evaluation.utils import evaluate_dictionary
@@ -15,6 +16,8 @@ logger = logging.getLogger(__name__)
 import os 
 import sys
 from typing import Optional
+import pathlib
+import pandas as pd
 
 @dataclass
 class DataArguments:
@@ -30,6 +33,31 @@ class DataArguments:
     sample: Optional[int] = field(
         default=None
     )
+
+    output_dir: str = field(
+        default='./output'
+    )
+
+    save_to_output_dir: bool = field(
+        default=True
+    )
+
+    load_cache_from_output_dir: bool = field(
+        default=False
+    )
+
+    decoder_results_filename: str = field(
+        default="decoder.csv"
+    )
+
+    encoder_results_filename: str = field(
+        default="encoder.csv"
+    )
+
+    ensemble_results_filename: str = field(
+        default="ensemble.csv"
+    )
+
 
 @dataclass
 class BeamsearchArguments:
@@ -104,17 +132,29 @@ def main():
     transformers.utils.logging.enable_default_handler()
     transformers.utils.logging.enable_explicit_format()
 
-    gpt2_model = Beamsearch(
-        model_name_or_path=beamsearch_args.decoder_model_name_or_path,
-        model_type=beamsearch_args.decoder_model_type,
-        device=beamsearch_args.decoder_device,
-        gpu_batch_size=beamsearch_args.decoder_gpu_batch_size
-    )
+    # Paths
+    if data_args.save_to_output_dir:
+        pathlib\
+            .Path(data_args.output_dir)\
+            .mkdir(parents=True, exist_ok=True)
 
-    bert_model = Reranker(
-        model_name_or_path=reranker_args.encoder_model_name_or_path,
-        model_type=reranker_args.encoder_model_type
-    )
+        encoder_results_path = \
+            os.path.join(
+                data_args.output_dir,
+                data_args.encoder_results_filename
+            )
+
+        decoder_results_path = \
+            os.path.join(
+                data_args.output_dir,
+                data_args.decoder_results_filename
+            )
+
+        ensemble_results_path = \
+            os.path.join(
+                data_args.output_dir,
+                data_args.ensemble_results_filename
+            )
 
     dataset = load_dataset('text', data_files={'test': data_args.source})
     gold = dataset['test'].to_dict()['text']
@@ -125,12 +165,27 @@ def main():
         gold = gold[0:data_args.sample]
         hashtags = hashtags[0:data_args.sample]
 
-    gpt2_run = gpt2_model.run(
-        hashtags,
-        topk=beamsearch_args.topk,
-        steps=beamsearch_args.steps
-    )
 
+
+    if data_args.load_cache_from_output_dir and \
+        os.path.isfile(decoder_results_path):
+        gpt2_run = pd.read_csv(decoder_results_path)
+    else:
+        gpt2_model = Beamsearch(
+            model_name_or_path=beamsearch_args.decoder_model_name_or_path,
+            model_type=beamsearch_args.decoder_model_type,
+            device=beamsearch_args.decoder_device,
+            gpu_batch_size=beamsearch_args.decoder_gpu_batch_size
+        )
+
+        gpt2_run = gpt2_model.run(
+            hashtags,
+            topk=beamsearch_args.topk,
+            steps=beamsearch_args.steps
+        )
+
+        if data_args.save_to_output_dir:
+            gpt2_run.to_csv(decoder_results_path)
 
     gpt2_metrics = evaluate_dictionary(
         gpt2_run,
@@ -141,14 +196,33 @@ def main():
     logger.info("Beamsearch metrics:")
     logger.info("%s", gpt2_metrics)
 
-    bert_run = bert_model.rerank(gpt2_run)
+    if data_args.load_cache_from_output_dir and \
+        os.path.isfile(encoder_results_path):
+        bert_run = pd.read_csv(encoder_results_path)
+    else:
+        bert_model = Reranker(
+            model_name_or_path=reranker_args.encoder_model_name_or_path,
+            model_type=reranker_args.encoder_model_type
+        )
 
-    ensemble = top2_ensemble(
-        bert_run,
-        gpt2_run,
-        alpha=ensemble_args.alpha,
-        beta=ensemble_args.beta
-    )
+        bert_run = bert_model.rerank(gpt2_run)
+
+        if data_args.save_to_output_dir:
+            bert_run.to_csv(encoder_results_path)
+
+    if data_args.load_cache_from_output_dir and \
+        os.path.isfile(ensemble_results_path):
+        ensemble = pd.read_csv(ensemble_results_path)
+    else:
+        ensemble = top2_ensemble(
+            bert_run,
+            gpt2_run,
+            alpha=ensemble_args.alpha,
+            beta=ensemble_args.beta
+        )
+
+        if data_args.save_to_output_dir:
+            ensemble.to_csv(ensemble)
 
     ensemble = enforce_prob_dict(
         ensemble,
