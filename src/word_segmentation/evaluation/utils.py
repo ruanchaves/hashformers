@@ -13,13 +13,13 @@ def evaluate_dictionary(data, gold, n=10):
     for i in range(1, n+1):
         df = input_data.get_top_k(
             k=i,
-            characters_field="characters",
+            characters_field="hashtag",
             segmentation_field="segmentation",
             score_field="score",
             return_dataframe=True
         )
 
-        df['gold'] = df['characters'].apply(
+        df['gold'] = df['hashtag'].apply(
             lambda x: gold_dict[x]
         )
 

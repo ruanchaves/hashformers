@@ -91,16 +91,30 @@ class ProbabilityDictionary(object):
         with open(filepath, 'w') as f:
             json.dump(self.dictionary, f)
 
-def enforce_prob_dict(dictionary, coerce_lists=True):
+def enforce_prob_dict(
+    dictionary,
+    score_field="score",
+    characters_field="hashtag",
+    segmentation_field="segmentation"):
     if isinstance(dictionary, ProbabilityDictionary):
         return dictionary
     elif isinstance(dictionary, dict):
         return ProbabilityDictionary(dictionary)
     elif isinstance(dictionary, list) \
-        and all(isinstance(x, str) for x in dictionary) \
-        and coerce_lists == True:
+        and all(isinstance(x, str) for x in dictionary):
         dct = {
             k:0.0 for k in list(set(dictionary))
+        }
+        return ProbabilityDictionary(dct)
+    elif isinstance(dictionary, pd.DataFrame):
+        df = dictionary\
+            .sort_values(by=score_field)\
+            .groupby(characters_field)\
+            .head(1)
+        df_scores = df[score_field].values.tolist()
+        df_segs = df[segmentation_field].values.tolist()
+        dct = {
+            k:v for k,v in list(zip(df_segs, df_scores))
         }
         return ProbabilityDictionary(dct)
     else:

@@ -33,11 +33,11 @@ def evaluate_ensemble(
     
     df = copy.deepcopy(input_df)
 
-    df['ensemble_rank'] = run_ensemble(
-        df['diff'].values,
-        df['diff_2'].values,
-        df['rank'].values,
-        df['rank_2'].values,
+    df["ensemble_rank"] = run_ensemble(
+        df["diff"].values,
+        df["diff_2"].values,
+        df["rank"].values,
+        df["rank_2"].values,
         alpha=alpha,
         beta=beta
     )
@@ -45,8 +45,8 @@ def evaluate_ensemble(
     df_1 = filter_top_k(
         df,
         1,
-        characters_field="gold",
-        score_field="ensemble_rank"
+        gold_field='hashtag',
+        score_field='ensemble_rank'
     )
 
     metrics_df_1 = evaluate_df(df_1)
@@ -66,24 +66,24 @@ def evaluate_ensemble(
 def build_ensemble_df_from_data(
     data,
     dataset,
-    aux_model='bert_from_gpt2',
-    ref_model='gpt2'
+    bert_model="bert_from_gpt2",
+    gpt2_model="gpt2"
 ):
-    aux = read_experiment_dataset(
+    bert = read_experiment_dataset(
         data,
         dataset,
-        aux_model
+        bert_model
     )
 
-    ref = read_experiment_dataset(
+    gpt2 = read_experiment_dataset(
         data,
         dataset,
-        ref_model
+        gpt2_model
     )
 
-    assert aux.shape == ref.shape
+    assert bert.shape == gpt2.shape
 
-    ensemble_df = build_ensemble_df(ref, aux)
+    ensemble_df = build_ensemble_df(gpt2, bert)
 
     return ensemble_df
 
@@ -97,8 +97,8 @@ def grid_search(
     ensemble_df = build_ensemble_df_from_data(
         data,
         dataset,
-        ref_model=bert_model,
-        aux_model=gpt2_model
+        bert_model=bert_model,
+        gpt2_model=gpt2_model
     )
 
     alpha = np.linspace(0.0, 1.0, num=num_params).round(3)
@@ -145,8 +145,8 @@ def grid_search_and_evaluate(
     ensemble_df = build_ensemble_df_from_data(
         data,
         test_set,
-        ref_model=bert_model,
-        aux_model=gpt2_model
+        bert_model=bert_model,
+        gpt2_model=gpt2_model
     )
 
     ensemble_metrics = evaluate_ensemble(

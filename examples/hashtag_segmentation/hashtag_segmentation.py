@@ -72,11 +72,11 @@ class RerankerArguments:
 class EnsembleArguments:
 
     alpha: float = field(
-        default=0.2
+        default=0.222
     )
 
     beta: float = field(
-        default=0.1
+        default=0.111
     )
 
 def main():
@@ -149,14 +149,18 @@ def main():
         bert_run,
         gpt2_run,
         alpha=ensemble_args.alpha,
-        beta=ensemble_args.beta,
-        return_dataframe=False
+        beta=ensemble_args.beta
     )
 
-    candidates = list(ensemble.values())
+    # get candidates from df - to-do
+
+    ensemble = ensemble\
+            .sort_values(by=["hashtag", "ensemble_rank"])\
+            .groupby("hashtag")\
+            .head(1)
 
     ensemble_metrics = evaluate_dictionary(
-        candidates,
+        ensemble,
         gold,
         n=1
     )
