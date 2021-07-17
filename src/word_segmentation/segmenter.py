@@ -30,11 +30,13 @@ class WordSegmenter(object):
             self.encoder_model = None
     
     def segment(
+            self,
             word_list,
             topk=20,
             steps=13,
             alpha=0.222,
-            beta=0.111):
+            beta=0.111,
+            use_encoder=True):
 
         decoder_run = self.decoder_model.run(
             word_list,
@@ -52,7 +54,7 @@ class WordSegmenter(object):
                 beta=beta
             )
         
-        if self.encoder_model:
+        if self.encoder_model and use_encoder:
             ensemble_prob_dict = enforce_prob_dict(
                 ensemble,
                 score_field="ensemble_rank")
