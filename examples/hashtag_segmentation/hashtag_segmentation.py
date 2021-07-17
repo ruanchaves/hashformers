@@ -210,6 +210,12 @@ def main():
             bert_run_prob_dict\
                 .to_csv(encoder_results_path)
 
+    bert_metrics = evaluate_dictionary(
+        bert_run,
+        gold,
+        n=data_args.evaluate_top_k
+    )
+
     if data_args.load_cache_from_output_dir and \
         os.path.isfile(ensemble_results_path):
         ensemble = pd.read_csv(ensemble_results_path)
@@ -236,6 +242,9 @@ def main():
 
     logger.info("Beamsearch metrics:")
     logger.info("%s", gpt2_metrics)
+
+    logger.info("Reranker metrics:")
+    logger.info("%s", bert_metrics)
 
     logger.info("Ensemble metrics:")
     logger.info("%s", ensemble_metrics)
