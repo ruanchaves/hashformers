@@ -84,7 +84,7 @@ def main():
         evaluation = evaluate_single_runs(data, k=k)
         log_dataframe(evaluation)
 
-    boun_test_metrics = grid_search_and_evaluate(
+    boun_test_result = grid_search_and_evaluate(
         data,
         dev_set="Dev-BOUN",
         test_set="Test-BOUN",
@@ -92,15 +92,19 @@ def main():
         gpt2_model="gpt2"
     )
 
+    boun_test_metrics = boun_test_result["metrics"]
+
     logger.info("%s", boun_test_metrics)
 
-    stanford_test_metrics = grid_search_and_evaluate(
+    stanford_test_result = grid_search_and_evaluate(
         data,
         dev_set="Dev-Stanford",
         test_set="Test-Stanford",
         bert_model="bert_from_gpt2",
         gpt2_model="gpt2"
     )
+
+    stanford_test_metrics = stanford_test_result["metrics"]
 
     logger.info("%s", stanford_test_metrics)
 

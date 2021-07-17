@@ -166,4 +166,7 @@ def grid_search_and_evaluate(
 
     metrics.update(ensemble_metrics)
 
-    return metrics
+    return {
+        "metrics": metrics,
+        "data": ensemble_df
+    }

@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from itertools import starmap
-from json import encoder
+from word_segmentation.experiments.architectures import evaluate_ensemble
 from word_segmentation.beamsearch.algorithm import Beamsearch
 from word_segmentation.beamsearch.reranker import Reranker
 from word_segmentation.evaluation.utils import evaluate_dictionary
@@ -12,18 +11,23 @@ import logging
 import transformers
 import datasets 
 from datasets import load_dataset
-logger = logging.getLogger(__name__)
 import os 
 import sys
 from typing import Optional
 import pathlib
 import pandas as pd
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class DataArguments:
 
     source: str = field(
         default='./Test-BOUN'
+    )
+
+    evaluate: int = field(
+        default=True
     )
 
     evaluate_top_k: int = field(
@@ -58,6 +62,10 @@ class DataArguments:
         default="ensemble.csv"
     )
 
+    segmentation_results_filename: str = field(
+        default="segmentations.txt"
+    )
+
 
 @dataclass
 class BeamsearchArguments:
@@ -88,6 +96,10 @@ class BeamsearchArguments:
 
 @dataclass
 class RerankerArguments:
+
+    use_encoder: bool = field(
+        default=True
+    )
 
     encoder_model_name_or_path: str = field(
         default="bert-large-uncased-whole-word-masking",
@@ -155,6 +167,12 @@ def main():
                 data_args.output_dir,
                 data_args.ensemble_results_filename
             )
+        
+        segmentation_results_path = \
+            os.path.join(
+                data_args.output_dir,
+                data_args.segmentation_results_filename
+            )
 
     dataset = load_dataset('text', data_files={'test': data_args.source})
     gold = dataset['test'].to_dict()['text']
@@ -164,8 +182,6 @@ def main():
     if data_args.sample:
         gold = gold[0:data_args.sample]
         hashtags = hashtags[0:data_args.sample]
-
-
 
     if data_args.load_cache_from_output_dir and \
         os.path.isfile(decoder_results_path):
@@ -187,67 +203,101 @@ def main():
         if data_args.save_to_output_dir:
             gpt2_run.to_csv(decoder_results_path)
 
-    gpt2_metrics = evaluate_dictionary(
-        gpt2_run,
-        gold,
-        n=data_args.evaluate_top_k
-    )
-
-    if data_args.load_cache_from_output_dir and \
-        os.path.isfile(encoder_results_path):
-        bert_run = pd.read_csv(encoder_results_path)
-    else:
-        bert_model = Reranker(
-            model_name_or_path=reranker_args.encoder_model_name_or_path,
-            model_type=reranker_args.encoder_model_type
-        )
-
-        bert_run = bert_model.rerank(gpt2_run)
-
-        if data_args.save_to_output_dir:
-            bert_run_prob_dict = \
-                enforce_prob_dict(bert_run)
-            bert_run_prob_dict\
-                .to_csv(encoder_results_path)
-
-    bert_metrics = evaluate_dictionary(
-        bert_run,
-        gold,
-        n=data_args.evaluate_top_k
-    )
-
-    if data_args.load_cache_from_output_dir and \
-        os.path.isfile(ensemble_results_path):
-        ensemble = pd.read_csv(ensemble_results_path)
-    else:
-        ensemble = top2_ensemble(
-            bert_run,
+    if data_args.evaluate:
+        gpt2_metrics = evaluate_dictionary(
             gpt2_run,
-            alpha=ensemble_args.alpha,
-            beta=ensemble_args.beta
+            gold,
+            n=data_args.evaluate_top_k
         )
 
-        if data_args.save_to_output_dir:
-            ensemble.to_csv(ensemble_results_path)
+    if reranker_args.use_encoder:
 
-    ensemble = enforce_prob_dict(
-        ensemble,
-        score_field="ensemble_rank")
+        if data_args.load_cache_from_output_dir and \
+            os.path.isfile(encoder_results_path):
+            bert_run = pd.read_csv(encoder_results_path)
+        else:
+            bert_model = Reranker(
+                model_name_or_path=reranker_args.encoder_model_name_or_path,
+                model_type=reranker_args.encoder_model_type
+            )
 
-    ensemble_metrics = evaluate_dictionary(
-        ensemble,
-        gold,
-        n=2
-    )
+            bert_run = bert_model.rerank(gpt2_run)
 
-    logger.info("Beamsearch metrics:")
-    logger.info("%s", gpt2_metrics)
+            if data_args.save_to_output_dir:
+                bert_run_prob_dict = \
+                    enforce_prob_dict(bert_run)
+                bert_run_prob_dict\
+                    .to_csv(encoder_results_path)
 
-    logger.info("Reranker metrics:")
-    logger.info("%s", bert_metrics)
+        if data_args.evaluate:
+            bert_metrics = evaluate_dictionary(
+                bert_run,
+                gold,
+                n=data_args.evaluate_top_k
+            )
 
-    logger.info("Ensemble metrics:")
-    logger.info("%s", ensemble_metrics)
+        if data_args.load_cache_from_output_dir and \
+            os.path.isfile(ensemble_results_path):
+            ensemble = pd.read_csv(ensemble_results_path)
+        else:
+            ensemble = top2_ensemble(
+                gpt2_run,
+                bert_run,
+                alpha=ensemble_args.alpha,
+                beta=ensemble_args.beta
+            )
+
+            if data_args.save_to_output_dir:
+                ensemble.to_csv(ensemble_results_path)
+
+        if data_args.evaluate:
+            gold_df = pd.DataFrame([{
+                'gold': x,
+                'hashtag': x.replace(" ","")
+            } for x in gold ])
+
+            ensemble = pd.merge(ensemble, gold_df, on='hashtag')
+
+            ensemble_metrics = evaluate_ensemble(
+                ensemble,
+                alpha=ensemble_args.alpha,
+                beta=ensemble_args.beta
+            )
+
+    if data_args.evaluate:
+        logger.info("Beamsearch metrics:")
+        logger.info("%s", gpt2_metrics)
+
+        if reranker_args.use_encoder:
+            logger.info("Reranker metrics:")
+            logger.info("%s", bert_metrics)
+
+            logger.info("Ensemble metrics:")
+            logger.info("%s", ensemble_metrics)
+    
+    if data_args.save_to_output_dir \
+        and reranker_args.use_encoder:
+        ensemble_prob_dict = enforce_prob_dict(
+            ensemble,
+            score_field="ensemble_rank")
+        segs = ensemble_prob_dict.get_segmentations(
+            astype='list',
+            gold_array=gold
+        )
+    elif data_args.save_to_output_dir \
+        and not reranker_args.use_encoder:
+        gpt2_run_prob_dict = enforce_prob_dict(
+            gpt2_run,
+            score_field="score"
+        )
+        segs = gpt2_run_prob_dict.get_segmentation(
+            astype='list',
+            gold_array=gold
+        )
+
+    if data_args.save_to_output_dir:
+        with open(segmentation_results_path, 'w') as f:
+            print("\n".join(segs), file=f)
 
 if __name__ == '__main__':
     main()

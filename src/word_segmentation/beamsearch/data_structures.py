@@ -15,9 +15,26 @@ class ProbabilityDictionary(object):
 
     def get_segmentations(
         self,
-        astype='dict'
+        astype='dict',
+        gold_array=None
     ):
         top_1 = self.get_top_k(k=1)
+        if gold_array:
+            gold_df = pd.DataFrame([{
+                "gold": x,
+                "characters": x.replace(" ", "")
+            } for x in gold_array])
+            seg_df = pd.DataFrame([{
+                "segmentation": x,
+                "characters": x.replace(" ", "") 
+            } for x in top_1])
+            output_df = pd.merge(
+                gold_df,
+                seg_df,
+                how='left',
+                on='characters'
+            )
+            return output_df['segmentation'].values.tolist()
         if astype == 'dict':
             return { k.replace(" ", ""):k for k,v in top_1.items() }
         elif astype == 'list':
