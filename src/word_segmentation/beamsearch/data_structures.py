@@ -83,6 +83,22 @@ class ProbabilityDictionary(object):
             ]
         )
         return df
+    
+    def to_csv(
+        self,
+        filename,
+        characters_field='characters',
+        segmentation_field='segmentation',
+        score_field='score'
+    ):
+        df = self.to_dataframe(
+            filename,
+            characters_field=characters_field,
+            segmentation_field=segmentation_field,
+            score_field=score_field
+        )
+        df.to_csv(filename)
+
 
     def to_json(
         self,
