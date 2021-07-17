@@ -208,7 +208,10 @@ def main():
         bert_run = bert_model.rerank(gpt2_run)
 
         if data_args.save_to_output_dir:
-            bert_run.to_csv(encoder_results_path)
+            bert_run_prob_dict = \
+                enforce_prob_dict(bert_run)
+            bert_run_prob_dict\
+                .to_csv(encoder_results_path)
 
     if data_args.load_cache_from_output_dir and \
         os.path.isfile(ensemble_results_path):
