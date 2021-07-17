@@ -225,7 +225,7 @@ def main():
         )
 
         if data_args.save_to_output_dir:
-            ensemble.to_csv(ensemble)
+            ensemble.to_csv(ensemble_results_path)
 
     ensemble = enforce_prob_dict(
         ensemble,
