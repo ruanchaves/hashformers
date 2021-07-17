@@ -193,9 +193,6 @@ def main():
         n=data_args.evaluate_top_k
     )
 
-    logger.info("Beamsearch metrics:")
-    logger.info("%s", gpt2_metrics)
-
     if data_args.load_cache_from_output_dir and \
         os.path.isfile(encoder_results_path):
         bert_run = pd.read_csv(encoder_results_path)
@@ -236,6 +233,9 @@ def main():
         gold,
         n=2
     )
+
+    logger.info("Beamsearch metrics:")
+    logger.info("%s", gpt2_metrics)
 
     logger.info("Ensemble metrics:")
     logger.info("%s", ensemble_metrics)
