@@ -92,7 +92,6 @@ class ProbabilityDictionary(object):
         score_field='score'
     ):
         df = self.to_dataframe(
-            filename,
             characters_field=characters_field,
             segmentation_field=segmentation_field,
             score_field=score_field
