@@ -56,8 +56,8 @@ class Accuracy(datasets.Metric):
             inputs_description=_KWARGS_DESCRIPTION,
             features=datasets.Features(
                 {
-                    "predictions": datasets.Sequence(datasets.Value("string")),
-                    "references": datasets.Sequence(datasets.Value("string")),
+                    "predictions": datasets.Value("string"),
+                    "references": datasets.Value("string"),
                 }
             ),
         )
