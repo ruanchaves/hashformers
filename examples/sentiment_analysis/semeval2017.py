@@ -32,26 +32,25 @@ class SemEvalConfig(datasets.BuilderConfig):
             self.negative_label = negative_label
             self.neutral_label = neutral_label
             self.labels = [positive_label, negative_label, neutral_label]
+            if all(isinstance(x, int) for x in self.labels):
+                self.polarity_type = "int32"
+            elif all(isinstance(x, str) for x in self.labels):
+                self.polarity_type = "string"
+            else:
+                raise NotImplementedError
             super(SemEvalConfig, self).__init__(**kwargs)
 
-class Tass(datasets.GeneratorBasedBuilder):
+class SemEval2017(datasets.GeneratorBasedBuilder):
 
     BUILDER_CONFIG_CLASS = SemEvalConfig
 
     def _info(self):
-        
-        if all(isinstance(x, int) for x in self.config.labels):
-            polarity_type = "int32"
-        elif all(isinstance(x, str) for x in self.config.labels):
-            polarity_type = "string"
-        else:
-            raise NotImplementedError
-        
+            
         features = datasets.Features(
             {
                 "tweetid": datasets.Value("string"),
                 "content": datasets.Value("string"),
-                "polarity": datasets.Value(polarity_type),
+                "polarity": datasets.Value(self.config.polarity_type),
             }
         )
         return datasets.DatasetInfo(
@@ -97,7 +96,10 @@ class Tass(datasets.GeneratorBasedBuilder):
         df["polarity"] = df["original_polarity"].apply(
             lambda x: polarity_dict[x]
         )
-        
+
+        df['content'] = df['content'].astype(str)
+        df['tweetid'] = df['tweetid'].astype(str)
+
         records = df.to_dict('records')
         for row in records:
             if self.config.skip_neutral \
