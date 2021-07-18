@@ -1,1 +1,1 @@
-from segmenter import *
+from .segmenter import *
