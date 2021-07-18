@@ -22,7 +22,7 @@ class WordSegmenter(object):
         spacy_language = "en"
     ):
         if spacy_language:
-            self.nlp = spacy.load(spacy_language, disable=['parser', 'tagger', 'ner'])
+            self.nlp = spacy.load(spacy_language, disable=['parser', 'tagger', "lemmatizer", 'ner'])
             re_token_match = _get_regex_pattern(self.nlp.Defaults.token_match)
             self.nlp.tokenizer.token_match = re.compile(f"({re_token_match}|#\w+|\w+-\w+)").match
 
@@ -91,7 +91,7 @@ class WordSegmenter(object):
 
         for idx, item in enumerate(segmentations):
             hashtag_dict.update({
-                hashtags[idx] : segmentations[idx]
+                hashtag_list[idx] : segmentations[idx]
             })
 
         output = [ replace_hashtags(self.nlp(x)) for x in text_list ]
