@@ -28,16 +28,9 @@ class SemEvalConfig(datasets.BuilderConfig):
             else:
                 self.url = _URL
             self.skip_neutral = skip_neutral
-            self.positive_label = positive_label
-            self.negative_label = negative_label
-            self.neutral_label = neutral_label
-            self.labels = [positive_label, negative_label, neutral_label]
-            if all(isinstance(x, int) for x in self.labels):
-                self.polarity_type = "int32"
-            elif all(isinstance(x, str) for x in self.labels):
-                self.polarity_type = "string"
-            else:
-                raise NotImplementedError
+            self.positive_label = str(positive_label)
+            self.negative_label = str(negative_label)
+            self.neutral_label = str(neutral_label)
             super(SemEvalConfig, self).__init__(**kwargs)
 
 class SemEval2017(datasets.GeneratorBasedBuilder):
@@ -50,7 +43,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             {
                 "tweetid": datasets.Value("string"),
                 "content": datasets.Value("string"),
-                "polarity": datasets.Value(self.config.polarity_type),
+                "polarity": datasets.Value("string")
             }
         )
         return datasets.DatasetInfo(
@@ -97,8 +90,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             lambda x: polarity_dict[x]
         )
 
-        df['content'] = df['content'].astype(str)
-        df['tweetid'] = df['tweetid'].astype(str)
+        df = df.astype(str)
 
         records = df.to_dict('records')
         for row in records:
