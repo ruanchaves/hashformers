@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 import logging
-import os 
+import os
+from repositories.word_segmentation.src.word_segmentation import segmenter 
 import sys
 
 import datasets
@@ -16,6 +17,8 @@ from transformers import (
     AutoModelForSequenceClassification,
     HfArgumentParser
 )
+
+from word_segmentation import WordSegmenter
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +68,7 @@ class TextClassificationArguments:
 class WordSegmenterArguments:
 
     decoder_model_name_or_path: str = field(
-        default="gpt2"
+        default="DeepESP/gpt2-spanish"
     )
 
     decoder_model_type: str = field(
@@ -81,7 +84,7 @@ class WordSegmenterArguments:
     )
 
     encoder_model_name_or_path: str = field(
-        default="bert-base-uncased"
+        default="dccuchile/bert-base-spanish-wwm-uncased"
     )
 
     encoder_model_type: str = field(
@@ -89,7 +92,7 @@ class WordSegmenterArguments:
     )
 
     spacy_model: str = field(
-        default="en_core_web_sm"
+        default="es_core_news_sm"
     )
 
 def main():
@@ -128,13 +131,17 @@ def main():
     sentences = [x[data_args.content_field] for x in data]
     gold = [x[data_args.label_field] for x in data]
     step = class_args.batch_size
-    chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
-    labels = []
-    for chunk in chunks:
-        chunk_results = classifier(chunk)
-        chunk_labels = [x["label"] for x in chunk_results]
-        labels.extend(chunk_labels)
-    
+
+    def process_sentences(sentences, classifier):
+        chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
+        labels = []
+        for chunk in chunks:
+            chunk_results = classifier(chunk)
+            chunk_labels = [x["label"] for x in chunk_results]
+            labels.extend(chunk_labels)
+        return labels
+
+    labels = process_sentences(sentences, classifier)
     # hashtag_truth_value = ["#" in x for x in sentences]
 
     metric = load_metric(class_args.metrics)
@@ -143,6 +150,29 @@ def main():
         references=gold)
 
     logger.info("%s", eval_results)
+
+    ws = WordSegmenter(
+        decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
+        decoder_model_type=ws_args.decoder_model_type,
+        decoder_device=ws_args.decoder_device,
+        decoder_gpu_batch_size=ws_args.decoder_gpu_batch_size,
+        encoder_model_name_or_path=ws_args.encoder_model_name_or_path,
+        encoder_model_type=ws_args.encoder_model_type,
+        spacy_model=ws_args.spacy_model
+    )
+
+    segmented_sentences = ws.process_hashtags(sentences)
+    segmented_labels = process_sentences(
+        segmented_sentences,
+        classifier
+    )
+
+    segmented_eval_results = metric.computer(
+        predictions=segmented_labels,
+        references=gold
+    )
+
+    logger.info("%s", segmented_eval_results)
 
 if __name__ == '__main__':
     main()
