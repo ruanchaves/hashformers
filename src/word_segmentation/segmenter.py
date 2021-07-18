@@ -79,6 +79,8 @@ class WordSegmenter(object):
 
         hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
         hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten
+        print(hashtag_list)
+        print(type(hashtag_list[0]))
         segmentations = self.segment(
             hashtag_list,
             topk=topk,
