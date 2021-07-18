@@ -208,7 +208,7 @@ def main():
         classifier
     )
 
-    segmented_eval_results = metric.computer(
+    segmented_eval_results = metric.compute(
         predictions=segmented_labels,
         references=gold
     )
