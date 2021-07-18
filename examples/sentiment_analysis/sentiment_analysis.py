@@ -49,6 +49,10 @@ class TextClassificationArguments:
         default="finiteautomata/beto-sentiment-analysis"
     )
 
+    sentiment_model_device: int = field(
+        default=0
+    )
+
     batch_size: int = field(
         default=1
     )
@@ -118,7 +122,8 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
     classifier = pipeline("sentiment-analysis", 
         model=model,
-        tokenizer=tokenizer)
+        tokenizer=tokenizer,
+        device=class_args.sentiment_model_device)
     
     sentences = [x[data_args.content_field] for x in data]
     gold = [x[data_args.label_field] for x in data]
