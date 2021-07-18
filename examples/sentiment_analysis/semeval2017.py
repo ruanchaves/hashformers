@@ -19,9 +19,9 @@ class SemEvalConfig(datasets.BuilderConfig):
         def __init__(self, 
             url=None, 
             skip_neutral=True, 
-            positive_label=1,
-            negative_label=0,
-            neutral_label=2,
+            positive_label="POSITIVE",
+            negative_label="NEGATIVE",
+            neutral_label="NEUTRAL",
             **kwargs):
             if url:
                 self.url = url
