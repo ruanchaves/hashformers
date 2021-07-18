@@ -183,7 +183,6 @@ def main():
         chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
         labels = []
         for chunk in chunks:
-            print(chunk)
             chunk_results = classifier(chunk)
             chunk_labels = [x["label"] for x in chunk_results]
             labels.extend(chunk_labels)
