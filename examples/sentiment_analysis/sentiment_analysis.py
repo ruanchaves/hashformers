@@ -53,8 +53,8 @@ class DataArguments:
         default=True
     )
 
-    batch_size: int = field(
-        default=1
+    sample: Optional[int] = field(
+        default=None
     )
 
 @dataclass
@@ -68,8 +68,8 @@ class TextClassificationArguments:
         default=0
     )
 
-    sample: Optional[int] = field(
-        default=None
+    batch_size: int = field(
+        default=1
     )
 
 @dataclass
@@ -170,6 +170,10 @@ def main():
 
     sentences = sentences_subset
     gold = gold_subset
+
+    if data_args.sample:
+        sentences = sentences[0:data_args.sample]
+        gold = gold[0:data_args.sample]
 
     def process_sentences(sentences, classifier):
         chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
