@@ -118,7 +118,15 @@ def main():
     transformers.utils.logging.enable_default_handler()
     transformers.utils.logging.enable_explicit_format()
 
-    data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)[data_args.split]
+    ws = WordSegmenter(
+        decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
+        decoder_model_type=ws_args.decoder_model_type,
+        decoder_device=ws_args.decoder_device,
+        decoder_gpu_batch_size=ws_args.decoder_gpu_batch_size,
+        encoder_model_name_or_path=ws_args.encoder_model_name_or_path,
+        encoder_model_type=ws_args.encoder_model_type,
+        spacy_model=ws_args.spacy_model
+    )
 
     model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
     tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
@@ -126,7 +134,9 @@ def main():
         model=model,
         tokenizer=tokenizer,
         device=class_args.sentiment_model_device)
-    
+
+    data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)[data_args.split]
+
     sentences = [x[data_args.content_field] for x in data]
     gold = [x[data_args.label_field] for x in data]
     step = class_args.batch_size
@@ -149,16 +159,6 @@ def main():
         references=gold)
 
     logger.info("%s", eval_results)
-
-    ws = WordSegmenter(
-        decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
-        decoder_model_type=ws_args.decoder_model_type,
-        decoder_device=ws_args.decoder_device,
-        decoder_gpu_batch_size=ws_args.decoder_gpu_batch_size,
-        encoder_model_name_or_path=ws_args.encoder_model_name_or_path,
-        encoder_model_type=ws_args.encoder_model_type,
-        spacy_model=ws_args.spacy_model
-    )
 
     segmented_sentences = ws.process_hashtags(sentences)
     segmented_labels = process_sentences(
