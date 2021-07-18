@@ -42,6 +42,7 @@ class DataArguments:
         default = "polarity"
     )
 
+@dataclass
 class TextClassificationArguments:
 
     sentiment_model: str = field(
