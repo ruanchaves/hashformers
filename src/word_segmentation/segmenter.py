@@ -19,10 +19,10 @@ class WordSegmenter(object):
         decoder_gpu_batch_size = 1,
         encoder_model_name_or_path = "bert-base-uncased",
         encoder_model_type = "bert",
-        spacy_language = "en"
+        spacy_model = "en_core_web_sm"
     ):
-        if spacy_language:
-            self.nlp = spacy.load(spacy_language, disable=['parser', 'tagger', "lemmatizer", 'ner'])
+        if spacy_model:
+            self.nlp = spacy.load(spacy_model, disable=["parser", "tagger", "lemmatizer", "ner"])
             re_token_match = _get_regex_pattern(self.nlp.Defaults.token_match)
             self.nlp.tokenizer.token_match = re.compile(f"({re_token_match}|#\w+|\w+-\w+)").match
 
@@ -79,8 +79,6 @@ class WordSegmenter(object):
 
         hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
         hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten
-        print(hashtag_list)
-        print(type(hashtag_list[0]))
         segmentations = self.segment(
             hashtag_list,
             topk=topk,
