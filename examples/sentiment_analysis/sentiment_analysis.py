@@ -53,6 +53,10 @@ class DataArguments:
         default=True
     )
 
+    batch_size: int = field(
+        default=1
+    )
+
 @dataclass
 class TextClassificationArguments:
 
