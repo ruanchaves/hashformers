@@ -199,6 +199,11 @@ def main():
     logger.info("%s", eval_results)
 
     segmented_sentences = ws.process_hashtags(sentences)
+
+    segmented_sentences = [
+        " ".join(x) for x in segmented_sentences
+    ]
+
     segmented_labels = process_sentences(
         segmented_sentences,
         classifier
