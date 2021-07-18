@@ -18,6 +18,7 @@ from transformers import (
 )
 
 from word_segmentation import WordSegmenter
+from typing import Optional 
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,14 @@ class DataArguments:
         default = "polarity"
     )
 
+    output_dir: str = field(
+        default="./output"
+    )
+
+    load_cache_from_output_dir: bool = field(
+        default=True
+    )
+
 @dataclass
 class TextClassificationArguments:
 
@@ -55,12 +64,8 @@ class TextClassificationArguments:
         default=0
     )
 
-    batch_size: int = field(
-        default=1
-    )
-
-    metrics: str = field(
-        default="./sentiment_metrics.py"
+    sample: Optional[int] = field(
+        default=None
     )
 
 @dataclass
@@ -139,7 +144,28 @@ def main():
 
     sentences = [x[data_args.content_field] for x in data]
     gold = [x[data_args.label_field] for x in data]
+
     step = class_args.batch_size
+
+    def filter_sentences(sentences, gold):
+        def hashtag_filter(data_item):
+            if "#" in data_item[0]:
+                return True
+            else:
+                return False
+        data = list(zip(sentences, gold))
+        data_subset = list(filter(hashtag_filter, data))
+        sentences_subset = [x[0] for x in data_subset]
+        gold_subset = [x[1] for x in data_subset]
+        return sentences_subset, gold_subset
+
+    sentences_subset, gold_subset = \
+        filter_sentences(sentences, gold)
+
+    logger.info(f"Sentences: {str(len(sentences))} , Sentences w/ hashtags: {str(len(sentences_subset))}")
+
+    sentences = sentences_subset
+    gold = gold_subset
 
     def process_sentences(sentences, classifier):
         chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
@@ -151,7 +177,6 @@ def main():
         return labels
 
     labels = process_sentences(sentences, classifier)
-    # hashtag_truth_value = ["#" in x for x in sentences]
 
     metric = load_metric(class_args.metrics)
     eval_results = metric.compute(
