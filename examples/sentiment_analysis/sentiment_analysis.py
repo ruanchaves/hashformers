@@ -1,13 +1,21 @@
 from dataclasses import dataclass, field
-from transformers import HfArgumentParser
-import logging 
-import transformers
-import datasets 
-from datasets import load_dataset
+import logging
 import os 
 import sys
-from transformers import pipeline
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+import datasets
+from datasets import (
+    load_dataset,
+    load_metric
+)
+
+import transformers
+from transformers import (
+    pipeline,
+    AutoTokenizer,
+    AutoModelForSequenceClassification,
+    HfArgumentParser
+)
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +35,11 @@ class DataArguments:
     )
 
     content_field: str = field(
-        default = 'content'
+        default = "content"
+    )
+
+    label_field: str = field(
+        default = "polarity"
     )
 
 class TextClassificationArguments:
@@ -38,6 +50,10 @@ class TextClassificationArguments:
 
     batch_size: int = field(
         default=1
+    )
+
+    metrics: str = field(
+        default="./sentiment_metrics.py"
     )
 
 @dataclass
@@ -104,13 +120,23 @@ def main():
         tokenizer=tokenizer)
     
     sentences = [x[data_args.content_field] for x in data]
+    gold = [x[data_args.label_field] for x in data]
     step = class_args.batch_size
     chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
+    labels = []
     for chunk in chunks:
-        results = classifier(chunk)
-        labels = [x["label"] for x in results]
-        print(labels)
+        chunk_results = classifier(chunk)
+        chunk_labels = [x["label"] for x in chunk_results]
+        labels.extend(chunk_labels)
+    
+    # hashtag_truth_value = ["#" in x for x in sentences]
 
+    metric = load_metric(class_args.metrics)
+    eval_results = metric.compute(
+        predictions=labels, 
+        references=gold)
+
+    logger.info("%s", eval_results)
 
 if __name__ == '__main__':
     main()
