@@ -138,6 +138,4 @@ class WordSegmenter(object):
                 gold_array=word_list
             )
 
-        segs = [str(x) for x in segs]
-
         return segs

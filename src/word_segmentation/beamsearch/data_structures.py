@@ -19,7 +19,7 @@ class ProbabilityDictionary(object):
         gold_array=None
     ):
         top_1 = self.get_top_k(k=1)
-        if gold_array:
+        if gold_array and astype == 'list':
             gold_df = pd.DataFrame([{
                 "gold": x,
                 "characters": x.replace(" ", "")
@@ -34,7 +34,11 @@ class ProbabilityDictionary(object):
                 how='left',
                 on='characters'
             )
-            return output_df['segmentation'].values.tolist()
+            output_series = output_df['segmentation'].values.tolist()
+            output_series = [
+                str(x) for x in output_series
+            ]
+            return output_series
         if astype == 'dict':
             return { k.replace(" ", ""):k for k,v in top_1.items() }
         elif astype == 'list':
