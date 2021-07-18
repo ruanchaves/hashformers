@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 import logging
 import os
-from repositories.word_segmentation.src.word_segmentation import segmenter 
 import sys
 
 import datasets
