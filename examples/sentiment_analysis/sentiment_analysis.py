@@ -72,6 +72,10 @@ class TextClassificationArguments:
         default=1
     )
 
+    metrics: str = field(
+        default="./sentiment_metrics.py"
+    )
+
 @dataclass
 class WordSegmenterArguments:
 
