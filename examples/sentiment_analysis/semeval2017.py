@@ -97,8 +97,6 @@ class Tass(datasets.GeneratorBasedBuilder):
         df["polarity"] = df["original_polarity"].apply(
             lambda x: polarity_dict[x]
         )
-
-        df = df.astype(str)
         
         records = df.to_dict('records')
         for row in records:
