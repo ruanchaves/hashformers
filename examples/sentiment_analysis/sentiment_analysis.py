@@ -183,7 +183,7 @@ def main():
         split="test",
         reference_field="polarity",
         predictions_field="predictions",
-        metric="semeval2017.py"):
+        metric="./semeval2017.py"):
         predictions = data[split][predictions_field]
         references = data[split][reference_field]
         metric = load_metric(metric)
@@ -203,7 +203,10 @@ def main():
         batch_size=class_args.batch_size)
 
     if data_args.hashtag_only:
-        evaluation = eval_dataset(data)
+        evaluation = eval_dataset(
+            data,
+            metric=class_args.metrics
+        )
         logger.info("Hashtag subset evaluation:")
         logger.info("%s", evaluation)
     else:
