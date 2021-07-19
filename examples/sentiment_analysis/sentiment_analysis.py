@@ -192,7 +192,7 @@ def main():
         )
         return eval_results
 
-    data[data_args.split] = data[data_args.split].map(
+    data = data.map(
         process_rows, 
         fn_kwargs={
             "classifier": classifier,
