@@ -162,7 +162,7 @@ def main():
         data = data.filter(lambda x: x["has_hashtag"])
 
     if data_args.sample:
-        data[data_args.split] = data[data_args.split][0:data_args.sample]
+        data = data[0:data_args.sample]
 
     def process_rows(batch, classifier=None, content_field="content", predictions_field="predictions"):
         sentences = batch[content_field]
@@ -179,12 +179,11 @@ def main():
 
     def eval_dataset(
         data,
-        split="test", 
         reference_field="polarity",
         predictions_field="predictions",
         metric="semeval2017.py"):
-        predictions = data[split][predictions_field]
-        references = data[split][reference_field]
+        predictions = data[predictions_field]
+        references = data[reference_field]
         metric = load_metric(metric)
         eval_results = metric.compute(
             predictions=predictions,
@@ -223,7 +222,7 @@ def main():
             "content_field": data_args.content_field
         },
         batched=True, 
-        batch_size=data['test'].shape[0]
+        batch_size=data.shape[0]
     )
 
     data = data.map(
