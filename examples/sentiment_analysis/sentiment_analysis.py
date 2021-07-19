@@ -25,6 +25,10 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DataArguments:
 
+    log_level: str = field(
+        default='INFO'
+    )
+
     dataset_reader: str = field(
         default='./tass_reader.py'
     )
@@ -55,6 +59,10 @@ class DataArguments:
 
     sample: Optional[int] = field(
         default=None
+    )
+
+    hashtag_only: bool = field(
+        default=True
     )
 
 @dataclass
@@ -125,9 +133,9 @@ def main():
         handlers=[logging.StreamHandler(sys.stdout)],
     )
 
-    logger.setLevel('DEBUG')
-    datasets.utils.logging.set_verbosity('DEBUG')
-    transformers.utils.logging.set_verbosity('DEBUG')
+    logger.setLevel(data_args.log_level)
+    datasets.utils.logging.set_verbosity(data_args.log_level)
+    transformers.utils.logging.set_verbosity(data_args.log_level)
     transformers.utils.logging.enable_default_handler()
     transformers.utils.logging.enable_explicit_format()
 
@@ -150,70 +158,107 @@ def main():
 
     data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)[data_args.split]
 
-    sentences = [x[data_args.content_field] for x in data]
-    gold = [x[data_args.label_field] for x in data]
-
-    step = class_args.batch_size
-
-    def filter_sentences(sentences, gold):
-        def hashtag_filter(data_item):
-            if "#" in data_item[0]:
-                return True
-            else:
-                return False
-        data = list(zip(sentences, gold))
-        data_subset = list(filter(hashtag_filter, data))
-        sentences_subset = [x[0] for x in data_subset]
-        gold_subset = [x[1] for x in data_subset]
-        return sentences_subset, gold_subset
-
-    sentences_subset, gold_subset = \
-        filter_sentences(sentences, gold)
-
-    logger.info(f"Sentences: {str(len(sentences))} , Sentences w/ hashtags: {str(len(sentences_subset))}")
-
-    sentences = sentences_subset
-    gold = gold_subset
+    if data_args.hashtag_only:
+        data = data.filter(lambda x: x["has_hashtag"])
 
     if data_args.sample:
-        sentences = sentences[0:data_args.sample]
-        gold = gold[0:data_args.sample]
+        data[data_args.split] = data[data_args.split][0:data_args.sample]
 
-    def process_sentences(sentences, classifier):
-        chunks = [ sentences[i:i+step] for i in range(0, len(sentences), step)]
-        labels = []
-        for chunk in chunks:
-            chunk_results = classifier(chunk)
-            chunk_labels = [x["label"] for x in chunk_results]
-            labels.extend(chunk_labels)
-        return labels
+    def process_rows(batch, classifier=None, content_field="content", predictions_field="predictions"):
+        sentences = batch[content_field]
+        labels = classifier(sentences)
+        batch.update({predictions_field: labels})
+        return batch
 
-    labels = process_sentences(sentences, classifier)
+    def segment_content(batch, segmenter=None, content_field="content", segmented_content_field="segmented_content"):
+        sentences = batch[content_field]
+        segmented_content = segmenter.process_hashtags(sentences)
+        segmented_content = [ " ".join(x) for x in segmented_content]
+        batch.update({segmented_content_field: segmented_content})
+        return batch
 
-    metric = load_metric(class_args.metrics)
-    eval_results = metric.compute(
-        predictions=labels, 
-        references=gold)
+    def eval_dataset(
+        data,
+        split="test", 
+        reference_field="polarity",
+        predictions_field="predictions",
+        metric="semeval2017.py"):
+        predictions = data[split][predictions_field]
+        references = data[split][reference_field]
+        metric = load_metric(metric)
+        eval_results = metric.compute(
+            predictions=predictions,
+            references=references
+        )
+        return eval_results
 
-    logger.info("%s", eval_results)
+    data = data.map(
+        process_rows, 
+        fn_kwargs={
+            "classifier": classifier,
+            "content_field": data_args.content_field
+        },
+        batched=True, 
+        batch_size=class_args.batch_size)
 
-    segmented_sentences = ws.process_hashtags(sentences)
+    if data_args.hashtag_only:
+        evaluation = eval_dataset(data)
+        logger.info("Hashtag subset evaluation:")
+        logger.info("%s", evaluation)
+    else:
+        data_subset = data.filter(lambda x: x['has_hashtag'])
 
-    segmented_sentences = [
-        " ".join(x) for x in segmented_sentences
-    ]
+        evaluation = eval_dataset(data_subset)
+        logger.info("Hashtag subset evaluation:")
+        logger.info("%s", evaluation)
 
-    segmented_labels = process_sentences(
-        segmented_sentences,
-        classifier
+        evaluation = eval_dataset(data)
+        logger.info("Full dataset evaluation:")
+        logger.info("%s", evaluation)
+
+    data = data.map(
+        segment_content,
+        fn_kwargs={
+            "segmenter": ws,
+            "content_field": data_args.content_field
+        },
+        batched=True, 
+        batch_size=data['test'].shape[0]
     )
 
-    segmented_eval_results = metric.compute(
-        predictions=segmented_labels,
-        references=gold
-    )
+    data = data.map(
+        process_rows, 
+        fn_kwargs={
+            "classifier": classifier,
+            "content_field": "segmented_content",
+            "predictions_field": "segmented_predictions"
+        },
+        batched=True, 
+        batch_size=class_args.batch_size)
 
-    logger.info("%s", segmented_eval_results)
+    if data_args.hashtag_only:
+        evaluation = eval_dataset(
+            data,
+            predictions_field="segmented_predictions"
+        )
+        logger.info("Hashtag subset evaluation after hashtag segmentation:")
+        logger.info("%s", evaluation)
+    else:
+        data_subset = data.filter(lambda x: x['has_hashtag'])
+
+        evaluation = eval_dataset(
+            data_subset,
+            predictions_field="segmented_predictions"
+        )
+        logger.info("Hashtag subset evaluation after hashtag segmentation:")
+        logger.info("%s", evaluation)
+
+        evaluation = eval_dataset(
+            data,
+            predictions_field="segmented_predictions"
+        )
+        logger.info("Full dataset evaluation after hashtag segmentation:")
+        logger.info("%s", evaluation)
 
 if __name__ == '__main__':
     main()

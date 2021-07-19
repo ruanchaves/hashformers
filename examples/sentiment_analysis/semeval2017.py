@@ -43,7 +43,8 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             {
                 "tweetid": datasets.Value("string"),
                 "content": datasets.Value("string"),
-                "polarity": datasets.Value("string")
+                "polarity": datasets.Value("string"),
+                "has_hashtag": datasets.Value("bool")
             }
         )
         return datasets.DatasetInfo(
@@ -100,5 +101,6 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             yield row["tweetid"], {
                 "tweetid": row["tweetid"],
                 "content": row["content"],
-                "polarity": row["polarity"]
+                "polarity": row["polarity"],
+                "has_hashtag": "#" in row["content"]
             }
