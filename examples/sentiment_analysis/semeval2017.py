@@ -94,7 +94,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
         df = df.astype(str)
 
         records = df.to_dict('records')
-        for row in records:
+        for idx, row in enumerate(records):
             if self.config.skip_neutral \
                 and row["polarity"] == self.config.neutral_label:
                 continue

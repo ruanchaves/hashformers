@@ -162,7 +162,8 @@ def main():
         data = data.filter(lambda x: x["has_hashtag"])
 
     if data_args.sample:
-        data[data_args.split] = data[data_args.split][0:data_args.sample]
+        data[data_args.split] = data[data_args.split]\
+            .select([i for i in range(0, data_args.sample)])
 
     def process_rows(batch, classifier=None, content_field="content", predictions_field="predictions"):
         sentences = batch[content_field]
