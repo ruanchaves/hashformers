@@ -185,7 +185,7 @@ def main():
         split="test",
         reference_field="polarity",
         predictions_field="predictions",
-        metric="./semeval2017.py"):
+        metric="./sentiment_metrics.py"):
         predictions = data[split][predictions_field]
         predictions = [x["label"] for x in predictions]
         references = data[split][reference_field]
