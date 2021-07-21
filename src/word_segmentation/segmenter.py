@@ -72,10 +72,8 @@ class WordSegmenter(object):
             ]
         
         def replace_hashtags(tokens):
-            return [ 
-                hashtag_dict.get(x.text[1:], x.text) 
-                    if x.text.startswith("#") else x.text for x in tokens
-            ]
+            return [ hashtag_dict.get(x.text[1:], x.text) 
+                    if x.text.startswith("#") else x.text for x in tokens ]
 
         hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
         hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten

@@ -187,6 +187,10 @@ def main():
         predictions = data[split][predictions_field]
         references = data[split][reference_field]
         metric = load_metric(metric)
+        print(predictions)
+        print(references)
+        print(type(predictions))
+        print(type(references))
         eval_results = metric.compute(
             predictions=predictions,
             references=references
