@@ -22,6 +22,7 @@ from transformers import (
 from word_segmentation import WordSegmenter
 from typing import Optional 
 import copy
+import functools
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +123,15 @@ class WordSegmenterArguments:
         default="es_core_news_sm"
     )
 
+def rsetattr(obj, attr, val):
+    pre, _, post = attr.rpartition('.')
+    return setattr(rgetattr(obj, pre) if pre else obj, post, val)
+
+def rgetattr(obj, attr, *args):
+    def _getattr(obj, attr):
+        return getattr(obj, attr, *args)
+    return functools.reduce(_getattr, [obj] + attr.split('.'))
+
 def main():
     parser = HfArgumentParser((TextClassificationArguments, WordSegmenterArguments, DataArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -156,11 +166,24 @@ def main():
         spacy_model=ws_args.spacy_model
     )
 
-    sentiment_model_config = AutoConfig.from_pretrained(class_args.sentiment_model)
+    def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
+        model_type = rgetattr(model, "config.model_type")
+        oldModuleList = rgetattr(model, f"{model_type}.encoder.layer")
+        newModuleList = nn.ModuleList()
+
+        # Now iterate over all layers, only keepign only the relevant layers.
+        for i in range(0, len(num_layers_to_keep)):
+            newModuleList.append(oldModuleList[i])
+
+        # create a copy of the model, modify it with the new list, and return
+        copyOfModel = copy.deepcopy(model)
+        rsetattr(copyOfModel, f"{model_type}.encoder.layer", newModuleList)
+
+        return copyOfModel
+
+    model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
     if class_args.prune_layers:
-        sentiment_model_config.n_layer = class_args.prune_layers
-        sentiment_model_config.num_hidden_layers = class_args.prune_layers
-    model = AutoModelForSequenceClassification.from_config(sentiment_model_config)
+        model = deleteEncodingLayers(model, class_args.prune_layers)
 
     tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
     classifier = pipeline("sentiment-analysis", 
