@@ -263,7 +263,7 @@ def main():
             batched=True, 
             batch_size=class_args.batch_size)
 
-    if class_args.run_segmenter:
+    if ws_args.run_segmenter:
         data = data.map(
             segment_content,
             fn_kwargs={
