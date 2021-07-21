@@ -185,12 +185,9 @@ def main():
         predictions_field="predictions",
         metric="./semeval2017.py"):
         predictions = data[split][predictions_field]
+        predictions = [x["label"] for x in predictions]
         references = data[split][reference_field]
         metric = load_metric(metric)
-        print(predictions)
-        print(references)
-        print(type(predictions))
-        print(type(references))
         eval_results = metric.compute(
             predictions=predictions,
             references=references
