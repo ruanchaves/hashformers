@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 import logging
 import os
 import sys
+from torch import nn
 
 import datasets
 from datasets import (
@@ -19,6 +20,7 @@ from transformers import (
 
 from word_segmentation import WordSegmenter
 from typing import Optional 
+import copy
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +84,10 @@ class TextClassificationArguments:
 
     metrics: str = field(
         default="./sentiment_metrics.py"
+    )
+
+    prune_layers: Optional[int] = field(
+        default=None
     )
 
 @dataclass
@@ -149,7 +155,26 @@ def main():
         spacy_model=ws_args.spacy_model
     )
 
+    def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
+        # Taken from https://github.com/huggingface/transformers/issues/2483
+        oldModuleList = model.bert.encoder.layer
+        newModuleList = nn.ModuleList()
+
+        # Now iterate over all layers, only keepign only the relevant layers.
+        for i in range(0, len(num_layers_to_keep)):
+            newModuleList.append(oldModuleList[i])
+
+        # create a copy of the model, modify it with the new list, and return
+        copyOfModel = copy.deepcopy(model)
+        copyOfModel.bert.encoder.layer = newModuleList
+
+        return copyOfModel
+
     model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
+
+    if class_args.prune_layers:
+        model = deleteEncodingLayers(model, class_args.prune_layers)
+
     tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
     classifier = pipeline("sentiment-analysis", 
         model=model,
