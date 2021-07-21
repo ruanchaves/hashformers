@@ -206,22 +206,15 @@ def main():
         batch_size=class_args.batch_size)
 
     if data_args.hashtag_only:
-        evaluation = eval_dataset(
+        subset_evaluation = eval_dataset(
             data,
             metric=class_args.metrics
         )
-        logger.info("Hashtag subset evaluation:")
-        logger.info("%s", evaluation)
+        full_evaluation = None
     else:
         data_subset = data.filter(lambda x: x['has_hashtag'])
-
-        evaluation = eval_dataset(data_subset)
-        logger.info("Hashtag subset evaluation:")
-        logger.info("%s", evaluation)
-
-        evaluation = eval_dataset(data)
-        logger.info("Full dataset evaluation:")
-        logger.info("%s", evaluation)
+        subset_evaluation = eval_dataset(data_subset)
+        full_evaluation = eval_dataset(data)
 
     data = data.map(
         segment_content,
@@ -244,28 +237,39 @@ def main():
         batch_size=class_args.batch_size)
 
     if data_args.hashtag_only:
-        evaluation = eval_dataset(
+
+        subset_evaluation_after_segmentation = eval_dataset(
             data,
             predictions_field="segmented_predictions"
         )
-        logger.info("Hashtag subset evaluation after hashtag segmentation:")
-        logger.info("%s", evaluation)
+        
+        full_evaluation_after_segmentation = None
+    
     else:
         data_subset = data.filter(lambda x: x['has_hashtag'])
 
-        evaluation = eval_dataset(
+        subset_evaluation_after_segmentation = eval_dataset(
             data_subset,
             predictions_field="segmented_predictions"
         )
-        logger.info("Hashtag subset evaluation after hashtag segmentation:")
-        logger.info("%s", evaluation)
 
-        evaluation = eval_dataset(
+        full_evaluation_after_segmentation = eval_dataset(
             data,
             predictions_field="segmented_predictions"
         )
-        logger.info("Full dataset evaluation after hashtag segmentation:")
-        logger.info("%s", evaluation)
+
+    logger.info("Full dataset evaluation:")
+    logger.info("%s", full_evaluation)
+
+    logger.info("Hashtag subset evaluation:")
+    logger.info("%s", subset_evaluation)
+
+    logger.info("Hashtag subset evaluation after hashtag segmentation:")
+    logger.info("%s", subset_evaluation_after_segmentation)
+
+    logger.info("Full dataset evaluation after hashtag segmentation:")
+    logger.info("%s", full_evaluation_after_segmentation)
+
 
 if __name__ == '__main__':
     main()
