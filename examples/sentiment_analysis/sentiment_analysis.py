@@ -165,6 +165,8 @@ def main():
         data[data_args.split] = data[data_args.split]\
             .select([i for i in range(0, data_args.sample)])
 
+    split_length = data[data_args.split].shape[0]
+
     def process_rows(batch, classifier=None, content_field="content", predictions_field="predictions"):
         sentences = batch[content_field]
         labels = classifier(sentences)
@@ -228,7 +230,7 @@ def main():
             "content_field": data_args.content_field
         },
         batched=True, 
-        batch_size=data.shape[0]
+        batch_size=split_length
     )
 
     data = data.map(
