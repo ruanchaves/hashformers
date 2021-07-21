@@ -158,7 +158,7 @@ def main():
 
     sentiment_model_config = AutoConfig.from_pretrained(class_args.sentiment_model)
     if class_args.prune_layers:
-        config.n_layer = class_args.prune_layers
+        sentiment_model_config.n_layer = class_args.prune_layers
     model = AutoModelForSequenceClassification.from_config(sentiment_model_config)
 
     tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
