@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass, field
 import logging
 import os
@@ -28,20 +29,16 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DataArguments:
 
+    do_eval: bool = field(
+        default=True
+    )
+
     log_level: str = field(
         default='INFO'
     )
 
     dataset_reader: str = field(
         default='./tass_reader.py'
-    )
-
-    load_from_disk: bool = field(
-        default=False
-    )
-
-    save_to_disk: bool = field(
-        default=False
     )
 
     dataset_load_path: Optional[str] = field(
@@ -106,6 +103,14 @@ class TextClassificationArguments:
 @dataclass
 class WordSegmenterArguments:
 
+    hashtag_dict_load_path: Optional[str] = field(
+        default=None
+    )
+
+    hashtag_dict_save_path: Optional[str] = field(
+        default=None
+    )
+
     run_segmenter: bool = field(
         default=True
     )
@@ -151,13 +156,6 @@ def process_rows(batch, classifier=None, content_field="content", predictions_fi
     sentences = batch[content_field]
     labels = classifier(sentences)
     batch.update({predictions_field: labels})
-    return batch
-
-def segment_content(batch, segmenter=None, content_field="content", segmented_content_field="segmented_content"):
-    sentences = batch[content_field]
-    segmented_content = segmenter.process_hashtags(sentences)
-    segmented_content = [ " ".join(x) for x in segmented_content]
-    batch.update({segmented_content_field: segmented_content})
     return batch
 
 def eval_dataset(
@@ -216,6 +214,12 @@ def main():
     transformers.utils.logging.enable_default_handler()
     transformers.utils.logging.enable_explicit_format()
 
+    if ws_args.hashtag_dict_load_path:
+        with open(ws_args.hashtag_dict_load_path, 'r') as f:
+            main_hashtag_dict = json.load(f)
+    else:
+        main_hashtag_dict = {}
+
     if ws_args.run_segmenter:
         ws = WordSegmenter(
             decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
@@ -239,7 +243,7 @@ def main():
             tokenizer=tokenizer,
             device=class_args.sentiment_model_device)
 
-    if data_args.load_from_disk:
+    if data_args.dataset_load_path:
         data = datasets.load_from_disk(data_args.dataset_load_path)
     else:
         data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
@@ -263,6 +267,22 @@ def main():
             batched=True, 
             batch_size=class_args.batch_size)
 
+    def segment_content(
+        batch, 
+        segmenter=None, 
+        content_field="content", 
+        segmented_content_field="segmented_content",
+        dictionary=main_hashtag_dict):
+
+        sentences = batch[content_field]
+        segmented_content, hashtag_dict = segmenter.process_hashtags(
+            sentences,
+            dictionary=dictionary)
+        segmented_content = [ " ".join(x) for x in segmented_content]
+        batch.update({segmented_content_field: segmented_content})
+        main_hashtag_dict.update(hashtag_dict)
+        return batch
+
     if ws_args.run_segmenter:
         data = data.map(
             segment_content,
@@ -285,53 +305,64 @@ def main():
             batched=True, 
             batch_size=class_args.batch_size)
 
-    if data_args.save_to_disk:
+    if data_args.dataset_save_path:
+
         data.save_to_disk(data_args.dataset_save_path)
 
-    if data_args.hashtag_only:
-        subset_evaluation = eval_dataset(
-            data,
-            metric=class_args.metrics
-        )
-        full_evaluation = None
-    else:
-        data_subset = data.filter(lambda x: x['has_hashtag'])
-        subset_evaluation = eval_dataset(data_subset)
-        full_evaluation = eval_dataset(data)
+    if ws_args.hashtag_dict_save_path:
 
-    if data_args.hashtag_only:
-        subset_evaluation_after_segmentation = eval_dataset(
-            data,
-            predictions_field="segmented_predictions"
-        )
-        full_evaluation_after_segmentation = None
-    else:
-        data_subset = data.filter(lambda x: x['has_hashtag'])
-        subset_evaluation_after_segmentation = eval_dataset(
-            data_subset,
-            predictions_field="segmented_predictions"
-        )
-        full_evaluation_after_segmentation = eval_dataset(
-            data,
-            predictions_field="segmented_predictions"
-        )
+        with open(ws_args.hashtag_dict_save_path, 'w') as f:
+            json.dump(main_hashtag_dict, f)
 
-    log_args = {}
-    for item in [class_args, ws_args, data_args]:
-        log_args.update(vars(item))
-    logger.info("%s", log_args)
 
-    logger.info("Full dataset evaluation:")
-    logger.info("%s", full_evaluation)
+    if data_args.do_eval:
 
-    logger.info("Hashtag subset evaluation:")
-    logger.info("%s", subset_evaluation)
+        if data_args.hashtag_only:
+            subset_evaluation = eval_dataset(
+                data,
+                metric=class_args.metrics
+            )
+            full_evaluation = None
+        else:
+            data_subset = data.filter(lambda x: x['has_hashtag'])
+            subset_evaluation = eval_dataset(data_subset)
+            full_evaluation = eval_dataset(data)
 
-    logger.info("Hashtag subset evaluation after hashtag segmentation:")
-    logger.info("%s", subset_evaluation_after_segmentation)
+        if data_args.hashtag_only:
+            subset_evaluation_after_segmentation = eval_dataset(
+                data,
+                predictions_field="segmented_predictions"
+            )
+            full_evaluation_after_segmentation = None
+        else:
+            data_subset = data.filter(lambda x: x['has_hashtag'])
+            subset_evaluation_after_segmentation = eval_dataset(
+                data_subset,
+                predictions_field="segmented_predictions"
+            )
+            full_evaluation_after_segmentation = eval_dataset(
+                data,
+                predictions_field="segmented_predictions"
+            )
 
-    logger.info("Full dataset evaluation after hashtag segmentation:")
-    logger.info("%s", full_evaluation_after_segmentation)
+        log_args = {}
+        for item in [class_args, ws_args, data_args]:
+            log_args.update(vars(item))
+
+        logger.info("Parameters:")
+        logger.info("%s", log_args)
+
+        logger.info("Full dataset evaluation:")
+        logger.info("%s", full_evaluation)
+
+        logger.info("Hashtag subset evaluation:")
+        logger.info("%s", subset_evaluation)
+
+        logger.info("Hashtag subset evaluation after hashtag segmentation:")
+        logger.info("%s", subset_evaluation_after_segmentation)
+
+        logger.info("Full dataset evaluation after hashtag segmentation:")
+        logger.info("%s", full_evaluation_after_segmentation)
 
 
 if __name__ == '__main__':

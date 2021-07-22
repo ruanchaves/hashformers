@@ -60,10 +60,14 @@ class WordSegmenter(object):
         steps=13,
         alpha=0.222,
         beta=0.111,
-        use_encoder=True
+        use_encoder=True,
+        dictionary=None,
     ):
 
         hashtag_dict = {}
+
+        if dictionary and isinstance(dictionary, dict):
+            hashtag_dict.update(dictionary)
 
         def filter_hashtags(tokens):
             return [ 
@@ -77,21 +81,26 @@ class WordSegmenter(object):
 
         hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
         hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten
-        segmentations = self.segment(
-            hashtag_list,
-            topk=topk,
-            steps=steps,
-            alpha=alpha,
-            beta=beta,
-            use_encoder=use_encoder)
 
-        for idx, item in enumerate(segmentations):
-            hashtag_dict.update({
-                hashtag_list[idx] : segmentations[idx]
-            })
+        hashtag_list = [ x for x in hashtag_list if x not in list(hashtag_dict.values()) ]
+
+        if hashtag_list:
+            segmentations = self.segment(
+                hashtag_list,
+                topk=topk,
+                steps=steps,
+                alpha=alpha,
+                beta=beta,
+                use_encoder=use_encoder)
+
+            for idx, item in enumerate(segmentations):
+                hashtag_dict.update({
+                    hashtag_list[idx] : segmentations[idx]
+                })
 
         output = [ replace_hashtags(self.nlp(x)) for x in text_list ]
-        return output
+
+        return output, hashtag_dict
 
     def segment(
             self,
