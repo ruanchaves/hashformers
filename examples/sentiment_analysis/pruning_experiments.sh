@@ -9,7 +9,7 @@ python sentiment_analysis.py \
     --decoder_model_type gpt2 \
     --encoder_model_name_or_path bert-large-uncased-whole-word-masking \
     --encoder_model_type bert \
-    --spacy_model en_core_news_sm
+    --spacy_model en_core_web_sm
 
 for i in {1..24}:
 do
