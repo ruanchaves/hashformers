@@ -74,6 +74,14 @@ class DataArguments:
         default=True
     )
 
+    skip_neutral: bool = field(
+        default=True
+    )
+
+    neutral_field: str = field(
+        default="2"
+    )
+
 @dataclass
 class TextClassificationArguments:
 
@@ -166,7 +174,6 @@ def process_rows(
     _, preds = torch.max(softmax_logits, 1)
     preds = preds.tolist()
     preds = [ str(x) for x in preds ]
-    print(preds)
     batch.update({predictions_field: preds})
     return batch
 
@@ -258,6 +265,9 @@ def main():
 
     if data_args.hashtag_only:
         data = data.filter(lambda x: x["has_hashtag"])
+
+    if data_args.skip_neutral:
+        data = data.filter(lambda x: x["polarity"] != data_args.neutral_field)
 
     if data_args.sample:
         data[data_args.split] = data[data_args.split]\
