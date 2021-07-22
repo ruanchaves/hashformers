@@ -164,6 +164,7 @@ def process_rows(
     logits = model(**tokens).logits
     labels = torch.softmax(logits, dim=1).tolist()[0]
     labels = [ str(x) for x in labels ]
+    print(labels)
     batch.update({predictions_field: labels})
     return batch
 
