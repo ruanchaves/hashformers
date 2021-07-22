@@ -4,6 +4,7 @@ import logging
 import os
 import sys
 from torch import nn
+import torch
 
 import datasets
 from datasets import (
@@ -152,9 +153,17 @@ def rgetattr(obj, attr, *args):
         return getattr(obj, attr, *args)
     return functools.reduce(_getattr, [obj] + attr.split('.'))
 
-def process_rows(batch, classifier=None, content_field="content", predictions_field="predictions"):
+def process_rows(
+        batch, 
+        model=None, 
+        tokenizer=None, 
+        content_field="content", 
+        predictions_field="predictions"):
     sentences = batch[content_field]
-    labels = classifier(sentences)
+    tokens = tokenizer(sentences, padding=True, truncation=True, return_tensors="pt")
+    logits = model(**tokens).logits
+    labels = torch.softmax(logits, dim=1).tolist()[0]
+    labels = [ str(x) for x in labels ]
     batch.update({predictions_field: labels})
     return batch
 
@@ -238,10 +247,6 @@ def main():
         if class_args.prune_layers:
             model = deleteEncodingLayers(model, class_args.prune_layers)
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
-        classifier = pipeline("sentiment-analysis", 
-            model=model,
-            tokenizer=tokenizer,
-            device=class_args.sentiment_model_device)
 
     if data_args.dataset_load_path:
         data = datasets.load_from_disk(data_args.dataset_load_path)
@@ -261,7 +266,8 @@ def main():
         data = data.map(
             process_rows, 
             fn_kwargs={
-                "classifier": classifier,
+                "model": model,
+                "tokenizer": tokenizer,
                 "content_field": data_args.content_field
             },
             batched=True, 
@@ -298,7 +304,8 @@ def main():
         data = data.map(
             process_rows, 
             fn_kwargs={
-                "classifier": classifier,
+                "model": model,
+                "tokenizer": tokenizer,
                 "content_field": "segmented_content",
                 "predictions_field": "segmented_predictions"
             },

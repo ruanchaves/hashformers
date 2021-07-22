@@ -19,9 +19,9 @@ class SemEvalConfig(datasets.BuilderConfig):
         def __init__(self, 
             url=None, 
             skip_neutral=True, 
-            positive_label="POSITIVE",
-            negative_label="NEGATIVE",
-            neutral_label="NEUTRAL",
+            positive_label="positive",
+            negative_label="negative",
+            neutral_label="neutral",
             **kwargs):
             if url:
                 self.url = url
@@ -76,9 +76,9 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
 
     def _generate_examples(self, filepath, split):
         polarity_dict = {
-            'positive': self.config.positive_label,
-            'neutral': self.config.neutral_label,
-            'negative': self.config.negative_label
+            self.config.positive_label: "1",
+            self.config.neutral_label: "2",
+            self.config.negative_label: "0"
         }
         df = pd.read_csv(
             filepath,
