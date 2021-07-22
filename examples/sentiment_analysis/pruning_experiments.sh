@@ -1,5 +1,3 @@
-LOGFILE=pruning_experiments.log
-
 python sentiment_analysis.py \
     --log_level INFO \
     --dataset_reader semeval2017.py \
@@ -11,7 +9,7 @@ python sentiment_analysis.py \
     --decoder_model_type gpt2 \
     --encoder_model_name_or_path bert-large-uncased-whole-word-masking \
     --encoder_model_type bert \
-    --spacy_model en_core_web_sm >> $LOGFILE
+    --spacy_model en_core_web_sm
 
 for i in {1..24}
 do
@@ -21,5 +19,5 @@ do
     --run_segmenter False \
     --sentiment_model siebert/sentiment-roberta-large-english \
     --do_eval \
-    --prune_layers $i >> $LOGFILE
+    --prune_layers $i
 done
