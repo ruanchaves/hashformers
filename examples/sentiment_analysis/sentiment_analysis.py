@@ -162,7 +162,7 @@ def process_rows(
     sentences = batch[content_field]
     tokens = tokenizer(sentences, padding=True, truncation=True, return_tensors="pt")
     logits = model(**tokens).logits
-    labels = torch.softmax(logits, dim=1).tolist()
+    labels = torch.softmax(logits, dim=1)
     labels = torch.max(labels, 1).tolist()
     labels = [ str(x) for x in labels ]
     print(labels)
