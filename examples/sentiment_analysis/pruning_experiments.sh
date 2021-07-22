@@ -12,7 +12,7 @@ python sentiment_analysis.py \
     --spacy_model en_core_web_sm \
     --sample 3
 
-for i in {1..24}:
+for i in {1..24}
 do
     python sentiment_analysis.py \
     --log_level INFO \
