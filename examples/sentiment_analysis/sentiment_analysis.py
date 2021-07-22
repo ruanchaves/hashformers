@@ -184,7 +184,6 @@ def eval_dataset(
     predictions_field="predictions",
     metric="./sentiment_metrics.py"):
     predictions = data[split][predictions_field]
-    predictions = [x["label"] for x in predictions]
     references = data[split][reference_field]
     metric = load_metric(metric)
     eval_results = metric.compute(
