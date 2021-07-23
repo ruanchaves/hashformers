@@ -195,7 +195,21 @@ def eval_dataset(
 
 def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
     model_type = rgetattr(model, "config.model_type")
-    oldModuleList = rgetattr(model, f"{model_type}.encoder.layer")
+    oldModuleList = None
+
+    try:
+        oldModuleList = rgetattr(model, f"{model_type}.encoder.layer")
+    except AttributeError:
+        pass
+
+    try:
+        oldModuleList = rgetattr(model, f"{model_type}.transformer.layer")
+    except AttributeError:
+        pass
+
+    if not oldModuleList:
+        raise NotImplementedError
+
     newModuleList = nn.ModuleList()
 
     # Now iterate over all layers, only keepign only the relevant layers.
