@@ -11,7 +11,7 @@
    "prune_layers": 4,
    "run_classifier": true,
    "run_segmenter": false,
-   "sentiment_model": "cardiffnlp/twitter-roberta-base-sentiment",
+   "sentiment_model": "cardiffnlp/twitter-xlm-roberta-base-sentiment",
    "sentiment_model_device": 0,
    "skip_neutral": false,
    "split": "test"
