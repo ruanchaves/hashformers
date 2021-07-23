@@ -5,6 +5,7 @@ import os
 import sys
 from torch import nn
 import torch
+from contextlib import suppress
 
 import datasets
 from datasets import (
@@ -195,17 +196,13 @@ def eval_dataset(
 
 def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
     model_type = rgetattr(model, "config.model_type")
+    
     oldModuleList = None
+    keys = ['encoder', 'transformer']
 
-    try:
-        oldModuleList = rgetattr(model, f"{model_type}.encoder.layer")
-    except:
-        pass
-
-    try:
-        oldModuleList = rgetattr(model, f"{model_type}.transformer.layer")
-    except:
-        pass
+    for item in keys:
+        with suppress(AttributeError):
+            oldModuleList = rgetattr(model, f"{model_type}.{item}.layer")
 
     if not oldModuleList:
         raise NotImplementedError
@@ -218,7 +215,10 @@ def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full be
 
     # create a copy of the model, modify it with the new list, and return
     copyOfModel = copy.deepcopy(model)
-    rsetattr(copyOfModel, f"{model_type}.encoder.layer", newModuleList)
+
+    for item in keys:
+        with suppress(AttributeError):
+            rsetattr(copyOfModel, f"{model_type}.{item}.layer", newModuleList)
 
     return copyOfModel
 
