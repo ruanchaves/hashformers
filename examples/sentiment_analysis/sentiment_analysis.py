@@ -83,6 +83,14 @@ class DataArguments:
         default="2"
     )
 
+    positive_field: str = field(
+        default="1"
+    )
+
+    negative_field: str = field(
+        default="0"
+    )
+
 @dataclass
 class TextClassificationArguments:
 
@@ -285,6 +293,20 @@ def main():
     if data_args.sample:
         data[data_args.split] = data[data_args.split]\
             .select([i for i in range(0, data_args.sample)])
+
+    label_mapping = {
+        "0": data_args.negative_field,
+        "1": data_args.positive_field,
+        "2": data_args.neutral_field
+    }
+    def map_labels(row, mapping = None):
+        row["polarity"] = mapping[row["polarity"]]
+        return row
+    data = data.map(
+        map_labels,
+        fn_kwargs={
+            "mapping": label_mapping
+        })
 
     split_length = data[data_args.split].shape[0]
 
