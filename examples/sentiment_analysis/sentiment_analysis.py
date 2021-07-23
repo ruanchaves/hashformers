@@ -199,12 +199,12 @@ def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full be
 
     try:
         oldModuleList = rgetattr(model, f"{model_type}.encoder.layer")
-    except AttributeError:
+    except:
         pass
 
     try:
         oldModuleList = rgetattr(model, f"{model_type}.transformer.layer")
-    except AttributeError:
+    except:
         pass
 
     if not oldModuleList:
