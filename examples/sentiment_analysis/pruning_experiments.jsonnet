@@ -27,7 +27,16 @@ local Params(
 local config = [
     Params("cardiffnlp/twitter-roberta-base-sentiment", 12, "0", "1", "2", false),
     Params("cardiffnlp/twitter-xlm-roberta-base-sentiment", 12, "0", "1", "2", false),
-    Params("finiteautomata/bertweet-base-sentiment-analysis", 12, "0", "1", "2", false)
+    Params("finiteautomata/bertweet-base-sentiment-analysis", 12, "0", "1", "2", false),
+    Params("distilbert-base-uncased-finetuned-sst-2-english", 12, "0", "2", "1", true),
+    Params("textattack/roberta-base-SST-2", 12, "0", "2", "1", true),
+    Params("textattack/bert-base-uncased-SST-2", 12, "0", "2", "1", true),
+    Params("textattack/xlnet-base-cased-SST-2", 12, "0", "2", "1", true),
+    Params("textattack/albert-base-v2-SST-2", 12, "0", "2", "1", true),
+    Params("textattack/facebook-bart-large-SST-2", 12, "0", "2", "1", true),
+    Params("textattack/distilbert-base-uncased-SST-2", 6, "0", "2", "1", true),
+    Params("textattack/xlnet-large-cased-SST-2", 24, "0", "2", "1", true),
+    Params("textattack/distilbert-base-cased-SST-2", 6, "0", "2", "1", true)
 ];
 
 {
