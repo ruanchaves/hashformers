@@ -103,7 +103,7 @@ class TextClassificationArguments:
     )
 
     sentiment_model_device: int = field(
-        default=0
+        default="cuda"
     )
 
     batch_size: int = field(
@@ -356,6 +356,8 @@ def main():
             model = deleteEncodingLayers(original_model, idx)
         else:
             model = original_model
+
+        model.to(class_args.sentiment_model_device)
 
         if class_args.run_classifier:
             data = data.map(
