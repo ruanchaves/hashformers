@@ -219,6 +219,9 @@ def eval_dataset(
 def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
     model_type = rgetattr(model, "config.model_type")
     
+    if model_type == 'xlm-roberta':
+        model_type = 'roberta'
+
     oldModuleList = None
     keys = ['encoder', 'transformer']
 
