@@ -180,7 +180,8 @@ def process_rows(
         tokenizer=None, 
         content_field="content", 
         predictions_field="predictions",
-        max_length=512):
+        max_length=512,
+        device="cuda"):
     sentences = batch[content_field]
     tokens = tokenizer(
         sentences, 
@@ -189,6 +190,7 @@ def process_rows(
         return_tensors="pt",
         max_length=max_length
         )
+    tokens = tokens.to(device)
     logits = model(**tokens).logits
     softmax_logits = torch.softmax(logits, dim=1)
     _, preds = torch.max(softmax_logits, 1)
