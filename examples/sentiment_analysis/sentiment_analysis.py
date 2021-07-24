@@ -179,9 +179,16 @@ def process_rows(
         model=None, 
         tokenizer=None, 
         content_field="content", 
-        predictions_field="predictions"):
+        predictions_field="predictions",
+        max_length=512):
     sentences = batch[content_field]
-    tokens = tokenizer(sentences, padding=True, truncation=True, return_tensors="pt")
+    tokens = tokenizer(
+        sentences, 
+        padding=True, 
+        truncation=True, 
+        return_tensors="pt",
+        max_length=max_length
+        )
     logits = model(**tokens).logits
     softmax_logits = torch.softmax(logits, dim=1)
     _, preds = torch.max(softmax_logits, 1)
@@ -281,9 +288,6 @@ def main():
         model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
         if class_args.prune_layers:
             model = deleteEncodingLayers(model, class_args.prune_layers)
-        
-        if class_args.max_length:
-            model.config.max_length = class_args.max_length 
 
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
