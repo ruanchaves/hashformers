@@ -1,5 +1,4 @@
-local Params(model,layers,negative,neutral,positive,skip_neutral) = 
-    local param(
+local Params(
         model,
         layers,
         negative,
@@ -24,7 +23,6 @@ local Params(model,layers,negative,neutral,positive,skip_neutral) =
         run_segmenter: false,
         skip_neutral: skip_neutral
     };
-    [param(model, x, negative, neutral, positive, skip_neutral) for x in std.range(1, layers)];
 
 local config = [
     Params("cardiffnlp/twitter-roberta-base-sentiment", 12, "0", "1", "2", false),
@@ -32,8 +30,6 @@ local config = [
     Params("finiteautomata/bertweet-base-sentiment-analysis", 12, "0", "1", "2", false)
 ];
 
-local param_list = [ item for items in config for item in items];
-
 {
-    [std.format("%d.json", i)]: param_list[i] for i in std.range(0, std.length(param_list)-1)
+    [std.format("%d.json", i)]: config[i] for i in std.range(0, std.length(config)-1)
 }
