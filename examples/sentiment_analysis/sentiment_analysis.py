@@ -102,7 +102,7 @@ class TextClassificationArguments:
         default="finiteautomata/beto-sentiment-analysis"
     )
 
-    sentiment_model_device: int = field(
+    sentiment_model_device: str = field(
         default="cuda"
     )
 
