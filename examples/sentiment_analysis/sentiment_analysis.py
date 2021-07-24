@@ -192,6 +192,7 @@ def process_rows(
         )
     tokens = tokens.to(device)
     logits = model(**tokens).logits
+    logits = logits.to("cpu")
     softmax_logits = torch.softmax(logits, dim=1)
     _, preds = torch.max(softmax_logits, 1)
     preds = preds.tolist()
