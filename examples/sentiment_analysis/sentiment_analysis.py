@@ -118,6 +118,10 @@ class TextClassificationArguments:
         default=None
     )
 
+    max_length: int = field(
+        default=512
+    )
+
 @dataclass
 class WordSegmenterArguments:
 
@@ -277,6 +281,10 @@ def main():
         model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
         if class_args.prune_layers:
             model = deleteEncodingLayers(model, class_args.prune_layers)
+        
+        if class_args.max_length:
+            model.config.max_length = class_args.max_length 
+
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
     if data_args.dataset_load_path:
