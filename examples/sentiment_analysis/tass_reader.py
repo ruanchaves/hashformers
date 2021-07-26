@@ -54,9 +54,9 @@ class Tass(datasets.GeneratorBasedBuilder):
 
     def _generate_examples(self, filepath, split):
         polarity_dict = {
-            'P': 'POS',
-            'N': 'NEG',
-            'NEU': 'NEU'
+            'P': "1",
+            'N': "0",
+            'NEU': "2"
         }
         tree = ET.parse(filepath)
         root = tree.getroot()

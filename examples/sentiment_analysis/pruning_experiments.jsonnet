@@ -1,3 +1,17 @@
+local WS_Params(
+        
+    ) = {
+        log_level: "INFO",
+        run_classifier: false,
+        run_segmenter: true,
+        dataset_reader: "./semeval2017.py",
+        dataset_save_path: "./semeval2017",
+        dataset_url: "",
+        split: "test",
+        hashtag_only: true,
+        
+    };
+
 local Params(
         model,
         layers,
