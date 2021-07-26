@@ -74,5 +74,6 @@ class Tass(datasets.GeneratorBasedBuilder):
             yield tweet_id, {
                 "tweetid": tweet_id,
                 "content": content,
-                "polarity": polarity
+                "polarity": polarity,
+                "has_hashtag": "#" in content
             }
