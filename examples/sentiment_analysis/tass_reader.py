@@ -26,6 +26,7 @@ class Tass(datasets.GeneratorBasedBuilder):
                 "tweetid": datasets.Value("string"),
                 "content": datasets.Value("string"),
                 "polarity": datasets.Value("string"),
+                "has_hashtag": datasets.Value("bool")                
             }
         )
         return datasets.DatasetInfo(
