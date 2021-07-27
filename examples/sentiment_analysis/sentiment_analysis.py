@@ -356,89 +356,89 @@ def main():
             model_range = 1
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
-    for idx in range(0, model_range):
+        for idx in range(0, model_range):
 
-        if class_args.prune_layers:
-            model = deleteEncodingLayers(original_model, idx)
+            if class_args.prune_layers:
+                model = deleteEncodingLayers(original_model, idx)
+            else:
+                model = original_model
+
+            model.to(class_args.sentiment_model_device)
+
+            if class_args.run_classifier:
+                data = data.map(
+                    process_rows, 
+                    fn_kwargs={
+                        "model": model,
+                        "tokenizer": tokenizer,
+                        "content_field": data_args.content_field
+                    },
+                    batched=True, 
+                    batch_size=class_args.batch_size)
+
+            if class_args.run_classifier:
+                data = data.map(
+                    process_rows, 
+                    fn_kwargs={
+                        "model": model,
+                        "tokenizer": tokenizer,
+                        "content_field": "segmented_content",
+                        "predictions_field": "segmented_predictions"
+                    },
+                    batched=True, 
+                    batch_size=class_args.batch_size)
+
+    if data_args.do_eval:
+
+        if data_args.hashtag_only:
+            subset_evaluation = eval_dataset(
+                data,
+                metric=class_args.metrics
+            )
+            full_evaluation = None
         else:
-            model = original_model
+            data_subset = data.filter(lambda x: x['has_hashtag'])
+            subset_evaluation = eval_dataset(data_subset)
+            full_evaluation = eval_dataset(data)
 
-        model.to(class_args.sentiment_model_device)
+        if data_args.hashtag_only:
+            subset_evaluation_after_segmentation = eval_dataset(
+                data,
+                predictions_field="segmented_predictions"
+            )
+            full_evaluation_after_segmentation = None
+        else:
+            data_subset = data.filter(lambda x: x['has_hashtag'])
+            subset_evaluation_after_segmentation = eval_dataset(
+                data_subset,
+                predictions_field="segmented_predictions"
+            )
+            full_evaluation_after_segmentation = eval_dataset(
+                data,
+                predictions_field="segmented_predictions"
+            )
 
-        if class_args.run_classifier:
-            data = data.map(
-                process_rows, 
-                fn_kwargs={
-                    "model": model,
-                    "tokenizer": tokenizer,
-                    "content_field": data_args.content_field
-                },
-                batched=True, 
-                batch_size=class_args.batch_size)
+        log_args = {}
+        for item in [class_args, ws_args, data_args]:
+            log_args.update(vars(item))
 
-        if class_args.run_classifier:
-            data = data.map(
-                process_rows, 
-                fn_kwargs={
-                    "model": model,
-                    "tokenizer": tokenizer,
-                    "content_field": "segmented_content",
-                    "predictions_field": "segmented_predictions"
-                },
-                batched=True, 
-                batch_size=class_args.batch_size)
+        logger.info("Parameters:")
+        logger.info("%s", log_args)
 
-        if data_args.do_eval:
+        logger.info("idx:")
+        logger.info("%s", str(idx))
 
-            if data_args.hashtag_only:
-                subset_evaluation = eval_dataset(
-                    data,
-                    metric=class_args.metrics
-                )
-                full_evaluation = None
-            else:
-                data_subset = data.filter(lambda x: x['has_hashtag'])
-                subset_evaluation = eval_dataset(data_subset)
-                full_evaluation = eval_dataset(data)
+        logger.info("Full dataset evaluation:")
+        logger.info("%s", full_evaluation)
 
-            if data_args.hashtag_only:
-                subset_evaluation_after_segmentation = eval_dataset(
-                    data,
-                    predictions_field="segmented_predictions"
-                )
-                full_evaluation_after_segmentation = None
-            else:
-                data_subset = data.filter(lambda x: x['has_hashtag'])
-                subset_evaluation_after_segmentation = eval_dataset(
-                    data_subset,
-                    predictions_field="segmented_predictions"
-                )
-                full_evaluation_after_segmentation = eval_dataset(
-                    data,
-                    predictions_field="segmented_predictions"
-                )
+        logger.info("Hashtag subset evaluation:")
+        logger.info("%s", subset_evaluation)
 
-            log_args = {}
-            for item in [class_args, ws_args, data_args]:
-                log_args.update(vars(item))
+        logger.info("Hashtag subset evaluation after hashtag segmentation:")
+        logger.info("%s", subset_evaluation_after_segmentation)
 
-            logger.info("Parameters:")
-            logger.info("%s", log_args)
-
-            logger.info("idx:")
-            logger.info("%s", str(idx))
-
-            logger.info("Full dataset evaluation:")
-            logger.info("%s", full_evaluation)
-
-            logger.info("Hashtag subset evaluation:")
-            logger.info("%s", subset_evaluation)
-
-            logger.info("Hashtag subset evaluation after hashtag segmentation:")
-            logger.info("%s", subset_evaluation_after_segmentation)
-
-            logger.info("Full dataset evaluation after hashtag segmentation:")
-            logger.info("%s", full_evaluation_after_segmentation)
+        logger.info("Full dataset evaluation after hashtag segmentation:")
+        logger.info("%s", full_evaluation_after_segmentation)
 
     if data_args.dataset_save_path:
         data.save_to_disk(data_args.dataset_save_path)
