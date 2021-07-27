@@ -26,6 +26,12 @@ def get_args():
         default="Helsinki-NLP/opus-mt-en-es"
     )
 
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=1000
+    )
+
     args = parser.parse_args()
 
     return args
@@ -33,13 +39,14 @@ def get_args():
 def main():
     args = get_args()
 
-    translate_from_df(
+    translate_dataset(
         args.dataset_path,
         args.save_path,
-        args.model_name
+        args.model_name,
+        batch_size=args.batch_size
     )
 
-def translate_from_df(
+def translate_dataset(
     dataset_path,
     save_path,
     model_name="Helsinki-NLP/opus-mt-en-es",
@@ -55,7 +62,8 @@ def translate_from_df(
     "header": None,
     "index": False
 },
-    device="cuda"
+    device="cuda",
+    batch_size=1000
 ):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = MarianMTModel.from_pretrained(model_name)
@@ -64,12 +72,25 @@ def translate_from_df(
     assert tokenizer != None
 
     def translate_sentence(sentence, model=None, tokenizer=None):
-        tokens = tokenizer([sentence], return_tensors="pt", padding=True, truncation=True)
+        if isinstance(sentence, str):
+            input = [sentence]
+        else:
+            input = sentence
+        tokens = tokenizer(input, return_tensors="pt", padding=True, truncation=True)
         tokens.to(device)
         translated = model.generate(**tokens)
-        return [tokenizer.decode(t, skip_special_tokens=True) for t in translated][0]
+        translation = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
-    def translate_row(row, sentence_field="sentence", model=None, tokenizer=None):
+        if isinstance(sentence, str):
+            return translation[0]
+        else:
+            return translation
+
+    def translate_row(
+        row, 
+        sentence_field="sentence", 
+        model=None, 
+        tokenizer=None):
         row[sentence_field] = \
             translate_sentence(row[sentence_field], model=model, tokenizer=tokenizer)
         return row
@@ -79,7 +100,10 @@ def translate_from_df(
 
     if dataset_path == "sst":
         dataset = datasets.load_dataset("sst", "default")
-        dataset = dataset.map(translate_row_partial)
+        dataset = dataset.map(
+            translate_row_partial,
+            batched=True,
+            batch_size=batch_size)
         dataset.save_to_disk(save_path)
     else:
         df = pd.read_csv(dataset_path, **read_params)
