@@ -77,7 +77,7 @@ def main():
     sst_train_df = process_sst_dataset(sst, split="train")
     sst_train_df.to_csv("sst_train.csv", **params)
 
-    sst_dev_df = process_sst_dataset(sst, split="dev")
+    sst_dev_df = process_sst_dataset(sst, split="validation")
     sst_dev_df.to_csv("sst_dev.csv", **params)
 
     sst_test_df = process_sst_dataset(sst, split="test")
