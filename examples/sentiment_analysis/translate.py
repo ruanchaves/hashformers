@@ -1,4 +1,3 @@
-from typing import get_args
 from transformers import MarianMTModel, MarianTokenizer, AutoTokenizer
 from functools import partial
 import pandas as pd 
