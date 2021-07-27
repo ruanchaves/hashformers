@@ -2,6 +2,7 @@ from transformers import MarianMTModel, MarianTokenizer, AutoTokenizer
 from functools import partial
 import pandas as pd 
 import argparse
+import datasets
 
 
 def get_args():
@@ -25,12 +26,6 @@ def get_args():
         default="Helsinki-NLP/opus-mt-en-es"
     )
 
-    parser.add_argument(
-        "--mode",
-        type=str,
-        default="dataframe"
-    )
-
     args = parser.parse_args()
 
     return args
@@ -38,12 +33,11 @@ def get_args():
 def main():
     args = get_args()
 
-    if args.mode == 'dataframe':
-        translate_from_df(
-            args.dataset_path,
-            args.save_path,
-            args.model_name
-        )
+    translate_from_df(
+        args.dataset_path,
+        args.save_path,
+        args.model_name
+    )
 
 def translate_from_df(
     dataset_path,
@@ -63,22 +57,36 @@ def translate_from_df(
 },
     device="cuda"
 ):
-  tokenizer = AutoTokenizer.from_pretrained(model_name)
-  model = MarianMTModel.from_pretrained(model_name)
-  model.to(device)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = MarianMTModel.from_pretrained(model_name)
+    model.to(device)
 
-  assert tokenizer != None
+    assert tokenizer != None
 
-  def translate_row(row, model=None, tokenizer=None):
-    tokens = tokenizer([row], return_tensors="pt", padding=True, truncation=True)
-    tokens.to(device)
-    translated = model.generate(**tokens)
-    return [tokenizer.decode(t, skip_special_tokens=True) for t in translated][0]
+    def translate_sentence(sentence, model=None, tokenizer=None):
+        tokens = tokenizer([sentence], return_tensors="pt", padding=True, truncation=True)
+        tokens.to(device)
+        translated = model.generate(**tokens)
+        return [tokenizer.decode(t, skip_special_tokens=True) for t in translated][0]
 
-  df = pd.read_csv(dataset_path, **read_params)
-  translate_partial = partial(translate_row, model=model, tokenizer=tokenizer)
-  df[content_field] = df[content_field].apply(lambda x: translate_partial(x))
-  df.to_csv(save_path, **save_params)
+    def translate_row(row, sentence_field="sentence", model=None, tokenizer=None):
+        sentence = row[sentence_field]
+        output = translate_sentence(sentence, model=model, tokenizer=tokenizer)
+        row[sentence_field] = output
+        return row
+
+    translate_sentence_partial = partial(translate_row, model=model, tokenizer=tokenizer)
+    translate_row_partial = partial(translate_sentence, model=model, tokenizer=tokenizer)
+
+    if dataset_path == "sst2":
+        dataset = datasets.load_dataset("sst2", "default")
+        dataset = dataset.map(translate_row_partial)
+        dataset.save_to_disk(save_path)
+    else:
+        df = pd.read_csv(dataset_path, **read_params)
+        df[content_field] = df[content_field].apply(
+            lambda x: translate_sentence_partial(x))
+        df.to_csv(save_path, **save_params)
 
 if __name__ == '__main__':
     main()
