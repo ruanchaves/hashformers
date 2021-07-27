@@ -64,6 +64,8 @@ def translate_from_df(
     assert tokenizer != None
 
     def translate_sentence(sentence, model=None, tokenizer=None):
+        print(sentence)
+        print(type(sentence))
         tokens = tokenizer([sentence], return_tensors="pt", padding=True, truncation=True)
         tokens.to(device)
         translated = model.generate(**tokens)
