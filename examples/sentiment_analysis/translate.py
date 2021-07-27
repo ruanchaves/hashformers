@@ -70,9 +70,9 @@ def translate_from_df(
         return [tokenizer.decode(t, skip_special_tokens=True) for t in translated][0]
 
     def translate_row(row, sentence_field="sentence", model=None, tokenizer=None):
-        sentence = row[sentence_field]
+        sentence = str(row[sentence_field])
         output = translate_sentence(sentence, model=model, tokenizer=tokenizer)
-        row[sentence_field] = output
+        row[sentence_field] = str(output)
         return row
 
     translate_sentence_partial = partial(translate_row, model=model, tokenizer=tokenizer)
