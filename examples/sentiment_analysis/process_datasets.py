@@ -65,7 +65,7 @@ def main():
         "index": False
     }
 
-    semeval_dev_df = process_sst_dataset(semeval_dev)
+    semeval_dev_df = process_semeval_dataset(semeval_dev)
     semeval_dev_df.to_csv("semeval_dev.csv", **params)
 
     semeval_train_df = process_semeval_dataset(semeval_train)
