@@ -94,10 +94,12 @@ def translate_dataset(
         row[sentence_field] = \
             translate_sentence(row[sentence_field], model=model, tokenizer=tokenizer)
         return row
-
-    translate_sentence_partial = partial(translate_sentence, model=model, tokenizer=tokenizer)
+        
     translate_row_partial = partial(translate_row, model=model, tokenizer=tokenizer)
 
+    translate_row_partial_content_field = \
+        partial(translate_row, sentence_field=content_field, model=model, tokenizer=tokenizer)
+    
     if dataset_path == "sst":
         dataset = datasets.load_dataset("sst", "default")
         dataset = dataset.map(
@@ -107,9 +109,12 @@ def translate_dataset(
         dataset.save_to_disk(save_path)
     else:
         df = pd.read_csv(dataset_path, **read_params)
-        df[content_field] = df[content_field].apply(
-            lambda x: translate_sentence_partial(x))
-        df.to_csv(save_path, **save_params)
+        dataset = datasets.Dataset.from_pandas(df)
+        dataset = dataset.map(
+            translate_row_partial_content_field,
+            batched=True,
+            batch_size=batch_size)
+        dataset.save_to_disk(save_path)
 
 if __name__ == '__main__':
     main()
