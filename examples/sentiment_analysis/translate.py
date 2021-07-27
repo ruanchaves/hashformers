@@ -64,21 +64,18 @@ def translate_from_df(
     assert tokenizer != None
 
     def translate_sentence(sentence, model=None, tokenizer=None):
-        print(sentence)
-        print(type(sentence))
         tokens = tokenizer([sentence], return_tensors="pt", padding=True, truncation=True)
         tokens.to(device)
         translated = model.generate(**tokens)
         return [tokenizer.decode(t, skip_special_tokens=True) for t in translated][0]
 
     def translate_row(row, sentence_field="sentence", model=None, tokenizer=None):
-        sentence = str(row[sentence_field])
-        output = translate_sentence(sentence, model=model, tokenizer=tokenizer)
-        row[sentence_field] = str(output)
+        row[sentence_field] = \
+            translate_sentence(row[sentence_field], model=model, tokenizer=tokenizer)
         return row
 
-    translate_sentence_partial = partial(translate_row, model=model, tokenizer=tokenizer)
-    translate_row_partial = partial(translate_sentence, model=model, tokenizer=tokenizer)
+    translate_sentence_partial = partial(translate_sentence, model=model, tokenizer=tokenizer)
+    translate_row_partial = partial(translate_row, model=model, tokenizer=tokenizer)
 
     if dataset_path == "sst":
         dataset = datasets.load_dataset("sst", "default")
