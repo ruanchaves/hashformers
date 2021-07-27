@@ -78,8 +78,8 @@ def translate_from_df(
     translate_sentence_partial = partial(translate_row, model=model, tokenizer=tokenizer)
     translate_row_partial = partial(translate_sentence, model=model, tokenizer=tokenizer)
 
-    if dataset_path == "sst2":
-        dataset = datasets.load_dataset("sst2", "default")
+    if dataset_path == "sst":
+        dataset = datasets.load_dataset("sst", "default")
         dataset = dataset.map(translate_row_partial)
         dataset.save_to_disk(save_path)
     else:
