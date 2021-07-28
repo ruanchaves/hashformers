@@ -3,7 +3,8 @@ from functools import partial
 import pandas as pd 
 import argparse
 import datasets
-
+import json
+import re
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -18,6 +19,12 @@ def get_args():
         "--save_path",
         type=str,
         default=None
+    )
+
+    parser.add_argument(
+        "--join",
+        type=bool,
+        default=False
     )
 
     parser.add_argument(
@@ -43,7 +50,8 @@ def main():
         args.dataset_path,
         args.save_path,
         args.model_name,
-        batch_size=args.batch_size
+        batch_size=args.batch_size,
+        join=args.join
     )
 
 def translate_dataset(
@@ -57,13 +65,9 @@ def translate_dataset(
     "sep": "\t"
 },
     content_field="content",
-    save_params={
-    "sep": "\t",
-    "header": None,
-    "index": False
-},
     device="cuda",
-    batch_size=1000
+    batch_size=1000,
+    join=False
 ):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = MarianMTModel.from_pretrained(model_name)
@@ -94,27 +98,33 @@ def translate_dataset(
         row[sentence_field] = \
             translate_sentence(row[sentence_field], model=model, tokenizer=tokenizer)
         return row
-        
-    translate_row_partial = partial(translate_row, model=model, tokenizer=tokenizer)
 
     translate_row_partial_content_field = \
         partial(translate_row, sentence_field=content_field, model=model, tokenizer=tokenizer)
     
     if dataset_path == "sst":
         dataset = datasets.load_dataset("sst", "default")
-        dataset = dataset.map(
-            translate_row_partial,
-            batched=True,
-            batch_size=batch_size)
-        dataset.save_to_disk(save_path)
+    if dataset_path.endswith('.json'):
+        with open(dataset_path, 'r') as f:
+            dataset = json.load(f)
+        dataset = [ { "key": k, "content": v} for k,v in dataset.items() ]
+        dataset = datasets.Dataset.from_pandas(pd.DataFrame(dataset))     
     else:
         df = pd.read_csv(dataset_path, **read_params)
         dataset = datasets.Dataset.from_pandas(df)
-        dataset = dataset.map(
-            translate_row_partial_content_field,
-            batched=True,
-            batch_size=batch_size)
-        dataset.save_to_disk(save_path)
+    dataset = dataset.map(
+        translate_row_partial_content_field,
+        batched=True,
+        batch_size=batch_size)
+    
+    if join == True:
+        def join_hashtags(row, content_field="content"):
+            row[content_field] = re.sub(r'\s+', '', row[content_field])
+            row[content_field] = "#" + row[content_field]
+            return row
+        dataset = dataset.map(join_hashtags)
+
+    dataset.save_to_disk(save_path)
 
 if __name__ == '__main__':
     main()
