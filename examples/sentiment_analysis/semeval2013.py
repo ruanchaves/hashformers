@@ -95,7 +95,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             if self.config.skip_neutral \
                 and row["polarity"] == self.config.neutral_label:
                 continue
-            yield row["tweetid"], {
+            yield str(idx), {
                 "tweetid": row["tweetid"],
                 "content": row["content"],
                 "polarity": row["polarity"],
