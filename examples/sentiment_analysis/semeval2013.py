@@ -65,10 +65,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             datasets.SplitGenerator(
                 name=datasets.Split.TEST,
                 gen_kwargs={
-                    "filepath": os.path.join(
-                        data['test'],
-                        "twitter-2013train-A.tsv"
-                    ),
+                    "filepath": data['test'],
                     "split": "test"
                 },
             )
