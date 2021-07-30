@@ -23,7 +23,7 @@ local Params(
         run_classifier: true,
         sentiment_model: model,
         sentiment_model_device: 0,
-        batch_size: 2,
+        batch_size: 1,
         metrics: "./sentiment_metrics.py",
         prune_layers: layers,
         run_segmenter: false

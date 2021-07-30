@@ -322,9 +322,6 @@ def main():
     else:
         data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
 
-    logger.info("Debug")
-    sys.exit(0)
-
     if data_args.sample:
         data[data_args.split] = data[data_args.split]\
             .select([i for i in range(0, data_args.sample)])
