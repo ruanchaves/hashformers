@@ -416,66 +416,66 @@ def main():
                     batch_size=class_args.batch_size,
                     keep_in_memory=True)
 
-    if data_args.do_eval:
+            if data_args.do_eval:
 
-        data_subset = data.filter(lambda x: x['has_hashtag'])
+                data_subset = data.filter(lambda x: x['has_hashtag'])
 
-        dataset_evaluation_params = {
-            "split": data_args.split,
-            "reference_field": data_args.label_field,
-            "metric": class_args.metrics
-        }
+                dataset_evaluation_params = {
+                    "split": data_args.split,
+                    "reference_field": data_args.label_field,
+                    "metric": class_args.metrics
+                }
 
-        if data_args.predictions_field:
-            
-            subset_evaluation = eval_dataset(
-                data_subset,
-                predictions_field=data_args.predictions_field,
-                **dataset_evaluation_params)
-            subset_evaluation.update({
-                "eval": "subset_evaluation"
-            })
+                if data_args.predictions_field:
+                    
+                    subset_evaluation = eval_dataset(
+                        data_subset,
+                        predictions_field=data_args.predictions_field,
+                        **dataset_evaluation_params)
+                    subset_evaluation.update({
+                        "eval": "subset_evaluation"
+                    })
 
-            full_evaluation = eval_dataset(
-                data,
-                predictions_field=data_args.predictions_field,
-                **dataset_evaluation_params)
-            full_evaluation.update({
-                "eval": "full_evaluation"
-            })
+                    full_evaluation = eval_dataset(
+                        data,
+                        predictions_field=data_args.predictions_field,
+                        **dataset_evaluation_params)
+                    full_evaluation.update({
+                        "eval": "full_evaluation"
+                    })
 
-        if data_args.segmented_predictions_field:
-            
-            subset_evaluation_after_segmentation = eval_dataset(
-                data_subset,
-                predictions_field=data_args.segmented_predictions_field,
-                **dataset_evaluation_params)
-            subset_evaluation_after_segmentation.update({
-                "eval": "subset_evaluation_after_segmentation"
-            })
+                if data_args.segmented_predictions_field:
+                    
+                    subset_evaluation_after_segmentation = eval_dataset(
+                        data_subset,
+                        predictions_field=data_args.segmented_predictions_field,
+                        **dataset_evaluation_params)
+                    subset_evaluation_after_segmentation.update({
+                        "eval": "subset_evaluation_after_segmentation"
+                    })
 
-            full_evaluation_after_segmentation = eval_dataset(
-                data,
-                predictions_field=data_args.segmented_predictions_field,
-                **dataset_evaluation_params)
-            full_evaluation_after_segmentation.update({
-                "eval": "full_evaluation_after_segmentation"
-            })
+                    full_evaluation_after_segmentation = eval_dataset(
+                        data,
+                        predictions_field=data_args.segmented_predictions_field,
+                        **dataset_evaluation_params)
+                    full_evaluation_after_segmentation.update({
+                        "eval": "full_evaluation_after_segmentation"
+                    })
 
-        log_args = {}
-        for item in [class_args, ws_args, data_args]:
-            log_args.update(vars(item))
+                log_args = {}
+                for item in [class_args, ws_args, data_args]:
+                    log_args.update(vars(item))
 
-        for item in [
-            full_evaluation,
-            subset_evaluation,
-            subset_evaluation_after_segmentation,
-            full_evaluation_after_segmentation]:
+                for item in [
+                    full_evaluation,
+                    subset_evaluation,
+                    subset_evaluation_after_segmentation,
+                    full_evaluation_after_segmentation]:
 
-            item.update(log_args)
-            item.update({"current_layer": idx})
+                    item.update(log_args)
+                    item.update({"current_layer": class_args.prune_layers[idx]})
 
-            logger.info("%s", item)
+                    logger.info("%s", item)
 
     if data_args.dataset_save_path:
         data.save_to_disk(data_args.dataset_save_path)
