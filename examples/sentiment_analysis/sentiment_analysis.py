@@ -399,7 +399,8 @@ def main():
                         "predictions_field": data_args.predictions_field
                     },
                     batched=True, 
-                    batch_size=class_args.batch_size)
+                    batch_size=class_args.batch_size,
+                    keep_in_memory=True)
 
             if class_args.run_classifier and data_args.segmented_predictions_field:
                 logger.info("Writing processed predictions on the dataset.")
@@ -412,7 +413,8 @@ def main():
                         "predictions_field": data_args.segmented_predictions_field
                     },
                     batched=True, 
-                    batch_size=class_args.batch_size)
+                    batch_size=class_args.batch_size,
+                    keep_in_memory=True)
 
     if data_args.do_eval:
 
