@@ -207,7 +207,7 @@ def process_rows(
 
     if return_shape:
         return logits.shape[1]
-        
+
     _, preds = torch.max(softmax_logits, 1)
     preds = preds.tolist()
     if logits.shape[1] == 2:
@@ -373,8 +373,8 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
         for idx in range(0, model_range):
-            logger.info(f"Processing predictions for layer {class_args.prune_layers[idx]}.")
             if class_args.prune_layers:
+                logger.info(f"Processing predictions for layer {class_args.prune_layers[idx]}.")
                 model = deleteEncodingLayers(original_model, class_args.prune_layers[idx])
             else:
                 model = original_model
@@ -480,7 +480,8 @@ def main():
                     full_evaluation_after_segmentation]:
 
                     item.update(log_args)
-                    item.update({"current_layer": class_args.prune_layers[idx]})
+                    if class_args.prune_layers:
+                        item.update({"current_layer": class_args.prune_layers[idx]})
 
                     logger.info(item)
 
