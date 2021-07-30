@@ -423,7 +423,7 @@ def main():
         dataset_evaluation_params = {
             "split": data_args.split,
             "reference_field": data_args.label_field,
-            "metric": data_args.metrics
+            "metric": class_args.metrics
         }
 
         if data_args.predictions_field:
