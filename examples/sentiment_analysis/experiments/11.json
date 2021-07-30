@@ -4,12 +4,6 @@
    "do_eval": true,
    "log_level": "INFO",
    "metrics": "./sentiment_metrics.py",
-   "prune_layers": [
-      6,
-      12,
-      18,
-      24
-   ],
    "run_classifier": true,
    "run_segmenter": false,
    "sentiment_model": "siebert/sentiment-roberta-large-english",
