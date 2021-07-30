@@ -280,18 +280,17 @@ def main():
         class_args, ws_args, data_args = \
             parser.parse_args_into_dataclasses()
 
-    logger = logging.getLogger()
-    logHandler = logging.StreamHandler(sys.stdout)
-    formatter = jsonlogger.JsonFormatter()
-    logHandler.setFormatter(formatter)
-    logger.addHandler(logHandler)
+    # logHandler = logging.StreamHandler(sys.stdout)
+    # formatter = jsonlogger.JsonFormatter()
+    # logHandler.setFormatter(formatter)
+    # logger.addHandler(logHandler)
 
-    # # Setup logging
-    # logging.basicConfig(
-    #     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    #     datefmt="%m/%d/%Y %H:%M:%S",
-    #     handlers=[logging.StreamHandler(sys.stdout)],
-    # )
+    # Setup logging
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
 
     logger.setLevel(data_args.log_level)
     datasets.utils.logging.set_verbosity(data_args.log_level)
