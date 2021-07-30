@@ -20,11 +20,10 @@ local Params(
         log_level: "INFO",
         dataset_load_path: "./semeval2017",
         split: "test",
-        hashtag_only: true,
         run_classifier: true,
         sentiment_model: model,
         sentiment_model_device: 0,
-        batch_size: 1,
+        batch_size: 2,
         metrics: "./sentiment_metrics.py",
         prune_layers: layers,
         run_segmenter: false

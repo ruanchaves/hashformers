@@ -1,8 +1,7 @@
 {
-   "batch_size": 1,
+   "batch_size": 2,
    "dataset_load_path": "./semeval2017",
    "do_eval": true,
-   "hashtag_only": true,
    "log_level": "INFO",
    "metrics": "./sentiment_metrics.py",
    "prune_layers": 12,
