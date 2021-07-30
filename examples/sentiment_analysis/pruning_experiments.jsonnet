@@ -30,18 +30,18 @@ local Params(
     };
 
 local config = [
-    Params("cardiffnlp/twitter-roberta-base-sentiment", 12),
-    Params("finiteautomata/bertweet-base-sentiment-analysis", 12),
-    Params("distilbert-base-uncased-finetuned-sst-2-english", 12),
-    Params("textattack/roberta-base-SST-2", 12),
-    Params("textattack/bert-base-uncased-SST-2", 12),
-    Params("textattack/xlnet-base-cased-SST-2", 12),
-    Params("textattack/albert-base-v2-SST-2", 12),
-    Params("textattack/facebook-bart-large-SST-2", 12),
-    Params("textattack/distilbert-base-uncased-SST-2", 6),
-    Params("textattack/distilbert-base-cased-SST-2", 6),
-    Params("textattack/xlnet-large-cased-SST-2", 24),
-    Params("siebert/sentiment-roberta-large-english", 24)
+    Params("cardiffnlp/twitter-roberta-base-sentiment", [6, 12]),
+    Params("finiteautomata/bertweet-base-sentiment-analysis", [6, 12]),
+    Params("distilbert-base-uncased-finetuned-sst-2-english", [6, 12]),
+    Params("textattack/roberta-base-SST-2", [6, 12]),
+    Params("textattack/bert-base-uncased-SST-2", [6, 12]),
+    Params("textattack/xlnet-base-cased-SST-2", [6, 12]),
+    Params("textattack/albert-base-v2-SST-2", [6, 12]),
+    Params("textattack/facebook-bart-large-SST-2", [6, 12]),
+    Params("textattack/distilbert-base-uncased-SST-2", [6]),
+    Params("textattack/distilbert-base-cased-SST-2", [6]),
+    Params("textattack/xlnet-large-cased-SST-2", [6, 12, 18, 24]),
+    Params("siebert/sentiment-roberta-large-english", [6, 12, 18, 24])
 ];
 
 {

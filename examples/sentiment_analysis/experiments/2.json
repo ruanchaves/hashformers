@@ -4,7 +4,10 @@
    "do_eval": true,
    "log_level": "INFO",
    "metrics": "./sentiment_metrics.py",
-   "prune_layers": 12,
+   "prune_layers": [
+      6,
+      12
+   ],
    "run_classifier": true,
    "run_segmenter": false,
    "sentiment_model": "distilbert-base-uncased-finetuned-sst-2-english",
