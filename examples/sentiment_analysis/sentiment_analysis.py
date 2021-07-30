@@ -190,7 +190,8 @@ def process_rows(
         content_field="content", 
         predictions_field="predictions",
         max_length=512,
-        device="cuda"):
+        device="cuda",
+        return_shape=False):
     sentences = batch[content_field]
     tokens = tokenizer(
         sentences, 
@@ -203,24 +204,16 @@ def process_rows(
     logits = model(**tokens).logits
     logits = logits.to("cpu")
     softmax_logits = torch.softmax(logits, dim=1)
-    if logits.shape[1] == 3:
-        _, preds = torch.max(softmax_logits, 1)
-        preds = preds.tolist()
-    elif logits.shape[1] == 2:
-        rounded_logits = torch.round(softmax_logits * 2) / 2
-        neutral_mask = [bool(x[0]==x[1]) for x in rounded_logits]
-        _, preds = torch.max(softmax_logits, 1)
-        preds = preds.tolist()
-        for idx, item in enumerate(preds):
-            if neutral_mask[idx]:
-                preds[idx] = 1
-            elif item == 1:
-                preds[idx] = 2
-            elif item == 0:
-                preds[idx] = 0
-    else:
-        raise NotImplementedError
 
+    if return_shape:
+        return logits.shape[1]
+        
+    _, preds = torch.max(softmax_logits, 1)
+    preds = preds.tolist()
+    if logits.shape[1] == 2:
+        for idx, item in enumerate(preds):
+            if item == 1:
+                preds[idx] = 2
     preds = [ str(x) for x in preds ]
     batch.update({predictions_field: preds})
     return batch
@@ -388,6 +381,20 @@ def main():
 
             model.to(class_args.sentiment_model_device)
 
+            num_labels = process_rows(
+                {"content": ["hello world"]}, 
+                model=model,
+                tokenizer=tokenizer,
+                content_field="content",
+                return_shape=True
+            )
+            if num_labels == 2:
+                data = data.filter(lambda x: x[data_args.label_field]!="1")
+            elif num_labels == 3:
+                pass
+            else:
+                raise NotImplementedError
+
             if class_args.run_classifier and data_args.predictions_field:
                 logger.info("Writing predictions on the dataset.")
                 data = data.map(
@@ -475,7 +482,7 @@ def main():
                     item.update(log_args)
                     item.update({"current_layer": class_args.prune_layers[idx]})
 
-                    logger.info("%s", item)
+                    logger.info(item)
 
     if data_args.dataset_save_path:
         data.save_to_disk(data_args.dataset_save_path)
