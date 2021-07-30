@@ -380,7 +380,7 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
         for idx in range(0, model_range):
-
+            logger.info(f"Processing predictions for layer {idx}.")
             if class_args.prune_layers:
                 model = deleteEncodingLayers(original_model, idx)
             else:
