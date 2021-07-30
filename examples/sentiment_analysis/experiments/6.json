@@ -1,5 +1,5 @@
 {
-   "batch_size": 2,
+   "batch_size": 6,
    "dataset_load_path": "./semeval2017",
    "do_eval": true,
    "log_level": "INFO",
