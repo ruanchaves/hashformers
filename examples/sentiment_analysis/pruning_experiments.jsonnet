@@ -14,43 +14,35 @@ local WS_Params(
 
 local Params(
         model,
-        layers,
-        negative,
-        neutral,
-        positive,
-        skip_neutral
+        layers
     ) = {
         do_eval: true,
         log_level: "INFO",
         dataset_load_path: "./semeval2017",
         split: "test",
         hashtag_only: true,
-        negative_field: negative,
-        neutral_field: neutral,
-        positive_field: positive,
         run_classifier: true,
         sentiment_model: model,
         sentiment_model_device: 0,
         batch_size: 1,
         metrics: "./sentiment_metrics.py",
         prune_layers: layers,
-        run_segmenter: false,
-        skip_neutral: skip_neutral
+        run_segmenter: false
     };
 
 local config = [
-    Params("cardiffnlp/twitter-roberta-base-sentiment", 12, "0", "1", "2", false),
-    Params("cardiffnlp/twitter-xlm-roberta-base-sentiment", 12, "0", "1", "2", false),
-    Params("finiteautomata/bertweet-base-sentiment-analysis", 12, "0", "1", "2", false),
-    Params("distilbert-base-uncased-finetuned-sst-2-english", 12, "0", "2", "1", true),
-    Params("textattack/roberta-base-SST-2", 12, "0", "2", "1", true),
-    Params("textattack/bert-base-uncased-SST-2", 12, "0", "2", "1", true),
-    Params("textattack/xlnet-base-cased-SST-2", 12, "0", "2", "1", true),
-    Params("textattack/albert-base-v2-SST-2", 12, "0", "2", "1", true),
-    Params("textattack/facebook-bart-large-SST-2", 12, "0", "2", "1", true),
-    Params("textattack/distilbert-base-uncased-SST-2", 6, "0", "2", "1", true),
-    Params("textattack/xlnet-large-cased-SST-2", 24, "0", "2", "1", true),
-    Params("textattack/distilbert-base-cased-SST-2", 6, "0", "2", "1", true)
+    Params("cardiffnlp/twitter-roberta-base-sentiment", 12),
+    Params("finiteautomata/bertweet-base-sentiment-analysis", 12),
+    Params("distilbert-base-uncased-finetuned-sst-2-english", 12),
+    Params("textattack/roberta-base-SST-2", 12),
+    Params("textattack/bert-base-uncased-SST-2", 12),
+    Params("textattack/xlnet-base-cased-SST-2", 12),
+    Params("textattack/albert-base-v2-SST-2", 12),
+    Params("textattack/facebook-bart-large-SST-2", 12),
+    Params("textattack/distilbert-base-uncased-SST-2", 6),
+    Params("textattack/distilbert-base-cased-SST-2", 6),
+    Params("textattack/xlnet-large-cased-SST-2", 24),
+    Params("siebert/sentiment-roberta-large-english", 24)
 ];
 
 {

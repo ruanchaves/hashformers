@@ -76,9 +76,9 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
 
     def _generate_examples(self, filepath, split):
         polarity_dict = {
-            self.config.positive_label: "1",
-            self.config.neutral_label: "2",
-            self.config.negative_label: "0"
+            self.config.negative_label: "0",
+            self.config.neutral_label: "1",
+            self.config.positive_label: "2"
         }
         df = pd.read_csv(
             filepath,
@@ -98,7 +98,7 @@ class SemEval2017(datasets.GeneratorBasedBuilder):
             if self.config.skip_neutral \
                 and row["polarity"] == self.config.neutral_label:
                 continue
-            yield row["tweetid"], {
+            yield idx, {
                 "tweetid": row["tweetid"],
                 "content": row["content"],
                 "polarity": row["polarity"],

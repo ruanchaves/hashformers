@@ -6,6 +6,8 @@ import sys
 from torch import nn
 import torch
 from contextlib import suppress
+from pythonjsonlogger import jsonlogger
+
 
 import datasets
 from datasets import (
@@ -15,7 +17,6 @@ from datasets import (
 
 import transformers
 from transformers import (
-    pipeline,
     AutoTokenizer,
     AutoModelForSequenceClassification,
     HfArgumentParser
@@ -40,7 +41,7 @@ class DataArguments:
     )
 
     dataset_reader: str = field(
-        default='./tass_reader.py'
+        default='./semeval2017.py'
     )
 
     dataset_load_path: Optional[str] = field(
@@ -63,32 +64,24 @@ class DataArguments:
         default = "content"
     )
 
+    predictions_field: Optional[str] = field(
+        default="predictions"
+    )
+
+    segmented_content_field: Optional[str] = field(
+        default="segmented_content"
+    )
+
+    segmented_predictions_field: str = field(
+        default="segmented_predictions"
+    )
+
     label_field: str = field(
         default = "polarity"
     )
 
     sample: Optional[int] = field(
         default=None
-    )
-
-    hashtag_only: bool = field(
-        default=True
-    )
-
-    skip_neutral: bool = field(
-        default=True
-    )
-
-    neutral_field: str = field(
-        default="2"
-    )
-
-    positive_field: str = field(
-        default="1"
-    )
-
-    negative_field: str = field(
-        default="0"
     )
 
 @dataclass
@@ -165,6 +158,22 @@ class WordSegmenterArguments:
         default="es_core_news_sm"
     )
 
+    topk: int = field(
+        default=20
+    )
+
+    steps: int = field(
+        default=13
+    )
+
+    alpha: float = field(
+        default=0.222
+    )
+
+    beta: float = field(
+        default=0.111
+    )
+
 def rsetattr(obj, attr, val):
     pre, _, post = attr.rpartition('.')
     return setattr(rgetattr(obj, pre) if pre else obj, post, val)
@@ -194,8 +203,24 @@ def process_rows(
     logits = model(**tokens).logits
     logits = logits.to("cpu")
     softmax_logits = torch.softmax(logits, dim=1)
-    _, preds = torch.max(softmax_logits, 1)
-    preds = preds.tolist()
+    if logits.shape[1] == 3:
+        _, preds = torch.max(softmax_logits, 1)
+        preds = preds.tolist()
+    elif logits.shape[1] == 2:
+        rounded_logits = torch.round(softmax_logits * 2) / 2
+        neutral_mask = [bool(x[0]==x[1]) for x in rounded_logits]
+        _, preds = torch.max(softmax_logits, 1)
+        preds = preds.tolist()
+        for idx, item in enumerate(preds):
+            if neutral_mask[idx]:
+                preds[idx] = 1
+            elif item == 1:
+                preds[idx] = 2
+            elif item == 0:
+                preds[idx] = 0
+    else:
+        raise NotImplementedError
+
     preds = [ str(x) for x in preds ]
     batch.update({predictions_field: preds})
     return batch
@@ -218,9 +243,6 @@ def eval_dataset(
 
 def deleteEncodingLayers(model, num_layers_to_keep):  # must pass in the full bert model
     model_type = rgetattr(model, "config.model_type")
-    
-    if model_type == 'xlm-roberta':
-        model_type = 'roberta'
 
     oldModuleList = None
     keys = ['encoder', 'transformer']
@@ -258,12 +280,18 @@ def main():
         class_args, ws_args, data_args = \
             parser.parse_args_into_dataclasses()
 
-    # Setup logging
-    logging.basicConfig(
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        datefmt="%m/%d/%Y %H:%M:%S",
-        handlers=[logging.StreamHandler(sys.stdout)],
-    )
+    logger = logging.getLogger()
+    logHandler = logging.StreamHandler(sys.stdout)
+    formatter = jsonlogger.JsonFormatter()
+    logHandler.setFormatter(formatter)
+    logger.addHandler(logHandler)
+
+    # # Setup logging
+    # logging.basicConfig(
+    #     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    #     datefmt="%m/%d/%Y %H:%M:%S",
+    #     handlers=[logging.StreamHandler(sys.stdout)],
+    # )
 
     logger.setLevel(data_args.log_level)
     datasets.utils.logging.set_verbosity(data_args.log_level)
@@ -295,29 +323,9 @@ def main():
     else:
         data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
 
-    if data_args.hashtag_only:
-        data = data.filter(lambda x: x["has_hashtag"])
-
-    if data_args.skip_neutral:
-        data = data.filter(lambda x: x["polarity"] != data_args.neutral_field)
-
     if data_args.sample:
         data[data_args.split] = data[data_args.split]\
             .select([i for i in range(0, data_args.sample)])
-
-    label_mapping = {
-        "0": data_args.negative_field,
-        "1": data_args.positive_field,
-        "2": data_args.neutral_field
-    }
-    def map_labels(row, mapping = None):
-        row["polarity"] = mapping[row["polarity"]]
-        return row
-    data = data.map(
-        map_labels,
-        fn_kwargs={
-            "mapping": label_mapping
-        })
 
     split_length = data[data_args.split].shape[0]
 
@@ -326,11 +334,20 @@ def main():
         segmenter=None, 
         content_field="content", 
         segmented_content_field="segmented_content",
-        dictionary=main_hashtag_dict):
-
+        topk=20,
+        steps=13,
+        alpha=0.222,
+        beta=0.111,
+        use_encoder=True,
+        dictionary=None):
         sentences = batch[content_field]
         segmented_content, hashtag_dict = segmenter.process_hashtags(
             sentences,
+            topk=topk,
+            steps=steps,
+            alpha=alpha,
+            beta=beta,
+            use_encoder=use_encoder,
             dictionary=dictionary)
         segmented_content = [ " ".join(x) for x in segmented_content]
         batch.update({segmented_content_field: segmented_content})
@@ -342,7 +359,12 @@ def main():
             segment_content,
             fn_kwargs={
                 "segmenter": ws,
-                "content_field": data_args.content_field
+                "content_field": data_args.content_field,
+                "segmented_content_field": data_args.segmented_content_field,
+                "topk": ws_args.topk,
+                "steps": ws_args.steps,
+                "alpha": ws_args.alpha,
+                "beta": ws_args.beta
             },
             batched=True, 
             batch_size=split_length
@@ -365,80 +387,90 @@ def main():
 
             model.to(class_args.sentiment_model_device)
 
-            if class_args.run_classifier:
+            if class_args.run_classifier and data_args.prediction_field:
                 data = data.map(
                     process_rows, 
                     fn_kwargs={
                         "model": model,
                         "tokenizer": tokenizer,
-                        "content_field": data_args.content_field
+                        "content_field": data_args.content_field,
+                        "predictions_field": data_args.predictions_field
                     },
                     batched=True, 
                     batch_size=class_args.batch_size)
 
-            if class_args.run_classifier:
+            if class_args.run_classifier and data_args.segmented_predictions_field:
                 data = data.map(
                     process_rows, 
                     fn_kwargs={
                         "model": model,
                         "tokenizer": tokenizer,
-                        "content_field": "segmented_content",
-                        "predictions_field": "segmented_predictions"
+                        "content_field": data_args.segmented_content_field,
+                        "predictions_field": data_args.segmented_predictions_field
                     },
                     batched=True, 
                     batch_size=class_args.batch_size)
 
     if data_args.do_eval:
 
-        if data_args.hashtag_only:
-            subset_evaluation = eval_dataset(
-                data,
-                metric=class_args.metrics
-            )
-            full_evaluation = None
-        else:
-            data_subset = data.filter(lambda x: x['has_hashtag'])
-            subset_evaluation = eval_dataset(data_subset)
-            full_evaluation = eval_dataset(data)
+        data_subset = data.filter(lambda x: x['has_hashtag'])
 
-        if data_args.hashtag_only:
-            subset_evaluation_after_segmentation = eval_dataset(
+        dataset_evaluation_params = {
+            "split": data_args.split,
+            "reference_field": data_args.label_field,
+            "metric": data_args.metrics
+        }
+
+        if data_args.predictions_field:
+            
+            subset_evaluation = eval_dataset(
+                data_subset,
+                predictions_field=data_args.predictions_field,
+                **dataset_evaluation_params)
+            subset_evaluation.update({
+                "eval": "subset_evaluation"
+            })
+
+            full_evaluation = eval_dataset(
                 data,
-                predictions_field="segmented_predictions"
-            )
-            full_evaluation_after_segmentation = None
-        else:
-            data_subset = data.filter(lambda x: x['has_hashtag'])
+                predictions_field=data_args.predictions_field,
+                **dataset_evaluation_params)
+            full_evaluation.update({
+                "eval": "full_evaluation"
+            })
+
+        if data_args.segmented_predictions_field:
+            
             subset_evaluation_after_segmentation = eval_dataset(
                 data_subset,
-                predictions_field="segmented_predictions"
-            )
+                predictions_field=data_args.segmented_predictions_field,
+                **dataset_evaluation_params)
+            subset_evaluation_after_segmentation.update({
+                "eval": "subset_evaluation_after_segmentation"
+            })
+
             full_evaluation_after_segmentation = eval_dataset(
                 data,
-                predictions_field="segmented_predictions"
-            )
+                predictions_field=data_args.segmented_predictions_field,
+                **dataset_evaluation_params)
+            full_evaluation_after_segmentation.update({
+                "eval": "full_evaluation_after_segmentation"
+            })
 
         log_args = {}
         for item in [class_args, ws_args, data_args]:
             log_args.update(vars(item))
 
-        logger.info("Parameters:")
-        logger.info("%s", log_args)
+        for item in [
+            full_evaluation,
+            subset_evaluation,
+            subset_evaluation_after_segmentation,
+            full_evaluation_after_segmentation]:
 
-        logger.info("idx:")
-        logger.info("%s", str(idx))
+            item.update(log_args)
+            item.update({"current_layer": idx})
 
-        logger.info("Full dataset evaluation:")
-        logger.info("%s", full_evaluation)
-
-        logger.info("Hashtag subset evaluation:")
-        logger.info("%s", subset_evaluation)
-
-        logger.info("Hashtag subset evaluation after hashtag segmentation:")
-        logger.info("%s", subset_evaluation_after_segmentation)
-
-        logger.info("Full dataset evaluation after hashtag segmentation:")
-        logger.info("%s", full_evaluation_after_segmentation)
+            logger.info("%s", item)
 
     if data_args.dataset_save_path:
         data.save_to_disk(data_args.dataset_save_path)
