@@ -387,7 +387,7 @@ def main():
 
             model.to(class_args.sentiment_model_device)
 
-            if class_args.run_classifier and data_args.prediction_field:
+            if class_args.run_classifier and data_args.predictions_field:
                 data = data.map(
                     process_rows, 
                     fn_kwargs={
