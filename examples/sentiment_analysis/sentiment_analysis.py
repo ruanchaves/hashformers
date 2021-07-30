@@ -23,7 +23,7 @@ from transformers import (
 )
 
 from word_segmentation import WordSegmenter
-from typing import Optional 
+from typing import Optional, List
 import copy
 import functools
 
@@ -107,7 +107,7 @@ class TextClassificationArguments:
         default="./sentiment_metrics.py"
     )
 
-    prune_layers: Optional[int] = field(
+    prune_layers: Optional[List[int]] = field(
         default=None
     )
 
@@ -374,15 +374,15 @@ def main():
     if class_args.run_classifier:
         original_model = AutoModelForSequenceClassification.from_pretrained(class_args.sentiment_model)
         if class_args.prune_layers:
-            model_range = class_args.prune_layers
+            model_range = len(class_args.prune_layers)
         else:
             model_range = 1
         tokenizer = AutoTokenizer.from_pretrained(class_args.sentiment_model)
 
         for idx in range(0, model_range):
-            logger.info(f"Processing predictions for layer {idx}.")
+            logger.info(f"Processing predictions for layer {class_args.prune_layers[idx]}.")
             if class_args.prune_layers:
-                model = deleteEncodingLayers(original_model, idx)
+                model = deleteEncodingLayers(original_model, class_args.prune_layers[idx])
             else:
                 model = original_model
 
