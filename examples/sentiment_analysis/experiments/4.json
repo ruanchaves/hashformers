@@ -5,14 +5,10 @@
    "hashtag_only": true,
    "log_level": "INFO",
    "metrics": "./sentiment_metrics.py",
-   "negative_field": "0",
-   "neutral_field": "2",
-   "positive_field": "1",
    "prune_layers": 12,
    "run_classifier": true,
    "run_segmenter": false,
-   "sentiment_model": "textattack/roberta-base-SST-2",
+   "sentiment_model": "textattack/bert-base-uncased-SST-2",
    "sentiment_model_device": 0,
-   "skip_neutral": true,
    "split": "test"
 }
