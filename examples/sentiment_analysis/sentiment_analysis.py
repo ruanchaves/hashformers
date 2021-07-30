@@ -318,8 +318,10 @@ def main():
         ws = None
 
     if data_args.dataset_load_path:
+        logger.info("Loading dataset from disk.")
         data = datasets.load_from_disk(data_args.dataset_load_path)
     else:
+        logger.info("Loading dataset with reader.")
         data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
 
     if data_args.sample:
@@ -387,6 +389,7 @@ def main():
             model.to(class_args.sentiment_model_device)
 
             if class_args.run_classifier and data_args.predictions_field:
+                logger.info("Writing predictions on the dataset.")
                 data = data.map(
                     process_rows, 
                     fn_kwargs={
@@ -399,6 +402,7 @@ def main():
                     batch_size=class_args.batch_size)
 
             if class_args.run_classifier and data_args.segmented_predictions_field:
+                logger.info("Writing processed predictions on the dataset.")
                 data = data.map(
                     process_rows, 
                     fn_kwargs={
