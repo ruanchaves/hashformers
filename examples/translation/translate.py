@@ -96,6 +96,13 @@ def main():
             data[split] = data[split]\
                 .select([x for x in range(0, data_args.sample)])
 
+    if not data_args.translate_train:
+        del data["train"]
+    if not data_args.translate_validation:
+        del data["validation"]
+    if not data_args.translate_test:
+        del data["test"]
+
     # Translate the dataset as-is
     data = model.translate(
         data,

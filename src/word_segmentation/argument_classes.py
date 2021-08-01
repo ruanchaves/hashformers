@@ -69,7 +69,19 @@ class TranslationDataArguments:
 
     sample: Optional[int] = field(
         default=None
-    ) 
+    )
+
+    translate_train: bool = field(
+        default=False
+    )
+
+    translate_validation: bool = field(
+        default=True
+    )
+
+    translate_test: bool = field(
+        default=True
+    )
 
 @dataclass
 class DataArguments:
