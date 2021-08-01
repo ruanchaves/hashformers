@@ -207,3 +207,7 @@ class WordSegmenterArguments:
     beta: float = field(
         default=0.111
     )
+
+    use_encoder = field(
+        default=True
+    )
