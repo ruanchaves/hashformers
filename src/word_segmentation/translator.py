@@ -19,10 +19,10 @@ class Translator(WordSegmenter):
             input = [sentence]
         else:
             input = sentence
-        tokens = self.tokenizer(input, return_tensors="pt", padding=True, truncation=True)
+        tokens = self.translation_tokenizer(input, return_tensors="pt", padding=True, truncation=True)
         tokens.to(device)
-        translated = self.model.generate(**tokens)
-        translation = [self.tokenizer.decode(t, skip_special_tokens=True) for t in translated]
+        translated = self.translation_model.generate(**tokens)
+        translation = [self.translation_tokenizer.decode(t, skip_special_tokens=True) for t in translated]
 
         if isinstance(sentence, str):
             return translation[0]
@@ -38,8 +38,8 @@ class Translator(WordSegmenter):
     ):  
 
         translation_fn_kwargs = {
-                    "model": self.model,
-                    "tokenizer": self.tokenizer,
+                    "model": self.translation_model,
+                    "tokenizer": self.translation_tokenizer,
                     "content_field": content_field,
                     "output_field": output_field
         }
