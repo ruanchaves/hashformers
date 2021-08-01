@@ -208,6 +208,6 @@ class WordSegmenterArguments:
         default=0.111
     )
 
-    use_encoder = field(
+    use_encoder: bool = field(
         default=True
     )
