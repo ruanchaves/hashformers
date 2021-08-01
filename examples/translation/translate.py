@@ -103,50 +103,50 @@ def main():
         **translation_kwargs
     )
 
-    # # Get hashtag dictionary
-    # _, hashtag_dict = model.segment_dataset(
-    #     data,
-    #     content_field=data_args.content_field,
-    #     segmented_content_field=None,
-    #     dictionary=main_hashtag_dict,
-    #     **ws_kwargs
-    # )
+    # Get hashtag dictionary
+    _, hashtag_dict = model.segment_dataset(
+        data,
+        content_field=data_args.content_field,
+        segmented_content_field=None,
+        dictionary=main_hashtag_dict,
+        **ws_kwargs
+    )
 
-    # # Translate the hashtag dictionary
-    # hashtag_dict = model.translate(
-    #     hashtag_dict,
-    #     **translation_kwargs
-    # )
+    # Translate the hashtag dictionary
+    hashtag_dict = model.translate(
+        hashtag_dict,
+        **translation_kwargs
+    )
 
-    # # Replace hashtags with their translations
-    # data, _ = model.segment_dataset(
-    #     data,
-    #     content_field=data_args.content_field,
-    #     segmented_content_field=data_args.content_replaced_hashtags_field,
-    #     dictionary=hashtag_dict,
-    #     produce_hashtags=True,
-    #     **ws_kwargs
-    # )
+    # Replace hashtags with their translations
+    data, _ = model.segment_dataset(
+        data,
+        content_field=data_args.content_field,
+        segmented_content_field=data_args.content_replaced_hashtags_field,
+        dictionary=hashtag_dict,
+        produce_hashtags=True,
+        **ws_kwargs
+    )
 
-    # # Translate the modified tweets
-    # data = model.translate(
-    #     data,
-    #     content_field=data_args.content_replaced_hashtags_field,
-    #     output_field=data_args.translation_replaced_hashtags_field,
-    #     **translation_kwargs
-    # )
+    # Translate the modified tweets
+    data = model.translate(
+        data,
+        content_field=data_args.content_replaced_hashtags_field,
+        output_field=data_args.translation_replaced_hashtags_field,
+        **translation_kwargs
+    )
 
-    # inverted_hashtag_dict = {
-    #     "#" + v.replace(" ", ""):v for v in list(hashtag_dict.values())
-    # }
+    inverted_hashtag_dict = {
+        "#" + v.replace(" ", ""):v for v in list(hashtag_dict.values())
+    }
 
-    # data, _ = model.segment_dataset(
-    #     data,
-    #     content_field=data_args.translation_replaced_hashtags_field,
-    #     segmented_content_field=data_args.translation_segmented_hashtags_field,
-    #     dictionary=inverted_hashtag_dict,
-    #     **ws_kwargs
-    # )
+    data, _ = model.segment_dataset(
+        data,
+        content_field=data_args.translation_replaced_hashtags_field,
+        segmented_content_field=data_args.translation_segmented_hashtags_field,
+        dictionary=inverted_hashtag_dict,
+        **ws_kwargs
+    )
 
     if data_args.dataset_save_path:
         data.save_to_disk(data_args.dataset_save_path)
