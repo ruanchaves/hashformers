@@ -1,0 +1,12 @@
+{
+   "dataset_reader": "umsab.py",
+   "dataset_save_path": "./german",
+   "dataset_url": "https://raw.githubusercontent.com/ruanchaves/xlm-t/main/data/sentiment/german",
+   "decoder_model_name_or_path": "dbmdz/german-gpt2",
+   "encoder_model_name_or_path": "bert-base-german-cased",
+   "log_level": "INFO",
+   "spacy_model": "de_dep_news_trf",
+   "translation_model_batch_size": 10,
+   "translation_model_device": "cuda",
+   "translation_model_name_or_path": "Helsinki-NLP/opus-mt-de-en"
+}
