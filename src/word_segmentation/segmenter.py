@@ -7,7 +7,15 @@ from spacy.tokenizer import _get_regex_pattern
 import spacy
 import re 
 import itertools
-from spacy.matcher import Matcher
+from collections import namedtuple
+
+WordSegmenterResult = namedtuple(
+    "WordSegmenterResult", 
+    [
+        "dataset", 
+        "hashtag_dict"
+    ]
+)
 
 class WordSegmenter(object):
 
@@ -62,6 +70,8 @@ class WordSegmenter(object):
         beta=0.111,
         use_encoder=True,
         dictionary=None,
+        produce_hashtags=False,
+        replace=True
     ):
 
         hashtag_dict = {}
@@ -75,14 +85,26 @@ class WordSegmenter(object):
                     if x.text.startswith("#") 
             ]
         
-        def replace_hashtags(tokens):
-            return [ hashtag_dict.get(x.text[1:], x.text) 
-                    if x.text.startswith("#") else x.text for x in tokens ]
+        def replace_hashtags(tokens, produce_hashtags=False):
+            if produce_hashtags:
+                output = []
+                for x in tokens:
+                    if x.text.startswith("#"):
+                        try:
+                            word = hashtag_dict.get(x.text[1:])
+                            word = "#" + word.replace(" ", "")
+                        except:
+                            word = x.text
+                    output.append(word)           
+            else:
+                output = [ hashtag_dict.get(x.text[1:], x.text) 
+                        if x.text.startswith("#") else x.text for x in tokens ]
+            return output
 
         hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
         hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten
 
-        hashtag_list = [ x for x in hashtag_list if x not in list(hashtag_dict.values()) ]
+        hashtag_list = [ x for x in hashtag_list if x not in list(hashtag_dict.keys()) ]
 
         if hashtag_list:
             segmentations = self.segment(
@@ -98,9 +120,52 @@ class WordSegmenter(object):
                     hashtag_list[idx] : segmentations[idx]
                 })
 
-        output = [ replace_hashtags(self.nlp(x)) for x in text_list ]
+        if replace:
+            output = [ replace_hashtags(
+                self.nlp(x), 
+                produce_hashtags=produce_hashtags) for x in text_list ]
+        else:
+            output = None
 
-        return output, hashtag_dict
+        return WordSegmenterResult(output, hashtag_dict)
+
+    def segment_dataset(
+        self,
+        dataset,
+        content_field="content",
+        segmented_content_field="segmented_content",
+        **kwargs
+    ):
+        main_hashtag_dict = {}
+        def segment_content(
+            batch,
+            **kwargs
+        ):
+            sentences = batch[content_field]
+            segmented_content, hashtag_dict = self.process_hashtags(
+                sentences,
+                dictionary=main_hashtag_dict,
+                replace=bool(segmented_content_field),
+                **kwargs
+            )
+
+            if segmented_content_field:
+                segmented_content = [
+                    " ".join(x) for x in segmented_content
+                ]
+                batch.update({segmented_content_field: segmented_content})
+
+            main_hashtag_dict.update(hashtag_dict)
+            return batch
+        
+        output = dataset.map(
+            segment_content,
+            fn_kwargs=kwargs,
+            batched=True,
+            batch_size=None
+        )
+
+        return WordSegmenterResult(output, main_hashtag_dict)
 
     def segment(
             self,
