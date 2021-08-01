@@ -129,7 +129,7 @@ def main():
     )
 
     # Translate the modified tweets
-    model.translate(
+    data = model.translate(
         data,
         content_field=data_args.content_replaced_hashtags_field,
         output_field=data_args.translation_replaced_hashtags_field
@@ -147,6 +147,10 @@ def main():
         dictionary=inverted_hashtag_dict,
         **ws_kwargs
     )
+
+    if data_args.dataset_save_path:
+        data.save_to_disk(data_args.dataset_save_path)
+
 
 if __name__ == '__main__':
     main()
