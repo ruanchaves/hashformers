@@ -38,8 +38,6 @@ class Translator(WordSegmenter):
     ):  
 
         translation_fn_kwargs = {
-                    "model": self.translation_model,
-                    "tokenizer": self.translation_tokenizer,
                     "content_field": content_field,
                     "output_field": output_field
         }
@@ -47,11 +45,9 @@ class Translator(WordSegmenter):
         def translate_row(
             row, 
             content_field="sentence",
-            output_field="output",
-            model=None, 
-            tokenizer=None):
+            output_field="output"):
             row[output_field] = \
-                self.translate_sentence(row[content_field], model=model, tokenizer=tokenizer)
+                self.translate_sentence(row[content_field])
             return row
         
         if isinstance(dataset, datasets.dataset_dict.DatasetDict):
