@@ -35,10 +35,6 @@ class TranslationDataArguments:
         default=None
     )
 
-    dataset_base_url: str = field(
-        default=None
-    )
-
     dataset_load_path: Optional[str] = field(
         default=None
     )
