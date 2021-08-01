@@ -137,6 +137,9 @@ class WordSegmenter(object):
         **kwargs
     ):
         main_hashtag_dict = {}
+        main_hashtag_dict.update(kwargs["dictionary"])
+        del kwargs["dictionary"]
+        
         def segment_content(
             batch,
             **kwargs
