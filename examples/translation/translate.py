@@ -1,11 +1,7 @@
-from functools import partial
-from repositories.word_segmentation.src.word_segmentation.segmenter import WordSegmenter
-import pandas as pd 
 from datasets import load_dataset
 import logging
 import datasets
 import json
-import re
 import sys
 
 from pythonjsonlogger import jsonlogger
