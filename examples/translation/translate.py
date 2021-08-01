@@ -132,7 +132,7 @@ def main():
     data = model.translate(
         data,
         content_field=data_args.content_replaced_hashtags_field,
-        output_field=data_args.translation_replaced_hashtags_field
+        output_field=data_args.translation_replaced_hashtags_field,
         **translation_kwargs
     )
 
