@@ -54,7 +54,13 @@ class Translator(WordSegmenter):
                 self.translate_sentence(row[content_field], model=model, tokenizer=tokenizer)
             return row
         
-        if isinstance(dataset, dict):
+        if isinstance(dataset, datasets.dataset_dict.DatasetDict):
+            output_dataset = dataset.map(
+                translate_row,
+                fn_kwargs=translation_fn_kwargs,
+                **kwargs
+            )
+        elif isinstance(dataset, dict):
             print(dataset)
             print(type(dataset))
             json_object = {
@@ -76,10 +82,6 @@ class Translator(WordSegmenter):
                 ))
             }
         else:
-            output_dataset = dataset.map(
-                translate_row,
-                fn_kwargs=translation_fn_kwargs,
-                **kwargs
-            )
+            raise NotImplementedError
 
         return output_dataset
