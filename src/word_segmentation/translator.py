@@ -57,13 +57,10 @@ class Translator(WordSegmenter):
                 **kwargs
             )
         elif isinstance(dataset, dict):
-            print(dataset)
-            print(type(dataset))
             json_object = {
                 "key": [k for k in dataset.keys()],
                 content_field: [v for v in dataset.values()]
             }
-            print(json_object)
             converted_dataset = datasets.Dataset.from_dict(json_object)
             translated_dataset = converted_dataset.map(
                 translate_row,
