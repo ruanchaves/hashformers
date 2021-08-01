@@ -73,7 +73,7 @@ def main():
 
     model = Translator(
         translation_model=translation_model,
-        tokenizer=translation_tokenizer,
+        translation_tokenizer=translation_tokenizer,
         decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
         decoder_model_type=ws_args.decoder_model_type,
         decoder_device=ws_args.decoder_device,
