@@ -95,6 +95,8 @@ class WordSegmenter(object):
                             word = "#" + word.replace(" ", "")
                         except:
                             word = x.text
+                    else:
+                        word = x.text
                     output.append(word)           
             else:
                 output = [ hashtag_dict.get(x.text[1:], x.text) 
@@ -139,7 +141,7 @@ class WordSegmenter(object):
         main_hashtag_dict = {}
         main_hashtag_dict.update(kwargs["dictionary"])
         del kwargs["dictionary"]
-        
+
         def segment_content(
             batch,
             **kwargs
