@@ -5,7 +5,7 @@ local settings = [
     {
         language: "arabic",
         translation_model: "Helsinki-NLP/opus-mt-ar-en",
-        segmenter: "aubmindlab/aragpt2-mega",
+        segmenter: "aubmindlab/aragpt2-large",
         reranker: "aubmindlab/bert-large-arabertv2",
         spacy_model: "xx_sent_ud_sm"
     },

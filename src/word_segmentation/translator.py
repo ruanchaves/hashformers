@@ -46,7 +46,6 @@ class Translator(WordSegmenter):
             row, 
             content_field="sentence",
             output_field="output"):
-            print("content / output", content_field, output_field)
             row[output_field] = \
                 self.translate_sentence(row[content_field])
             return row
