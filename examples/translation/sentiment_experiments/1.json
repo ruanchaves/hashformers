@@ -1,6 +1,6 @@
 {
    "content_field": "translation",
-   "dataset_load_path": "/home/word_segmentation/experiments/translation/german",
+   "dataset_load_path": "/home/word_segmentation/examples/translation/german",
    "do_eval": true,
    "run_classifier": true,
    "run_segmenter": false,

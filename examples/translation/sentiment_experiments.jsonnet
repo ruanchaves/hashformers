@@ -1,4 +1,4 @@
-local BASE_PATH = "/home/word_segmentation/experiments/translation";
+local BASE_PATH = "/home/word_segmentation/examples/translation";
 
 local Params(
     base_path,
