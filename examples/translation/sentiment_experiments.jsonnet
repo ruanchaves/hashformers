@@ -1,4 +1,4 @@
-local BASE_PATH = "/home/word_segmentation/examples/translation";
+local BASE_PATH = "/home/word_segmentation/examples";
 
 local Params(
     base_path,
@@ -7,13 +7,14 @@ local Params(
     content_field,
     segmented_content_field
 ) = {
-    dataset_load_path: "%s/%s" % [base_path, language],
+    dataset_load_path: "%s/translation/%s" % [base_path, language],
     do_eval: true,
     run_classifier: true,
     run_segmenter: false,
     sentiment_model: model,
     content_field: content_field,
-    segmented_content_field: segmented_content_field
+    segmented_content_field: segmented_content_field,
+    metrics: "%s/sentiment_analysis/sentiment_metrics.py" % base_path 
 };
 
 local Experiments(base_path, language, model) = [
