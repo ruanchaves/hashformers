@@ -1,0 +1,9 @@
+{
+   "content_field": "translation",
+   "dataset_load_path": "/home/word_segmentation/experiments/translation/german",
+   "do_eval": true,
+   "run_classifier": true,
+   "run_segmenter": false,
+   "segmented_content_field": "translation_replaced_hashtags",
+   "sentiment_model": "textattack/bert-base-uncased-SST-2"
+}
