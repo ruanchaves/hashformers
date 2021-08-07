@@ -1,5 +1,5 @@
 local base_url = "https://raw.githubusercontent.com/ruanchaves/xlm-t/main/data/sentiment";
-local batch_size = 10;
+local batch_size = 1;
 
 local settings = [
     {
@@ -71,7 +71,8 @@ local Params(
     decoder_model_name_or_path: segmenter,
     encoder_model_name_or_path: reranker,
     spacy_model: spacy_model,
-    dataset_save_path: "./%s" % language
+    dataset_save_path: "./sample_%s" % language,
+    sample: 100
 };
 
 local config = [
