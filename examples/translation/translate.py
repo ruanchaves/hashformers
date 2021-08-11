@@ -131,7 +131,7 @@ def main():
     def save_dataset_chunk(data, destination):
         
         if os.path.isdir(destination):
-            old_data = datasets.load_from_disk(destination)
+            old_data = datasets.load_from_disk(destination, keep_in_memory=True)
             shutil.rmtree(destination, ignore_errors=True)
             for key in old_data.keys():
                 if data.get(key, None):
