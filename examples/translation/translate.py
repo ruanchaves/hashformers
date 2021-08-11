@@ -1,12 +1,14 @@
+from collections import namedtuple
 from datasets import load_dataset
 import logging
 import datasets
 import json
 import sys
 import os
-
+import copy
+import shutil
 from pythonjsonlogger import jsonlogger
-
+from tqdm import tqdm
 from transformers import (
     MarianMTModel,
     MarianTokenizer,
@@ -86,79 +88,122 @@ def main():
 
     if data_args.dataset_load_path:
         logger.info("Loading dataset from disk.")
-        data = datasets.load_from_disk(data_args.dataset_load_path)
+        global_data = datasets.load_from_disk(data_args.dataset_load_path)
     else:
         logger.info("Loading dataset with reader.")
-        data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
+        global_data = load_dataset(data_args.dataset_reader, url=data_args.dataset_url)
 
     if data_args.sample:
-        for split in data.keys():
-            data[split] = data[split]\
+        for split in global_data.keys():
+            global_data[split] = global_data[split]\
                 .select([x for x in range(0, data_args.sample)])
 
     if not data_args.translate_train:
-        del data["train"]
+        del global_data["train"]
     if not data_args.translate_validation:
-        del data["validation"]
+        del global_data["validation"]
     if not data_args.translate_test:
-        del data["test"]
+        del global_data["test"]
 
-    # Translate the dataset as-is
-    data = model.translate(
-        data,
-        content_field=data_args.content_field,
-        output_field=data_args.translation_field,
-        **translation_kwargs
-    )
+    def estimate_max_value(data, step=100):
+        SelectionsContainer = namedtuple("Selections", ["selections", "max_value"])
+        selections = {}
+        for key in data.keys():
+            selections[key] = [x for x in range(0, len(data[key]))]
+            selections[key] = [selections[key][i:i+step] for i in range(0, len(selections[key], step))]
+        max_value = max([ len(selections[x]) for x in selections.keys()])
+        return SelectionsContainer(selections=selections, max_value=max_value)
 
-    # Get hashtag dictionary
-    _, hashtag_dict = model.segment_dataset(
-        data,
-        content_field=data_args.content_field,
-        segmented_content_field=None,
-        dictionary=main_hashtag_dict,
-        **ws_kwargs
-    )
+    def generate_slices(data, step=100):
+        selections, max_value = estimate_max_value(data, step=step)
+        for idx in range(0, max_value):
+            new_data = copy.deepcopy(data)
+            for key in selections.keys():
+                try:
+                    selection = selections[key][idx]
+                    new_data[key] = new_data[key].select(selection)
+                except IndexError:
+                    selection = None
+                    del new_data[key]
+            yield new_data
 
-    # Translate the hashtag dictionary
-    hashtag_dict = model.translate(
-        hashtag_dict,
-        **translation_kwargs
-    )
+    def save_dataset_chunk(data, destination):
+        
+        if os.path.isdir(destination):
+            old_data = datasets.load_from_disk(destination)
+            shutil.rmtree(destination, ignore_errors=True)
+            for key in old_data.keys():
+                if data.get(key, None):
+                    data[key] = datasets.concatenate_datasets([old_data[key], data[key]])
+                else:
+                    data[key] = old_data[key]
+        
+        data.save_to_disk(destination)
 
-    # Replace hashtags with their translations
-    data, _ = model.segment_dataset(
-        data,
-        content_field=data_args.content_field,
-        segmented_content_field=data_args.content_replaced_hashtags_field,
-        dictionary=hashtag_dict,
-        produce_hashtags=True,
-        **ws_kwargs
-    )
+    generator_length = estimate_max_value(
+        global_data, 
+        step=translation_args.translation_generator_batch_size).max_value
 
-    # Translate the modified tweets
-    data = model.translate(
-        data,
-        content_field=data_args.content_replaced_hashtags_field,
-        output_field=data_args.translation_replaced_hashtags_field,
-        **translation_kwargs
-    )
+    for data in tqdm(generate_slices(
+        global_data,
+        step=translation_args.translation_generator_batch_size), 
+        total=generator_length):
 
-    inverted_hashtag_dict = {
-        "#" + v.replace(" ", ""):v for v in list(hashtag_dict.values())
-    }
+        # Translate the dataset as-is
+        data = model.translate(
+            data,
+            content_field=data_args.content_field,
+            output_field=data_args.translation_field,
+            **translation_kwargs
+        )
 
-    data, _ = model.segment_dataset(
-        data,
-        content_field=data_args.translation_replaced_hashtags_field,
-        segmented_content_field=data_args.translation_segmented_hashtags_field,
-        dictionary=inverted_hashtag_dict,
-        **ws_kwargs
-    )
+        # Get hashtag dictionary
+        _, hashtag_dict = model.segment_dataset(
+            data,
+            content_field=data_args.content_field,
+            segmented_content_field=None,
+            dictionary=main_hashtag_dict,
+            **ws_kwargs
+        )
 
-    if data_args.dataset_save_path:
-        data.save_to_disk(data_args.dataset_save_path)
+        # Translate the hashtag dictionary
+        hashtag_dict = model.translate(
+            hashtag_dict,
+            **translation_kwargs
+        )
 
+        # Replace hashtags with their translations
+        data, _ = model.segment_dataset(
+            data,
+            content_field=data_args.content_field,
+            segmented_content_field=data_args.content_replaced_hashtags_field,
+            dictionary=hashtag_dict,
+            produce_hashtags=True,
+            **ws_kwargs
+        )
+
+        # Translate the modified tweets
+        data = model.translate(
+            data,
+            content_field=data_args.content_replaced_hashtags_field,
+            output_field=data_args.translation_replaced_hashtags_field,
+            **translation_kwargs
+        )
+
+        inverted_hashtag_dict = {
+            "#" + v.replace(" ", ""):v for v in list(hashtag_dict.values())
+        }
+
+        data, _ = model.segment_dataset(
+            data,
+            content_field=data_args.translation_replaced_hashtags_field,
+            segmented_content_field=data_args.translation_segmented_hashtags_field,
+            dictionary=inverted_hashtag_dict,
+            **ws_kwargs
+        )
+
+        if data_args.dataset_save_path:
+            save_dataset_chunk(data, data_args.dataset_save_path)
 
 if __name__ == '__main__':
     main()

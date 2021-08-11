@@ -83,6 +83,10 @@ class TranslationDataArguments:
         default=True
     )
 
+    translation_generator_batch_size: int = field(
+        default=100
+    )
+
 @dataclass
 class DataArguments:
 
