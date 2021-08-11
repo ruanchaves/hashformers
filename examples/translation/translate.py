@@ -7,6 +7,7 @@ import sys
 import os
 import copy
 import shutil
+import datetime
 from pythonjsonlogger import jsonlogger
 from tqdm import tqdm
 from transformers import (
@@ -144,10 +145,12 @@ def main():
         global_data, 
         step=data_args.translation_generator_batch_size).max_value
 
-    for data in tqdm(generate_slices(
+    for idx, data in enumerate(generate_slices(
         global_data,
-        step=data_args.translation_generator_batch_size), 
-        total=generator_length):
+        step=data_args.translation_generator_batch_size)):
+
+        now = str(datetime.datetime.now())
+        logger.info({"step": idx , "total": generator_length, "date": now})
 
         # Translate the dataset as-is
         data = model.translate(
