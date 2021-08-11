@@ -150,7 +150,7 @@ def main():
         step=data_args.translation_generator_batch_size)):
 
         now = str(datetime.datetime.now())
-        logger.info({"step": idx , "total": generator_length, "date": now})
+        logger.info("%s", {"step": idx , "total": generator_length, "date": now})
 
         # Translate the dataset as-is
         data = model.translate(
