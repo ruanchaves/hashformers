@@ -110,7 +110,7 @@ def main():
         selections = {}
         for key in data.keys():
             selections[key] = [x for x in range(0, len(data[key]))]
-            selections[key] = [selections[key][i:i+step] for i in range(0, len(selections[key], step))]
+            selections[key] = [selections[key][i:i+step] for i in range(0, len(selections[key]), step)]
         max_value = max([ len(selections[x]) for x in selections.keys()])
         return SelectionsContainer(selections=selections, max_value=max_value)
 
