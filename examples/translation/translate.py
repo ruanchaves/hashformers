@@ -142,11 +142,11 @@ def main():
 
     generator_length = estimate_max_value(
         global_data, 
-        step=translation_args.translation_generator_batch_size).max_value
+        step=data_args.translation_generator_batch_size).max_value
 
     for data in tqdm(generate_slices(
         global_data,
-        step=translation_args.translation_generator_batch_size), 
+        step=data_args.translation_generator_batch_size), 
         total=generator_length):
 
         # Translate the dataset as-is
