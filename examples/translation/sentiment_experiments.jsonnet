@@ -1,5 +1,5 @@
 local BASE_PATH = "/home/word_segmentation/examples";
-local LANGUAGE = "arabic";
+local LANGUAGE = "hindi";
 
 local Params(
     base_path,

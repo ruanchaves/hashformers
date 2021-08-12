@@ -1,6 +1,6 @@
 {
    "content_field": "translation",
-   "dataset_load_path": "/home/word_segmentation/examples/translation/arabic",
+   "dataset_load_path": "/home/word_segmentation/examples/translation/hindi",
    "do_eval": true,
    "metrics": "/home/word_segmentation/examples/sentiment_analysis/sentiment_metrics.py",
    "run_classifier": true,
