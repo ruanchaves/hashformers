@@ -1,4 +1,5 @@
 local BASE_PATH = "/home/word_segmentation/examples";
+local LANGUAGE = "arabic";
 
 local Params(
     base_path,
@@ -35,6 +36,7 @@ local Experiments(base_path, language, model) = [
 ];
 
 local models = [
+        "cardiffnlp/twitter-roberta-base-sentiment",
         "distilbert-base-uncased-finetuned-sst-2-english",
         "textattack/roberta-base-SST-2",
         "textattack/bert-base-uncased-SST-2",
@@ -48,7 +50,7 @@ local models = [
 local models_and_experiments = [
     Experiments(
         BASE_PATH,
-        "german",
+        LANGUAGE,
         m
     ) for m in models
 ];

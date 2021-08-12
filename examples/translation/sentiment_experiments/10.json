@@ -1,10 +1,10 @@
 {
    "content_field": "translation",
-   "dataset_load_path": "/home/word_segmentation/examples/translation/german",
+   "dataset_load_path": "/home/word_segmentation/examples/translation/arabic",
    "do_eval": true,
    "metrics": "/home/word_segmentation/examples/sentiment_analysis/sentiment_metrics.py",
    "run_classifier": true,
    "run_segmenter": false,
    "segmented_content_field": "translation_replaced_hashtags",
-   "sentiment_model": "siebert/sentiment-roberta-large-english"
+   "sentiment_model": "textattack/albert-base-v2-SST-2"
 }

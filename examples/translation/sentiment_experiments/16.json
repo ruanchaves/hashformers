@@ -5,6 +5,6 @@
    "metrics": "/home/word_segmentation/examples/sentiment_analysis/sentiment_metrics.py",
    "run_classifier": true,
    "run_segmenter": false,
-   "segmented_content_field": "translation_segmented_hashtags",
-   "sentiment_model": "textattack/roberta-base-SST-2"
+   "segmented_content_field": "translation_replaced_hashtags",
+   "sentiment_model": "textattack/xlnet-large-cased-SST-2"
 }
