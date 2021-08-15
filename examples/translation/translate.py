@@ -8,6 +8,7 @@ import os
 import copy
 import shutil
 import datetime
+import torch
 from pythonjsonlogger import jsonlogger
 from tqdm import tqdm
 from transformers import (
@@ -207,6 +208,8 @@ def main():
 
         if data_args.dataset_save_path:
             save_dataset_chunk(data, data_args.dataset_save_path)
+        
+        torch.cuda.empty_cache()
 
 if __name__ == '__main__':
     main()
