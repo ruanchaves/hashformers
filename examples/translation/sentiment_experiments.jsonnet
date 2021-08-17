@@ -1,5 +1,5 @@
-local BASE_PATH = "/home/word_segmentation/examples";
-local LANGUAGE = "hindi";
+local BASE_PATH = std.extVar("BASE_PATH");
+local LANGUAGE = std.extVar("LANGUAGE");
 
 local Params(
     base_path,
