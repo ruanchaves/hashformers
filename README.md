@@ -8,7 +8,34 @@ This package applies Transformer models to hashtag segmentation. It is built on 
 
 # Basic usage
 
-```
+```python
+from hashformers import WordSegmenter
+
+ws = WordSegmenter(
+    segmenter_model_name_or_path='gpt2',
+    reranker_model_name_or_path="bert-base-uncased",
+    use_reranker=True
+)
+
+segmentations = ws.segment([
+    "#myoldphonesucks",
+    "#latinosinthedeepsouth",
+    "#weneedanationalpark",
+    "#LandoftheLost",
+    "#icecold",
+    "#Heartbreaker",
+    "#TheRiseGuys"
+])
+
+print(segmentations)
+
+# ['my old phone sucks',
+# 'latinos in the deep south',
+# 'we need a national park',
+# 'Land of the Lost',
+# 'ice cold',
+# 'Heartbreaker',
+# 'The Rise Guys']
 ```
 
 # Examples
