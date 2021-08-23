@@ -4,4 +4,6 @@
 
 # About
 
-This package uses Transformer models for hashtag segmentation.
+This package applies Transformer models to hashtag segmentation. 
+
+# Citation 
