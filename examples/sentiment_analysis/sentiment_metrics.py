@@ -8,28 +8,9 @@ import datasets
 
 
 _DESCRIPTION = """
-Accuracy is the proportion of correct predictions among the total number of cases processed. It can be computed with:
-Accuracy = (TP + TN) / (TP + TN + FP + FN)
-TP: True positive
-TN: True negative
-FP: False positive
-FN: False negative
 """
 
 _KWARGS_DESCRIPTION = """
-Args:
-    predictions: Predicted labels, as returned by a model.
-    references: Ground truth labels.
-    normalize: If False, return the number of correctly classified samples.
-        Otherwise, return the fraction of correctly classified samples.
-    sample_weight: Sample weights.
-Returns:
-    accuracy: Accuracy score.
-Examples:
-    >>> accuracy_metric = datasets.load_metric("accuracy")
-    >>> results = accuracy_metric.compute(references=[0, 1], predictions=[0, 1])
-    >>> print(results)
-    {'accuracy': 1.0}
 """
 
 _CITATION = """\

@@ -21,12 +21,12 @@ class WordSegmenter(object):
 
     def __init__(
         self,
-        decoder_model_name_or_path = "gpt2",
-        decoder_model_type = "gpt2",
-        decoder_device = "cuda",
-        decoder_gpu_batch_size = 1,
-        encoder_model_name_or_path = "bert-base-uncased",
-        encoder_model_type = "bert",
+        segmenter_model_name_or_path = "gpt2",
+        segmenter_model_type = "gpt2",
+        segmenter_device = "cuda",
+        segmenter_gpu_batch_size = 1,
+        reranker_model_name_or_path = "bert-base-uncased",
+        reranker_model_type = "bert",
         spacy_model = "en_core_web_sm"
     ):
         if spacy_model:
@@ -34,20 +34,20 @@ class WordSegmenter(object):
             re_token_match = _get_regex_pattern(self.nlp.Defaults.token_match)
             self.nlp.tokenizer.token_match = re.compile(f"({re_token_match}|#\w+|\w+-\w+)").match
 
-        self.decoder_model = Beamsearch(
-        model_name_or_path=decoder_model_name_or_path,
-        model_type=decoder_model_type,
-        device=decoder_device,
-        gpu_batch_size=decoder_gpu_batch_size
+        self.segmenter_model = Beamsearch(
+        model_name_or_path=segmenter_model_name_or_path,
+        model_type=segmenter_model_type,
+        device=segmenter_device,
+        gpu_batch_size=segmenter_gpu_batch_size
     )
 
-        if encoder_model_name_or_path:
-            self.encoder_model = Reranker(
-                model_name_or_path=encoder_model_name_or_path,
-                model_type=encoder_model_type
+        if reranker_model_name_or_path:
+            self.reranker_model = Reranker(
+                model_name_or_path=reranker_model_name_or_path,
+                model_type=reranker_model_type
             )
         else:
-            self.encoder_model = None
+            self.reranker_model = None
 
     def replace_word(self, text, word, replacement):
         doc = self.nlp(text)
@@ -68,7 +68,7 @@ class WordSegmenter(object):
         steps=13,
         alpha=0.222,
         beta=0.111,
-        use_encoder=True,
+        use_reranker=True,
         dictionary=None,
         produce_hashtags=False,
         replace=True
@@ -115,7 +115,7 @@ class WordSegmenter(object):
                 steps=steps,
                 alpha=alpha,
                 beta=beta,
-                use_encoder=use_encoder)
+                use_reranker=use_reranker)
 
             for idx, item in enumerate(segmentations):
                 hashtag_dict.update({
@@ -179,25 +179,25 @@ class WordSegmenter(object):
             steps=13,
             alpha=0.222,
             beta=0.111,
-            use_encoder=True):
+            use_reranker=True):
 
-        decoder_run = self.decoder_model.run(
+        segmenter_run = self.segmenter_model.run(
             word_list,
             topk=topk,
             steps=steps
         )
         
-        if self.encoder_model:
-            encoder_run = self.encoder_model.rerank(decoder_run)
+        if self.reranker_model:
+            reranker_run = self.reranker_model.rerank(segmenter_run)
 
             ensemble = top2_ensemble(
-                decoder_run,
-                encoder_run,
+                segmenter_run,
+                reranker_run,
                 alpha=alpha,
                 beta=beta
             )
         
-        if self.encoder_model and use_encoder:
+        if self.reranker_model and use_reranker:
             ensemble_prob_dict = enforce_prob_dict(
                 ensemble,
                 score_field="ensemble_rank")
@@ -206,11 +206,11 @@ class WordSegmenter(object):
                 gold_array=word_list
             )
         else:
-            decoder_prob_dict = enforce_prob_dict(
-                decoder_run,
+            segmenter_prob_dict = enforce_prob_dict(
+                segmenter_run,
                 score_field="score"
             )
-            segs = decoder_prob_dict.get_segmentation(
+            segs = segmenter_prob_dict.get_segmentation(
                 astype="list",
                 gold_array=word_list
             )

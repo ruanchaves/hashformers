@@ -188,27 +188,27 @@ class WordSegmenterArguments:
         default=True
     )
 
-    decoder_model_name_or_path: str = field(
+    segmenter_model_name_or_path: str = field(
         default="DeepESP/gpt2-spanish"
     )
 
-    decoder_model_type: str = field(
+    segmenter_model_type: str = field(
         default="gpt2"
     )
 
-    decoder_device: str = field(
+    segmenter_device: str = field(
         default="cuda"
     )
 
-    decoder_gpu_batch_size: int = field(
+    segmenter_gpu_batch_size: int = field(
         default=1
     )
 
-    encoder_model_name_or_path: str = field(
+    reranker_model_name_or_path: str = field(
         default="dccuchile/bert-base-spanish-wwm-uncased"
     )
 
-    encoder_model_type: str = field(
+    reranker_model_type: str = field(
         default="bert"
     )
 
@@ -232,6 +232,6 @@ class WordSegmenterArguments:
         default=0.111
     )
 
-    use_encoder: bool = field(
+    use_reranker: bool = field(
         default=True
     )

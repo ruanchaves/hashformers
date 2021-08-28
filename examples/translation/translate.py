@@ -53,7 +53,7 @@ def main():
         "steps": ws_args.steps,
         "alpha": ws_args.alpha,
         "beta": ws_args.beta,
-        "use_encoder": ws_args.use_encoder
+        "use_reranker": ws_args.use_reranker
     }
 
     if ws_args.hashtag_dict_load_path:
@@ -79,12 +79,12 @@ def main():
     model = Translator(
         translation_model=translation_model,
         translation_tokenizer=translation_tokenizer,
-        decoder_model_name_or_path=ws_args.decoder_model_name_or_path,
-        decoder_model_type=ws_args.decoder_model_type,
-        decoder_device=ws_args.decoder_device,
-        decoder_gpu_batch_size=ws_args.decoder_gpu_batch_size,
-        encoder_model_name_or_path=ws_args.encoder_model_name_or_path,
-        encoder_model_type=ws_args.encoder_model_type,
+        segmenter_model_name_or_path=ws_args.segmenter_model_name_or_path,
+        segmenter_model_type=ws_args.segmenter_model_type,
+        segmenter_device=ws_args.segmenter_device,
+        segmenter_gpu_batch_size=ws_args.segmenter_gpu_batch_size,
+        reranker_model_name_or_path=ws_args.reranker_model_name_or_path,
+        reranker_model_type=ws_args.reranker_model_type,
         spacy_model=ws_args.spacy_model        
     )
 

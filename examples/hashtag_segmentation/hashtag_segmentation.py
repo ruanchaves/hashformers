@@ -50,12 +50,12 @@ class DataArguments:
         default=False
     )
 
-    decoder_results_filename: str = field(
-        default="decoder.csv"
+    segmenter_results_filename: str = field(
+        default="segmenter.csv"
     )
 
-    encoder_results_filename: str = field(
-        default="encoder.csv"
+    reranker_results_filename: str = field(
+        default="reranker.csv"
     )
 
     ensemble_results_filename: str = field(
@@ -70,19 +70,19 @@ class DataArguments:
 @dataclass
 class BeamsearchArguments:
     
-    decoder_model_name_or_path: str = field(
+    segmenter_model_name_or_path: str = field(
         default='gpt2-large'
     )
 
-    decoder_model_type: str = field(
+    segmenter_model_type: str = field(
         default='gpt2'
     )
 
-    decoder_device: str = field(
+    segmenter_device: str = field(
         default='cuda'
     )
 
-    decoder_gpu_batch_size: int = field(
+    segmenter_gpu_batch_size: int = field(
         default=1
     )
 
@@ -97,15 +97,15 @@ class BeamsearchArguments:
 @dataclass
 class RerankerArguments:
 
-    use_encoder: bool = field(
+    use_reranker: bool = field(
         default=True
     )
 
-    encoder_model_name_or_path: str = field(
+    reranker_model_name_or_path: str = field(
         default="bert-large-uncased-whole-word-masking",
     )
 
-    encoder_model_type: str = field(
+    reranker_model_type: str = field(
         default="bert"
     )
 
@@ -150,16 +150,16 @@ def main():
             .Path(data_args.output_dir)\
             .mkdir(parents=True, exist_ok=True)
 
-        encoder_results_path = \
+        reranker_results_path = \
             os.path.join(
                 data_args.output_dir,
-                data_args.encoder_results_filename
+                data_args.reranker_results_filename
             )
 
-        decoder_results_path = \
+        segmenter_results_path = \
             os.path.join(
                 data_args.output_dir,
-                data_args.decoder_results_filename
+                data_args.segmenter_results_filename
             )
 
         ensemble_results_path = \
@@ -184,14 +184,14 @@ def main():
         hashtags = hashtags[0:data_args.sample]
 
     if data_args.load_cache_from_output_dir and \
-        os.path.isfile(decoder_results_path):
-        gpt2_run = pd.read_csv(decoder_results_path)
+        os.path.isfile(segmenter_results_path):
+        gpt2_run = pd.read_csv(segmenter_results_path)
     else:
         gpt2_model = Beamsearch(
-            model_name_or_path=beamsearch_args.decoder_model_name_or_path,
-            model_type=beamsearch_args.decoder_model_type,
-            device=beamsearch_args.decoder_device,
-            gpu_batch_size=beamsearch_args.decoder_gpu_batch_size
+            model_name_or_path=beamsearch_args.segmenter_model_name_or_path,
+            model_type=beamsearch_args.segmenter_model_type,
+            device=beamsearch_args.segmenter_device,
+            gpu_batch_size=beamsearch_args.segmenter_gpu_batch_size
         )
 
         gpt2_run = gpt2_model.run(
@@ -201,7 +201,7 @@ def main():
         )
 
         if data_args.save_to_output_dir:
-            gpt2_run.to_csv(decoder_results_path)
+            gpt2_run.to_csv(segmenter_results_path)
 
     if data_args.evaluate:
         gpt2_metrics = evaluate_dictionary(
@@ -210,15 +210,15 @@ def main():
             n=data_args.evaluate_top_k
         )
 
-    if reranker_args.use_encoder:
+    if reranker_args.use_reranker:
 
         if data_args.load_cache_from_output_dir and \
-            os.path.isfile(encoder_results_path):
-            bert_run = pd.read_csv(encoder_results_path)
+            os.path.isfile(reranker_results_path):
+            bert_run = pd.read_csv(reranker_results_path)
         else:
             bert_model = Reranker(
-                model_name_or_path=reranker_args.encoder_model_name_or_path,
-                model_type=reranker_args.encoder_model_type
+                model_name_or_path=reranker_args.reranker_model_name_or_path,
+                model_type=reranker_args.reranker_model_type
             )
 
             bert_run = bert_model.rerank(gpt2_run)
@@ -227,7 +227,7 @@ def main():
                 bert_run_prob_dict = \
                     enforce_prob_dict(bert_run)
                 bert_run_prob_dict\
-                    .to_csv(encoder_results_path)
+                    .to_csv(reranker_results_path)
 
         if data_args.evaluate:
             bert_metrics = evaluate_dictionary(
@@ -268,7 +268,7 @@ def main():
         logger.info("Beamsearch metrics:")
         logger.info("%s", gpt2_metrics)
 
-        if reranker_args.use_encoder:
+        if reranker_args.use_reranker:
             logger.info("Reranker metrics:")
             logger.info("%s", bert_metrics)
 
@@ -276,7 +276,7 @@ def main():
             logger.info("%s", ensemble_metrics)
     
     if data_args.save_to_output_dir \
-        and reranker_args.use_encoder:
+        and reranker_args.use_reranker:
         ensemble_prob_dict = enforce_prob_dict(
             ensemble,
             score_field="ensemble_rank")
@@ -285,7 +285,7 @@ def main():
             gold_array=gold
         )
     elif data_args.save_to_output_dir \
-        and not reranker_args.use_encoder:
+        and not reranker_args.use_reranker:
         gpt2_run_prob_dict = enforce_prob_dict(
             gpt2_run,
             score_field="score"
