@@ -37,7 +37,7 @@ parso==0.6.2
 pathos==0.2.5
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==7.0.0
+Pillow==8.3.2
 pkginfo==1.5.0.1
 pox==0.2.7
 ppft==1.6.6.1
