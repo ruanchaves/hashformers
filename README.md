@@ -1,5 +1,5 @@
 <h1 align="center">
-  ![](https://raw.githubusercontent.com/ruanchaves/hashformers/master/hashformers.png)
+  <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/hashformers.png" width="350" title="hashformers">
 </h1>
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
