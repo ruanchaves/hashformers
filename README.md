@@ -3,7 +3,9 @@
 </h1>
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
-[![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)
+[![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/) 
+[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/)
+ 
 
 **Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
 
