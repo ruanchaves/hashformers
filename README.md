@@ -6,7 +6,7 @@
 
 This package applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
 
-**Paper**: [#PAPER_NAME#](#PAPER_URL#)
+**Paper coming soon**
 
 # Basic usage
 
@@ -55,11 +55,11 @@ docker build .
 
 Applications of hashtag segmentation to tweet sentiment analysis and the automatic translation of tweets can be found on the `examples` folder.
 
-# Citation 
+<!--- # Citation ---> 
 
-You can cite [this paper](#PAPER_URL#) when referring to the hashformers library:
+<!--- You can cite [this paper](#PAPER_URL#) when referring to the hashformers library: ---> 
 
-```
+<!--- ```
 @misc{rodrigues2022segmentation,
       title={dolorem ipsum quia dolor sit amet}, 
       author={Ruan Chaves Rodrigues},
@@ -68,4 +68,4 @@ You can cite [this paper](#PAPER_URL#) when referring to the hashformers library
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }
-```
+``` ---> 
