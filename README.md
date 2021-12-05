@@ -2,6 +2,8 @@
   <b>hashformers</b>
 </h1>
 
+** Update 05/12/2021: We are currently fixing a bug on the installation of this package. A fully functional Colab notebook is coming soon.**
+
 **Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
 
 This package applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
