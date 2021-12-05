@@ -2,7 +2,7 @@
   <b>hashformers</b>
 </h1>
 
-[![Open In Collab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+[![Open In Colab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)]
 
 **Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
 
