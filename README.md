@@ -2,7 +2,7 @@
   <b>hashformers</b>
 </h1>
 
-**December 5th, 2021: We are currently fixing a bug on the installation of the hashformers package. A fully functional Colab notebook is coming soon.**
+[![Open In Collab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
 **Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
 
@@ -40,17 +40,6 @@ print(segmentations)
 # 'ice cold',
 # 'Heartbreaker',
 # 'The Rise Guys']
-```
-
-# Installation
-
-Run our library on Google Colab or, alternatively, deploy it from a Docker container. 
-You can customize the `Dockerfile` on this folder to your particular use case.
-
-```
-git clone https://github.com/ruanchaves/hashformers.git
-cd hashformers
-docker build .
 ```
 
 # Examples
