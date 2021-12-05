@@ -2,7 +2,7 @@
   <b>hashformers</b>
 </h1>
 
-** Update 05/12/2021: We are currently fixing a bug on the installation of this package. A fully functional Colab notebook is coming soon.**
+**December 5th, 2021: We are currently fixing a bug on the installation of the hashformers package. A fully functional Colab notebook is coming soon.**
 
 **Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
 
