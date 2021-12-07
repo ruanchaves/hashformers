@@ -71,7 +71,7 @@ Applications of hashtag segmentation to tweet sentiment analysis and the automat
 
 # Contributing 
 
-Pull requests are welcome. 
+Pull requests are welcome! We need to improve on the documentation and code quality of this repository. It's also a good idea to implement more sophisticated ensembling techniques. [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
 
 # Citation
 
