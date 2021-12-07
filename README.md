@@ -11,7 +11,7 @@
 
 Try it right now on [Google Colab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb).
 
-**Paper coming soon**
+**Paper:** [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
 # Basic usage
 
@@ -63,3 +63,16 @@ Applications of hashtag segmentation to tweet sentiment analysis and the automat
       primaryClass={cs.CL}
 }
 ``` ---> 
+
+# Citation
+
+```
+@misc{rodrigues2021zeroshot,
+      title={Zero-shot hashtag segmentation for multilingual sentiment analysis}, 
+      author={Ruan Chaves Rodrigues and Marcelo Akira Inuzuka and Juliana Resplande Sant'Anna Gomes and Acquila Santos Rocha and Iacer Calixto and Hugo Alexandre Dantas do Nascimento},
+      year={2021},
+      eprint={2112.03213},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
