@@ -45,6 +45,11 @@ print(segmentations)
 # 'The Rise Guys']
 ```
 
+# Installation
+
+Installation steps are described on this [notebook](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb). 
+A Docker image is coming soon.
+
 # Examples
 
 Applications of hashtag segmentation to tweet sentiment analysis and the automatic translation of tweets can be found on the `examples` folder.
