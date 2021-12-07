@@ -69,6 +69,10 @@ Applications of hashtag segmentation to tweet sentiment analysis and the automat
 }
 ``` ---> 
 
+# Contributing 
+
+Pull requests are welcome. 
+
 # Citation
 
 ```
