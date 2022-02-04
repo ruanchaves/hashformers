@@ -5,6 +5,8 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
 
+<h1 align="center"> State-of-the-art Hashtag Segmentation </h1>
+
 **Hashtag segmentation** is the task of automatically adding spaces between the words in a hashtag. 
 
 **Hashformers** applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
