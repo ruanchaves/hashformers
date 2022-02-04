@@ -102,7 +102,7 @@ class WordSegmenter(object):
                 segmenter_run,
                 score_field="score"
             )
-            segs = segmenter_prob_dict.get_segmentation(
+            segs = segmenter_prob_dict.get_segmentations(
                 astype="list",
                 gold_array=word_list
             )
