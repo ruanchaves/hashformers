@@ -2,10 +2,10 @@
   <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/hashformers.png" width="300" title="hashformers">
 </h1>
 
+<h1 align="center"> State-of-the-art Hashtag Segmentation </h1>
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
-
-<h1 align="center"> State-of-the-art Hashtag Segmentation </h1>
 
 **Hashtag segmentation** is the task of automatically adding spaces between the words in a hashtag. 
 
