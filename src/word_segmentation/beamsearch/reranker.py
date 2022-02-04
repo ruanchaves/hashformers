@@ -9,11 +9,15 @@ class Reranker(ModelLM):
     def __init__(
         self,
         model_name_or_path='bert-base-uncased',
-        model_type='bert'
+        model_type='bert',
+        gpu_batch_size=1,
+        gpu_id=0
     ):
         super().__init__(
             model_name_or_path=model_name_or_path,
             model_type=model_type,
+            gpu_batch_size=gpu_batch_size,
+            gpu_id=gpu_id
         )
     
     def rerank(

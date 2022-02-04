@@ -11,6 +11,7 @@ class WordSegmenter(object):
         segmenter_model_type = "gpt2",
         segmenter_device = "cuda",
         segmenter_gpu_batch_size = 1,
+        reranker_gpu_batch_size = 2000,
         reranker_model_name_or_path = "bert-base-uncased",
         reranker_model_type = "bert"
     ):
@@ -25,7 +26,8 @@ class WordSegmenter(object):
         if reranker_model_name_or_path:
             self.reranker_model = Reranker(
                 model_name_or_path=reranker_model_name_or_path,
-                model_type=reranker_model_type
+                model_type=reranker_model_type,
+                gpu_batch_size=reranker_gpu_batch_size
             )
         else:
             self.reranker_model = None
