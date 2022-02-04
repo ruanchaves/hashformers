@@ -2,18 +2,18 @@
   <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/hashformers.png" width="300" title="hashformers">
 </h1>
 
-<h1 align="center"> State-of-the-art Hashtag Segmentation </h1>
-
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
 
-**Hashtag segmentation** is the task of automatically adding spaces between the words in a hashtag. 
+Hashtag segmentation is the task of automatically adding spaces between the words in a hashtag. 
 
-**Hashformers** applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
+Hashformers is the current **state-of-the-art** for hashtag segmentation. It is a **language-agnostic** library: You can use it to segment hashtags not just in English but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
-* [**Step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+Hashformers ( **hash**tags + trans**formers** ) applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages. 
 
-Try it right now on [Google Colab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb).
+* [**Segment hashtags on Google Colab**](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+
+* [**Read the step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
 ## Comparison to other hashtag segmentation libraries 
 
