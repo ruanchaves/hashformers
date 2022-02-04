@@ -7,9 +7,7 @@
 
 Hashtag segmentation is the task of automatically adding spaces between the words in a hashtag. 
 
-Hashformers is the current **state-of-the-art** for hashtag segmentation. It is a **language-agnostic** library: You can use it to segment hashtags not just in English but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
-
-Hashformers ( **hash**tags + trans**formers** ) applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages. 
+Hashformers is the current **state-of-the-art** for hashtag segmentation. It is a **language-agnostic** library: you can use it to segment hashtags not just in English but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
 * [**Segment hashtags on Google Colab**](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
@@ -47,6 +45,7 @@ print(segmentations)
 ```
 
 # Installation
+
 ```
 pip install hashformers
 ```
