@@ -50,7 +50,7 @@ ws = WordSegmenter(
 )
 ```
 
-If you want to use a reranker model, you must install mxnet. Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the `mxnet` package compatible with your CUDA version.
+If you want to use a reranker model, you must install [mxnet](https://pypi.org/project/mxnet/). Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the [mxnet package](https://pypi.org/project/mxnet/) compatible with your CUDA version.
 
 ```
 pip install mxnet-cu110 
