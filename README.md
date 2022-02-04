@@ -15,9 +15,9 @@ Try it right now on [Google Colab](https://colab.research.google.com/github/ruan
 
 ## Relevant Papers 
 
-* * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+* [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
-* * [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
+* [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
 
 # Basic usage
 
