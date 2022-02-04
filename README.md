@@ -53,8 +53,13 @@ Here we install **hashformers** with `mxnet-cu110`, which is compatible with Goo
 
 ```
 pip install mxnet-cu110 
-pip install https://github.com/ruanchaves/hashformers/raw/master/deps/lm_scorer-0.4.2-py3-none-any.whl 
-pip install git+git://github.com/ruanchaves/mlm-scoring.git@master#egg=mlm
+pip install hashformers
+```
+
+You can also install **hashformers** directly from this repository ( or your fork ):
+
+```
+pip install mxnet-cu110 
 pip install git+git://github.com/ruanchaves/hashformers.git@master#egg=hashformers 
 ```
 
