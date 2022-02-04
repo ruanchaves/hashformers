@@ -79,7 +79,8 @@ class WordSegmenter(object):
             steps=steps
         )
         
-        if self.reranker_model:
+        ensemble = None
+        if use_reranker:
             reranker_run = self.reranker_model.rerank(segmenter_run)
 
             ensemble = top2_ensemble(
@@ -88,8 +89,7 @@ class WordSegmenter(object):
                 alpha=alpha,
                 beta=beta
             )
-        
-        if self.reranker_model and use_reranker:
+
             ensemble_prob_dict = enforce_prob_dict(
                 ensemble,
                 score_field="ensemble_rank")
