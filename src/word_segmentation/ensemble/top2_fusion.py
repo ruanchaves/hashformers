@@ -1,6 +1,20 @@
 from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from word_segmentation.experiments.utils import build_ensemble_df
-from word_segmentation.experiments.architectures import run_ensemble
+
+def run_ensemble(
+    a_diff,
+    b_diff,
+    a_rank,
+    b_rank,
+    alpha=0.0,
+    beta=0.0):
+
+    delta = alpha * a_diff - beta * b_diff
+    decision = (delta < 0).astype(int)
+    negation =  (~(delta < 0)).astype(int)
+    output = a_rank * negation + b_rank * decision
+    
+    return output
 
 def top2_ensemble(
     dict_1, 

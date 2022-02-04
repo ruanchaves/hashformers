@@ -33,7 +33,9 @@ def evaluate_df(
     )
   metrics = {
       "f1": evaluator.calculateFScore(),
-      "acc": evaluator.calculateAccuracy()
+      "acc": evaluator.calculateAccuracy(),
+      "recall": evaluator.calculateRecall(),
+      "precision": evaluator.calculatePrecision()
   }
   return metrics
 
