@@ -58,19 +58,19 @@ pip install mxnet-cu110
 pip install hashformers
 ```
 
-# Development
-
-Install **hashformers** directly from this repository ( or your fork ):
-
-```
-pip install git+git://github.com/ruanchaves/hashformers.git@master#egg=hashformers 
-```
-
 # Contributing 
 
 Pull requests are welcome!  [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
 
-## Relevant Papers 
+If you want to develop the library, you can install **hashformers** directly from this repository ( or your fork ):
+
+```
+git clone https://github.com/ruanchaves/hashformers.git
+cd hashformers
+pip install -e .
+```
+
+# Relevant Papers 
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
