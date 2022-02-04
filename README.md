@@ -11,9 +11,11 @@ Hashformers is the current **state-of-the-art** for hashtag segmentation. On ave
 
 Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
-* <h4> ✂️ [**Segment hashtags on Google Colab**](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) </h4>
+<p align="center">
+<h4> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Segment hashtags on Google Colab </a> </h4>
 
-* <h4> ✂️ [**Read the step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb) </h4>
+<h4> <a href="https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Read the step-by-step tutorial </a> </h4>
+</p>
 
 # Basic usage
 
