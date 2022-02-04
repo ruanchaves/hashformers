@@ -9,11 +9,15 @@
 
 **Hashformers** applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
 
+* [**Step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+
 Try it right now on [Google Colab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb).
 
-* **Paper:** [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+## Relevant Papers 
 
-* [**Step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+* * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+
+* * [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
 
 # Basic usage
 
