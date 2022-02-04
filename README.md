@@ -22,29 +22,18 @@ from hashformers import WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
-    reranker_model_name_or_path="bert-base-uncased",
-    use_reranker=True
+    reranker_model_name_or_path="bert-base-uncased"
 )
 
 segmentations = ws.segment([
-    "#myoldphonesucks",
-    "#latinosinthedeepsouth",
     "#weneedanationalpark",
-    "#LandoftheLost",
-    "#icecold",
-    "#Heartbreaker",
-    "#TheRiseGuys"
+    "#icecold"
 ])
 
 print(segmentations)
 
-# ['my old phone sucks',
-# 'latinos in the deep south',
-# 'we need a national park',
-# 'Land of the Lost',
-# 'ice cold',
-# 'Heartbreaker',
-# 'The Rise Guys']
+# [ 'we need a national park',
+# 'ice cold' ]
 ```
 
 # Installation
