@@ -1,21 +1,7 @@
-import itertools
 from word_segmentation.beamsearch.algorithm import Beamsearch
 from word_segmentation.beamsearch.reranker import Reranker
 from word_segmentation.beamsearch.data_structures import enforce_prob_dict
 from word_segmentation.ensemble.top2_fusion import top2_ensemble
-from spacy.tokenizer import _get_regex_pattern
-import spacy
-import re 
-import itertools
-from collections import namedtuple
-
-WordSegmenterResult = namedtuple(
-    "WordSegmenterResult", 
-    [
-        "dataset", 
-        "hashtag_dict"
-    ]
-)
 
 class WordSegmenter(object):
 
