@@ -37,18 +37,31 @@ print(segmentations)
 ```
 
 # Installation
+```
+pip install hashformers
+```
 
-Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the `mxnet` package compatible with your CUDA version.
+It is possible to use **hashformers** without a reranker:
+
+```python
+ws = WordSegmenter(
+    segmenter_model_name_or_path="gpt2",
+    reranker_model_name_or_path=None
+)
+```
+
+If you want to use a reranker model, you must install mxnet. Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the `mxnet` package compatible with your CUDA version.
 
 ```
 pip install mxnet-cu110 
 pip install hashformers
 ```
 
-You can also install **hashformers** directly from this repository ( or your fork ):
+# Development
+
+Install **hashformers** directly from this repository ( or your fork ):
 
 ```
-pip install mxnet-cu110 
 pip install git+git://github.com/ruanchaves/hashformers.git@master#egg=hashformers 
 ```
 
