@@ -15,7 +15,17 @@ class WordSegmenter(object):
         reranker_model_name_or_path = "bert-base-uncased",
         reranker_model_type = "bert"
     ):
+        """Segments a list of hashtags.
 
+        Args:
+            segmenter_model_name_or_path (str, optional): Transformer decoder model name. Defaults to "gpt2".
+            segmenter_model_type (str, optional): Transformer decoder model type. Defaults to "gpt2".
+            segmenter_device (str, optional): Device. Defaults to "cuda".
+            segmenter_gpu_batch_size (int, optional): Segmenter GPU batch size. Defaults to 1.
+            reranker_gpu_batch_size (int, optional): Reranker GPU split size. Defaults to 2000.
+            reranker_model_name_or_path (str, optional): Transformer encoder model name. Defaults to "bert-base-uncased".
+            reranker_model_type (str, optional): Transformer encoder model type. Defaults to "bert".
+        """
         self.segmenter_model = Beamsearch(
         model_name_or_path=segmenter_model_name_or_path,
         model_type=segmenter_model_type,
@@ -42,6 +52,22 @@ class WordSegmenter(object):
             use_reranker=True,
             return_ranks=False,
             trim_hashtags=True):
+        """Segment a list of hashtags.
+
+        Args:
+            word_list (List[str]): List of hashtag strings.
+            topk (int, optional): top-k parameter for the Beamsearch algorithm. Defaults to 20.
+            steps (int, optional): steps parameter for the Beamsearch algorithm. Defaults to 13.
+            alpha (float, optional): alpha parameter for the top-2 ensemble. Defaults to 0.222.
+            beta (float, optional): beta parameter for the top-2 ensemble. Defaults to 0.111.
+            use_reranker (bool, optional): Whether or not to run the reranker and the ensemble. Defaults to True.
+            return_ranks (bool, optional): Return not just the segmented hashtags but also the ranks. Defaults to False.
+            trim_hashtags (bool, optional): Automatically remove "#" characters from the beginning of the hashtags. Defaults to True.
+
+        Returns:
+            A list of segmented hashtags if return_ranks == False.
+            A dictionary of the ranks and the segmented hashtags if return_ranks == True.
+        """
 
         if trim_hashtags:
             word_list = \
