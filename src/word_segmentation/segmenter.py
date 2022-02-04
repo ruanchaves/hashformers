@@ -52,7 +52,12 @@ class WordSegmenter(object):
             alpha=0.222,
             beta=0.111,
             use_reranker=True,
-            return_ranks=False):
+            return_ranks=False,
+            trim_hashtags=True):
+
+        if trim_hashtags:
+            word_list = \
+                [ x.lstrip("#") for x in word_list ]
 
         segmenter_run = self.segmenter_model.run(
             word_list,

@@ -1,5 +1,8 @@
 from word_segmentation.beamsearch.model_lm import ModelLM
 from word_segmentation.beamsearch.data_structures import enforce_prob_dict
+from word_segmentation.beamsearch.data_structures import (
+    ProbabilityDictionary
+)
 
 class Reranker(ModelLM):
 
@@ -22,4 +25,4 @@ class Reranker(ModelLM):
         candidates = list(input_data.dictionary.keys())
         scores = self.model.get_probs(candidates)
         rank = { k:v for k,v in list(zip(candidates, scores))}
-        return rank
+        return ProbabilityDictionary(rank)
