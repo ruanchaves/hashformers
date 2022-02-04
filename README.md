@@ -21,7 +21,7 @@ Try it right now on [Google Colab](https://colab.research.google.com/github/ruan
 
 In this figure we compare **hashformers** with [HashtagMaster](https://github.com/mounicam/hashtag_master) ( also known as "MPNR" ) and [ekphrasis](https://github.com/cbaziotis/ekphrasis) when we evaluate all libraries on five hashtag segmentation benchmarks.
 
-On average, hashformers was **10%** more accurate than the second best option.
+On average, hashformers is **10% more accurate** than the second best option. More details [on our wiki](https://github.com/ruanchaves/hashformers/wiki/Evaluation).
 
 # Basic usage
 
