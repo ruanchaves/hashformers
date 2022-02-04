@@ -31,11 +31,12 @@
 <a href="https://pypi.com/project/pip/"><img alt="PyPi license" src="https://badgen.net/pypi/license/pip/"></a>
 </p>
 <p>Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. </p>
-<p>Hashformers is the current <strong>state-of-the-art</strong> for hashtag segmentation. On average, hashformers is <strong>10% more accurate</strong> than the second best hashtag segmentation library ( more details <a href="https://github.com/ruanchaves/hashformers/wiki/Hashformers">on our wiki</a> ).</p>
+<p>Hashformers is the current <strong>state-of-the-art</strong> for hashtag segmentation. On average, hashformers is <strong>10% more accurate</strong> than the second best hashtag segmentation library ( more details <a href="https://ruanchaves.github.io/hashformers/#evaluation">on the docs</a> ).</p>
 <p>Hashformers is also <strong>language-agnostic</strong>: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the <a href="https://huggingface.co/models">Hugging Face Model Hub</a>.</p>
 <p align="center">
-<h4> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Segment hashtags on Google Colab </a> </h4>
-<h4> <a href="https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Read the step-by-step tutorial </a> </h4>
+<h3> <a href="https://ruanchaves.github.io/hashformers/"> ✂️ Read the documentation </a> </h3>
+<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Segment hashtags on Google Colab </a> </h3>
+<h3> <a href="https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Follow the step-by-step tutorial </a> </h3>
 </p>
 <h1 id="basic-usage">Basic usage</h1>
 <pre><code class="language-python">from hashformers import WordSegmenter
@@ -55,6 +56,7 @@ print(segmentations)
 # [ 'we need a national park',
 # 'ice cold' ]
 </code></pre>
+<p>For more information, read the <a href="https://ruanchaves.github.io/hashformers/segmenter.html#hashformers.segmenter.WordSegmenter">documentation for the WordSegmenter object</a>.</p>
 <h1 id="installation">Installation</h1>
 <pre><code>pip install hashformers
 </code></pre>
@@ -95,12 +97,146 @@ pip install -e .
       primaryClass={cs.CL}
 }
 </code></pre>
+<h1 id="evaluation">Evaluation</h1>
+<h1 align="center">
+<img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/barplot_evaluation.png" width="512" title="hashformers">
+</h1>
+<p>In this figure we compare <strong>hashformers</strong> with <a href="https://github.com/mounicam/hashtag_master">HashtagMaster</a> ( also known as "MPNR" ) and <a href="https://github.com/cbaziotis/ekphrasis">ekphrasis</a> on five hashtag segmentation datasets.</p>
+<p>HashSet-1 is a sample from the distant HashSet dataset. HashSet-2 is the lowercase version of HashSet-1, and HashSet-3 is the manually annotated portion of HashSet. More information on the datasets and their evaluation is available on the <a href="https://arxiv.org/abs/2201.06741">HashSet paper</a>. </p>
+<p>A script to reproduce the evaluation of ekphrasis is available on <a href="https://github.com/ruanchaves/hashformers/blob/master/scripts/evaluate_ekphrasis.py">scripts/evaluate_ekphrasis.py</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">dataset</th>
+<th align="left">library</th>
+<th align="right">accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">BOUN</td>
+<td align="left">HashtagMaster</td>
+<td align="right">81.60</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">44.74</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>83.68</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-1</td>
+<td align="left">HashtagMaster</td>
+<td align="right">50.06</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">0.00</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>72.47</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-2</td>
+<td align="left">HashtagMaster</td>
+<td align="right">45.04</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>ekphrasis</strong></td>
+<td align="right"><strong>55.73</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">hashformers</td>
+<td align="right">47.43</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-3</td>
+<td align="left">HashtagMaster</td>
+<td align="right">41.93</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">56.44</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>56.71</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">Stanford-Dev</td>
+<td align="left">HashtagMaster</td>
+<td align="right">73.12</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">51.38</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>80.04</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">average (all)</td>
+<td align="left">HashtagMaster</td>
+<td align="right">58.35</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">41.65</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>68.06</strong></td>
+</tr>
+</tbody>
+</table>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 .. include:: ../../README.md
+.. include:: ../../docs/EVALUATION.md
 &#34;&#34;&#34;
 from .segmenter import *</code></pre>
 </details>
@@ -146,6 +282,7 @@ from .segmenter import *</code></pre>
 <li><a href="#contributing">Contributing</a></li>
 <li><a href="#relevant-papers">Relevant Papers</a></li>
 <li><a href="#citation">Citation</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
 </ul>
 </div>
 <ul id="index">
