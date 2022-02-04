@@ -5,11 +5,11 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
 
-Hashtag segmentation is the task of automatically adding spaces between the words in a hashtag. 
+Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
 
 Hashformers is the current **state-of-the-art** for hashtag segmentation. On average, hashformers is **10% more accurate** than the second best hashtag segmentation library ( more details [on our wiki](https://github.com/ruanchaves/hashformers/wiki/Evaluation) ).
 
-Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
+Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
 * ✂️ [**Segment hashtags on Google Colab**](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
