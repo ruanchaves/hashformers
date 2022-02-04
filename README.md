@@ -5,13 +5,15 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
 
-**Hashtag segmentation** is the task of automatically inserting the missing spaces between the words in a hashtag. 
+**Hashtag segmentation** is the task of automatically adding spaces between the words in a hashtag. 
 
 **Hashformers** applies Transformer models to hashtag segmentation. It is built on top of the [transformers](https://github.com/huggingface/transformers) library and the [lm-scorer](https://github.com/simonepri/lm-scorer) and [mlm-scoring](https://github.com/awslabs/mlm-scoring) packages.
 
 Try it right now on [Google Colab](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb).
 
-**Paper:** [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+* **Paper:** [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+
+* [**Step-by-step tutorial**](https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
 # Basic usage
 
@@ -47,31 +49,18 @@ print(segmentations)
 
 # Installation
 
-Installation steps are described on this [notebook](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb). 
-A Docker image is coming soon.
+Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the `mxnet` package compatible with your CUDA version.
 
-# Examples
-
-Applications of hashtag segmentation to tweet sentiment analysis and the automatic translation of tweets can be found on the `examples` folder.
-
-<!--- # Citation ---> 
-
-<!--- You can cite [this paper](#PAPER_URL#) when referring to the hashformers library: ---> 
-
-<!--- ```
-@misc{rodrigues2022segmentation,
-      title={dolorem ipsum quia dolor sit amet}, 
-      author={Ruan Chaves Rodrigues},
-      year={2022},
-      eprint={9999.99999},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}
-``` ---> 
+```
+pip install mxnet-cu110 
+pip install https://github.com/ruanchaves/hashformers/raw/master/deps/lm_scorer-0.4.2-py3-none-any.whl 
+pip install git+git://github.com/ruanchaves/mlm-scoring.git@master#egg=mlm
+pip install git+git://github.com/ruanchaves/hashformers.git@master#egg=hashformers 
+```
 
 # Contributing 
 
-Pull requests are welcome! We need to improve on the documentation and code quality of this repository. It's also a good idea to implement more sophisticated ensembling techniques. [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
+Pull requests are welcome!  [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
 
 # Citation
 
