@@ -2,7 +2,7 @@ import pandas as pd
 import copy
 import numpy as np 
 
-from word_segmentation.experiments.evaluation import (
+from hashformers.experiments.evaluation import (
     filter_top_k
 )
 

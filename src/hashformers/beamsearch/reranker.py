@@ -1,6 +1,6 @@
-from word_segmentation.beamsearch.model_lm import ModelLM
-from word_segmentation.beamsearch.data_structures import enforce_prob_dict
-from word_segmentation.beamsearch.data_structures import (
+from hashformers.beamsearch.model_lm import ModelLM
+from hashformers.beamsearch.data_structures import (
+    enforce_prob_dict,
     ProbabilityDictionary
 )
 

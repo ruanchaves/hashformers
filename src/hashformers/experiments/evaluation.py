@@ -1,4 +1,4 @@
-from word_segmentation.evaluation.modeler import Modeler
+from hashformers.evaluation.modeler import Modeler
 import pandas as pd
 import copy
 import numpy as np

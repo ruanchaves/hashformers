@@ -1,7 +1,7 @@
-from word_segmentation.beamsearch.algorithm import Beamsearch
-from word_segmentation.beamsearch.reranker import Reranker
-from word_segmentation.beamsearch.data_structures import enforce_prob_dict
-from word_segmentation.ensemble.top2_fusion import top2_ensemble
+from hashformers.beamsearch.algorithm import Beamsearch
+from hashformers.beamsearch.reranker import Reranker
+from hashformers.beamsearch.data_structures import enforce_prob_dict
+from hashformers.ensemble.top2_fusion import top2_ensemble
 
 class WordSegmenter(object):
 

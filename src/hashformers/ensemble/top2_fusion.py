@@ -1,5 +1,5 @@
-from word_segmentation.beamsearch.data_structures import enforce_prob_dict
-from word_segmentation.experiments.utils import build_ensemble_df
+from hashformers.beamsearch.data_structures import enforce_prob_dict
+from hashformers.experiments.utils import build_ensemble_df
 
 def run_ensemble(
     a_diff,

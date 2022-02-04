@@ -1,11 +1,11 @@
 import itertools
 import re
-from word_segmentation.beamsearch.data_structures import (
+from hashformers.beamsearch.data_structures import (
     Node,
     ProbabilityDictionary
 )
 
-from word_segmentation.beamsearch.model_lm import ModelLM
+from hashformers.beamsearch.model_lm import ModelLM
 
 class Beamsearch(ModelLM):
 

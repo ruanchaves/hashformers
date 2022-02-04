@@ -1,5 +1,5 @@
-from word_segmentation.beamsearch.data_structures import enforce_prob_dict
-from word_segmentation.evaluation.modeler import Modeler
+from hashformers.beamsearch.data_structures import enforce_prob_dict
+from hashformers.evaluation.modeler import Modeler
 
 def evaluate_dictionary(data, gold, n=10):
 
