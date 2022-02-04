@@ -9,7 +9,7 @@ setup(
    packages=find_packages('src'),
    package_dir={'': 'src'},
    install_requires=[
-   "mlm @ https://github.com/ruanchaves/mlm-scoring/master#egg=mlm-0.1",
+   "mlm @ git+git://github.com/ruanchaves/mlm-scoring.git@master#egg=mlm-0.1",
    "lm_scorer @ https://github.com/ruanchaves/hashformers/raw/master/deps/lm_scorer-0.4.2-py3-none-any.whl"
    ]
 )
