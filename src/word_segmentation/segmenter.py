@@ -96,9 +96,9 @@ class WordSegmenter(object):
         if not return_ranks:
             return segs
         else:
-            segmenter_df = segmenter_run.to_dataframe()
+            segmenter_df = segmenter_run.to_dataframe().reset_index(drop=True)
             if use_reranker:
-                reranker_df = reranker_run.to_dataframe()
+                reranker_df = reranker_run.to_dataframe().reset_index(drop=True)
             else:
                 reranker_df = None
             return {
