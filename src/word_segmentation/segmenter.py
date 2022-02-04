@@ -26,13 +26,8 @@ class WordSegmenter(object):
         segmenter_device = "cuda",
         segmenter_gpu_batch_size = 1,
         reranker_model_name_or_path = "bert-base-uncased",
-        reranker_model_type = "bert",
-        spacy_model = "en_core_web_sm"
+        reranker_model_type = "bert"
     ):
-        if spacy_model:
-            self.nlp = spacy.load(spacy_model, disable=["parser", "tagger", "lemmatizer", "ner"])
-            re_token_match = _get_regex_pattern(self.nlp.Defaults.token_match)
-            self.nlp.tokenizer.token_match = re.compile(f"({re_token_match}|#\w+|\w+-\w+)").match
 
         self.segmenter_model = Beamsearch(
         model_name_or_path=segmenter_model_name_or_path,
@@ -49,129 +44,6 @@ class WordSegmenter(object):
         else:
             self.reranker_model = None
 
-    def replace_word(self, text, word, replacement):
-        doc = self.nlp(text)
-        matches = [
-            (token.idx, len(word)) for token in doc 
-                if token.text[1:].lower()==word 
-                and token.text.startswith("#")
-        ]
-        matches = sorted(matches, key=lambda x:-x[0])
-        for i, l in matches: 
-            text = text[:i] + replacement + text[i+l:]
-        return text
-
-    def process_hashtags(
-        self,
-        text_list,
-        topk=20,
-        steps=13,
-        alpha=0.222,
-        beta=0.111,
-        use_reranker=True,
-        dictionary=None,
-        produce_hashtags=False,
-        replace=True
-    ):
-
-        hashtag_dict = {}
-
-        if dictionary and isinstance(dictionary, dict):
-            hashtag_dict.update(dictionary)
-
-        def filter_hashtags(tokens):
-            return [ 
-                x.text[1:] for x in tokens 
-                    if x.text.startswith("#") 
-            ]
-        
-        def replace_hashtags(tokens, produce_hashtags=False):
-            if produce_hashtags:
-                output = []
-                for x in tokens:
-                    if x.text.startswith("#"):
-                        try:
-                            word = hashtag_dict.get(x.text[1:])
-                            word = "#" + word.replace(" ", "")
-                        except:
-                            word = x.text
-                    else:
-                        word = x.text
-                    output.append(word)           
-            else:
-                output = [ hashtag_dict.get(x.text[1:], x.text) 
-                        if x.text.startswith("#") else x.text for x in tokens ]
-            return output
-
-        hashtags = [ filter_hashtags(self.nlp(x)) for x in text_list ]
-        hashtag_list = list(itertools.chain.from_iterable(hashtags)) #flatten
-
-        hashtag_list = [ x for x in hashtag_list if x not in list(hashtag_dict.keys()) ]
-
-        if hashtag_list:
-            segmentations = self.segment(
-                hashtag_list,
-                topk=topk,
-                steps=steps,
-                alpha=alpha,
-                beta=beta,
-                use_reranker=use_reranker)
-
-            for idx, item in enumerate(segmentations):
-                hashtag_dict.update({
-                    hashtag_list[idx] : segmentations[idx]
-                })
-
-        if replace:
-            output = [ replace_hashtags(
-                self.nlp(x), 
-                produce_hashtags=produce_hashtags) for x in text_list ]
-        else:
-            output = None
-
-        return WordSegmenterResult(output, hashtag_dict)
-
-    def segment_dataset(
-        self,
-        dataset,
-        content_field="content",
-        segmented_content_field="segmented_content",
-        **kwargs
-    ):
-        main_hashtag_dict = {}
-        main_hashtag_dict.update(kwargs["dictionary"])
-        del kwargs["dictionary"]
-
-        def segment_content(
-            batch,
-            **kwargs
-        ):
-            sentences = batch[content_field]
-            segmented_content, hashtag_dict = self.process_hashtags(
-                sentences,
-                dictionary=main_hashtag_dict,
-                replace=bool(segmented_content_field),
-                **kwargs
-            )
-
-            if segmented_content_field:
-                segmented_content = [
-                    " ".join(x) for x in segmented_content
-                ]
-                batch.update({segmented_content_field: segmented_content})
-
-            main_hashtag_dict.update(hashtag_dict)
-            return batch
-        
-        output = dataset.map(
-            segment_content,
-            fn_kwargs=kwargs,
-            batched=True,
-            batch_size=None
-        )
-
-        return WordSegmenterResult(output, main_hashtag_dict)
-
     def segment(
             self,
             word_list,
@@ -179,7 +51,8 @@ class WordSegmenter(object):
             steps=13,
             alpha=0.222,
             beta=0.111,
-            use_reranker=True):
+            use_reranker=True,
+            return_ranks=False):
 
         segmenter_run = self.segmenter_model.run(
             word_list,
@@ -215,4 +88,17 @@ class WordSegmenter(object):
                 gold_array=word_list
             )
 
-        return segs
+        if not return_ranks:
+            return segs
+        else:
+            segmenter_df = segmenter_run.to_dataframe()
+            if use_reranker:
+                reranker_df = reranker_run.to_dataframe()
+            else:
+                reranker_df = None
+            return {
+                "segmenter": segmenter_df,
+                "reranker": reranker_df,
+                "ensemble": ensemble,
+                "segmentations": segs
+            }
