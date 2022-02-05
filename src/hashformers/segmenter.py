@@ -19,7 +19,7 @@ class WordSegmenterOutput:
 @dataclass
 class TweetSegmenterOutput:
     output: List[str]
-    word_segmenter_output: hashformers.WordSegmenterOutput
+    word_segmenter_output: Any
     hashtag_dict: dict
 
 class RegexWordSegmenter(object):
