@@ -206,7 +206,7 @@ class TweetSegmenter(object):
     def create_regex_pattern(self, replacement_dict, flags=0):
         return re.compile("|".join(replacement_dict), flags)
 
-    def replace_hashtags(self, tweets, hashtag_dict, hashtag_token=None, separator=" ", hashtag_character="#"):
+    def replace_hashtags(self, tweets, hashtag_dict, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
 
         if not hashtag_dict:
             return tweets
@@ -214,6 +214,7 @@ class TweetSegmenter(object):
         replacement_dict = {}
 
         for key, value in hashtag_dict.items():
+
             if not key.startswith(hashtag_character):
                 hashtag_key = hashtag_character + key
             else:
@@ -224,8 +225,12 @@ class TweetSegmenter(object):
             else:
                 hashtag_value = value
   
+            if lower:
+                hashtag_value = hashtag_value.lower()
+
             replacement_dict.update(hashtag_key, hashtag_value)
 
+        # Treat edge case: overlapping hashtags
         replacement_dict = \
             map(re.escape, sorted(replacement_dict, key=len, reverse=True))
 
@@ -236,13 +241,13 @@ class TweetSegmenter(object):
         
         return tweets
 
-    def segment_tweets(self, tweets, hashtag_dict=None, **kwargs):
+    def segment_tweets(self, tweets, hashtag_dict = None, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
         
-        tweets = self.replace_hashtags(tweets, hashtag_dict)
+        tweets = self.replace_hashtags(tweets, hashtag_dict, **preprocessing_kwargs)
         
         hashtags = self.extract_hashtags(tweets)
         
-        word_segmenter_output = self.word_segmenter.segment(hashtags, **kwargs)
+        word_segmenter_output = self.word_segmenter.segment(hashtags, **segmenter_kwargs)
         
         segmentations = word_segmenter_output.output
         
