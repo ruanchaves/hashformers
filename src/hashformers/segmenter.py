@@ -136,7 +136,7 @@ class WordSegmenter(object):
         )
         
         ensemble = None
-        if use_reranker:
+        if use_reranker and self.reranker_model:
             reranker_run = self.reranker_model.rerank(segmenter_run)
 
             ensemble = top2_ensemble(
