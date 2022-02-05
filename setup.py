@@ -10,6 +10,7 @@ setup(
    package_dir={'': 'src'},
    install_requires=[
    "mlm-hashformers",
-   "lm-scorer-hashformers"
+   "lm-scorer-hashformers",
+   "twitter-text-python"
    ]
 )
