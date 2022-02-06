@@ -9,6 +9,7 @@ import os
 import torch
 
 test_data_dir = Path(__file__).parent.absolute()
+cuda_is_available = torch.cuda.is_available()
 
 with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f1,\
      open(os.path.join(test_data_dir,"fixtures/word_segmenters.json"), "r") as f2:
@@ -29,7 +30,6 @@ def tweet_segmenter():
     return TweetSegmenter()
 
 @pytest.fixture(scope="module", params=word_segmenter_params, ids=word_segmenter_test_ids)
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="A GPU is not available.")
 def word_segmenter(request):
     
     word_segmenter_class = request.param["class"]
@@ -55,6 +55,7 @@ def word_segmenter(request):
 
     return ws
 
+@pytest.mark.skipif(not cuda_is_available, reason="A GPU is not available.")
 def test_word_segmenter_output_format(word_segmenter):
     
     test_boun_hashtags = [
