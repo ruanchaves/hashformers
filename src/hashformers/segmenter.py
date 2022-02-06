@@ -13,6 +13,7 @@ import typing
 import inspect
 import copy
 import torch
+from math import log10
 
 @dataclass
 class WordSegmenterOutput:
@@ -68,11 +69,18 @@ class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     
-    def find_segment(self, *args, **kwargs):
-        return super().find_segment.__wrapped__(*args, **kwargs)
+    def find_segment(self, text, prev='<S>'):
+        if not text:
+            return 0.0, []
+        candidates = [self.combine((log10(self.condProbWord(first, prev)), first), self.find_segment(rem, first))
+                      for first, rem in self.splits(text)]
+        return max(candidates)
 
     def segment(self, word: str) -> str:
-        return super().segment.__wrapped__(word)
+        if word.islower():
+            return " ".join(self.find_segment(word)[1])
+        else:
+            return self.case_split.sub(r' \1', word).lower()
 
 class RegexWordSegmenter(BaseSegmenter):
 

@@ -13,8 +13,15 @@ with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f
     test_boun_gold = f1.read().strip().split("\n")
     test_boun_hashtags = [ x.replace(" ", "") for x in test_boun_gold]
     word_segmenter_params = json.load(f2)
+    word_segmenter_test_ids = []
+    for row in word_segmenter_params:
+        class_name = row["class"]
+        segmenter = row["init_kwargs"].get("segmenter_model_name_or_path", "O")
+        reranker = row["init_kwargs"].get("reranker_model_name_or_path", "O")
+        id_string = "{0}_{1}_{2}".format(class_name, segmenter, reranker)
+        word_segmenter_test_ids.append(id_string)
 
-@pytest.fixture(scope="module", params=word_segmenter_params)
+@pytest.fixture(scope="module", params=word_segmenter_params, ids=word_segmenter_test_ids)
 def word_segmenter(request):
     
     word_segmenter_class = request.param["class"]
