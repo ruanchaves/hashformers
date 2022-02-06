@@ -29,7 +29,7 @@ def word_segmenter(request):
             return super().__init__(**kwargs)
         
         def predict(self, *args):
-            super().predict(*args, **word_segmenter_predict_kwargs)
+            return super().predict(*args, **word_segmenter_predict_kwargs)
 
     WordSegmenterClassWrapper.__name__ = request.param["class"] + "ClassWrapper"
 
