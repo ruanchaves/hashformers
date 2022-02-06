@@ -17,9 +17,9 @@ import torch
 @dataclass
 class WordSegmenterOutput:
     output: List[str]
-    segmenter_rank: Union[pd.DataFrame, None]
-    reranker_rank: Union[pd.DataFrame, None]
-    ensemble_rank: Union[pd.DataFrame, None]
+    segmenter_rank: Union[pd.DataFrame, None] = None
+    reranker_rank: Union[pd.DataFrame, None] = None
+    ensemble_rank: Union[pd.DataFrame, None] = None
 
 @dataclass
 class TweetSegmenterOutput:
@@ -50,7 +50,7 @@ class BaseSegmenter(object):
         first_argument_type = typing.get_type_hints(self.segment)[first_argument]
         a = type(first_argument_type) == type(str)
         b = type(input) == type(str)
-        output = WordSegmenterOutput()
+        output = None
         if a and b:
             output = self.segment(input, *args, **kwargs)
         elif not a and not b:
