@@ -39,11 +39,9 @@ def word_segmenter(request):
 
     return ws
 
-def test_word_segmenter_output_format():
+def test_word_segmenter_output_format(word_segmenter):
     
-    model = word_segmenter()
-    
-    predictions = model.predict(test_boun_hashtags)
+    predictions = word_segmenter.predict(test_boun_hashtags)
 
     predictions_chars = [ x.replace(" ", "") for x in predictions ]
     
