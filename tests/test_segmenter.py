@@ -42,7 +42,7 @@ def word_segmenter(request):
 
 def test_word_segmenter_output_format(word_segmenter):
     
-    predictions = word_segmenter.predict(test_boun_hashtags)
+    predictions = word_segmenter.predict(test_boun_hashtags).output
 
     predictions_chars = [ x.replace(" ", "") for x in predictions ]
     
