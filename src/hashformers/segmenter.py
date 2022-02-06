@@ -312,7 +312,7 @@ class TweetSegmenter(BaseSegmenter):
         
         return tweet
 
-    def segment(self, tweets, regex_flag=0, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
+    def segment(self, tweets: str, regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
 
         hashtags = self.extract_hashtags(tweets)
         
