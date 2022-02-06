@@ -1,5 +1,13 @@
 # Evaluation
 
+We provide a detailed evaluation of the accuracy and speed of the `hashformers` framework in comparison with alternative libraries.
+
+Although models based on n-grams such as `ekphrasis` are orders of magnitude faster than `hashformers`, they are remarkably unstable across different datasets. 
+
+Research papers on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods. So it is possible that the best speed-accuracy trade-off may lie in building [ranking cascades](https://arxiv.org/abs/2010.06467) ( a.k.a. "telescoping" ) where `hashformers` is used as a fallback for when less time-consuming methods score below a certain confidence threshold.
+
+## Accuracy
+
 <h1 align="center">
   <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/barplot_evaluation.png" width="512" title="hashformers">
 </h1>
@@ -35,3 +43,29 @@ A script to reproduce the evaluation of ekphrasis is available on [scripts/evalu
 | average (all) | HashtagMaster |     58.35  |
 |               | ekphrasis     |     41.65  |
 |               |**hashformers**|   **68.06**|
+
+## Speed
+
+| model         | hashtags/second | accuracy  | topk | layers|
+|:--------------|:----------------|----------:|-----:|------:|
+| ekphrasis     |    4405.00      |   44.74   |  -   |   -   |
+| gpt2-large    |      12.04      |   63.86   |  2   | first |
+| distilgpt2    |      29.32      |   64.56   |  2   | first |
+|**distilgpt2** |    **15.00**    | **80.48** |**2** |**all**|
+| gpt2          |      11.36      |    -      |  2   |  all  |
+| gpt2          |      3.48       |    -      |  20  |  all  |
+| gpt2 + bert   |      1.38       |   83.68   |  20  |  all  |
+
+In this table we evaluate hashformers under different settings on the Dev-BOUN dataset and compare it with ekphrasis. As ekphrasis relies on n-grams, it is a few orders of magnitude faster than hashformers.  
+
+All experiments were performed on Google Colab while connected to a Tesla T4 GPU with 15GB of RAM. We highlight `distilgpt2` at `topk = 2`, which provides the best speed-accuracy trade-off.
+
+* **model**: The name of the model. We evaluate ekphrasis under the default settings, and use the reranker only for the SOTA experiment at the bottom row.
+
+* **hashtags/second**: How many hashtags the model can segment per second. All experiments on hashformers had the `batch_size` parameter adjusted to take up close to 100% of GPU RAM. A sidenote: even at 100% of GPU memory usage, we get about 60% of GPU utilization. So you may get better results by using GPUs with more memory than 16GB.
+
+* **accuracy**: Accuracy on the Dev-BOUN dataset. We don't evaluate the accuracy of `gpt2`, but we know [from the literature](https://arxiv.org/abs/2112.03213) that it is expected to be between `distilgpt2` (at 80%) and `gpt2 + bert` (the SOTA, at 83%).
+
+* **topk**: the `topk` parameter of the Beamsearch algorithm ( passed as the `topk` argument to the `WordSegmenter.segment` method). The `steps` Beamsearch parameter was fixed at a default value of 13 for all experiments with hashformers, as it doesn't have a significant impact on performance as `topk`.
+
+* **layers**: How many Transformer layers were utilized for language modeling: either all layers or just the bottom layer.
