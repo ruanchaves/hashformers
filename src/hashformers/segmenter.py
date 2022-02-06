@@ -163,43 +163,27 @@ class WordSegmenter(BaseSegmenter):
             steps: int = 13,
             alpha: float = 0.222,
             beta: float = 0.111,
-            use_reranker: bool = True,
+            use_reranker: bool = False,
             return_ranks: bool = False) -> Any :
         """Segment a list of strings.
 
-        Args:
-            word_list (List[str]): A list of strings.
-            topk (int, optional): 
-                top-k parameter for the Beamsearch algorithm. 
-                A lower top-k value will speed up the algorithm. 
-                However, this will decrease the amount of candidate segmentations in a rank. 
-                Defaults to 20.
-            steps (int, optional): 
-                steps parameter for the Beamsearch algorithm. 
-                A lower amount of steps will speed up the algorithm. 
-                However, the algorithm will never detect a number of words larger than amount of steps. 
-                Defaults to 13. 
-            alpha (float, optional): 
-                alpha parameter for the top-2 ensemble. 
-                It controls the weight given to the segmenter candidates. 
-                Reasonable values range from 0 to 1. 
-                Defaults to 0.222.
-            beta (float, optional): 
-                beta parameter for the top-2 ensemble. 
-                It controls the weight given to the reranker candidates. 
-                Reasonable values range from 0 to 1. 
-                Defaults to 0.111.
-            use_reranker (bool, optional): 
-                Whether or not to run the reranker. 
-                Defaults to True.
-            return_ranks (bool, optional): 
-                Return not just the segmented hashtags but also the a dictionary of the ranks. 
-                Defaults to False.
-
-        Returns:
-            Any: A list of segmented words if return_ranks == False. A dictionary of the ranks and the segmented words if return_ranks == True.
+        :param word_list: A list of strings.
+        :type word_list: List[str]
+        :param topk: top-k parameter for the Beamsearch algorithm. A lower top-k value will speed up the algorithm.  However, this will decrease the amount of candidate segmentations in a rank, defaults to 20
+        :type topk: int, optional
+        :param steps: steps parameter for the Beamsearch algorithm. A lower amount of steps will speed up the algorithm. However, the algorithm will never detect a number of words larger than amount of steps, defaults to 13
+        :type steps: int, optional
+        :param alpha: alpha parameter for the top-2 ensemble. It controls the weight given to the segmenter candidates. Reasonable values range from 0 to 1, defaults to 0.222
+        :type alpha: float, optional
+        :param beta: beta parameter for the top-2 ensemble. It controls the weight given to the reranker candidates. Reasonable values range from 0 to 1, defaults to 0.111
+        :type beta: float, optional
+        :param use_reranker: Whether or not to run the reranker, defaults to False
+        :type use_reranker: bool, optional
+        :param return_ranks: Return not just the segmented hashtags but also the a dictionary of the ranks, defaults to False
+        :type return_ranks: bool, optional
+        :return: A list of segmented words if return_ranks == False. A dictionary of the ranks and the segmented words if return_ranks == True.
+        :rtype: Any
         """
-
         segmenter_run = self.segmenter_model.run(
             word_list,
             topk=topk,
