@@ -2,11 +2,13 @@ import hashformers
 import pytest
 import json
 from hashformers import prune_segmenter_layers
-
+from pathlib import Path
 import hashformers
+import os
+test_data_dir = Path(__file__).parent.absolute()
 
-with open("fixtures/test_boun_sample.txt", "r") as f1,\
-    open("fixtures/word_Segmenters.json") as f2:
+with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f1,\
+     open(os.path.join(test_data_dir,"fixtures/word_segmenters.json"), "r") as f2:
 
     test_boun_gold = f1.read().strip().split("\n")
     test_boun_hashtags = [ x.replace(" ", "") for x in test_boun_gold]
