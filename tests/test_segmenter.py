@@ -1,5 +1,5 @@
 import hashformers
-from hashformers.segmenter import TweetSegmenter
+from hashformers.segmenter import TweetSegmenter, TwitterTextMatcher
 import pytest
 import json
 from hashformers import prune_segmenter_layers
@@ -69,6 +69,11 @@ def test_word_segmenter_output_format(word_segmenter):
     predictions_chars = [ x.replace(" ", "") for x in predictions ]
     
     assert all([x == y for x,y in zip(test_boun_hashtags, predictions_chars)])
+
+def test_matcher():
+    matcher = TwitterTextMatcher()
+    result = matcher(["esto es #UnaGenialidad"])
+    assert result == "UnaGenialidad"
 
 def test_tweet_segmenter_output_format(tweet_segmenter):
 
