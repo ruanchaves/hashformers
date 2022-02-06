@@ -50,14 +50,18 @@ class BaseSegmenter(object):
         first_argument_type = typing.get_type_hints(self.segment)[first_argument]
         a = type(first_argument_type) == type(str)
         b = type(input) == type(str)
+        output = WordSegmenterOutput()
         if a and b:
-            return self.segment(input, *args, **kwargs)
+            output = self.segment(input, *args, **kwargs)
         elif not a and not b:
-            return self.segment(input, *args, **kwargs)
+            output = self.segment(input, *args, **kwargs)
         elif a and not b:
-            return [ self.segment(x, *args, **kwargs) for x in input ]
+            output = [ self.segment(x, *args, **kwargs) for x in input ]
         elif not a and b:
-            return self.segment([input], *args, **kwargs)[0]
+            output = self.segment([input], *args, **kwargs)[0]
+        if type(output) != type(WordSegmenterOutput):
+            output = WordSegmenterOutput(output=output)
+        return output
 
 class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
 
@@ -86,12 +90,7 @@ class RegexWordSegmenter(BaseSegmenter):
         for rule in self.regex_rules:
             for idx, word in enumerate(word_list):
                 word_list[idx] = self.segment_word(rule, word)
-        return WordSegmenterOutput(
-            segmenter_rank=None,
-            reranker_rank=None,
-            ensemble_rank=None,
-            output=word_list            
-        )
+        return word_list
 
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
