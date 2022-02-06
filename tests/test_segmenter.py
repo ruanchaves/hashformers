@@ -1,10 +1,13 @@
 import hashformers
+from hashformers.segmenter import TweetSegmenter
 import pytest
 import json
 from hashformers import prune_segmenter_layers
 from pathlib import Path
 import hashformers
 import os
+import torch
+
 test_data_dir = Path(__file__).parent.absolute()
 
 with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f1,\
@@ -21,7 +24,12 @@ with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f
         id_string = "{0}_{1}_{2}".format(class_name, segmenter, reranker)
         word_segmenter_test_ids.append(id_string)
 
+@pytest.fixture(scope="module")
+def tweet_segmenter():
+    return TweetSegmenter()
+
 @pytest.fixture(scope="module", params=word_segmenter_params, ids=word_segmenter_test_ids)
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="A GPU is not available.")
 def word_segmenter(request):
     
     word_segmenter_class = request.param["class"]
@@ -49,8 +57,32 @@ def word_segmenter(request):
 
 def test_word_segmenter_output_format(word_segmenter):
     
+    test_boun_hashtags = [
+        "minecraf",
+        "ourmomentfragrance",
+        "waybackwhen"
+    ]
+
     predictions = word_segmenter.predict(test_boun_hashtags).output
 
     predictions_chars = [ x.replace(" ", "") for x in predictions ]
     
     assert all([x == y for x,y in zip(test_boun_hashtags, predictions_chars)])
+
+def test_tweet_segmenter_output_format(tweet_segmenter):
+
+    original_tweets = [
+        "esto es #UnaGenialidad"
+    ]
+
+    expected_tweets = [
+        "esto es Una Genialidad"
+    ]
+
+    output_tweets = tweet_segmenter.predict(original_tweets).output
+
+    assert len(original_tweets) == len(expected_tweets) == len(output_tweets)
+
+    for idx, tweet in enumerate(original_tweets):
+        assert expected_tweets[idx] == output_tweets[idx], \
+            "{0} != {1}".format(expected_tweets[idx], output_tweets[idx])
