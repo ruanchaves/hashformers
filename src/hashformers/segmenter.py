@@ -270,9 +270,6 @@ class TweetSegmenter(BaseSegmenter):
     def extract_hashtags(self, tweets):
         return self.matcher(tweets)
 
-    def create_regex_pattern(self, replacement_dict, flags=0):
-        return re.compile("|".join(replacement_dict), flags)
-
     def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
 
         hashtag_buffer = {
@@ -298,10 +295,6 @@ class TweetSegmenter(BaseSegmenter):
 
             replacement_dict.update(hashtag_key, hashtag_value)
 
-        # Treat edge case: overlapping hashtags
-        replacement_dict = \
-            map(re.escape, sorted(replacement_dict, key=len, reverse=True))
-
         return replacement_dict
 
     def replace_hashtags(self, tweet, regex_pattern, replacement_dict):
@@ -323,8 +316,12 @@ class TweetSegmenter(BaseSegmenter):
             tweet_dict = [ hashtag_set_index[hashtag] for hashtag in tweet_hashtags]
             tweet_dict = [ replacement_pairs[index] for index in tweet_dict ]
             tweet_dict = dict(tweet_dict)
+
+            # Treats edge case: overlapping hashtags
+            tweet_map = \
+                map(re.escape, sorted(tweet_dict, key=len, reverse=True))
             
-            regex_pattern = self.create_regex_pattern(tweet_dict, flag=flag)
+            regex_pattern = re.compile("|".join(tweet_map), flag)
             tweet = self.replace_hashtags(tweets[idx], regex_pattern, tweet_dict)
             yield tweet
 
