@@ -13,6 +13,6 @@ setup(
    "lm-scorer-hashformers",
    "twitter-text-python",
    "ekphrasis",
-   "methodtools"
+   "pandas",
    ]
 )

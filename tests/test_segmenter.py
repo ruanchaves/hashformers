@@ -1,5 +1,6 @@
+import dataclasses
 import hashformers
-from hashformers.segmenter import TweetSegmenter, TwitterTextMatcher
+from hashformers.segmenter import RegexWordSegmenter, TweetSegmenter, TwitterTextMatcher, WordSegmenterOutput
 import pytest
 import json
 from hashformers import prune_segmenter_layers
@@ -73,7 +74,33 @@ def test_word_segmenter_output_format(word_segmenter):
 def test_matcher():
     matcher = TwitterTextMatcher()
     result = matcher(["esto es #UnaGenialidad"])
-    assert result == "UnaGenialidad"
+    assert result == [["UnaGenialidad"]]
+
+def test_regex_word_segmenter():
+    ws = RegexWordSegmenter()
+    test_case = ["UnaGenialidad"]
+    expected_output=["Una Genialidad"]
+    prediction = ws.predict(test_case) 
+    error_message = "{0} != {1}".format(prediction, str(test_case))
+    assert prediction.output == expected_output, error_message
+
+def test_hashtag_container(tweet_segmenter):
+    original_tweets = [
+        "esto es #UnaGenialidad"
+    ]
+    hashtag_container, word_segmenter_output = tweet_segmenter.build_hashtag_container(original_tweets)
+    assert hashtag_container.hashtags == [['UnaGenialidad']]
+    assert hashtag_container.hashtag_set == ['UnaGenialidad']
+    assert hashtag_container.replacement_dict == {'#UnaGenialidad': 'Una Genialidad'}
+    assert isinstance(word_segmenter_output, hashformers.segmenter.WordSegmenterOutput)
+
+def test_tweet_segmenter_generator(tweet_segmenter):
+    original_tweets = [
+        "esto es #UnaGenialidad"
+    ]
+    hashtag_container, word_segmenter_output = tweet_segmenter.build_hashtag_container(original_tweets)
+    for tweet in tweet_segmenter.segmented_tweet_generator(original_tweets, *dataclasses.astuple(hashtag_container), flag=0):
+        assert tweet == "esto es Una Genialidad"
 
 def test_tweet_segmenter_output_format(tweet_segmenter):
 
@@ -85,7 +112,11 @@ def test_tweet_segmenter_output_format(tweet_segmenter):
         "esto es Una Genialidad"
     ]
 
-    output_tweets = tweet_segmenter.predict(original_tweets).output
+    output_tweets = tweet_segmenter.predict(original_tweets)
+
+    output_tweets = output_tweets.output
+
+    assert type(output_tweets) == type([])
 
     assert len(original_tweets) == len(expected_tweets) == len(output_tweets)
 

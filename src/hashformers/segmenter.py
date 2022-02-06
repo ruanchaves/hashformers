@@ -4,17 +4,16 @@ from hashformers.beamsearch.reranker import Reranker
 from hashformers.beamsearch.data_structures import enforce_prob_dict
 from hashformers.ensemble.top2_fusion import top2_ensemble
 from typing import List, Union, Any
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 import pandas as pd
 from ttp import ttp
 from ekphrasis.classes.segmenter import Segmenter as EkphrasisSegmenter
 import re
-import typing
-import inspect
 import copy
 import torch
 from math import log10
 from functools import reduce
+import dataclasses
 
 @dataclass
 class WordSegmenterOutput:
@@ -24,9 +23,31 @@ class WordSegmenterOutput:
     ensemble_rank: Union[pd.DataFrame, None] = None
 
 @dataclass
+class HashtagContainer:
+    hashtags: List[List[str]]
+    hashtag_set: List[str]
+    replacement_dict: dict
+
+@dataclass
 class TweetSegmenterOutput:
     output: List[str]
     word_segmenter_output: Any
+
+def coerce_segmenter_objects(method):
+    def wrapper(inputs, *args, **kwargs):
+        if isinstance(inputs, str):
+            output = method([inputs], *args, **kwargs)
+        else:
+            output = method(inputs, *args, **kwargs)
+        for allowed_type in [
+            hashformers.segmenter.WordSegmenterOutput,
+            hashformers.segmenter.TweetSegmenterOutput
+        ]:
+            if isinstance(output, allowed_type):
+                return output
+        else:
+            return WordSegmenterOutput(output=output)
+    return wrapper
 
 def prune_segmenter_layers(ws, layer_list=[0]):
     ws.segmenter_model.model.scorer.model = \
@@ -47,31 +68,9 @@ def deleteEncodingLayers(model, layer_list=[0]):
 
 class BaseSegmenter(object):
 
-    def predict(self, input, *args, **kwargs):
-        first_argument = inspect.getfullargspec(self.segment).args[1]
-        first_argument_type = typing.get_type_hints(self.segment)[first_argument]
-        a = type(first_argument_type) == type(str)
-        b = type(input) == type(str)
-        output = None
-        if a and b:
-            output = self.segment(input, *args, **kwargs)
-        elif not a and not b:
-            output = self.segment(input, *args, **kwargs)
-        elif a and not b:
-            output = [ self.segment(x, *args, **kwargs) for x in input ]
-        elif not a and b:
-            output = self.segment([input], *args, **kwargs)[0]
-
-        if type(output) == type(WordSegmenterOutput):
-            return output
-
-        if type(output) == type(TweetSegmenterOutput):
-            return output
-
-        if type(output) != type(WordSegmenterOutput):
-            output = WordSegmenterOutput(output=output)
-        
-        return output
+    @coerce_segmenter_objects
+    def predict(self, *args, **kwargs):
+        return self.segment(*args, **kwargs)
 
 class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
 
@@ -85,11 +84,14 @@ class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
                       for first, rem in self.splits(text)]
         return max(candidates)
 
-    def segment(self, word: str) -> str:
+    def segment_word(self, word) -> str:
         if word.islower():
             return " ".join(self.find_segment(word)[1])
         else:
             return self.case_split.sub(r' \1', word).lower()
+
+    def segment(self, inputs) -> List[str]:
+        return [ self.segment_word(word) for word in inputs ]
 
 class RegexWordSegmenter(BaseSegmenter):
 
@@ -103,11 +105,13 @@ class RegexWordSegmenter(BaseSegmenter):
     def segment_word(self, rule, word):
         return rule.sub(r' \1', word).strip()
 
-    def segment(self, word_list: List[str]):
+    def segmentation_generator(self, word_list):
         for rule in self.regex_rules:
             for idx, word in enumerate(word_list):
-                word_list[idx] = self.segment_word(rule, word)
-        return word_list
+                yield self.segment_word(rule, word)
+
+    def segment(self, inputs: List[str]):
+        return list(self.segmentation_generator(inputs))
 
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
@@ -293,7 +297,7 @@ class TweetSegmenter(BaseSegmenter):
             if lower:
                 hashtag_value = hashtag_value.lower()
 
-            replacement_dict.update(hashtag_key, hashtag_value)
+            replacement_dict.update({hashtag_key : hashtag_value})
 
         return replacement_dict
 
@@ -325,9 +329,8 @@ class TweetSegmenter(BaseSegmenter):
             tweet = self.replace_hashtags(tweets[idx], regex_pattern, tweet_dict)
             yield tweet
 
-
-    def segment(self, tweets: str, regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
-
+    def build_hashtag_container(self, tweets: str, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
+        
         hashtags = self.extract_hashtags(tweets)
 
         hashtag_set = list(set(reduce(lambda x, y: x + y, hashtags)))
@@ -338,8 +341,12 @@ class TweetSegmenter(BaseSegmenter):
 
         replacement_dict = self.compile_dict(hashtag_set, segmentations, **preprocessing_kwargs)
 
-        output = [ tweet for tweet in \
-            self.segmented_tweet_generator(tweets, hashtags, hashtag_set, replacement_dict, flag=regex_flag)]
+        return HashtagContainer(hashtags, hashtag_set, replacement_dict), word_segmenter_output
+  
+    def segment(self, tweets: List[str], regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
+
+        hashtag_container, word_segmenter_output = self.build_hashtag_container(tweets, preprocessing_kwargs, segmenter_kwargs)
+        output = list(self.segmented_tweet_generator(tweets, *dataclasses.astuple(hashtag_container), flag=regex_flag))
 
         return TweetSegmenterOutput(
             word_segmenter_output = word_segmenter_output,
