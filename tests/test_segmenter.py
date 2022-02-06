@@ -1,23 +1,21 @@
-import dataclasses
-import hashformers
-from hashformers.segmenter import RegexWordSegmenter, TweetSegmenter, TwitterTextMatcher, WordSegmenterOutput
 import pytest
+
+import dataclasses
 import json
-from hashformers import prune_segmenter_layers
-from pathlib import Path
-import hashformers
 import os
+from pathlib import Path
+
+import hashformers
 import torch
+from hashformers import prune_segmenter_layers
+from hashformers.segmenter import (RegexWordSegmenter, TweetSegmenter,
+                                   TwitterTextMatcher)
 
 test_data_dir = Path(__file__).parent.absolute()
 cuda_is_available = torch.cuda.is_available()
 
-with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f1,\
-     open(os.path.join(test_data_dir,"fixtures/word_segmenters.json"), "r") as f2:
-
-    test_boun_gold = f1.read().strip().split("\n")
-    test_boun_hashtags = [ x.replace(" ", "") for x in test_boun_gold]
-    word_segmenter_params = json.load(f2)
+with open(os.path.join(test_data_dir,"fixtures/word_segmenters.json"), "r") as f:
+    word_segmenter_params = json.load(f)
     word_segmenter_test_ids = []
     for row in word_segmenter_params:
         class_name = row["class"]
