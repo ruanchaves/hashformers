@@ -60,8 +60,16 @@ class BaseSegmenter(object):
             output = [ self.segment(x, *args, **kwargs) for x in input ]
         elif not a and b:
             output = self.segment([input], *args, **kwargs)[0]
+
+        if type(output) == type(WordSegmenterOutput):
+            return output
+
+        if type(output) == type(TweetSegmenterOutput):
+            return output
+
         if type(output) != type(WordSegmenterOutput):
             output = WordSegmenterOutput(output=output)
+        
         return output
 
 class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
@@ -304,7 +312,7 @@ class TweetSegmenter(BaseSegmenter):
         
         return tweet
 
-    def segment_tweets(self, tweets, regex_flag=0, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
+    def segment(self, tweets, regex_flag=0, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
 
         hashtags = self.extract_hashtags(tweets)
         
