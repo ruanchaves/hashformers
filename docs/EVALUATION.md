@@ -62,7 +62,7 @@ All experiments were performed on Google Colab while connected to a Tesla T4 GPU
 
 * **model**: The name of the model. We evaluate ekphrasis under the default settings, and use the reranker only for the SOTA experiment at the bottom row.
 
-* **hashtags/second**: How many hashtags the model can segment per second. All experiments on hashformers had the `batch_size` parameter adjusted to take up close to 100% of GPU RAM. A sidenote: even at 100% of GPU memory usage, we get about 60% of GPU utilization. So you may get better results by adding more memory.
+* **hashtags/second**: How many hashtags the model can segment per second. All experiments on hashformers had the `batch_size` parameter adjusted to take up close to 100% of GPU RAM. A sidenote: even at 100% of GPU memory usage, we get about 60% of GPU utilization. So you may get better results by using GPUs with more memory than 16GB.
 
 * **accuracy**: Accuracy on the Dev-BOUN dataset. We don't evaluate the accuracy of `gpt2`, but we know [from the literature](https://arxiv.org/abs/2112.03213) that it is expected to be between `distilgpt2` (at 80%) and `gpt2 + bert` (the SOTA, at 83%).
 

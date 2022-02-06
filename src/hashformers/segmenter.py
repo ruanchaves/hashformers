@@ -7,7 +7,12 @@ from typing import List, Union, Any
 from dataclasses import dataclass
 import pandas as pd
 from ttp import ttp
+from ekphrasis.classes.segmenter import Segmenter as EkphrasisSegmenter
 import re
+import typing
+import inspect
+import copy
+import torch
 
 @dataclass
 class WordSegmenterOutput:
@@ -20,9 +25,52 @@ class WordSegmenterOutput:
 class TweetSegmenterOutput:
     output: List[str]
     word_segmenter_output: Any
-    hashtag_dict: dict
 
-class RegexWordSegmenter(object):
+def prune_segmenter_layers(ws, layer_list=[0]):
+    ws.segmenter_model.model.scorer.model = \
+        deleteEncodingLayers(ws.segmenter_model.model.scorer.model, layer_list=layer_list)
+    return ws
+
+def deleteEncodingLayers(model, layer_list=[0]):
+    oldModuleList = model.transformer.h
+    newModuleList = torch.nn.ModuleList()
+
+    for index in layer_list:
+        newModuleList.append(oldModuleList[index])
+
+    copyOfModel = copy.deepcopy(model)
+    copyOfModel.transformer.h = newModuleList
+
+    return copyOfModel
+
+class BaseSegmenter(object):
+
+    def predict(self, input, *args, **kwargs):
+        first_argument = inspect.getfullargspec(self.segment).args[1]
+        first_argument_type = typing.get_type_hints(self.segment)[first_argument]
+        a = type(first_argument_type) == type(str)
+        b = type(input) == type(str)
+        if a and b:
+            return self.segment(input, *args, **kwargs)
+        elif not a and not b:
+            return self.segment(input, *args, **kwargs)
+        elif a and not b:
+            return [ self.segment(x, *args, **kwargs) for x in input ]
+        elif not a and b:
+            return self.segment([input], *args, **kwargs)[0]
+
+class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def find_segment(self, *args, **kwargs):
+        return super().find_segment.__wrapped__(*args, **kwargs)
+
+    def segment(self, word: str) -> str:
+        return super().segment.__wrapped__(word)
+
+class RegexWordSegmenter(BaseSegmenter):
 
     def __init__(self,regex_rules=None):
         if not regex_rules:
@@ -31,10 +79,13 @@ class RegexWordSegmenter(object):
             re.compile(x) for x in regex_rules
         ]
 
-    def segment(self, word_list):
+    def segment_word(self, rule, word):
+        return rule.sub(r' \1', word).strip()
+
+    def segment(self, word_list: List[str]):
         for rule in self.regex_rules:
             for idx, word in enumerate(word_list):
-                word_list[idx] = rule.sub(r' \1', word).strip()
+                word_list[idx] = self.segment_word(rule, word)
         return WordSegmenterOutput(
             segmenter_rank=None,
             reranker_rank=None,
@@ -42,7 +93,7 @@ class RegexWordSegmenter(object):
             output=word_list            
         )
 
-class WordSegmenter(object):
+class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
     """
     def __init__(
@@ -185,8 +236,8 @@ class TwitterTextMatcher(object):
     
     def __call__(self, tweets):
         return [ self.parser.parse(x).tags for x in tweets ]
-
-class TweetSegmenter(object):
+    
+class TweetSegmenter(BaseSegmenter):
 
     def __init__(self, matcher=None, word_segmenter=None):
 
@@ -206,14 +257,15 @@ class TweetSegmenter(object):
     def create_regex_pattern(self, replacement_dict, flags=0):
         return re.compile("|".join(replacement_dict), flags)
 
-    def replace_hashtags(self, tweets, hashtag_dict, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
+    def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
 
-        if not hashtag_dict:
-            return tweets
+        hashtag_buffer = {
+            k:v for k,v in zip(hashtags, segmentations)
+        }
 
         replacement_dict = {}
 
-        for key, value in hashtag_dict.items():
+        for key, value in hashtag_buffer.items():
 
             if not key.startswith(hashtag_character):
                 hashtag_key = hashtag_character + key
@@ -224,7 +276,7 @@ class TweetSegmenter(object):
                 hashtag_value = hashtag_token + separator + value
             else:
                 hashtag_value = value
-  
+
             if lower:
                 hashtag_value = hashtag_value.lower()
 
@@ -234,37 +286,32 @@ class TweetSegmenter(object):
         replacement_dict = \
             map(re.escape, sorted(replacement_dict, key=len, reverse=True))
 
-        pattern = self.create_regex_pattern(replacement_dict)
+        return replacement_dict
 
-        for idx, tweet in enumerate(tweets):
-            tweets[idx] = pattern.sub(lambda m: replacement_dict[m.group(0)], tweet)
-        
-        return tweets
+    def replace_hashtags(self, tweet, regex_pattern, replacement_dict):
 
-    def segment_tweets(self, tweets, hashtag_dict = None, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
+        if not replacement_dict:
+            return tweet
+
+        tweet = regex_pattern.sub(lambda m: replacement_dict[m.group(0)], tweet)
         
-        tweets = self.replace_hashtags(tweets, hashtag_dict, **preprocessing_kwargs)
-        
+        return tweet
+
+    def segment_tweets(self, tweets, regex_flag=0, preprocessing_kwargs = {}, segmenter_kwargs = {} ):
+
         hashtags = self.extract_hashtags(tweets)
         
-        word_segmenter_output = self.word_segmenter.segment(hashtags, **segmenter_kwargs)
-        
-        segmentations = word_segmenter_output.output
-        
-        hashtag_dict.update({
-            k:v for k,v in zip(hashtags, segmentations)
-        })
+        word_segmenter_output = self.word_segmenter.predict(hashtags, **segmenter_kwargs)
 
-        tweets = self.replace_hashtags(tweets, hashtag_dict)
+        segmentations = word_segmenter_output.output
+
+        replacement_dict = self.compile_dict(hashtags, segmentations, **preprocessing_kwargs)
+
+        regex_pattern = self.create_regex_pattern(replacement_dict, flag=regex_flag)
+
+        tweets = [ self.replace_hashtags(tweet, regex_pattern, replacement_dict) for tweet in tweets]
         
         return TweetSegmenterOutput(
             word_segmenter_output = word_segmenter_output,
-            hashtag_dict = hashtag_dict,
             output = tweets
         )
-    
-    def predict(self, inputs, **kwargs):
-        if isinstance(inputs, str):
-            return self.segment_tweets([inputs], **kwargs)[0]
-        elif isinstance(inputs, list):
-            return self.segment_tweets(inputs, **kwargs)

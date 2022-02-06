@@ -11,6 +11,8 @@ setup(
    install_requires=[
    "mlm-hashformers",
    "lm-scorer-hashformers",
-   "twitter-text-python"
+   "twitter-text-python",
+   "ekphrasis",
+   "methodtools"
    ]
 )
