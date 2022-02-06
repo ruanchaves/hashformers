@@ -14,7 +14,6 @@ with open(os.path.join(test_data_dir,"fixtures/test_boun_sample.txt"), "r") as f
     test_boun_hashtags = [ x.replace(" ", "") for x in test_boun_gold]
     word_segmenter_params = json.load(f2)
 
-
 @pytest.fixture(scope="module", params=word_segmenter_params)
 def word_segmenter(request):
     
@@ -24,7 +23,7 @@ def word_segmenter(request):
 
     WordSegmenterClass = getattr(hashformers, word_segmenter_class)
 
-    class PartialWordSegmenterClass(WordSegmenterClass):
+    class WordSegmenterClassWrapper(WordSegmenterClass):
 
         def __init__(self, **kwargs):
             return super().__init__(**kwargs)
@@ -32,7 +31,9 @@ def word_segmenter(request):
         def predict(self, *args):
             super().predict(*args, **word_segmenter_predict_kwargs)
 
-    ws = PartialWordSegmenterClass(**word_segmenter_init_kwargs)
+    WordSegmenterClassWrapper.__name__ = request.param["class"] + "ClassWrapper"
+
+    ws = WordSegmenterClassWrapper(**word_segmenter_init_kwargs)
     
     if request.param.get("prune", False):
         ws = prune_segmenter_layers(ws, layer_list=[0])
