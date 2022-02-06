@@ -4,7 +4,7 @@ from hashformers.beamsearch.reranker import Reranker
 from hashformers.beamsearch.data_structures import enforce_prob_dict
 from hashformers.ensemble.top2_fusion import top2_ensemble
 from typing import List, Union, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import pandas as pd
 from ttp import ttp
 from ekphrasis.classes.segmenter import Segmenter as EkphrasisSegmenter
@@ -14,6 +14,7 @@ import inspect
 import copy
 import torch
 from math import log10
+from functools import reduce
 
 @dataclass
 class WordSegmenterOutput:
@@ -312,21 +313,38 @@ class TweetSegmenter(BaseSegmenter):
         
         return tweet
 
+    def segmented_tweet_generator(self, tweets, hashtags, hashtag_set, replacement_dict, flag=0):
+
+        hashtag_set_index = { value:idx for idx, value in enumerate(hashtag_set)}
+        replacement_pairs = [ (key, value) for key, value in replacement_dict.items() ]
+
+        for idx, tweet_hashtags in enumerate(hashtags):
+            
+            tweet_dict = [ hashtag_set_index[hashtag] for hashtag in tweet_hashtags]
+            tweet_dict = [ replacement_pairs[index] for index in tweet_dict ]
+            tweet_dict = dict(tweet_dict)
+            
+            regex_pattern = self.create_regex_pattern(tweet_dict, flag=flag)
+            tweet = self.replace_hashtags(tweets[idx], regex_pattern, tweet_dict)
+            yield tweet
+
+
     def segment(self, tweets: str, regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
 
         hashtags = self.extract_hashtags(tweets)
+
+        hashtag_set = list(set(reduce(lambda x, y: x + y, hashtags)))
         
-        word_segmenter_output = self.word_segmenter.predict(hashtags, **segmenter_kwargs)
+        word_segmenter_output = self.word_segmenter.predict(hashtag_set, **segmenter_kwargs)
 
         segmentations = word_segmenter_output.output
 
-        replacement_dict = self.compile_dict(hashtags, segmentations, **preprocessing_kwargs)
+        replacement_dict = self.compile_dict(hashtag_set, segmentations, **preprocessing_kwargs)
 
-        regex_pattern = self.create_regex_pattern(replacement_dict, flag=regex_flag)
+        output = [ tweet for tweet in \
+            self.segmented_tweet_generator(tweets, hashtags, hashtag_set, replacement_dict, flag=regex_flag)]
 
-        tweets = [ self.replace_hashtags(tweet, regex_pattern, replacement_dict) for tweet in tweets]
-        
         return TweetSegmenterOutput(
             word_segmenter_output = word_segmenter_output,
-            output = tweets
+            output = output
         )
