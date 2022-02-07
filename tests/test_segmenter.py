@@ -7,9 +7,8 @@ from pathlib import Path
 
 import hashformers
 import torch
-from hashformers import prune_segmenter_layers
 from hashformers.segmenter import (RegexWordSegmenter, TweetSegmenter,
-                                   TwitterTextMatcher)
+                                   TwitterTextMatcher, prune_segmenter_layers)
 
 test_data_dir = Path(__file__).parent.absolute()
 cuda_is_available = torch.cuda.is_available()
