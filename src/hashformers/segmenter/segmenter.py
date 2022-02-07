@@ -13,6 +13,7 @@ import torch
 from math import log10
 from functools import reduce
 import dataclasses
+from collections.abc import Iterable
 
 @dataclass
 class WordSegmenterOutput:
@@ -38,14 +39,20 @@ def coerce_segmenter_objects(method):
             output = method([inputs], *args, **kwargs)
         else:
             output = method(inputs, *args, **kwargs)
+        
         for allowed_type in [
             WordSegmenterOutput,
             TweetSegmenterOutput
         ]:
             if isinstance(output, allowed_type):
                 return output
-        else:
+        
+        if isinstance(output, str):
+            return WordSegmenterOutput(output=[output])
+
+        if isinstance(output, Iterable):
             return WordSegmenterOutput(output=output)
+
     return wrapper
 
 def prune_segmenter_layers(ws, layer_list=[0]):
