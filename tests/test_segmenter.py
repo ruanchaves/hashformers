@@ -7,7 +7,7 @@ from pathlib import Path
 
 import hashformers
 import torch
-from hashformers.segmenter import (RegexWordSegmenter, TweetSegmenter,
+from hashformers import (RegexWordSegmenter, TweetSegmenter,
                                    TwitterTextMatcher, prune_segmenter_layers)
 
 test_data_dir = Path(__file__).parent.absolute()

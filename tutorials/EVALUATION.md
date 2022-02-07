@@ -2,9 +2,7 @@
 
 We provide a detailed evaluation of the accuracy and speed of the `hashformers` framework in comparison with alternative libraries.
 
-Although models based on n-grams such as `ekphrasis` are orders of magnitude faster than `hashformers`, they are remarkably unstable across different datasets. 
-
-Research papers on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods. So it is possible that the best speed-accuracy trade-off may lie in building [ranking cascades](https://arxiv.org/abs/2010.06467) ( a.k.a. "telescoping" ) where `hashformers` is used as a fallback for when less time-consuming methods score below a certain confidence threshold.
+Although models based on n-grams such as `ekphrasis` are orders of magnitude faster than `hashformers`, they are remarkably unstable across different domains. Research on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods for reaching the best speed-accuracy trade-off.
 
 ## Accuracy
 
