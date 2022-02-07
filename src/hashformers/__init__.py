@@ -1,1 +1,1 @@
-from .segmenter import *
+from hashformers.segmenter import *

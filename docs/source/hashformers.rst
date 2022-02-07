@@ -11,18 +11,7 @@ Subpackages
    hashformers.ensemble
    hashformers.evaluation
    hashformers.experiments
-
-Submodules
-----------
-
-hashformers.segmenter module
-----------------------------
-
-.. automodule:: hashformers.segmenter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+   hashformers.segmenter
 
 Module contents
 ---------------
