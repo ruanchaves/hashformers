@@ -1,6 +1,4 @@
-<h1 align="center">
-  <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/hashformers.png" width="300" title="hashformers">
-</h1>
+# ✂️ hashformers
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
@@ -22,7 +20,7 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 
 
 
-# Basic usage
+## Basic usage
 
 ```python
 from hashformers import WordSegmenter
@@ -45,7 +43,7 @@ print(segmentations)
 
 For more information, read the [documentation for the WordSegmenter object](https://ruanchaves.github.io/hashformers/segmenter.html#hashformers.segmenter.WordSegmenter).
 
-# Installation
+## Installation
 
 ```
 pip install hashformers
@@ -67,7 +65,7 @@ pip install mxnet-cu110
 pip install hashformers
 ```
 
-# Contributing 
+## Contributing 
 
 Pull requests are welcome!  [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
 
@@ -79,13 +77,13 @@ cd hashformers
 pip install -e .
 ```
 
-# Relevant Papers 
+## Relevant Papers 
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
 * [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
 
-# Citation
+## Citation
 
 ```
 @misc{rodrigues2021zeroshot,
@@ -96,4 +94,4 @@ pip install -e .
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }
-```
+```s
