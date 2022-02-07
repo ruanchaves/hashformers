@@ -1,4 +1,3 @@
-import hashformers
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.beamsearch.data_structures import enforce_prob_dict
@@ -40,8 +39,8 @@ def coerce_segmenter_objects(method):
         else:
             output = method(inputs, *args, **kwargs)
         for allowed_type in [
-            hashformers.segmenter.WordSegmenterOutput,
-            hashformers.segmenter.TweetSegmenterOutput
+            WordSegmenterOutput,
+            TweetSegmenterOutput
         ]:
             if isinstance(output, allowed_type):
                 return output
