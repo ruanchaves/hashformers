@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation &mdash; hashformers 1.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference/index.html" />
+    <link rel="prev" title="✂️ hashformers" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> hashformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">✂️ hashformers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#basic-usage">Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#relevant-papers">Relevant Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#citation">Citation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#accuracy">Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speed">Speed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">hashformers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hashformers.html">hashformers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hashformers.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hashformers.html#module-hashformers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hashformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Evaluation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/EVALUATION.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline"></a></h1>
+<p>We provide a detailed evaluation of the accuracy and speed of the <code class="docutils literal notranslate"><span class="pre">hashformers</span></code> framework in comparison with alternative libraries.</p>
+<p>Although models based on n-grams such as <code class="docutils literal notranslate"><span class="pre">ekphrasis</span></code> are orders of magnitude faster than <code class="docutils literal notranslate"><span class="pre">hashformers</span></code>, they are remarkably unstable across different datasets.</p>
+<p>Research papers on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods. So it is possible that the best speed-accuracy trade-off may lie in building <a class="reference external" href="https://arxiv.org/abs/2010.06467">ranking cascades</a> ( a.k.a. “telescoping” ) where <code class="docutils literal notranslate"><span class="pre">hashformers</span></code> is used as a fallback for when less time-consuming methods score below a certain confidence threshold.</p>
+<section id="accuracy">
+<h2>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this headline"></a></h2>
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/ruanchaves/hashformers/master/barplot_evaluation.png" width="512" title="hashformers">
+</h1><p>In this figure we compare <strong>hashformers</strong> with <a class="reference external" href="https://github.com/mounicam/hashtag_master">HashtagMaster</a> ( also known as “MPNR” ) and <a class="reference external" href="https://github.com/cbaziotis/ekphrasis">ekphrasis</a> on five hashtag segmentation datasets.</p>
+<p>HashSet-1 is a sample from the distant HashSet dataset. HashSet-2 is the lowercase version of HashSet-1, and HashSet-3 is the manually annotated portion of HashSet. More information on the datasets and their evaluation is available on the <a class="reference external" href="https://arxiv.org/abs/2201.06741">HashSet paper</a>.</p>
+<p>A script to reproduce the evaluation of ekphrasis is available on <a class="reference external" href="https://github.com/ruanchaves/hashformers/blob/master/scripts/evaluate_ekphrasis.py">scripts/evaluate_ekphrasis.py</a>.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">dataset</th>
+<th align="left">library</th>
+<th align="right">accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">BOUN</td>
+<td align="left">HashtagMaster</td>
+<td align="right">81.60</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">44.74</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>83.68</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-1</td>
+<td align="left">HashtagMaster</td>
+<td align="right">50.06</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">0.00</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>72.47</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-2</td>
+<td align="left">HashtagMaster</td>
+<td align="right">45.04</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>ekphrasis</strong></td>
+<td align="right"><strong>55.73</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">hashformers</td>
+<td align="right">47.43</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">HashSet-3</td>
+<td align="left">HashtagMaster</td>
+<td align="right">41.93</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">56.44</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>56.71</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">Stanford-Dev</td>
+<td align="left">HashtagMaster</td>
+<td align="right">73.12</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">51.38</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>80.04</strong></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left">average (all)</td>
+<td align="left">HashtagMaster</td>
+<td align="right">58.35</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ekphrasis</td>
+<td align="right">41.65</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong>hashformers</strong></td>
+<td align="right"><strong>68.06</strong></td>
+</tr>
+</tbody>
+</table></section>
+<section id="speed">
+<h2>Speed<a class="headerlink" href="#speed" title="Permalink to this headline"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">model</th>
+<th align="left">hashtags/second</th>
+<th align="right">accuracy</th>
+<th align="right">topk</th>
+<th align="right">layers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">ekphrasis</td>
+<td align="left">4405.00</td>
+<td align="right">44.74</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+<tr>
+<td align="left">gpt2-large</td>
+<td align="left">12.04</td>
+<td align="right">63.86</td>
+<td align="right">2</td>
+<td align="right">first</td>
+</tr>
+<tr>
+<td align="left">distilgpt2</td>
+<td align="left">29.32</td>
+<td align="right">64.56</td>
+<td align="right">2</td>
+<td align="right">first</td>
+</tr>
+<tr>
+<td align="left"><strong>distilgpt2</strong></td>
+<td align="left"><strong>15.00</strong></td>
+<td align="right"><strong>80.48</strong></td>
+<td align="right"><strong>2</strong></td>
+<td align="right"><strong>all</strong></td>
+</tr>
+<tr>
+<td align="left">gpt2</td>
+<td align="left">11.36</td>
+<td align="right">-</td>
+<td align="right">2</td>
+<td align="right">all</td>
+</tr>
+<tr>
+<td align="left">gpt2</td>
+<td align="left">3.48</td>
+<td align="right">-</td>
+<td align="right">20</td>
+<td align="right">all</td>
+</tr>
+<tr>
+<td align="left">gpt2 + bert</td>
+<td align="left">1.38</td>
+<td align="right">83.68</td>
+<td align="right">20</td>
+<td align="right">all</td>
+</tr>
+</tbody>
+</table><p>In this table we evaluate hashformers under different settings on the Dev-BOUN dataset and compare it with ekphrasis. As ekphrasis relies on n-grams, it is a few orders of magnitude faster than hashformers.</p>
+<p>All experiments were performed on Google Colab while connected to a Tesla T4 GPU with 15GB of RAM. We highlight <code class="docutils literal notranslate"><span class="pre">distilgpt2</span></code> at <code class="docutils literal notranslate"><span class="pre">topk</span> <span class="pre">=</span> <span class="pre">2</span></code>, which provides the best speed-accuracy trade-off.</p>
+<ul class="simple">
+<li><p><strong>model</strong>: The name of the model. We evaluate ekphrasis under the default settings, and use the reranker only for the SOTA experiment at the bottom row.</p></li>
+<li><p><strong>hashtags/second</strong>: How many hashtags the model can segment per second. All experiments on hashformers had the <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> parameter adjusted to take up close to 100% of GPU RAM. A sidenote: even at 100% of GPU memory usage, we get about 60% of GPU utilization. So you may get better results by using GPUs with more memory than 16GB.</p></li>
+<li><p><strong>accuracy</strong>: Accuracy on the Dev-BOUN dataset. We don’t evaluate the accuracy of <code class="docutils literal notranslate"><span class="pre">gpt2</span></code>, but we know <a class="reference external" href="https://arxiv.org/abs/2112.03213">from the literature</a> that it is expected to be between <code class="docutils literal notranslate"><span class="pre">distilgpt2</span></code> (at 80%) and <code class="docutils literal notranslate"><span class="pre">gpt2</span> <span class="pre">+</span> <span class="pre">bert</span></code> (the SOTA, at 83%).</p></li>
+<li><p><strong>topk</strong>: the <code class="docutils literal notranslate"><span class="pre">topk</span></code> parameter of the Beamsearch algorithm ( passed as the <code class="docutils literal notranslate"><span class="pre">topk</span></code> argument to the <code class="docutils literal notranslate"><span class="pre">WordSegmenter.segment</span></code> method). The <code class="docutils literal notranslate"><span class="pre">steps</span></code> Beamsearch parameter was fixed at a default value of 13 for all experiments with hashformers, as it doesn’t have a significant impact on performance as <code class="docutils literal notranslate"><span class="pre">topk</span></code>.</p></li>
+<li><p><strong>layers</strong>: How many Transformer layers were utilized for language modeling: either all layers or just the bottom layer.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="✂️ hashformers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Ruan Chaves Rodrigues.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
