@@ -41,7 +41,7 @@ print(segmentations)
 # 'ice cold' ]
 ```
 
-For more information, read the [documentation for the WordSegmenter object](https://hashformers.readthedocs.io/en/latest/hashformers.html#hashformers-segmenter-module).
+For more information, read the [documentation for the WordSegmenter object](https://ruanchaves.github.io/hashformers/html/hashformers.segmenter.html#hashformers.segmenter.segmenter.WordSegmenter).
 
 ## Installation
 
