@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hashformers.segmenter package &mdash; hashformers 1.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="hashformers.experiments package" href="hashformers.experiments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> hashformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">✂️ hashformers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#basic-usage">Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#relevant-papers">Relevant Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#citation">Citation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="EVALUATION.html">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="EVALUATION.html#accuracy">Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EVALUATION.html#speed">Speed</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference/index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">hashformers</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="hashformers.html">hashformers package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="hashformers.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hashformers.html#module-hashformers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hashformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="reference/index.html">API Reference</a> &raquo;</li>
+          <li><a href="modules.html">hashformers</a> &raquo;</li>
+          <li><a href="hashformers.html">hashformers package</a> &raquo;</li>
+      <li>hashformers.segmenter package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hashformers.segmenter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hashformers-segmenter-package">
+<h1>hashformers.segmenter package<a class="headerlink" href="#hashformers-segmenter-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-hashformers.segmenter.segmenter">
+<span id="hashformers-segmenter-segmenter-module"></span><h2>hashformers.segmenter.segmenter module<a class="headerlink" href="#module-hashformers.segmenter.segmenter" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.BaseSegmenter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">BaseSegmenter</span></span><a class="headerlink" href="#hashformers.segmenter.segmenter.BaseSegmenter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.BaseSegmenter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.BaseSegmenter.predict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.EkphrasisWordSegmenter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">EkphrasisWordSegmenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.EkphrasisWordSegmenter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ekphrasis.classes.segmenter.Segmenter</span></code>, <a class="reference internal" href="#hashformers.segmenter.segmenter.BaseSegmenter" title="hashformers.segmenter.segmenter.BaseSegmenter"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashformers.segmenter.segmenter.BaseSegmenter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.EkphrasisWordSegmenter.find_segment">
+<span class="sig-name descname"><span class="pre">find_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;S&gt;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.EkphrasisWordSegmenter.find_segment" title="Permalink to this definition"></a></dt>
+<dd><p>Return (log P(words), words), where words is the best estimated segmentation
+:param text: the text to be segmented
+:param prev:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.EkphrasisWordSegmenter.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hashformers.segmenter.segmenter.EkphrasisWordSegmenter.segment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.EkphrasisWordSegmenter.segment_word">
+<span class="sig-name descname"><span class="pre">segment_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#hashformers.segmenter.segmenter.EkphrasisWordSegmenter.segment_word" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.HashtagContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">HashtagContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hashtags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashtag_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.HashtagContainer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.HashtagContainer.hashtag_set">
+<span class="sig-name descname"><span class="pre">hashtag_set</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.HashtagContainer.hashtag_set" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.HashtagContainer.hashtags">
+<span class="sig-name descname"><span class="pre">hashtags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.HashtagContainer.hashtags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.HashtagContainer.replacement_dict">
+<span class="sig-name descname"><span class="pre">replacement_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.HashtagContainer.replacement_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.RegexWordSegmenter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">RegexWordSegmenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regex_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.RegexWordSegmenter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hashformers.segmenter.segmenter.BaseSegmenter" title="hashformers.segmenter.segmenter.BaseSegmenter"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashformers.segmenter.segmenter.BaseSegmenter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.RegexWordSegmenter.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.RegexWordSegmenter.segment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.RegexWordSegmenter.segment_word">
+<span class="sig-name descname"><span class="pre">segment_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.RegexWordSegmenter.segment_word" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.RegexWordSegmenter.segmentation_generator">
+<span class="sig-name descname"><span class="pre">segmentation_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.RegexWordSegmenter.segmentation_generator" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">TweetSegmenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matcher</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_segmenter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hashformers.segmenter.segmenter.BaseSegmenter" title="hashformers.segmenter.segmenter.BaseSegmenter"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashformers.segmenter.segmenter.BaseSegmenter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.build_hashtag_container">
+<span class="sig-name descname"><span class="pre">build_hashtag_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tweets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessing_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.build_hashtag_container" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.compile_dict">
+<span class="sig-name descname"><span class="pre">compile_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hashtags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashtag_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashtag_character</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.compile_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.extract_hashtags">
+<span class="sig-name descname"><span class="pre">extract_hashtags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tweets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.extract_hashtags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.replace_hashtags">
+<span class="sig-name descname"><span class="pre">replace_hashtags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tweet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex_pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.replace_hashtags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tweets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex_flag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessing_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.segment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenter.segmented_tweet_generator">
+<span class="sig-name descname"><span class="pre">segmented_tweet_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tweets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashtags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashtag_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replacement_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenter.segmented_tweet_generator" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenterOutput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">TweetSegmenterOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_segmenter_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenterOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenterOutput.output">
+<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenterOutput.output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TweetSegmenterOutput.word_segmenter_output">
+<span class="sig-name descname"><span class="pre">word_segmenter_output</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.TweetSegmenterOutput.word_segmenter_output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.TwitterTextMatcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">TwitterTextMatcher</span></span><a class="headerlink" href="#hashformers.segmenter.segmenter.TwitterTextMatcher" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">WordSegmenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segmenter_model_name_or_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_gpu_batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reranker_gpu_batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reranker_model_name_or_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert-base-uncased'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reranker_model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hashformers.segmenter.segmenter.BaseSegmenter" title="hashformers.segmenter.segmenter.BaseSegmenter"><code class="xref py py-class docutils literal notranslate"><span class="pre">hashformers.segmenter.segmenter.BaseSegmenter</span></code></a></p>
+<p>A general-purpose word segmentation API.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenter.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.222</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.111</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_reranker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_ranks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenter.segment" title="Permalink to this definition"></a></dt>
+<dd><p>Segment a list of strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word_list</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of strings.</p></li>
+<li><p><strong>topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k parameter for the Beamsearch algorithm. A lower top-k value will speed up the algorithm.  However, this will decrease the amount of candidate segmentations in a rank, defaults to 20</p></li>
+<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – steps parameter for the Beamsearch algorithm. A lower amount of steps will speed up the algorithm. However, the algorithm will never detect a number of words larger than amount of steps, defaults to 13</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – alpha parameter for the top-2 ensemble. It controls the weight given to the segmenter candidates. Reasonable values range from 0 to 1, defaults to 0.222</p></li>
+<li><p><strong>beta</strong> (<em>float</em><em>, </em><em>optional</em>) – beta parameter for the top-2 ensemble. It controls the weight given to the reranker candidates. Reasonable values range from 0 to 1, defaults to 0.111</p></li>
+<li><p><strong>use_reranker</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether or not to run the reranker, defaults to False</p></li>
+<li><p><strong>return_ranks</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return not just the segmented hashtags but also the a dictionary of the ranks, defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of segmented words if return_ranks == False. A dictionary of the ranks and the segmented words if return_ranks == True.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenterOutput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">WordSegmenterOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmenter_rank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NoneType</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reranker_rank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NoneType</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_rank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NoneType</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenterOutput" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenterOutput.ensemble_rank">
+<span class="sig-name descname"><span class="pre">ensemble_rank</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenterOutput.ensemble_rank" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenterOutput.output">
+<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenterOutput.output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenterOutput.reranker_rank">
+<span class="sig-name descname"><span class="pre">reranker_rank</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenterOutput.reranker_rank" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.WordSegmenterOutput.segmenter_rank">
+<span class="sig-name descname"><span class="pre">segmenter_rank</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hashformers.segmenter.segmenter.WordSegmenterOutput.segmenter_rank" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.coerce_segmenter_objects">
+<span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">coerce_segmenter_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.coerce_segmenter_objects" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.deleteEncodingLayers">
+<span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">deleteEncodingLayers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.deleteEncodingLayers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hashformers.segmenter.segmenter.prune_segmenter_layers">
+<span class="sig-prename descclassname"><span class="pre">hashformers.segmenter.segmenter.</span></span><span class="sig-name descname"><span class="pre">prune_segmenter_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hashformers.segmenter.segmenter.prune_segmenter_layers" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-hashformers.segmenter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hashformers.segmenter" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hashformers.experiments.html" class="btn btn-neutral float-left" title="hashformers.experiments package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Ruan Chaves Rodrigues.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
