@@ -1,12 +1,10 @@
-from hashformers.beamsearch.algorithm import Beamsearch
-from hashformers.beamsearch.reranker import Reranker
-from hashformers.beamsearch.data_structures import enforce_prob_dict
+from hashformers.beamsearch.data_structures import ProbabilityDictionary, enforce_prob_dict
 from hashformers.ensemble.top2_fusion import top2_ensemble
 from typing import List, Union, Any
 from dataclasses import dataclass
 import pandas as pd
 from ttp import ttp
-from ekphrasis.classes.segmenter import Segmenter as EkphrasisSegmenter
+from hashformers.segmenter.ekphrasis_segmenter import UnigramSegmenter as EkphrasisSegmenter
 import re
 import copy
 import torch
@@ -79,28 +77,20 @@ class BaseSegmenter(object):
         return self.segment(*args, **kwargs)
 
 class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
-    def find_segment(self, text, prev='<S>'):
-        if not text:
-            return 0.0, []
-        candidates = [self.combine((log10(self.condProbWord(first, prev)), first), self.find_segment(rem, first))
-                      for first, rem in self.splits(text)]
-        return max(candidates)
-
-    def segment_word(self, word) -> str:
-        if word.islower():
-            return " ".join(self.find_segment(word)[1])
-        else:
-            return self.case_split.sub(r' \1', word).lower()
 
     def segment(self, inputs) -> List[str]:
-        return [ self.segment_word(word) for word in inputs ]
+        return [ self.segment(word) for word in inputs ]
+    
+    def run(self, inputs, **kwargs):
+        candidates = [ self.find_candidates(word) for word in inputs ]
+        candidates = reduce(lambda x,y: x+y, candidates)
+        candidates = list(map(lambda x: (" ".join(x[1]),x[0]), candidates))
+        candidates = dict(candidates)
+        return ProbabilityDictionary(dictionary=candidates)
 
 class RegexWordSegmenter(BaseSegmenter):
-
     def __init__(self,regex_rules=None):
         if not regex_rules:
             regex_rules = [r'([A-Z]+)']
@@ -119,18 +109,32 @@ class RegexWordSegmenter(BaseSegmenter):
     def segment(self, inputs: List[str]):
         return list(self.segmentation_generator(inputs))
 
+class Top2_Ensembler(object):
+    def __init__(self):
+        pass
+
+    def run(self, segmenter_run, reranker_run, alpha=0.222, beta=0.111):
+        ensemble = top2_ensemble(
+            segmenter_run,
+            reranker_run,
+            alpha=alpha,
+            beta=beta
+        )
+
+        ensemble_prob_dict = enforce_prob_dict(
+            ensemble,
+            score_field="ensemble_rank")
+        
+        return ensemble_prob_dict
+
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
     """
     def __init__(
         self,
-        segmenter_model_name_or_path = "gpt2",
-        segmenter_model_type = "gpt2",
-        segmenter_device = "cuda",
-        segmenter_gpu_batch_size = 1,
-        reranker_gpu_batch_size = 2000,
-        reranker_model_name_or_path = "bert-base-uncased",
-        reranker_model_type = "bert"
+        segmenter = None,
+        reranker = None,
+        ensembler = None
     ):
         """Word segmentation API initialization. 
            A GPT-2 model must be passed to `segmenter_model_name_or_path`, and optionally a BERT model to `reranker_model_name_or_path`.
@@ -146,30 +150,19 @@ class WordSegmenter(BaseSegmenter):
             reranker_model_name_or_path (str, optional): BERT model that will be fetched from the Hugging Face Model Hub. It is possible to turn off the reranker by passing a None or False value to this argument. Defaults to "bert-base-uncased".
             reranker_model_type (str, optional): Transformer encoder model type. Defaults to "bert".
         """
-        self.segmenter_model = Beamsearch(
-        model_name_or_path=segmenter_model_name_or_path,
-        model_type=segmenter_model_type,
-        device=segmenter_device,
-        gpu_batch_size=segmenter_gpu_batch_size
-    )
-
-        if reranker_model_name_or_path:
-            self.reranker_model = Reranker(
-                model_name_or_path=reranker_model_name_or_path,
-                model_type=reranker_model_type,
-                gpu_batch_size=reranker_gpu_batch_size
-            )
-        else:
-            self.reranker_model = None
+        self.segmenter_model = segmenter
+        self.reranker_model = reranker
+        self.ensembler = ensembler
 
     def segment(
             self,
             word_list: List[str],
-            topk: int = 20,
-            steps: int = 13,
-            alpha: float = 0.222,
-            beta: float = 0.111,
+            segmenter_run: Any = None,
+            segmenter_kwargs: dict = {},
+            ensembler_kwargs: dict = {},
+            reranker_kwargs: dict = {},
             use_reranker: bool = False,
+            use_ensembler: bool = False,
             return_ranks: bool = False) -> Any :
         """Segment a list of strings.
 
@@ -190,30 +183,28 @@ class WordSegmenter(BaseSegmenter):
         :return: A list of segmented words if return_ranks == False. A dictionary of the ranks and the segmented words if return_ranks == True.
         :rtype: Any
         """
-        segmenter_run = self.segmenter_model.run(
-            word_list,
-            topk=topk,
-            steps=steps
-        )
+        if not segmenter_run:
+            segmenter_run = self.segmenter_model.run(
+                word_list,
+                **segmenter_kwargs
+            )
         
-        ensemble = None
-        if use_reranker and self.reranker_model:
-            reranker_run = self.reranker_model.rerank(segmenter_run)
+        ensemble_prob_dict = None
 
-            ensemble = top2_ensemble(
+        if use_reranker and self.reranker_model:
+            reranker_run = self.reranker_model.rerank(segmenter_run, **reranker_kwargs)
+
+        if use_reranker and use_ensembler and self.ensembler:
+            ensemble_prob_dict = self.ensembler.run(
                 segmenter_run,
                 reranker_run,
-                alpha=alpha,
-                beta=beta
+                **ensembler_kwargs
             )
-
-            ensemble_prob_dict = enforce_prob_dict(
-                ensemble,
-                score_field="ensemble_rank")
             segs = ensemble_prob_dict.get_segmentations(
                 astype="list",
                 gold_array=word_list
             )
+
         else:
             segmenter_prob_dict = enforce_prob_dict(
                 segmenter_run,
@@ -228,14 +219,19 @@ class WordSegmenter(BaseSegmenter):
             return segs
         else:
             segmenter_df = segmenter_run.to_dataframe().reset_index(drop=True)
+            
             if use_reranker:
                 reranker_df = reranker_run.to_dataframe().reset_index(drop=True)
             else:
                 reranker_df = None
+            
+            if use_ensembler and ensemble_prob_dict:
+                ensembler_df = ensemble_prob_dict.to_dataframe()
+
             return WordSegmenterOutput(
                 segmenter_rank=segmenter_df,
                 reranker_rank=reranker_df,
-                ensemble_rank=ensemble,
+                ensemble_rank=ensembler_df,
                 output=segs
             )
 

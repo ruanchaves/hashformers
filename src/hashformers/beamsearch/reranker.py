@@ -1,24 +1,15 @@
-from hashformers.beamsearch.model_lm import ModelLM
 from hashformers.beamsearch.data_structures import (
     enforce_prob_dict,
     ProbabilityDictionary
 )
 
-class Reranker(ModelLM):
+class Reranker(object):
 
     def __init__(
         self,
-        model_name_or_path='bert-base-uncased',
-        model_type='bert',
-        gpu_batch_size=1,
-        gpu_id=0
+        reranker
     ):
-        super().__init__(
-            model_name_or_path=model_name_or_path,
-            model_type=model_type,
-            gpu_batch_size=gpu_batch_size,
-            gpu_id=gpu_id
-        )
+        self.model = reranker
     
     def rerank(
         self,

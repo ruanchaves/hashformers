@@ -11,10 +11,10 @@ class Beamsearch(ModelLM):
 
     def __init__(
             self,
-            model_name_or_path=None, 
-            model_type=None, 
+            model_name_or_path="gpt2", 
+            model_type="gpt2", 
             device='cuda', 
-            gpu_batch_size=1):
+            gpu_batch_size=1000):
         super().__init__(
             model_name_or_path=model_name_or_path, 
             model_type=model_type, 
