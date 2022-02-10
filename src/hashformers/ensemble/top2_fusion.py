@@ -46,3 +46,21 @@ def top2_ensemble(
     )
 
     return ensemble_df
+
+class Top2_Ensembler(object):
+    def __init__(self):
+        pass
+
+    def run(self, segmenter_run, reranker_run, alpha=0.222, beta=0.111):
+        ensemble = top2_ensemble(
+            segmenter_run,
+            reranker_run,
+            alpha=alpha,
+            beta=beta
+        )
+
+        ensemble_prob_dict = enforce_prob_dict(
+            ensemble,
+            score_field="ensemble_rank")
+        
+        return ensemble_prob_dict

@@ -1,69 +1,12 @@
-from hashformers.beamsearch.data_structures import ProbabilityDictionary, enforce_prob_dict
-from hashformers.ensemble.top2_fusion import top2_ensemble
-from typing import List, Union, Any
-from dataclasses import dataclass
-import pandas as pd
+from hashformers.beamsearch.data_structures import enforce_prob_dict
+from typing import List, Any
 from ttp import ttp
-from hashformers.segmenter.unigram_segmenter import UnigramSegmenter
+from hashformers.segmenter.base_segmenter import BaseSegmenter
+from hashformers.segmenter.regex_segmenter import RegexWordSegmenter
+from hashformers.segmenter.dataclasses import WordSegmenterOutput, TweetSegmenterOutput, HashtagContainer
 import re
-import copy
-import torch
 from functools import reduce
 import dataclasses
-
-def prune_segmenter_layers(ws, layer_list=[0]):
-    ws.segmenter_model.model.scorer.model = \
-        deleteEncodingLayers(ws.segmenter_model.model.scorer.model, layer_list=layer_list)
-    return ws
-
-def deleteEncodingLayers(model, layer_list=[0]):
-    oldModuleList = model.transformer.h
-    newModuleList = torch.nn.ModuleList()
-
-    for index in layer_list:
-        newModuleList.append(oldModuleList[index])
-
-    copyOfModel = copy.deepcopy(model)
-    copyOfModel.transformer.h = newModuleList
-
-    return copyOfModel
-
-class RegexWordSegmenter(BaseSegmenter):
-    def __init__(self,regex_rules=None):
-        if not regex_rules:
-            regex_rules = [r'([A-Z]+)']
-        self.regex_rules = [
-            re.compile(x) for x in regex_rules
-        ]
-
-    def segment_word(self, rule, word):
-        return rule.sub(r' \1', word).strip()
-
-    def segmentation_generator(self, word_list):
-        for rule in self.regex_rules:
-            for idx, word in enumerate(word_list):
-                yield self.segment_word(rule, word)
-
-    def segment(self, inputs: List[str]):
-        return list(self.segmentation_generator(inputs))
-
-class Top2_Ensembler(object):
-    def __init__(self):
-        pass
-
-    def run(self, segmenter_run, reranker_run, alpha=0.222, beta=0.111):
-        ensemble = top2_ensemble(
-            segmenter_run,
-            reranker_run,
-            alpha=alpha,
-            beta=beta
-        )
-
-        ensemble_prob_dict = enforce_prob_dict(
-            ensemble,
-            score_field="ensemble_rank")
-        
-        return ensemble_prob_dict
 
 class WordSegmenterCascade(BaseSegmenter):
 
@@ -92,7 +35,6 @@ class WordSegmenterCascade(BaseSegmenter):
     def segment(self, word_list, cascade_kwargs):
         return self.generate_pipeline(word_list, cascade_kwargs)[-1]
 
-
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
     """
@@ -102,20 +44,6 @@ class WordSegmenter(BaseSegmenter):
         reranker = None,
         ensembler = None
     ):
-        """Word segmentation API initialization. 
-           A GPT-2 model must be passed to `segmenter_model_name_or_path`, and optionally a BERT model to `reranker_model_name_or_path`.
-           If `reranker_model_name_or_path` is set to `False` or `None`, the word segmenter object will work without a reranker.
-
-
-        Args:
-            segmenter_model_name_or_path (str, optional): GPT-2 that will be fetched from the Hugging Face Model Hub. Defaults to "gpt2".
-            segmenter_model_type (str, optional): Transformer decoder model type. Defaults to "gpt2".
-            segmenter_device (str, optional): Device. Defaults to "cuda".
-            segmenter_gpu_batch_size (int, optional): Segmenter GPU batch size. Defaults to 1.
-            reranker_gpu_batch_size (int, optional): Reranker GPU split size. Defaults to 2000.
-            reranker_model_name_or_path (str, optional): BERT model that will be fetched from the Hugging Face Model Hub. It is possible to turn off the reranker by passing a None or False value to this argument. Defaults to "bert-base-uncased".
-            reranker_model_type (str, optional): Transformer encoder model type. Defaults to "bert".
-        """
         self.segmenter_model = segmenter
         self.reranker_model = reranker
         self.ensembler = ensembler
@@ -130,25 +58,7 @@ class WordSegmenter(BaseSegmenter):
             use_reranker: bool = False,
             use_ensembler: bool = False,
             return_ranks: bool = False) -> Any :
-        """Segment a list of strings.
-
-        :param word_list: A list of strings.
-        :type word_list: List[str]
-        :param topk: top-k parameter for the Beamsearch algorithm. A lower top-k value will speed up the algorithm.  However, this will decrease the amount of candidate segmentations in a rank, defaults to 20
-        :type topk: int, optional
-        :param steps: steps parameter for the Beamsearch algorithm. A lower amount of steps will speed up the algorithm. However, the algorithm will never detect a number of words larger than amount of steps, defaults to 13
-        :type steps: int, optional
-        :param alpha: alpha parameter for the top-2 ensemble. It controls the weight given to the segmenter candidates. Reasonable values range from 0 to 1, defaults to 0.222
-        :type alpha: float, optional
-        :param beta: beta parameter for the top-2 ensemble. It controls the weight given to the reranker candidates. Reasonable values range from 0 to 1, defaults to 0.111
-        :type beta: float, optional
-        :param use_reranker: Whether or not to run the reranker, defaults to False
-        :type use_reranker: bool, optional
-        :param return_ranks: Return not just the segmented hashtags but also the a dictionary of the ranks, defaults to False
-        :type return_ranks: bool, optional
-        :return: A list of segmented words if return_ranks == False. A dictionary of the ranks and the segmented words if return_ranks == True.
-        :rtype: Any
-        """
+            
         if not segmenter_run:
             segmenter_run = self.segmenter_model.run(
                 word_list,
