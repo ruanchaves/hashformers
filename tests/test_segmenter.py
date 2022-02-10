@@ -106,17 +106,20 @@ def word_segmenter_unigram_gpt2():
 
 if cuda_is_available:
     segmenter_fixtures = [
-        word_segmenter_gpt2_bert, 
-        word_segmenter_unigram,
-        word_segmenter_unigram_bert,
-        word_segmenter_unigram_gpt2
+        "word_segmenter_gpt2_bert", 
+        "word_segmenter_unigram",
+        "word_segmenter_unigram_bert",
+        "word_segmenter_unigram_gpt2"
     ]
 else:
-    segmenter_fixtures = [word_segmenter_unigram]
+    segmenter_fixtures = ["word_segmenter_unigram"]
+
+segmenter_fixtures = [
+    pytest.lazy_fixture(x) for x in segmenter_fixtures
+]
 
 @pytest.mark.parametrize('word_segmenter', segmenter_fixtures)
 def test_word_segmenter_output_format(word_segmenter):
-    
     test_boun_hashtags = [
         "minecraf",
         "ourmomentfragrance",
