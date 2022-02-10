@@ -4,54 +4,12 @@ from typing import List, Union, Any
 from dataclasses import dataclass
 import pandas as pd
 from ttp import ttp
-from hashformers.segmenter.ekphrasis_segmenter import UnigramSegmenter as EkphrasisSegmenter
+from hashformers.segmenter.unigram_segmenter import UnigramSegmenter
 import re
 import copy
 import torch
-from math import log10
 from functools import reduce
 import dataclasses
-from collections.abc import Iterable
-
-@dataclass
-class WordSegmenterOutput:
-    output: List[str]
-    segmenter_rank: Union[pd.DataFrame, None] = None
-    reranker_rank: Union[pd.DataFrame, None] = None
-    ensemble_rank: Union[pd.DataFrame, None] = None
-
-@dataclass
-class HashtagContainer:
-    hashtags: List[List[str]]
-    hashtag_set: List[str]
-    replacement_dict: dict
-
-@dataclass
-class TweetSegmenterOutput:
-    output: List[str]
-    word_segmenter_output: Any
-
-def coerce_segmenter_objects(method):
-    def wrapper(inputs, *args, **kwargs):
-        if isinstance(inputs, str):
-            output = method([inputs], *args, **kwargs)
-        else:
-            output = method(inputs, *args, **kwargs)
-        
-        for allowed_type in [
-            WordSegmenterOutput,
-            TweetSegmenterOutput
-        ]:
-            if isinstance(output, allowed_type):
-                return output
-        
-        if isinstance(output, str):
-            return WordSegmenterOutput(output=[output])
-
-        if isinstance(output, Iterable):
-            return WordSegmenterOutput(output=output)
-
-    return wrapper
 
 def prune_segmenter_layers(ws, layer_list=[0]):
     ws.segmenter_model.model.scorer.model = \
@@ -69,26 +27,6 @@ def deleteEncodingLayers(model, layer_list=[0]):
     copyOfModel.transformer.h = newModuleList
 
     return copyOfModel
-
-class BaseSegmenter(object):
-
-    @coerce_segmenter_objects
-    def predict(self, *args, **kwargs):
-        return self.segment(*args, **kwargs)
-
-class EkphrasisWordSegmenter(EkphrasisSegmenter, BaseSegmenter):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def segment(self, inputs) -> List[str]:
-        return [ self.segment(word) for word in inputs ]
-    
-    def run(self, inputs, **kwargs):
-        candidates = [ self.find_candidates(word) for word in inputs ]
-        candidates = reduce(lambda x,y: x+y, candidates)
-        candidates = list(map(lambda x: (" ".join(x[1]),x[0]), candidates))
-        candidates = dict(candidates)
-        return ProbabilityDictionary(dictionary=candidates)
 
 class RegexWordSegmenter(BaseSegmenter):
     def __init__(self,regex_rules=None):
@@ -126,6 +64,34 @@ class Top2_Ensembler(object):
             score_field="ensemble_rank")
         
         return ensemble_prob_dict
+
+class WordSegmenterCascade(BaseSegmenter):
+
+    def __init__(self, cascade):
+        self.cascade = cascade
+
+    def generate_pipeline(self, word_list, cascade_kwargs):
+        first_ws_output = self.cascade[0].segment(word_list, **cascade_kwargs[0])
+        cascade_stack = [first_ws_output]
+        pipeline = [first_ws_output]
+        for idx in range(len(cascade_kwargs)):
+            if idx:
+                previous_ws_output = cascade_stack.pop()
+                for item in ["ensemble_rank", "reranker_rank", "segmenter_rank"]:
+                    next_input = getattr(previous_ws_output, item)
+                    if next_input:
+                        break
+                current_kwargs = cascade_kwargs[idx]
+                if next_input:
+                    current_kwargs.setdefault("segmenter_run", next_input)
+                current_ws_output = self.cascade[idx].segment(word_list, **current_kwargs)
+                cascade_stack.append(current_ws_output)
+                pipeline.append(current_ws_output)
+        return pipeline
+
+    def segment(self, word_list, cascade_kwargs):
+        return self.generate_pipeline(word_list, cascade_kwargs)[-1]
+
 
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.

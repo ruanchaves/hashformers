@@ -50,6 +50,7 @@ class UnigramSegmenter(object):
 
         self.Pw = Pdist(self.unigrams, self.N, self.unk_probability)
 
+    @staticmethod
     def read_stats(lang='en', wordlist='best', match_cutoff=None):
         """
         Read key,value pairs from file.
@@ -129,4 +130,14 @@ class UnigramSegmenter(object):
         if word.islower():
             return " ".join(self.find_segment(word)[1])
         else:
-            return word
+            tmp = word.lower()
+            out = self.find_segment(tmp)[1]
+            out_len = [ len(x) for x in out ]
+            seg = []
+            i = 0
+            for j in out_len:
+                for _ in range(j):
+                    seg.append(word[i])
+                    i += 1
+                seg.append(" ")
+            return "".join(seg).strip()
