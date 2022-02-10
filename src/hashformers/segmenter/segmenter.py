@@ -3,7 +3,11 @@ from typing import List, Any
 from ttp import ttp
 from hashformers.segmenter.base_segmenter import BaseSegmenter
 from hashformers.segmenter.regex_segmenter import RegexWordSegmenter
-from hashformers.segmenter.dataclasses import WordSegmenterOutput, TweetSegmenterOutput, HashtagContainer
+from hashformers.segmenter.data_structures import ( 
+    WordSegmenterOutput, 
+    TweetSegmenterOutput, 
+    HashtagContainer
+)
 import re
 from functools import reduce
 import dataclasses

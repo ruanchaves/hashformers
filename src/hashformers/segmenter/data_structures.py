@@ -1,5 +1,6 @@
 from typing import List, Union, Any
 import pandas as pd
+from dataclasses import dataclass
 
 @dataclass
 class WordSegmenterOutput:

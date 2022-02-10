@@ -1,7 +1,8 @@
-from hashformers.segmenter.dataclasses import (
+from hashformers.segmenter.data_structures import (
     WordSegmenterOutput,
     TweetSegmenterOutput
 )
+
 from collections.abc import Iterable
 
 def coerce_segmenter_objects(method):
