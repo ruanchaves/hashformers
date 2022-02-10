@@ -22,14 +22,14 @@ cuda_is_available = torch.cuda.is_available()
 def test_cuda():
     assert torch.cuda.is_available() == True
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def tweet_segmenter():
     return TweetSegmenter(
         matcher=TwitterTextMatcher(),
         word_segmenter=RegexWordSegmenter()
     )
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def word_segmenter_gpt2_bert():
 
     segmenter = Beamsearch(
@@ -51,7 +51,7 @@ def word_segmenter_gpt2_bert():
     )
     return ws
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def word_segmenter_unigram():
     segmenter = UnigramWordSegmenter(
         max_split_length=20
@@ -63,7 +63,7 @@ def word_segmenter_unigram():
     )
     return ws
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def word_segmenter_unigram_bert():
     segmenter = UnigramWordSegmenter(
         max_split_length=20
@@ -83,7 +83,7 @@ def word_segmenter_unigram_bert():
     )
     return ws
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def word_segmenter_unigram_gpt2():
     segmenter = UnigramWordSegmenter(
         max_split_length=20
