@@ -91,7 +91,7 @@ def word_segmenter_unigram_gpt2():
 
     reranker = Reranker(
         model_name_or_path="distilgpt2",
-        model_type="gpt2"
+        model_type="gpt2",
         gpu_batch_size=1000
     )
 
