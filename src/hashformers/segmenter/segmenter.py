@@ -85,6 +85,11 @@ class WordSegmenter(BaseSegmenter):
         
         ensemble_prob_dict = None
 
+        segmenter_prob_dict = enforce_prob_dict(
+                segmenter_run,
+                score_field="score"
+        )
+
         if use_reranker and self.reranker_model:
             reranker_run = self.reranker_model.rerank(segmenter_run, **reranker_kwargs)
 
@@ -100,10 +105,6 @@ class WordSegmenter(BaseSegmenter):
             )
 
         else:
-            segmenter_prob_dict = enforce_prob_dict(
-                segmenter_run,
-                score_field="score"
-            )
             segs = segmenter_prob_dict.get_segmentations(
                 astype="list",
                 gold_array=word_list
@@ -112,7 +113,7 @@ class WordSegmenter(BaseSegmenter):
         if not return_ranks:
             return segs
         else:
-            segmenter_df = segmenter_run.to_dataframe().reset_index(drop=True)
+            segmenter_df = segmenter_prob_dict.to_dataframe().reset_index(drop=True)
             reranker_df = None
             ensembler_df = None
 
