@@ -53,7 +53,7 @@ class WordSegmenterCascade(BaseSegmenter):
     def segment(self, word_list):
         return self.generate_pipeline(word_list)[-1]
 
-class WordSegmenter(BaseSegmenter):
+class BaseWordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
     """
     def __init__(
