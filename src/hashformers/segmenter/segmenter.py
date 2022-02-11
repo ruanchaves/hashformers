@@ -11,6 +11,7 @@ from hashformers.segmenter.data_structures import (
 import re
 from functools import reduce
 import dataclasses
+import pandas as pd
 
 class WordSegmenterCascade(BaseSegmenter):
 
@@ -36,7 +37,7 @@ class WordSegmenterCascade(BaseSegmenter):
                 previous_ws_output = cascade_stack.pop()
                 for item in ["ensemble_rank", "reranker_rank", "segmenter_rank"]:
                     next_input = getattr(previous_ws_output, item)
-                    if next_input:
+                    if isinstance(next_input, pd.DataFrame):
                         break
                 current_kwargs = self.cascade_nodes[idx].word_segmenter_kwargs
                 if next_input:
