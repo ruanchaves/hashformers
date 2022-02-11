@@ -102,8 +102,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
                 "topk": topk,
                 "steps": steps
             }
-            
-            super().segment(
+
+            return super().segment(
                 word_list,
                 segmenter_kwargs=segmenter_kwargs
             )
