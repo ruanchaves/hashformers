@@ -40,7 +40,7 @@ class WordSegmenterCascade(BaseSegmenter):
                     if isinstance(next_input, pd.DataFrame):
                         break
                 current_kwargs = self.cascade_nodes[idx].word_segmenter_kwargs
-                if next_input:
+                if isinstance(next_input, pd.DataFrame):
                     current_kwargs.setdefault("segmenter_run", next_input)
                 current_ws_output = self.cascade_nodes[idx].word_segmenter.segment(
                     word_list, 
