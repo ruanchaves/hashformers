@@ -49,6 +49,6 @@ class BaseSegmenter(object):
         elif isinstance(inputs, Iterable):
             inputs = [ preprocess_input(x) for x in inputs ]
         else:
-            raise NotImplementedError
+            raise NotImplementedError(str(type(inputs)))
         
         return inputs
