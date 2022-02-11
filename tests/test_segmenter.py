@@ -9,7 +9,7 @@ from hashformers import (RegexWordSegmenter, TweetSegmenter,
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
-from hashformers.segmenter.segmenter import WordSegmenter
+from hashformers.segmenter.segmenter import WordSegmenter, WordSegmenterCascade
 
 import dataclasses
 from pathlib import Path
@@ -104,12 +104,48 @@ def word_segmenter_unigram_gpt2():
     )
     return ws
 
+@pytest.fixture(scope="module")
+def word_segmenter_unigram_gpt2_bert_cascade():
+    
+    segmenter = UnigramWordSegmenter(
+        max_split_length=20
+    )
+
+    reranker_1 = Reranker(
+        model_name_or_path="distilgpt2",
+        model_type="gpt2",
+        gpu_batch_size=1000
+    )
+
+    reranker_2 = Reranker(
+        model_name_or_path="bert-base-cased",
+        gpu_batch_size=1000
+    )
+
+    ensembler = Top2_Ensembler()
+
+    cascade = [
+        WordSegmenter(
+            segmenter=segmenter,
+            reranker=reranker_1,
+            ensemble=ensembler
+        ),
+        WordSegmenter(
+            segmenter=None,
+            reranker=reranker_2,
+            ensemble=ensembler
+        )
+    ]
+
+    return WordSegmenterCascade(cascade)
+
 if cuda_is_available:
     segmenter_fixtures = [
         "word_segmenter_gpt2_bert", 
         "word_segmenter_unigram",
         "word_segmenter_unigram_bert",
-        "word_segmenter_unigram_gpt2"
+        "word_segmenter_unigram_gpt2",
+        "word_segmenter_unigram_gpt2_bert_cascade"
     ]
 else:
     segmenter_fixtures = ["word_segmenter_unigram"]
