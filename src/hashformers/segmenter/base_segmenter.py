@@ -42,6 +42,7 @@ class BaseSegmenter(object):
                 word = word.lower()
             if remove_hashtag:
                 word = word.lstrip(hashtag_character)
+            return word
         
         if isinstance(inputs, str):
             inputs = preprocess_input(inputs)
