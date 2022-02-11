@@ -96,14 +96,26 @@ class TransformerWordSegmenter(BaseWordSegmenter):
             self,
             word_list,
             topk: int = 20,
-            steps: int = 13):
+            steps: int = 13,
+            alpha: float = 0.222,
+            beta: float = 0.111,
+            use_reranker: bool = True,
+            return_ranks: bool = False):
 
             segmenter_kwargs = {
                 "topk": topk,
                 "steps": steps
             }
 
+            ensembler_kwargs = {
+                "alpha": alpha,
+                "beta": beta
+            }
+
             return super().segment(
                 word_list,
-                segmenter_kwargs=segmenter_kwargs
+                segmenter_kwargs=segmenter_kwargs,
+                ensembler_kwargs=ensembler_kwargs,
+                use_reranker=use_reranker,
+                return_ranks=return_ranks
             )
