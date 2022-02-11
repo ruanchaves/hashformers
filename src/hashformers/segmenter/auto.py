@@ -91,3 +91,19 @@ class TransformerWordSegmenter(BaseWordSegmenter):
             reranker=reranker_model,
             ensembler=ensembler
         )
+
+    def segment(
+            self,
+            word_list,
+            topk: int = 20,
+            steps: int = 13):
+
+            segmenter_kwargs = {
+                "topk": topk,
+                "steps": steps
+            }
+            
+            super().segment(
+                word_list,
+                segmenter_kwargs=segmenter_kwargs
+            )

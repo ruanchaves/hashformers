@@ -23,7 +23,7 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 ## Basic usage
 
 ```python
-from hashformers import WordSegmenter
+from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
@@ -40,8 +40,6 @@ print(segmentations)
 # [ 'we need a national park',
 # 'ice cold' ]
 ```
-
-For more information, read the [documentation for the WordSegmenter object](https://ruanchaves.github.io/hashformers/html/hashformers.segmenter.html#hashformers.segmenter.segmenter.WordSegmenter).
 
 ## Installation
 
