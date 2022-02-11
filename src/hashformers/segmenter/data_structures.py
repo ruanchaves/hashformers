@@ -19,3 +19,8 @@ class HashtagContainer:
 class TweetSegmenterOutput:
     output: List[str]
     word_segmenter_output: Any
+
+@dataclass
+class CascadeNode:
+    word_segmenter: Any
+    word_segmenter_kwargs: dict

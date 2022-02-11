@@ -14,25 +14,31 @@ import dataclasses
 
 class WordSegmenterCascade(BaseSegmenter):
 
-    def __init__(self, cascade, cascade_kwargs):
-        self.cascade = cascade
-        self.cascade_kwargs = cascade_kwargs
+    def __init__(self, cascade_nodes):
+        self.cascade_nodes = cascade_nodes
 
     def generate_pipeline(self, word_list):
-        first_ws_output = self.cascade[0].segment(word_list, **self.cascade_kwargs[0])
+        first_ws_output = self.cascade_nodes[0].word_segmenter.segment(
+            word_list, 
+            **self.cascade_nodes[0].segment_kwargs)
         cascade_stack = [first_ws_output]
         pipeline = [first_ws_output]
-        for idx in range(len(self.cascade_kwargs)):
+        for idx in range(len(self.cascade_nodes)):
+
+            self.cascade_nodes[idx].word_segmenter_kwargs.setdefault("return_ranks", True)
+
             if idx:
                 previous_ws_output = cascade_stack.pop()
                 for item in ["ensemble_rank", "reranker_rank", "segmenter_rank"]:
                     next_input = getattr(previous_ws_output, item)
                     if next_input:
                         break
-                current_kwargs = self.cascade_kwargs[idx]
+                current_kwargs = self.cascade_nodes[idx].segment_kwargs
                 if next_input:
                     current_kwargs.setdefault("segmenter_run", next_input)
-                current_ws_output = self.cascade[idx].segment(word_list, **self.current_kwargs)
+                current_ws_output = self.cascade_nodes[idx].segment(
+                    word_list, 
+                    **self.current_kwargs)
                 cascade_stack.append(current_ws_output)
                 pipeline.append(current_ws_output)
         return pipeline
@@ -60,8 +66,8 @@ class WordSegmenter(BaseSegmenter):
             segmenter_kwargs: dict = {},
             ensembler_kwargs: dict = {},
             reranker_kwargs: dict = {},
-            use_reranker: bool = False,
-            use_ensembler: bool = False,
+            use_reranker: bool = True,
+            use_ensembler: bool = True,
             return_ranks: bool = False) -> Any :
             
         if not segmenter_run:
@@ -100,14 +106,14 @@ class WordSegmenter(BaseSegmenter):
             return segs
         else:
             segmenter_df = segmenter_run.to_dataframe().reset_index(drop=True)
-            
+            reranker_df = None
+            ensembler_df = None
+
             if use_reranker:
-                reranker_df = reranker_run.to_dataframe().reset_index(drop=True)
-            else:
-                reranker_df = None
-            
-            if use_ensembler and ensemble_prob_dict:
-                ensembler_df = ensemble_prob_dict.to_dataframe()
+                if self.reranker_model:
+                    reranker_df = reranker_run.to_dataframe().reset_index(drop=True)
+                if use_ensembler and self.ensembler and ensemble_prob_dict: 
+                    ensembler_df = ensemble_prob_dict.to_dataframe().reset_index(drop=True)
 
             return WordSegmenterOutput(
                 segmenter_rank=segmenter_df,

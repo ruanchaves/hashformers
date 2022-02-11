@@ -10,7 +10,7 @@ from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
 from hashformers.segmenter.segmenter import WordSegmenter, WordSegmenterCascade
-
+from hashformers.segmenter.data_structures import CascadeNode
 import dataclasses
 from pathlib import Path
 
@@ -124,18 +124,57 @@ def word_segmenter_unigram_gpt2_bert_cascade():
 
     ensembler = Top2_Ensembler()
 
-    cascade = [
-        WordSegmenter(
+    ws1 = WordSegmenter(
             segmenter=segmenter,
             reranker=reranker_1,
             ensembler=ensembler
-        ),
-        WordSegmenter(
+    )
+
+    ws2 = WordSegmenter(
             segmenter=None,
             reranker=reranker_2,
             ensembler=ensembler
-        )
-    ]
+    )
+
+
+    node1 = CascadeNode(
+        word_segmenter=ws1,
+        word_segmenter_kwargs={
+            "segmenter_kwargs": {
+                "topk": 5,
+                "steps": 5
+            },
+            "reranker_kwargs": {
+
+            },
+            "ensembler_kwargs": {
+                "alpha": 0.222,
+                "beta": 0.111
+            },
+            "use_reranker": True,
+            "use_ensembler": True
+        }
+    )
+
+    node2 = CascadeNode(
+        word_segmenter=ws2,
+        word_segmenter_kwargs={
+            "segmenter_kwargs": {
+
+            },
+            "reranker_kwargs": {
+
+            },
+            "ensembler_kwargs": {
+                "alpha": 0.222,
+                "beta": 0.111
+            },
+            "use_reranker": True,
+            "use_ensembler": True
+        }
+    )
+
+    cascade = [node1, node2]
 
     return WordSegmenterCascade(cascade)
 
