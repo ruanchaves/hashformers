@@ -18,5 +18,6 @@ class RegexWordSegmenter(BaseSegmenter):
             for idx, word in enumerate(word_list):
                 yield self.segment_word(rule, word)
 
-    def segment(self, inputs: List[str]):
+    def segment(self, inputs: List[str], **kwargs):
+        inputs = super().preprocess(inputs, **kwargs)
         return list(self.segmentation_generator(inputs))

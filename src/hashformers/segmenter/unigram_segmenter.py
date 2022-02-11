@@ -1,4 +1,5 @@
 from math import log10
+from hashformers.segmenter.base_segmenter import BaseSegmenter
 from wordfreq import get_frequency_list
 from functools import reduce
 from hashformers.beamsearch.data_structures import ProbabilityDictionary
@@ -33,7 +34,7 @@ class Pdist(dict):
             return self.unk_prob(key, self.total)
 
 
-class UnigramWordSegmenter(object):
+class UnigramWordSegmenter(BaseSegmenter):
     """
     The Segmenter Class implements the Viterbi algorithm for word segmentation.
     Based on CH14 from the book Beautiful Data (Segaran and Hammerbacher, 2009)
@@ -128,21 +129,12 @@ class UnigramWordSegmenter(object):
             return 0.0, []
         return max(self.find_candidates(text, prev=prev))
 
-    def segment(self, word):
-        if word.islower():
-            return " ".join(self.find_segment(word)[1])
-        else:
-            tmp = word.lower()
-            out = self.find_segment(tmp)[1]
-            out_len = [ len(x) for x in out ]
-            seg = []
-            i = 0
-            for j in out_len:
-                for _ in range(j):
-                    seg.append(word[i])
-                    i += 1
-                seg.append(" ")
-            return "".join(seg).strip()
+    def segment_word(self, word):
+        return " ".join(self.find_segment(word)[1])
+
+    def segment(self, inputs, **kwargs):
+        inputs = super().preprocess(**kwargs)
+        return [ self.segment_word(word) for word in inputs ]
 
     def run(self, inputs, **kwargs):
         candidates = [ self.find_candidates(word) for word in inputs ]
@@ -150,4 +142,3 @@ class UnigramWordSegmenter(object):
         candidates = list(map(lambda x: (" ".join(x[1]),abs(x[0])), candidates))
         candidates = dict(candidates)
         return ProbabilityDictionary(dictionary=candidates)
- 

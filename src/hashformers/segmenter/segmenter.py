@@ -50,7 +50,8 @@ class WordSegmenterCascade(BaseSegmenter):
 
         return pipeline
 
-    def segment(self, word_list):
+    def segment(self, word_list, **kwargs):
+        word_list = super().preprocess(word_list, **kwargs)
         return self.generate_pipeline(word_list)[-1]
 
 class BaseWordSegmenter(BaseSegmenter):
@@ -70,6 +71,7 @@ class BaseWordSegmenter(BaseSegmenter):
             self,
             word_list: List[str],
             segmenter_run: Any = None,
+            preprocessing_kwargs: dict = {},
             segmenter_kwargs: dict = {},
             ensembler_kwargs: dict = {},
             reranker_kwargs: dict = {},
@@ -77,6 +79,9 @@ class BaseWordSegmenter(BaseSegmenter):
             use_ensembler: bool = True,
             return_ranks: bool = False) -> Any :
             
+        if preprocessing_kwargs:
+            word_list = super().preprocess(word_list, **preprocessing_kwargs)
+
         if not isinstance(segmenter_run, pd.DataFrame):
             segmenter_run = self.segmenter_model.run(
                 word_list,
@@ -155,7 +160,7 @@ class TweetSegmenter(BaseSegmenter):
     def extract_hashtags(self, tweets):
         return self.matcher(tweets)
 
-    def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
+    def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=True, separator=" ", hashtag_character="#"):
 
         hashtag_buffer = {
             k:v for k,v in zip(hashtags, segmentations)

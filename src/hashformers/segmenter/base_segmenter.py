@@ -6,11 +6,14 @@ from hashformers.segmenter.data_structures import (
 from collections.abc import Iterable
 
 def coerce_segmenter_objects(method):
-    def wrapper(inputs, *args, **kwargs):
+    def wrapper(inputs, **kwargs):
+        
         if isinstance(inputs, str):
-            output = method([inputs], *args, **kwargs)
+            output = method([inputs], **kwargs)
+        elif isinstance(inputs, Iterable):
+            output = method(inputs, **kwargs)
         else:
-            output = method(inputs, *args, **kwargs)
+            raise NotImplementedError
         
         for allowed_type in [
             WordSegmenterOutput,
@@ -30,5 +33,21 @@ def coerce_segmenter_objects(method):
 class BaseSegmenter(object):
 
     @coerce_segmenter_objects
-    def predict(self, *args, **kwargs):
-        return self.segment(*args, **kwargs)
+    def predict(self, inputs, **kwargs):
+        return self.segment(inputs, **kwargs)
+    
+    def preprocess(self, inputs, lower=False, remove_hashtag=True, hashtag_character="#"):
+        def preprocess_input(word):
+            if lower:
+                word = word.lower()
+            if remove_hashtag:
+                word = word.lstrip(hashtag_character)
+        
+        if isinstance(inputs, str):
+            inputs = preprocess_input(inputs)
+        elif isinstance(inputs, Iterable):
+            inputs = [ preprocess_input(x) for x in inputs ]
+        else:
+            raise NotImplementedError
+        
+        return inputs
