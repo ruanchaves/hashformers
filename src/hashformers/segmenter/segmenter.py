@@ -18,11 +18,16 @@ class WordSegmenterCascade(BaseSegmenter):
         self.cascade_nodes = cascade_nodes
 
     def generate_pipeline(self, word_list):
+
+        self.cascade_nodes[0].word_segmenter_kwargs.setdefault("return_ranks", True)
+
         first_ws_output = self.cascade_nodes[0].word_segmenter.segment(
             word_list, 
-            **self.cascade_nodes[0].segment_kwargs)
+            **self.cascade_nodes[0].word_segmenter_kwargs)
+
         cascade_stack = [first_ws_output]
         pipeline = [first_ws_output]
+        
         for idx in range(len(self.cascade_nodes)):
 
             self.cascade_nodes[idx].word_segmenter_kwargs.setdefault("return_ranks", True)
@@ -36,11 +41,12 @@ class WordSegmenterCascade(BaseSegmenter):
                 current_kwargs = self.cascade_nodes[idx].word_segmenter_kwargs
                 if next_input:
                     current_kwargs.setdefault("segmenter_run", next_input)
-                current_ws_output = self.cascade_nodes[idx].segment(
+                current_ws_output = self.cascade_nodes[idx].word_segmenter.segment(
                     word_list, 
-                    **self.current_kwargs)
+                    **current_kwargs)
                 cascade_stack.append(current_ws_output)
                 pipeline.append(current_ws_output)
+
         return pipeline
 
     def segment(self, word_list):
