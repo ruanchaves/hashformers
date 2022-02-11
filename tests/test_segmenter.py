@@ -9,7 +9,8 @@ from hashformers import (RegexWordSegmenter, TweetSegmenter,
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
-from hashformers.segmenter.segmenter import WordSegmenter, WordSegmenterCascade
+from hashformers.segmenter.segmenter import BaseWordSegmenter
+from hashformers.segmenter.segmenter import WordSegmenterCascade
 from hashformers.segmenter.data_structures import CascadeNode
 import dataclasses
 from pathlib import Path
@@ -44,7 +45,7 @@ def word_segmenter_gpt2_bert():
 
     ensembler = Top2_Ensembler()
 
-    ws = WordSegmenter(
+    ws = BaseWordSegmenter(
         segmenter=segmenter,
         reranker=reranker,
         ensembler=ensembler
@@ -56,7 +57,7 @@ def word_segmenter_unigram():
     segmenter = UnigramWordSegmenter(
         max_split_length=20
     )
-    ws = WordSegmenter(
+    ws = BaseWordSegmenter(
         segmenter=segmenter,
         reranker=None,
         ensembler=None
@@ -76,7 +77,7 @@ def word_segmenter_unigram_bert():
 
     ensembler = Top2_Ensembler()
 
-    ws = WordSegmenter(
+    ws = BaseWordSegmenter(
         segmenter=segmenter,
         reranker=reranker,
         ensembler=ensembler
@@ -97,7 +98,7 @@ def word_segmenter_unigram_gpt2():
 
     ensembler = Top2_Ensembler()
 
-    ws = WordSegmenter(
+    ws = BaseWordSegmenter(
         segmenter=segmenter,
         reranker=reranker,
         ensembler=ensembler
@@ -124,13 +125,13 @@ def word_segmenter_unigram_gpt2_bert_cascade():
 
     ensembler = Top2_Ensembler()
 
-    ws1 = WordSegmenter(
+    ws1 = BaseWordSegmenter(
             segmenter=segmenter,
             reranker=reranker_1,
             ensembler=ensembler
     )
 
-    ws2 = WordSegmenter(
+    ws2 = BaseWordSegmenter(
             segmenter=None,
             reranker=reranker_2,
             ensembler=ensembler
