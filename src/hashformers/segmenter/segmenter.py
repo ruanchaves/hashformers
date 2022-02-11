@@ -33,7 +33,7 @@ class WordSegmenterCascade(BaseSegmenter):
                     next_input = getattr(previous_ws_output, item)
                     if next_input:
                         break
-                current_kwargs = self.cascade_nodes[idx].segment_kwargs
+                current_kwargs = self.cascade_nodes[idx].word_segmenter_kwargs
                 if next_input:
                     current_kwargs.setdefault("segmenter_run", next_input)
                 current_ws_output = self.cascade_nodes[idx].segment(
