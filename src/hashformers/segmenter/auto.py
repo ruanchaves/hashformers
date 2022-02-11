@@ -6,7 +6,7 @@ from hashformers.segmenter import (
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
-from unigram_segmenter import UnigramWordSegmenter
+from hashformers.segmenter.unigram_segmenter import UnigramWordSegmenter
 
 class FastWordSegmenter(BaseWordSegmenter):
     def __init__(
