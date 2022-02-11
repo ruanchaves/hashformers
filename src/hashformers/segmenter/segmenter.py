@@ -79,8 +79,7 @@ class BaseWordSegmenter(BaseSegmenter):
             use_ensembler: bool = True,
             return_ranks: bool = False) -> Any :
             
-        if preprocessing_kwargs:
-            word_list = super().preprocess(word_list, **preprocessing_kwargs)
+        word_list = super().preprocess(word_list, **preprocessing_kwargs)
 
         if not isinstance(segmenter_run, pd.DataFrame):
             segmenter_run = self.segmenter_model.run(
