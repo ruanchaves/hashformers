@@ -14,30 +14,31 @@ import dataclasses
 
 class WordSegmenterCascade(BaseSegmenter):
 
-    def __init__(self, cascade):
+    def __init__(self, cascade, cascade_kwargs):
         self.cascade = cascade
+        self.cascade_kwargs = cascade_kwargs
 
-    def generate_pipeline(self, word_list, cascade_kwargs):
-        first_ws_output = self.cascade[0].segment(word_list, **cascade_kwargs[0])
+    def generate_pipeline(self, word_list):
+        first_ws_output = self.cascade[0].segment(word_list, **self.cascade_kwargs[0])
         cascade_stack = [first_ws_output]
         pipeline = [first_ws_output]
-        for idx in range(len(cascade_kwargs)):
+        for idx in range(len(self.cascade_kwargs)):
             if idx:
                 previous_ws_output = cascade_stack.pop()
                 for item in ["ensemble_rank", "reranker_rank", "segmenter_rank"]:
                     next_input = getattr(previous_ws_output, item)
                     if next_input:
                         break
-                current_kwargs = cascade_kwargs[idx]
+                current_kwargs = self.cascade_kwargs[idx]
                 if next_input:
                     current_kwargs.setdefault("segmenter_run", next_input)
-                current_ws_output = self.cascade[idx].segment(word_list, **current_kwargs)
+                current_ws_output = self.cascade[idx].segment(word_list, **self.current_kwargs)
                 cascade_stack.append(current_ws_output)
                 pipeline.append(current_ws_output)
         return pipeline
 
-    def segment(self, word_list, cascade_kwargs):
-        return self.generate_pipeline(word_list, cascade_kwargs)[-1]
+    def segment(self, word_list):
+        return self.generate_pipeline(word_list)[-1]
 
 class WordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
