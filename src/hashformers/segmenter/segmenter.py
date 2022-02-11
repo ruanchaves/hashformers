@@ -77,7 +77,7 @@ class WordSegmenter(BaseSegmenter):
             use_ensembler: bool = True,
             return_ranks: bool = False) -> Any :
             
-        if not segmenter_run:
+        if not isinstance(segmenter_run, pd.DataFrame):
             segmenter_run = self.segmenter_model.run(
                 word_list,
                 **segmenter_kwargs
