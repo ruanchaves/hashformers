@@ -128,12 +128,12 @@ def word_segmenter_unigram_gpt2_bert_cascade():
         WordSegmenter(
             segmenter=segmenter,
             reranker=reranker_1,
-            ensemble=ensembler
+            ensembler=ensembler
         ),
         WordSegmenter(
             segmenter=None,
             reranker=reranker_2,
-            ensemble=ensembler
+            ensembler=ensembler
         )
     ]
 
