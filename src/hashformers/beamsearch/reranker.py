@@ -14,7 +14,7 @@ class Reranker(ModelLM):
         gpu_id=0,
         device="cuda"
     ):
-        self.model = super().__init__(
+        super().__init__(
             model_name_or_path=model_name_or_path,
             model_type=model_type,
             device=device,
