@@ -6,7 +6,7 @@ from hashformers.segmenter.data_structures import (
 from collections.abc import Iterable
 
 def coerce_segmenter_objects(method):
-    def wrapper(inputs, *args, **kwargs):
+    def wrapper(self, inputs, *args, **kwargs):
         
         if isinstance(inputs, str):
             output = method([inputs], *args, **kwargs)
