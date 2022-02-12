@@ -9,9 +9,9 @@ def coerce_segmenter_objects(method):
     def wrapper(self, inputs, *args, **kwargs):
         
         if isinstance(inputs, str):
-            output = method([inputs], *args, **kwargs)
+            output = method(self, [inputs], *args, **kwargs)
         elif isinstance(inputs, Iterable):
-            output = method(inputs, *args, **kwargs)
+            output = method(self, inputs, *args, **kwargs)
         else:
             raise NotImplementedError(str(type(inputs)))
         
