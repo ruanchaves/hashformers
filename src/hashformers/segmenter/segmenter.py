@@ -159,7 +159,7 @@ class TweetSegmenter(BaseSegmenter):
     def extract_hashtags(self, tweets):
         return self.matcher(tweets)
 
-    def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=True, separator=" ", hashtag_character="#"):
+    def compile_dict(self, hashtags, segmentations, hashtag_token=None, lower=False, separator=" ", hashtag_character="#"):
 
         hashtag_buffer = {
             k:v for k,v in zip(hashtags, segmentations)
