@@ -23,7 +23,7 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 ## Basic usage
 
 ```python
-from hashformers import WordSegmenter
+from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
@@ -41,8 +41,6 @@ print(segmentations)
 # 'ice cold' ]
 ```
 
-For more information, read the [documentation for the WordSegmenter object](https://ruanchaves.github.io/hashformers/html/hashformers.segmenter.html#hashformers.segmenter.segmenter.WordSegmenter).
-
 ## Installation
 
 Hashformers is compatible with Python 3.7.
@@ -54,13 +52,14 @@ pip install hashformers
 It is possible to use **hashformers** without a reranker:
 
 ```python
+from hashformers import TransformerWordSegmenter as WordSegmenter
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
     reranker_model_name_or_path=None
 )
 ```
 
-If you want to use a reranker model, you must install [mxnet](https://pypi.org/project/mxnet/). Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the [mxnet package](https://pypi.org/project/mxnet/) compatible with your CUDA version.
+If you want to use a BERT model as a reranker, you must install [mxnet](https://pypi.org/project/mxnet/). Here we install **hashformers** with `mxnet-cu110`, which is compatible with Google Colab. If installing in another environment, replace it by the [mxnet package](https://pypi.org/project/mxnet/) compatible with your CUDA version.
 
 ```
 pip install mxnet-cu110 
