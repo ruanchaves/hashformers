@@ -92,8 +92,7 @@
   <section id="evaluation">
 <h1>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline"></a></h1>
 <p>We provide a detailed evaluation of the accuracy and speed of the <code class="docutils literal notranslate"><span class="pre">hashformers</span></code> framework in comparison with alternative libraries.</p>
-<p>Although models based on n-grams such as <code class="docutils literal notranslate"><span class="pre">ekphrasis</span></code> are orders of magnitude faster than <code class="docutils literal notranslate"><span class="pre">hashformers</span></code>, they are remarkably unstable across different datasets.</p>
-<p>Research papers on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods. So it is possible that the best speed-accuracy trade-off may lie in building <a class="reference external" href="https://arxiv.org/abs/2010.06467">ranking cascades</a> ( a.k.a. “telescoping” ) where <code class="docutils literal notranslate"><span class="pre">hashformers</span></code> is used as a fallback for when less time-consuming methods score below a certain confidence threshold.</p>
+<p>Although models based on n-grams such as <code class="docutils literal notranslate"><span class="pre">ekphrasis</span></code> are orders of magnitude faster than <code class="docutils literal notranslate"><span class="pre">hashformers</span></code>, they are remarkably unstable across different domains. Research on word segmentation usually try to bring the best of both worlds together and combine deep learning with statistical methods for reaching the best speed-accuracy trade-off.</p>
 <section id="accuracy">
 <h2>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this headline"></a></h2>
 <h1 align="center">

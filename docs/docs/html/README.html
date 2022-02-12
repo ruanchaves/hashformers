@@ -94,14 +94,14 @@
 <p><a class="reference external" href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 <a class="reference external" href="https://pypi.com/project/pip/"><img alt="PyPi license" src="https://badgen.net/pypi/license/pip/" /></a></p>
 <p>Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag.</p>
-<p>Hashformers is the current <strong>state-of-the-art</strong> for hashtag segmentation. On average, hashformers is <strong>10% more accurate</strong> than the second best hashtag segmentation library ( more details <a class="reference external" href="https://hashformers.readthedocs.io/en/latest/EVALUATION.html">on the docs</a> ).</p>
+<p><a class="reference external" href="https://github.com/ruanchaves/hashformers">Hashformers</a> is the current <strong>state-of-the-art</strong> for hashtag segmentation. On average, hashformers is <strong>10% more accurate</strong> than the second best hashtag segmentation library ( more details <a class="reference external" href="https://ruanchaves.github.io/hashformers/html/EVALUATION.html">on the docs</a> ).</p>
 <p>Hashformers is also <strong>language-agnostic</strong>: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the <a class="reference external" href="https://huggingface.co/models">Hugging Face Model Hub</a>.</p>
-<p align="center"><p><h3> <a href="https://hashformers.readthedocs.io/"> ✂️ Read the documentation </a> </h3></p>
+<p align="center"><p><h3> <a href="https://ruanchaves.github.io/hashformers/html/README.html"> ✂️ Read the documentation </a> </h3></p>
 <p><h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Segment hashtags on Google Colab </a> </h3></p>
 <p><h3> <a href="https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Follow the step-by-step tutorial </a> </h3></p>
 </p><section id="basic-usage">
 <h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hashformers</span> <span class="kn">import</span> <span class="n">WordSegmenter</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hashformers</span> <span class="kn">import</span> <span class="n">TransformerWordSegmenter</span> <span class="k">as</span> <span class="n">WordSegmenter</span>
 
 <span class="n">ws</span> <span class="o">=</span> <span class="n">WordSegmenter</span><span class="p">(</span>
     <span class="n">segmenter_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;gpt2&quot;</span><span class="p">,</span>
@@ -119,21 +119,22 @@
 <span class="c1"># &#39;ice cold&#39; ]</span>
 </pre></div>
 </div>
-<p>For more information, read the <a class="reference external" href="https://hashformers.readthedocs.io/en/latest/hashformers.html#hashformers-segmenter-module">documentation for the WordSegmenter object</a>.</p>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>Hashformers is compatible with Python 3.7.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">hashformers</span>
 </pre></div>
 </div>
 <p>It is possible to use <strong>hashformers</strong> without a reranker:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">WordSegmenter</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hashformers</span> <span class="kn">import</span> <span class="n">TransformerWordSegmenter</span> <span class="k">as</span> <span class="n">WordSegmenter</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">WordSegmenter</span><span class="p">(</span>
     <span class="n">segmenter_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;gpt2&quot;</span><span class="p">,</span>
     <span class="n">reranker_model_name_or_path</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>If you want to use a reranker model, you must install <a class="reference external" href="https://pypi.org/project/mxnet/">mxnet</a>. Here we install <strong>hashformers</strong> with <code class="docutils literal notranslate"><span class="pre">mxnet-cu110</span></code>, which is compatible with Google Colab. If installing in another environment, replace it by the <a class="reference external" href="https://pypi.org/project/mxnet/">mxnet package</a> compatible with your CUDA version.</p>
+<p>If you want to use a BERT model as a reranker, you must install <a class="reference external" href="https://pypi.org/project/mxnet/">mxnet</a>. Here we install <strong>hashformers</strong> with <code class="docutils literal notranslate"><span class="pre">mxnet-cu110</span></code>, which is compatible with Google Colab. If installing in another environment, replace it by the <a class="reference external" href="https://pypi.org/project/mxnet/">mxnet package</a> compatible with your CUDA version.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mxnet</span><span class="o">-</span><span class="n">cu110</span> 
 <span class="n">pip</span> <span class="n">install</span> <span class="n">hashformers</span>
 </pre></div>
