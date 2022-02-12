@@ -13,7 +13,7 @@ def coerce_segmenter_objects(method):
         elif isinstance(inputs, Iterable):
             output = method(inputs, *args, **kwargs)
         else:
-            raise NotImplementedError
+            raise NotImplementedError(str(type(inputs)))
         
         for allowed_type in [
             WordSegmenterOutput,
