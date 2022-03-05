@@ -1,8 +1,12 @@
 from math import log10
+from math import inf
 from hashformers.segmenter.base_segmenter import BaseSegmenter
 from wordfreq import get_frequency_list
 from functools import reduce
 from hashformers.beamsearch.data_structures import ProbabilityDictionary
+
+def corrected_log10(x):
+    return log10(x) if x != 0 else -inf
 
 class Pdist(dict):
     """
@@ -113,7 +117,7 @@ class UnigramWordSegmenter(BaseSegmenter):
     def find_candidates(self, text, prev='<S>'):
         candidates = [
             self.combine(
-                (log10(self.condProbWord(first, prev)), first), 
+                (corrected_log10(self.condProbWord(first, prev)), first), 
                 self.find_segment(rem, first))
                       for first, rem in self.splits(text)]
         return candidates
