@@ -97,7 +97,7 @@ class BaseWordSegmenter(BaseSegmenter):
         if use_reranker and self.reranker_model:
             reranker_run = self.reranker_model.rerank(segmenter_run, **reranker_kwargs)
 
-        if use_reranker and use_ensembler and self.ensembler:
+        if use_reranker and self.reranker_model and use_ensembler and self.ensembler:
             ensemble_prob_dict = self.ensembler.run(
                 segmenter_run,
                 reranker_run,

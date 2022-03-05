@@ -1,0 +1,957 @@
+abstractconnectorserializeddataversion: abstract connector serialized data version
+abstractfigure:  abstract figure
+abstractfigures:  abstract figures
+abstractfigureserializeddataversion:  abstract figureserialized data version
+abstracthandle:  abstract handle
+abstractlocator:  abstract locator
+abstracttool:  abstract tool
+acceptstyping:  accepts typing
+actionevent:  action event
+actionlistener:  action listener
+actionperformed:  action performed
+actiontool:  action tool
+addactionlistener:  add action listener
+addall:  add all
+addbackground:  add background
+addcornerhandles:  add corner handles
+adddrawingchangelistener:  add drawing change listener
+addelement:  add element
+addfigurechangelistener:  add figure change listener
+addforeground:  add foreground
+addhandles:  add handles
+addimage:  add image
+addinternal:  add internal
+additem:  add item
+additemlistener:  add item listener
+addkeylistener:  add key listener
+addlayoutcomponent:  add layout component
+addlisteners:  add listeners
+addmouselistener:  add mouse listener
+addmousemotionlistener:  add mouse motion listener
+addpoint:  add point
+addpointrelative:  add point relative
+addposttask:  add post task
+addpretask:  add pre task
+addseparator:  add separator
+addtocontainer:  add to container
+addtoselection:  add to selection
+addtoselectionall:  add to selectionall
+addwindowlistener:  add window listener
+aligncommand:  align command
+alignmentmenu:  align mentmenu
+allbits:  all bits
+anchorangle:  anchor angle
+anchorfigure:  anchor figure
+anchorhandle:  anchor handle
+anchorlen:  anchor len
+anchorx:  anchor x
+anchory:  anchor y
+andrewfg:  and rewfg
+angletopoint:  angle to point
+animationdecorator:  animation decorator
+animationdecoratorserializeddataversion:  animation decorator serialized data version
+animationstep:  animation step
+anyway:  any way
+appletclassname:  applet class name
+appletpath:  applet path
+arrayindexoutofboundsexception:  array index out of bounds exception
+arrowmode:  arrow mode
+arrowtip:  arrow tip
+arrowtipserializeddataversion:  arrow tip serialized data version
+asint:  as int
+attributefigure:  attribute figure
+attributefigureserializeddataversion:  attribute figure serialized data version
+attributename:  attribute name
+attributevalue:  attribute value
+awteventmulticaster:  awt event multi caster
+basicdisplaybox:  basic display box
+basicgetimage:  basic get image
+basicmoveby:  basic move by
+beginedit:  begin edit
+booleanvalue:  boolean value
+borddec:  bord decorator
+borderdecorator:  border decorator
+borderdecoratorserializeddataversion:  border decorator serialized data version
+borderlayout:  border layout
+bordertool:  border tool
+bouncingdrawing:  bouncing drawing
+bouncingdrawingserializeddataversion:  bouncing drawing serialized data version
+boxhandlekit:  box handle kit
+bringtofront:  bring to front
+bringtofrontcommand:  bring to front command
+bufferedreader:  buffered reader
+bufferedupdateserializeddataversion:  buffered update serialized data version
+bufferedupdatestrategy:  buffered update strategy
+buttonpalette:  button palette
+bytearrayinputstream:  byte array input stream
+bytearrayoutputstream:  byte array output stream
+bytestream:  byte stream
+canconnect:  can connect
+cannot:  can not
+changeattributecommand:  change attribute command
+changeconnectionendhandle:  change connection end handle
+changeconnectionhandle:  change connection handle
+changeconnectionhandles:  change connection handles
+changeconnectionstarthandle:  change connection start handle
+checkdamage:  check damage
+checkenabled:  check enabled
+checkminimumsize:  check minimum size
+chopboxconnector:  chop box connector
+chopellipseconnector:  chop ellipse connector
+choppolygonconnector:  chop polygon connector
+classname:  class name
+classnotfoundexception:  class not found exception
+clearselection:  clear selection
+clipboard:  clip board
+clonenotsupportedexception:  clone not supported exception
+codebase:  code base
+colorentry:  color entry
+colorindex:  color index
+colormap:  color map
+commandbutton:  command button
+commandchoice:  command choice
+commandmenu:  command menu
+compositefigure:  composite figure
+compositefigureserializeddataversion:  composite figure serialized data version
+connectedfigure:  connected figure
+connectedtextlocator:  connected text locator
+connectedtexttool:  connected text tool
+connectend:  connect end
+connectionfigure:  connection figure
+connectionfigures:  connection figures
+connectionhandle:  connection handle
+connectioninsets:  connection in sets
+connectiontool:  connection tool
+connectorvisibility:  connector visibility
+connectssame:  connects same
+connectstart:  connect start
+constrainpoint:  constrain point
+containskey:  contains key
+containspoint:  contains point
+copycommand:  copy command
+copyselection:  copy selection
+createalignmentmenu:  create alignment menu
+createanimationmenu:  create animation menu
+createareatracker:  create area tracker
+createarrowmenu:  create arrow menu
+createattributechoices:  create attribute choices
+createattributesmenu:  createat tributes menu
+createattributespanel:  create attributes panel
+createbuttonpanel:  create button panel
+createbuttons:  create buttons
+createcolorchoice:  create color choice
+createcolormenu:  create color menu
+createconnection:  create connection
+createconnectors:  create connectors
+createcontents:  create contents
+createcurrentfont:  create current font
+createdebugmenu:  create debug menu
+createdfigure:  created figure
+createdragtracker:  create drag tracker
+createdrawing:  create drawing
+createdrawingview:  create drawing view
+createeditmenu:  create edit menu
+createfigure:  create figure
+createfilemenu:  create file menu
+createfontchoice:  create font choice
+createfontmenu:  create font menu
+createfontsizemenu:  create font size menu
+createfontstylemenu:  create font style menu
+createhandletracker:  create handle tracker
+createimage:  create image
+createimagesmenu:  create images menu
+createmenus:  create menus
+createoverlay:  create overlay
+createselectiontool:  create selection tool
+createstatusline:  create status line
+createtoolbutton:  create tool button
+createtoolpalette:  create tool palette
+createtools:  create tools
+createwindowmenu:  create window menu
+creationtool:  creation tool
+crosshair:  cross hair
+currentthread:  current thread
+currenttimemillis:  current time millis
+cutcommand:  cut command
+darkgray:  dark gray
+decoratorfigure:  decorator figure
+decoratorfigureserializeddataversion:  decorator figure serialized data version
+decrementindent:  decrement indent
+defaultreadobject:  default read object
+defaultsize:  default size
+deletecommand:  delete command
+deleteselection:  delete selection
+diamondfigure:  diamond figure
+disconnectend:  disconnect end
+disconnectstart:  disconnect start
+displaybox:  display box
+distancefromline:  distance from line
+dragtracker:  drag tracker
+drawall:  draw all
+drawapplet:  draw applet
+drawapplication:  draw application
+drawbackground:  draw background
+drawborder:  draw border
+drawconnectors:  draw connectors
+drawdrawing:  draw drawing
+drawframe:  draw frame
+drawghost:  draw ghost
+drawhandles:  draw handles
+drawimage:  draw image
+drawingchangeevent:  drawing change event
+drawingchangelistener:  drawing change listener
+drawingchangelisteners:  drawing change listeners
+drawingchoice:  drawing choice
+drawingeditor:  drawing editor
+drawinginvalidated:  drawing invalidated
+drawingrequestupdate:  drawing request update
+drawingserializeddataversion:  drawing serialized data version
+drawingview:  drawing view
+drawingviewserializeddataversion:  drawing view serialized data version
+drawline:  draw line
+drawoval:  draw oval
+drawpainters:  draw painters
+drawpattern:  draw pattern
+drawpolygon:  draw polygon
+drawrect:  draw rect
+drawroundrect:  draw round rect
+drawstring:  draw string
+drawxorrect:  draw xor rect
+duplicatecommand:  duplicate command
+easthandle:  east handle
+elbowconnection:  elbow connection
+elbowconnectionserializeddataversion:  elbow connection serialized data version
+elbowhandle:  elbow handle
+elbowtextlocator:  elbow text locator
+ellipsefigure:  ellipse figure
+ellipsefigureserializeddataversion:  ellipse figure serialized data version
+endaction:  end action
+endanimation:  end animation
+endedit:  end edit
+endfigure:  end figure
+endoverlay:  end overlay
+endpoint:  end point
+endswith:  end swith
+eraserubberband:  erase rubber band
+eventlistener:  event listener
+eventobject:  event object
+fanchorfigure:  fanchor figure
+fanchorhandle:  fanchor handle
+fanchorpoint:  fanchor point
+fanimatable:  fan imatable
+fanimationbutton:  fanimation button
+fanimator:  fan imator
+farcheight:  farc height
+farcwidth:  farc width
+farrowchoice:  far row choice
+fattribute:  f attribute
+fattributes:  f attributes
+fbackground:  f background
+fbackgrounds:  f backgrounds
+fbase:  f base
+fborder:  f border
+fcenter:  f center
+fchild:  f child
+fcolor:  f color
+fcommand:  f command
+fcommands:  f commands
+fcomponent:  f component
+fconnected:  f connected
+fconnection:  f connection
+fconnectors:  f connectors
+fconnectorsvisible:  f connectors visible
+fconnectortarget:  f connector target
+fconstrainer:  f constrainer
+fcontainer:  f container
+fcontents:  f contents
+fcreatedfigure:  f created figure
+fcurrent:  f current
+fdamage:  f damage
+fdata:  f data
+fdefaulttoolbutton:  f default tool button
+fdisplaybox:  f display box
+fdrawing:  f drawing
+fdrawingfilename:  f drawing file name
+fdrawinglockholder:  f drawing lock holder
+feditedconnection:  f edited connection
+feditor:  f editor
+feditwidget:  f edit widget
+fend:  f end
+fendconnector:  f end connector
+fenddecoration:  f end decoration
+fenumeration:  f enumeration
+ffigures:  f figures
+ffilename:  f file name
+ffillcolor:  f fill color
+ffont:  f font
+ffontchoice:  f font choice
+fforegrounds:  f foregrounds
+fframecolor:  f frame color
+fgap:  f gap
+fgclipboard:  fg clipboard
+fgcurrentfontname:  fg current font name
+fgcurrentfontsize:  fg current font size
+fgcurrentfontstyle:  fg current font style
+fgdebug:  fg debug
+fgdefaultattributes:  fg default attributes
+fgdrawpath:  fg draw path
+fgemptyrectangle:  fg empty rectangle
+fgiconkit:  fg icon kit
+fgrid:  fg rid
+fgridx:  fg rid x
+fgridy:  fg rid y
+fgsampleimagespath:  fg sample images path
+fgsampleimagesresourcepath:  fg sample images resource path
+fguntitled:  fg untitled
+fheight:  f height
+ficon:  f icon
+ficonkit:  f icon kit
+fieldbounds:  field bounds
+figureat:  figure at
+figureattributes:  figure attributes
+figureattributesserializeddataversion:  figure attributes serialized data version
+figurechanged:  figure changed
+figurechangeevent:  figure change event
+figurechangeeventmulticaster:  figure change event multi caster
+figurechangelistener:  figure change listener
+figurecount:  figure count
+figureenumeration:  figure enumeration
+figureenumerator:  figure enumerator
+figureindex:  figure index
+figureinvalidated:  figure invalidated
+figureremoved:  figure removed
+figurerequestremove:  figure request remove
+figurerequestupdate:  figure request update
+figureselection:  figure selection
+figuresreverse:  figures reverse
+figuretransfercommand:  figure transfer command
+filedialog:  file dialog
+fileinputstream:  file input stream
+filename:  file name
+fileoutputstream:  file output stream
+fillcolor:  fill color
+filloval:  fill oval
+fillpolygon:  fill polygon
+fillrect:  fill rect
+fillroundrect:  fill round rect
+fimage:  f image
+fimageheight:  f image height
+fimagewidth:  f image width
+findconnectablefigure:  find connectable figure
+findconnection:  find connection
+findconnectionstart:  find connection start
+findconnectiontarget:  find connection target
+findconnector:  find connector
+findend:  find end
+findent:  find ent
+findex:  find ex
+findfigure:  find figure
+findfigureinside:  find figure inside
+findfigureinsidewithout:  find figure inside without
+findfigurewithout:  find figure without
+findhandle:  find handle
+findpoint:  find point
+findsegment:  find segment
+findsource:  find source
+findstart:  find start
+findtarget:  find target
+finnerradius:  f inner radius
+firstelement:  first element
+fisreadonly:  f is read only
+fisrunning:  f is running
+flastclick:  f last click
+flastx:  f last x
+flasty:  f last y
+flattened:  flattened
+flistener:  f listener
+flisteners:  f listeners
+floatingtextfield:  floating text field
+flocator:  f locator
+fmap:  f map
+fmoved:  f moved
+fname:  f name
+fnormal:  f normal
+fobservedfigure:  f observed figure
+foffscreen:  f off screen
+foffsetx:  f offset x
+foffsety:  f offset y
+foldstate:  f old state
+followurltool:  follow url tool
+fontmetrics:  font metrics
+fontname:  font name
+fontsize:  font size
+fontsizehandle:  font size handle
+fontstyle:  font style
+foriginaltarget:  forigin altar get
+foriginx:  f origin x
+foriginy:  f origin y
+forigpoly:  f orig poly
+forname:  forname
+fouterradius:  f outer radius
+fowner:  f owner
+fpoints:  f points
+fpoly:  f poly
+fpolygon:  f polygon
+fposttasks:  f post tasks
+fpressed:  f pressed
+fpretasks:  f pretasks
+fprototype:  f prototype
+fradius:  f radius
+framebits:  frame bits
+framecolor:  frame color
+frectangle:  f rectangle
+freezeview:  freeze view
+fregisteredimages:  f registered images
+frelativex:  f relative x
+frelativey:  f relative y
+fscribble:  f scribble
+fsegment:  f segment
+fselected:  f selected
+fselectedtoolbutton:  f selected tool button
+fselectgroup:  f select group
+fselection:  f selection
+fselectionhandles:  f selection handles
+fsimpleupdate:  f simple update
+fsize:  f size
+fsizeisdirty:  f size is dirty
+fsleeper:  f sleeper
+fsplitpoint:  f split point
+fstart:  f start
+fstartconnector:  f start connector
+fstartdecoration:  f start decoration
+fstate:  f state
+fstatusline:  f status line
+fstream:  f stream
+ftarget:  f target
+ftext:  f text
+ftextcolor:  f text color
+ftextfield:  f text field
+ftokenizer:  f tokenizer
+ftool:  f tool
+ftypingtarget:  f typing target
+fupdatebutton:  f update button
+fupdatestrategy:  f update strategy
+furltarget:  f url target
+furthest:  furthest
+fvalue:  f value
+fverticallayout:  f vertical layout
+fview:  f view
+fviewsize:  f view size
+fwidth:  f width
+fxvelocity:  f x velocity
+fyvelocity:  f y velocity
+getappletcontext:  get applet context
+getarc:  get arc
+getascent:  get ascent
+getattribute:  get attribute
+getavailablefontfamilynames:  get available font family names
+getbackground:  get background
+getblue:  get blue
+getbounds:  get bounds
+getclass:  get class
+getclickcount:  get click count
+getclipboard:  get clip board
+getcodebase:  get code base
+getcomponent:  get component
+getcomponentcount:  get component count
+getconstrainer:  get constrainer
+getcontent:  get content
+getcontents:  get contents
+getdata:  get data
+getdefaultattribute:  get default attribute
+getdefaultcursor:  get default cursor
+getdefaulttoolkit:  get default tool kit
+getdirectory:  get directory
+getdocumentbase:  get document base
+getdrawing:  get drawing
+getdrawingviewsize:  get drawing view size
+getendconnector:  get end connector
+getfigure:  get figure
+getfigureselection:  get figure selection
+getfile:  get file
+getfillcolor:  get fill color
+getfont:  get font
+getfontlist:  get font list
+getfontmetrics:  get font metrics
+getframecolor:  get frame color
+getgraphics:  get graphics
+getgreen:  get green
+gethadjustable:  get had justable
+getheight:  get height
+getimage:  get image
+getinsets:  get in sets
+getinvalidatedrectangle:  get invalidated rectangle
+getitem:  get item
+getitemcount:  get item count
+getkeycode:  get key code
+getlabel:  get label
+getlocalgraphicsenvironment:  get local graphics environment
+getmenu:  get menu
+getmenubar:  get menu bar
+getminimumsize:  get minimum size
+getname:  get name
+getorigin:  get origin
+getparameter:  get parameter
+getpolygon:  get polygon
+getpredefinedcursor:  get predefined cursor
+getpreferredsize:  get preferred size
+getprintjob:  get print job
+getred:  get red
+getresource:  get resource
+getsavepath:  get save path
+getselectedindex:  get selected index
+getsize:  get size
+getsource:  get source
+getstart:  get start
+getstartconnector:  get start connector
+getstatechange:  get state change
+getstepx:  get step x
+getstepy:  get step y
+getstyle:  get style
+gettarget:  get target
+gettext:  get text
+gettoolkit:  get tool kit
+gettype:  get type
+getvadjustable:  get v adjustable
+getvalue:  get value
+getwidth:  get width
+getx:  get x
+gety:  get y
+graphicsenvironment:  graphics environment
+gridconstrainer:  grid constrainer
+groupcommand:  group command
+groupfigure:  group figure
+groupfigures:  group figures
+groupfigureserializeddataversion:  group figure serialized data version
+grouphandle:  group handle
+guesstype:  guess type
+handleconnect:  handle connect
+handlecursorkey:  handle cursor key
+handledisconnect:  handle disconnect
+handlesize:  handle size
+handletracker:  handle tracker
+hascycle:  has cycle
+hasdefined:  has defined
+hashtable:  has htable
+hasmoreelements:  has more elements
+hasmoretokens:  has more tokens
+iconkit:  icon kit
+iconname:  icon name
+illegalaccessexception:  illegal access exception
+imagefigure:  image figure
+imagefigureserializeddataversion:  image figure serialized data version
+imageobserver:  image observer
+imageproducer:  image producer
+imagesdirectory:  images directory
+imageupdate:  image update
+incrementindent:  increment indent
+indexof:  index of
+initdrawing:  init drawing
+initializeattributes:  initialize attributes
+innermost:  inner most
+innerradius:  inner radius
+inputstream:  input stream
+inputstreamreader:  input stream reader
+insertelementat:  insert element at
+insertfigures:  insert figures
+insertimagecommand:  insert image command
+insertpointat:  insert point at
+inspectfigure:  inspect figure
+instantiationexception:  instantiation exception
+internalerror:  internal error
+interruptedexception:  interrupted exception
+intobj:  int obj
+intvalue:  int value
+invokeend:  invoke end
+invokestart:  invoke start
+invokestep:  invoke step
+ioexception:  io exception
+isempty:  is empty
+isexecutable:  is executable
+isfocustraversable:  is focus traversable
+isprinting:  is printing
+isreadonly:  is readonly
+isshiftdown:  is shift down
+istransparent:  is transparent
+isvertical:  is vertical
+isvisible:  is visible
+itemevent:  item event
+itemlistener:  item listener
+itemstatechanged:  item state changed
+itself:  it self
+itsview:  its view
+iwidth:  i width
+javadraw:  java draw
+javadrawapp:  java draw app
+javadrawapplet:  java draw applet
+javadrawviewer:  java draw viewer
+jhotdraw:  j hot draw
+joinsegments:  join segments
+keydown:  key down
+keyevent:  key event
+keylistener:  key listener
+keypressed:  key pressed
+keyreleased:  key released
+keytyped:  key typed
+lastclick:  last click
+lastelement:  last element
+layoutconnection:  layout connection
+layoutcontainer:  layout container
+layoutmanager:  layout manager
+lightgray:  light gray
+lineconnection:  line connection
+lineconnectionserializeddataversion:  line connection serialized data version
+linecontainspoint:  line contains point
+linedecoration:  line decoration
+linefigure:  line figure
+linefigureserializeddataversion:  line figurese rialized data version
+lineno:  line no
+loaddrawing:  load drawing
+loadimage:  load image
+loadimageresource:  load image resource
+loadregisteredimages:  load registered images
+locatorconnector:  locator connector
+locatorconnectorserializeddataversion:  locator connector serialized data version
+locatorhandle:  locator handle
+makeinstance:  make instance
+malformedurlexception:  malformed url exception
+markdirty:  mark dirty
+mediatracker:  media tracker
+menubar:  menu bar
+menuitem:  menu item
+menushortcut:  menu shortcut
+minimumlayoutsize:  minimum layout size
+mouseclicked:  mouse clicked
+mousedown:  mouse down
+mousedrag:  mouse drag
+mousedragged:  mouse dragged
+mouseentered:  mouse entered
+mouseevent:  mouse event
+mouseexited:  mouse exited
+mouselistener:  mouse listener
+mousemotionlistener:  mouse motion listener
+mousemove:  mouse move
+mousemoved:  mouse moved
+mousepressed:  mouse pressed
+mousereleased:  mouse released
+mouseup:  mouse up
+moveby:  move by
+moveselection:  move selection
+myowner:  my owner
+myselectiontool:  my selection tool
+needslayout:  needs layout
+netapp:  net app
+netscape:  net scape
+newangle:  new angle
+newcorner:  new corner
+newend:  new end
+newextent:  new extent
+newfigure:  new figure
+newfigures:  new figures
+newfont:  new font
+newinstance:  new instance
+newlen:  new len
+neworigin:  new origin
+newsize:  new size
+newtext:  new text
+nextelement:  next element
+nextfigure:  next figure
+nexttoken:  next token
+nodefigure:  node figure
+northeasthandle:  north east handle
+northhandle:  north handle
+northwest:  north west
+northwesthandle:  north west handle
+nosuchelementexception:  no such element exception
+nosuchmethoderror:  no such method error
+nothingapp:  nothing app
+nothingapplet:  nothing applet
+notifyall:  notify all
+notifyposttasks:  notify post tasks
+nullhandle:  null handle
+nullhandles:  null handles
+numberformatexception:  number format exception
+numbertextfigure:  number text figure
+numbertextfigureserializeddataversion:  number text figure serialized data version
+objectinput:  object input
+objectinputstream:  object input stream
+objectoutput:  object output
+objectoutputstream:  object output stream
+offscreen:  off screen
+offsetlocator:  offset locator
+offsetlocatorserializeddataversion:  offset locator serialized data version
+offsetx:  offset x
+offsety:  offset y
+oldcorner:  old corner
+openstream:  open stream
+openview:  open view
+originalpolygon:  original polygon
+orphanall:  orphan all
+outermost:  outermost
+outermostpoint:  outermost point
+outerradius:  outer radius
+outputstream:  output stream
+outside:  out side
+ovalangletopoint:  oval angle to point
+overlaycolumns:  overlay columns
+ownerconnection:  owner connection
+paintbackground:  paint background
+paintnormal:  paint normal
+paintpressed:  paint pressed
+paintselected:  paint selected
+palettebutton:  palette button
+paletteicon:  palette icon
+palettelayout:  palette layout
+palettelistener:  palette listener
+paletteuserover:  palette user over
+paletteuserselected:  palette user selected
+partextent:  par textent
+partorigin:  part origin
+pastecommand:  paste command
+pathname:  path name
+patternpainter:  pattern painter
+peeldecoration:  peel decoration
+pertapplet:  pert applet
+pertapplication:  pert application
+pertdependency:  pert dependency
+pertdependencyserializeddataversion:  pert dependency serialized data version
+pertfigure:  pert figure
+pertfigurecreationtool:  pert figure creation tool
+pertfigureserializeddataversion:  pert figure serialized data version
+pertimages:  pert images
+pointconstrainer:  point constrainer
+pointcount:  point count
+pointindex:  point index
+pointtoangle:  point to angle
+polartopoint:  polar to point
+polygonfigure:  polygon figure
+polygonfigures:  polygon figures
+polygonfigureserializeddataversion:  polygon figure serialized data version
+polygonhandle:  polygon handle
+polygonpointaddhandle:  polygon point add handle
+polygonscalehandle:  polygon scale handle
+polygontool:  polygon tool
+polyline:  poly line
+polylineconnector:  poly line connector
+polylinefigure:  poly line figure
+polylinefigures:  poly line figures
+polylinefigureserializeddataversion:  poly line figure serialized data version
+polylinehandle:  poly line handle
+polylinehandles:  poly line handles
+polylinelocator:  poly line locator
+preferredlayoutsize:  preferred layout size
+printall:  print all
+printgraphics:  print graphics
+printjob:  print job
+printwriter:  print writer
+promptnew:  prompt new
+promptopen:  prompt open
+promptsaveas:  prompt saveas
+promptsaveasserialized:  prompt save as serialized
+radiushandle:  radius handle
+readboolean:  read boolean
+readcolor:  read color
+readdouble:  read double
+readdrawing:  read drawing
+readfromobjectinput:  read from object input
+readfromstorableinput:  read from storable input
+readint:  read int
+readobject:  read object
+readonly:  read only
+readstorable:  read storable
+readstring:  read string
+readtasks:  read tasks
+rectanglefigure:  rectangle figure
+rectanglefigureserializeddataversion:  rectangle figure serialized data version
+registerandloadimage:  register and load image
+registerimage:  register image
+relativelocator:  relative locator
+relativelocatorserializeddataversion:  relative locator serialized data version
+relativex:  relative x
+relativey:  relative y
+removeactionlistener:  remove action listener
+removeall:  remove all
+removeallelements:  remove all elements
+removebackground:  remove background
+removedrawingchangelistener:  removed rawing change listener
+removeelement:  remove element
+removeelementat:  remove element at
+removefigurechangelistener:  remove figure change listener
+removeforeground:  remove foreground
+removefrfigurerequestremove:  remove fr figure request remove
+removefromcontainer:  remove from container
+removefromdrawing:  remove from drawing
+removefromselection:  remove from selection
+removeinternal:  remove internal
+removelayoutcomponent:  remove layout component
+removepointat:  remove point at
+removeposttask:  remove post task
+removepretask:  remove pre task
+repairdamage:  repair damage
+requestfocus:  request focus
+requestupdate:  request update
+resourcename:  resource name
+reversefigureenumerator:  reverse figure enumerator
+reversevectorenumerator:  reverse vector enumerator
+roundrectanglefigure:  round rectangle figure
+roundrectangleserializeddataversion:  round rectangle serialized data version
+rubberband:  rubber band
+sampleimages:  sample images
+saveasobjectoutput:  save as object output
+saveasstorableoutput:  save as storable output
+scalerotate:  scale rotate
+scribbletool:  scribble tool
+scrollpane:  scroll pane
+selectall:  select all
+selectareatracker:  select area tracker
+selectgroup:  select group
+selectionchanged:  selection changed
+selectioncount:  selection count
+selectionelements:  selection elements
+selectionhandles:  selection handles
+selectiontool:  selection tool
+selectionzordered:  selection z ordered
+sendtoback:  send to back
+sendtobackcommand:  send to back command
+serialversionuid:  serial version uid
+setarc:  set arc
+setattribute:  set attribute
+setbackground:  set background
+setbounds:  set bounds
+setbuffereddisplayupdate:  set buffered display update
+setcolor:  set color
+setconstrainer:  set constrainer
+setcontents:  set contents
+setcurrentfontname:  set current font name
+setcurrentfontsize:  set current font size
+setcurrentfontstyle:  set current font style
+setcursor:  set cursor
+setdisplayupdate:  set display update
+setdrawing:  set drawing
+seteditable:  set editable
+seteditor:  set editor
+setelementat:  set element at
+setenabled:  set enabled
+setend:  set end
+setenddecoration:  set end decoration
+setfont:  set font
+setframecolor:  set frame color
+setint:  set int
+setlabel:  set label
+setlayout:  set layout
+setmenubar:  set menu bar
+setname:  set name
+setpoint:  set point
+setpointat:  set point at
+setpoints:  set points
+setreadonly:  set read only
+setselected:  set selected
+setsimpledisplayupdate:  set simple display update
+setsize:  set size
+setstartdecoration:  set start decoration
+settext:  set text
+settitle:  set title
+settool:  set tool
+setunitincrement:  set unit increment
+setupattributes:  setup attributes
+setvalue:  set value
+setvisible:  set visible
+setxormode:  set xor mode
+shortestdistanceconnector:  shortest distance connector
+showdocument:  show document
+showhelp:  show help
+showstatus:  show status
+simpleupdatestrategy:  simple update strategy
+sleeperthread:  sleeper thread
+smoothpoints:  smooth points
+southeast:  south east
+southeasthandle:  south east handle
+southhandle:  south handle
+southwest:  south west
+southwesthandle:  south west handle
+splitsegment:  split segment
+standarddrawing:  standard drawing
+standarddrawingview:  standard drawing view
+startanimation:  start animation
+startconnector:  start connector
+startnewline:  start new line
+startpoint:  start point
+startsleeper:  start sleeper
+stopsleeper:  stop sleeper
+storableinput:  storable input
+storableoutput:  storable output
+streamtokenizer:  stream tokenizer
+stringtokenizer:  string tokenizer
+stringwidth:  string width
+striptrailingasterisks:  strip trailing asterisks
+subclass:  sub class
+subclassers:  sub classers
+subclasses:  sub classes
+submenus:  sub menus
+substring:  sub string
+taskname:  task name
+textcolor:  text color
+textdisplaybox:  text display box
+textextent:  text extent
+textfield:  text field
+textfigure:  text figure
+textfigureserializeddataversion:  text figure serialized data version
+textholder:  text holder
+textowner:  text owner
+texttool:  text tool
+tobytearray:  to byte array
+together:  to gether
+toggleanimation:  toggle animation
+togglegridcommand:  toggle grid command
+toggleselection:  toggle selection
+tolowercase:  to lower case
+toolbutton:  tool button
+tooldone:  tool done
+toolkit:  toolkit
+toolname:  tool name
+toolpanel:  tool panel
+tostring:  to string
+trackconnectors:  track connectors
+trianglefigure:  triangle figure
+trianglerotationhandle:  triangle rotation handle
+unfreezeview:  unfreeze view
+ungroupcommand:  ungroup command
+updateconnection:  update connection
+updatedurations:  update durations
+updatelocation:  update location
+updatepoints:  update points
+updatestrategy:  update strategy
+urlstring:  url string
+urltool:  url tool
+vadjust:  v adjust
+valtype:  value type
+waitforall:  wait forall
+westhandle:  west handle
+willchange:  will change
+windowadapter:  window adapter
+windowclosing:  window closing
+windowevent:  window event
+workaround:  work around
+writeboolean:  write boolean
+writecolor:  write color
+writedouble:  write double
+writeint:  write int
+writeobject:  write object
+writeref:  write ref
+writestorable:  write storable
+writestring:  write string
+writetasks:  write tasks
+xdiff:  x diff
+xebc:  x ebc
+xffc:  x ffc
+xmax:  x max
+xmin:  x min
+xpoints:  x points
+xspeed:  x speed
+xvelocity:  x velocity
+ydiff:  y diff
+ymax:  y max
+ymin:  y min
+ypoints:  y points
+yspeed:  y speed
+yvelocity:  y velocity

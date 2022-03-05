@@ -1,0 +1,3085 @@
+abcdef: abc definition
+abor: abort
+abracket: a bracket
+abspath: absolute path
+accentsoft: accent soft
+acceptstring: accept string
+accesscontrol: access control
+acct: acceptt
+ack: acknowledge
+acl: access control list
+actioncode: action code
+activateradiobutton: activate radio button
+addcelltorow: add cell to row
+addcelltotable: add cell to table
+addch: add child
+addchild: add child
+addclassname: add class name
+addcolinfo: add column info
+addhiddenlink: add hidden link
+addinfo: add info
+addlbl: add label
+addobject: add object
+addobjectat: add object at
+addr: address
+addressdeflist: address definition list
+addrowgroup: add row group
+addrowtotable: add row to table
+addrs: address
+addrtype: address type
+adds: add string
+addstr: add string
+addstyle: add style
+addtolist: add to list
+addvalueaccepted: add value accepted
+adr: address
+adrs: address
+aedit: a edit
+afaik: as far as I know
+againformultinet: again formul to inet
+aka: a kind of 
+alertmail: alert mail
+alertsecs: alert secs
+alignedhostent: aligned hostent
+alink: a link
+alist: a list
+allocatedstring: allocated string
+allocationlist: allocation list
+allochtline: alloc to line
+altcharset: alternate charset
+alturls: alternative urls
+always: always
+alwaysalert: always alert
+anany: a nany
+anchoraddress: anchor address
+anchorline: anchor line
+anyaddress: any address
+anyedit: any edit
+anymap: any map
+anytolong: any to long
+anytostring: any to string
+appendcharacter: append character
+appendlist: append list
+appendobject: append object
+appendparagraph: append paragraph
+appendtext: append text
+appendtitle: append title
+appleshare: apple share
+applystyle: apply style
+aredifferent: are different
+arglist: arg list
+argncmp: arg compare 
+arg: argument
+argp: argument parameter
+arthurlibrary: arthu rlibrary
+arthursecret: arthur secret
+atexit: at exit
+atime: a time
+atlink: at link
+atsign: at sign
+attlist: attribute list
+attributelist: attribute list
+attrname: attribute name
+attrs: attributes
+attrval: attribute value
+auth: authenticate
+authinfo: author info
+autoconf: auto configuration
+autodetect: auto detect
+autoextedit: auto extended edit
+autogrow: auto grow
+autoswitch: auto switch
+badattr: bad attribute
+badchar: bad char
+badheaders: bad headers
+badlocpath: bad local path
+badrequest: bad request
+badseq: bad sequeqnce
+badtag: bad tag
+basefont: base font
+baselen: base length
+baudrates: baud rates
+beginanchor: begin anchor
+beginappend: begin append
+begindaterange: begin date range
+beginform: begin form
+begininput: begin input
+begininternalpage: begin internal page
+beginselect: begin select
+bestmatch: best match
+bestmime: best mime
+bgsound: background sound
+bias: bias
+bibhost: bibliography host
+bibhosticon: bibliography host icon
+biblioentry: bibliography entry
+bindtextdomain: bind text domain
+bineq: binary equal
+binherithandle: bin herit handle
+binhex: bin hex
+bitatpos: bit a tpos
+bitsperbyte: bits per byte
+bittoupper: bit to upper
+blankextent: blank extent
+blockquote: block quote
+bodyparts: body parts
+bodytext: body text
+bookmarkpage: bookmark page
+bookreader: book reader
+breakflag: break flag
+breakfor: break for
+breakpoints: break points
+bsdselect: bsd select
+bufcoded: buf coded
+bufferaddress: buffer address
+bufferlength: buffer length
+bufferload: buffer load
+buffstack: buffer stack
+buflen: buffer length
+bufout: buffer out
+bufp: bufer pointer
+bufplain: buffer plain
+bufsiz: buffer size
+bufsize: buffer size
+buildall: build all
+buildcommand: build command
+byanyname: by any name
+bymime: by mime
+bytesize: byte size
+bytesreceived: bytes received
+bytesreported: bytes reported
+bytetrans: byte transmitted
+cachethru: cache thru
+callerdata: caller data
+cancelprint: cancel print
+cancelrowspans: cancel rows pans
+cancelstbl: cancel stbl
+canclose: cancel close
+cannotprint: cannot print
+canonname: canonical name
+canreparse: can reparse
+canscrolldown: can scroll down
+canscrollup: can scroll up
+cantrimtextarea: cant rim text area
+cap: cap
+casecomp: case comparison
+caseless: case less
+caselesscmplist: case less comparison list
+cellinfo: cell info
+cellstate: cell state
+cernlib: cern library
+cernvax: cern vax
+cfgbzip: cfg bzip
+cfile: configuration file
+cfilename: configuration filename
+cfp: configuration
+charptr: char pointer
+charset: char set
+charsets: char sets
+charstring: char string
+chartrans: char trans
+charutil: char utilities
+chceked: char cheked
+chdir: change dir
+checkaccess: check access
+checkbox: check box
+checkboxes: check boxes
+checkdir: check dir
+checkonly: check only
+checkptr: check pointer
+childanchor: child anchor
+childnextnumber: child next number
+chunkcode: chunk code
+chunkidlen: chunk idlen
+chunkmarker: chunk marker
+chunkstart: chunk start
+ciphertext: cipher text
+citehost: cite host
+cjkfile: cjk file
+cjkinput: cjk input
+ckboard: check board
+classless: class less
+classname: class name
+classstart: class start
+cleanupwaissearchresponse: cleanup waiss earch response
+clearok: clear ok
+clearprotections: clear protections
+clearsourcecache: clear source cache
+cleartext: clear text
+closebracket: close bracket
+closedir: close dir
+closehandle: close handle
+closelog: close log
+cmdbuf: comand bufffer
+cmdline: comand line
+cmdlist: comand list
+cmds: comands
+cmdtab: comand table
+cmp: compare
+cntrl: control
+codebase: code base
+codemanagexec: code manage exec
+codepage: code page
+codepages: code pages
+codepoints: code points
+codeset: cod eset
+codetype: code type
+codingstandards: coding standards
+colgroup: column group
+colinfo: column information
+colorattr: color attribute
+colorcode: color code
+colorp: color property
+colorpairs: color pairs
+colorstylestuff: colorstyle stuff
+colorterm: color term
+cols: columns
+colspan: column span
+combinedcookie: combined cookie
+combinedcookies: combined cookies
+commandline: command line
+commenturl: comment url
+companycodes: company codes
+compareenvvars: compare environment variables
+compileopts: compile options
+composeauth: compose authorization
+composeauthresult: compose authorization result
+compr: compress
+compressedint: compressed int
+compresses: compresses
+compressfiletype: compress file type
+configinfo: configuration info
+contenttype: content type
+continuebit: continue bit
+controlstring: control string
+copyucinfostage: copy uc info stage
+countfrees: count frees
+countmallocs: count mallocs
+cpordinal: copy ordinal
+createprocess: create process
+createthread: create thread
+cshashsize: cs hash size
+cshelpfile: cs help file
+csname: cs name
+csofield: cso field
+csofields: cso fields
+csoformgen: cso form generation
+csoreport: cso report
+csstrim: cs strim
+cstfreedocobj: cst free doc object
+cstfreewaisdocheadlines: cst free wais doc headl ines
+cstfreewaisdocumentcodes: cst free wais document codes
+cstfreewaisdocumentheader: cst free wais document header
+cstfreewaisdocumentlongheader: cst free wais document long header
+cstfreewaisdocumentshortheader: cst free wais document short header
+cstfreewaisdocumenttext: cst free wais document text
+cstfreewaisinitresponse: cst free wais init response
+cstfreewaissearch: cst free waiss earch
+cstfreewaissearchresponse: cst free waiss earch response
+cstfreewaistextquery: cst free wais text query
+curanchor: cur anchor
+curblankextent: cur blank extent
+curcell: cur cell
+curdir: cur directory
+curdoc: cur document
+curedit: cur edit
+curele: cur element
+curlen: cur lenght
+curlim: cur limit
+curline: cur line
+curlink: cur link
+curloc: cur loc
+curmodif: cur modif
+curpage: cur page
+curpair: cur pair
+curpos: cur position
+currentanum: current anum
+currentassumecharset: current assume char set
+currentcharset: current char set
+currenteightbitraw: current eight bit raw
+currentnegocharset: current negotiation char set
+currentnegolanguage: current negotiation language
+currentrawmode: current raw mode
+currentshowcolor: current show color
+currentusedefaultrawmode: current use default raw mode
+currentuseragent: current user agent
+cursorline: cursor line
+curval: cur value
+curwid: cur windows id
+curx: cur x
+cury: cur y
+cuserid: cuser id
+cvsrepository: cvs repository
+cvsroot: cvs root
+cwd: current working directory
+databasediagnosticrecords: database diagnostic records
+databasenames: database names
+databits: data bits
+datalen: data length
+datamask: data mask
+dataoverun: data overun
+datasize: data size
+datefactor: date factor
+datestr: date string
+db: database
+dbname: db name
+dbtree: db tree
+dclprocess: dcl process
+dclspawn: dcl spawn
+dclsystem: dcl system
+debugsecs: debug secs
+decnetsockets: dec net sockets
+defaulteditbinding: default edit binding
+defaultimplementationid: default implementation id
+defaultimplementationname: default implementation name
+defaultimplementationversion: default implementation version
+defaultstyle: default style
+defmenu: definition menu
+defport: definition port
+defprot: definition prot
+defreturn: definition return
+defs: definitions
+dehighlightmarker: de highlight marker
+deletecriticalsection: delete critical section
+deleteit: delete it
+deletelinks: delete links
+deletestylelist: delete style list
+designissues: design issues
+diagnosticrecord: diagnostic record
+didcleanup: did cleanup
+didread: did read
+dirbuf: directory buf
+dircontents: directory contents
+directoryof: directory of
+direntry: directory entry
+dirlen: directory length
+dirlist: directory list
+dirname: directory name
+dirsize: directory size
+dirstyle: directory style
+disablecurrentform: disable current form
+disablesysprv: disable sysprv
+dispatchfield: dispatch field
+displaycharsetmatchlocale: display char set match locale
+displaystyles: display styles
+divcenter: div center
+divisionalignments: division alignments
+divleft: division left
+divright: division right
+docaddress: doc address
+doccodes: doc codes
+docheaders: doc headers
+docheadline: doc headline
+docid: doc id
+docinfo: doc info
+doclen: doc length
+doclength: doc length
+docname: doc name
+docnum: doc number
+docobj: doc object
+docobjs: doc objects
+docobjsptr: doc object pointer
+doconnect: doc connect
+docterm: doc term
+doctext: doc text
+doctype: doc type
+documentid: document id
+documentlength: document length
+documenttext: document text
+docurl: doc url
+dolist: do list
+domainprefix: domain prefix
+domainstr: domain string
+domainsuffix: domain suffix
+donelookup: done lookup
+dontcare: dont care
+dontcheck: dont check
+dosarabic: dos arabic
+dosbaltrim: dos baltrim
+doscyrillic: dos cyrillic
+dosgetinfoblocks: dos get info blocks
+dosgreek: dos greek
+doshebrew: dos hebrew
+doslatin: dos latin
+doslatinus: dos latinus
+dosname: dos name
+dospath: dos path
+dosquerycp: dos query copy
+dotcount: dot count
+dotdot: dot dot
+dotfile: dot file
+dotfiles: dot files
+dotraversal: dot raversal
+dotslash: dot slash
+doublehtmlsep: double html sep
+drawingtarget: drawing target
+dspstart: dsp start
+dspwdth: dsp width
+dumbterm: dumb term
+duplicateany: duplicate any
+editaction: edit action
+editactioncode: edit action code
+editbinding: edit binding
+editfielddata: edit field data
+editmode: edit mode
+eightbit: eight bit
+einprogress: ein progress
+elementnumber: element number
+elementsetnames: element set names
+elgoto: el goto
+enablesysprv: enable sysprv
+endcell: end cell
+endchunk: end chunk
+enddaterange: end date range
+endform: end form
+endif: end if
+endinput: end input
+endinternalpage: end internal page
+endselect: end select
+entityname: entity name
+entryname: entry name
+envbuffer: environment  buffer
+erasekey: erase key
+errlist: error list
+errno: error number
+errorstream: error stream
+escdelay: escape delay
+estheadersize: estended header size
+exceptionalnewline: exceptional newline
+exitthread: exit thread
+exitwitherror: exit with error
+expandtextarea: expand text area
+exteditform: extension edit form
+fakefinishcellintable: fake finish cell in table
+fallback: fall back
+fallthru: fall thru
+fastbackw: fast backward
+fastforw: fast forward
+fasttab: fast tabble
+fasttrimcolorclass: fast trim color class
+fatalproblem: fatal problem
+fieldname: field name
+fieldset: field set
+filecache: file cache
+filefinddata: file find data
+fileinitalreadydone: file init already done
+filename: file name
+filenamedesc: file name description
+filenames: file names
+filepart: file part
+filepath: file path
+filereferer: file referer
+filesort: file sort
+filestatus: file status
+filesystem: file system
+filesystems: file systems
+filevalue: file value
+findaddress: find address
+findbefore: find before
+findchildandlink: find child and link
+findclose: find close
+findfirstfile: find first file
+findhandle: find handle
+findinlist: find in list
+findnamedchild: find named child
+findnextfile: find next file
+findpound: find pound
+findpoundselector: find pound selector
+findpresentation: find presentation
+findsimpleaddress: find simple address
+findtempfilebyfp: find temp file by fp
+findtempfilebyname: find temp file by name
+finewww: fine www
+fingerhost: finger host
+finishcellinrow: finish cell in row
+finishcellintable: finish cell in table
+finishcolgroup: finish col group
+finishrowintable: finish row in table
+finishtable: finish table
+fionbio: fion bio
+firstanchor: first anchor
+firsthtline: first ht line
+firstnonblank: first non blank
+firstobject: first object
+firstrecall: first recall
+firstshortcutrecall: first short cut recall
+firsttime: first time
+firsturlrecall: first url recall
+firstuse: first use
+fixcharacters: fix characters
+fixedlengthrecords: fixed length records
+flagbase: flag base
+flagparam: flag param
+flushconsoleinputbuffer: flush console input buffer
+followtypedlink: follow typed link
+followup: follow up
+followups: follow ups
+followupto: follow up to
+fontname: font name
+fontpos: font pos
+fontreset: font reset
+fontsize: font size
+foolproof: fool proof
+forcepush: force push
+forcingnocache: forcing no cache
+fordefault: for default
+formatchoicenum: format choice num
+formatmessage: format message
+formatnum: format num
+formatstr: format str
+formdescnumber: form descriptor number
+formfield: form field
+forminfo: form info
+formlink: form link
+formlist: form list
+forwbackw: forward backwward
+forww: forward
+foundanchor: found anchor
+foundcell: found cell
+foundentity: found entity
+foundparent: found parent
+fragmentterm: fragment term
+freeaddrinfo: free address info
+freeall: free all
+freeany: free any
+freebitmap: free bitmap
+freecookie: free cookie
+freedefaultstyle: free default style
+freediag: free diagnostic
+freedocobj: free document object
+freeformat: free format
+freehtaautil: free htaa util
+freehtline: free ht line
+freeinitresponseapdu: free init response apdu
+freeme: fre eme
+freesearchapdu: free search apdu
+freesearchresponseapdu: free search response apdu
+freeterm: free term
+freewaisdocumentcodes: free wais document codes
+freewaisdocumentheader: free wais document header
+freewaisdocumentheadlines: free wais document headlines
+freewaisdocumentlongheader: free wais document long header
+freewaisdocumentshortheader: free wais document short header
+freewaisdocumenttext: free wais document text
+freewaisinitresponse: free wais init response
+freewaissearch: free wais search
+freewaissearchresponse: free wais search response
+fromascii: from ascii
+fromline: from line
+fromname: from name
+ftpglobals: ftp globals
+ftpstype: ftps type
+fullname: full name
+fullparentpath: full parent path
+fullpath: full path
+fullrefresh: full refresh
+generaterandomkey: generate random key
+getaddrinfo: get address information
+getalignment: get alignment
+getattrs: get attributes
+getbool: get bool
+getchar: get char
+getchartransinfo: get char translation information
+getcommand: get command
+getcontentbase: get content base
+getcontentlocation: get content location
+getcurrentcolumn: get current column
+getcurrentprotection: get current protection
+getcwd: get surrent working directory
+getdate: get date
+getdefaultprotection: get default protection
+getdirent: get dirent
+getenv: get environment
+geteuid: get extented user identity
+getexitcodethread: get exit code thread
+getfile: get file
+getfileinfo: get file information
+getfilename: get filename
+getfirsttargetinline: get first target inline
+getfixuppositions: get fixup positions
+getforegroundwindow: get foreground window
+getfullpathnamea: get full path namea
+getgid: get ggroup identifier 
+getgroups: get groups
+gethostbyaddr: get host by address
+gethostbyname: get host by name
+gethostname: get host name
+getkey: get key
+getlastchar: get last char
+getlasterror: get last error
+getlastmodified: get last modified
+getlines: get lines
+getlogin: get login
+getmaximumcolumn: get maximum column
+getmessageid: get messagei d
+getmodulehandle: get module handle
+getmouse: get mouse
+getnameinfo: get name information
+getnumoflines: get number of lines
+getoptionnum: get option number
+getoptvalues: get option values
+getowner: get owner
+getpeername: get peer name
+getpid: get  process identity 
+getquerytermsize: get query term size
+getresult: get result
+getrevtitle: get reverse title
+getservbyname: get server by name
+getserver: get server
+getshortpathname: get short path name
+getsockname: get socket name
+getspecifiedkcode: get specified key code
+getstartline: get start line
+getstartlinedeep: get start line deep
+getstartupinfo: get startup information
+getstdhandle: getstd handle
+getstdin: get stdin
+getstr: get string
+getstyle: get style
+gettabidcolumn: get table id column
+gettext: get text
+gettickcount: get tick count
+gettimeofday: get time of day
+gettopofscreen: get top of screen
+getucinfostage: get uc info stage
+getuid: get user identity 
+getuidname: get user identity name
+getunfoldedline: get unfolded line
+getversion: get version
+getwd: get working directory
+getwindowsdirectory: get windows directory
+getxkey: get hexadecimal key
+gidtoname: gid to name
+gilmartin: gil martin
+givenmime: given mime
+globalref: global reference
+globalserver: global server
+glossarycompact: glossary compact
+gnhandles: gn handles
+gnsetmimenames: gn set mime names
+gothost: got host
+gotolink: go to link
+gotopage: go to page
+gotorc: go to rc
+gotpara: got para
+gotscheme: got scheme
+gridtext: grid text
+groupcache: group cache
+groupcachelist: group cache list
+groupdef: group definition
+groupdeflist: group definition list
+groupname: group name
+grownups: grown ups
+hadvmsinterrupt: had vms interrupt
+hashstyles: hash styles
+hashtable: hash table
+hasnocacheset: has no cache set
+hastoolbar: has tool bar
+hasumap: has umap
+hasutf: has utf
+havemaxlength: have max length
+havesrclink: have src link
+haveuserchangedforms: have user changed forms
+havevisible: have visible
+haveyears: have years
+hdrfile: header file
+headingcenter: heading center
+headingleft: heading left
+headingright: heading right
+headtrim: head trim
+helpbuf: help buffer
+helpfile: help file
+helpfilepath: help file path
+helpurl: help url
+hexchars: hexadecimal chars
+hiddenlinkat: hidden linkat
+hiddenlinkcount: hidden link count
+hiddenlinkflag: hidden link flag
+hiddenlinks: hidden links
+hiddenvalue: hidden value
+highlightmarker: highlight marker
+hiliteinfo: hilite info
+hilitelist: hilite list
+hist: history
+histinfo: history info
+historytarget: history target
+hitoffset: hit off set
+homedir: home directory
+homedrive: home drive
+homeenv: home environment
+homepage: home page
+homepath: home path
+horizpos: horizontal position
+hostbuf: host bufffer
+hostcolon: host colon
+hostname: host name
+hostnames: host names
+housekeeping: housekeeping
+htaafailreasontype: htaa fail reason type
+htaaforwardauth: htaa forward authorization
+htaaglobals: htaa globals
+htaaglobalsset: htaa globals set
+htaamethod: htaa method
+htaaprot: htaa protocol
+htaaprotcache: htaa protocol  cache
+htaarealm: htaa realm
+htaascheme: htaa scheme
+htaaserver: htaa server
+htaasetup: htaa setup
+htaccess: ht access
+htaccessinit: ht access init
+htaddgotourl: ht add goto url
+htaddparam: ht add param
+htaddrule: ht add rule
+htaddsearchquery: ht add search query
+htaddsugfilename: ht add sug file name
+htaddtocmd: ht add to caomand
+htaddxpand: ht add expand
+htaftercommandarg: ht after command argument
+htalert: ht alert
+htalerts: ht alerts
+htalloc: ht alloc
+htalwaysalert: ht always alert
+htanchor: ht anchor
+htandcern: ht and cern
+htappname: ht application name
+htappversion: ht application version
+htassoc: ht assoc
+htassoclist: ht assoc list
+htatom: ht atom
+htatoms: ht atoms
+htbasestreaminstance: ht base stream instance
+htbequivalent: htb equivalent
+htbin: ht binary
+htbindir: ht binary directory
+htblackhole: ht black hole
+htblackholeinstance: ht black hole instance
+htbrowse: ht browse
+htbtelementandobject: htbt element and object
+htbtree: htb tree
+htbtreeandobject: htb tree and object
+htbzfilecopy: ht bz file copy
+htcachefilename: ht cache filename
+htcacheroot: ht cache root
+htcachesize: ht cache size
+htcanpost: ht can post
+htcardinal: ht cardinal
+htcharsetformat: ht charset format
+htcheckfnameforcompression: ht check file name for compression
+htcheckforinterrupt: ht check for interrupt
+htcheckforinterupt: ht check for interrupt
+htchildanchor: ht child anchor
+htchunk: ht chunk
+htchunkclear: ht chunk clear
+htchunkcreate: ht chunk create
+htchunkcreatemayfail: ht chunk create may fail
+htchunkensure: ht chunk ensure
+htchunkfree: ht chunk free
+htchunkinit: ht chunk init
+htchunkputb: ht chunk putb
+htchunkputc: ht chunk putc
+htchunkputs: ht chunk puts
+htchunkpututf: ht chunk put utf
+htchunkrealloc: ht chunk realloc
+htchunkterminate: ht chunk terminate
+htclearftppassword: ht clear ftp password
+htclearhttpauthinfo: ht clear http authorization information
+htclearnntpauthinfo: ht clear nntp authization informatio
+htclearrules: ht clear rules
+htclienthost: ht client host
+htclosebzfile: ht close bz file
+htclosegzfile: ht close gz file
+htcomparer: ht comparer
+htcompressed: ht compressed
+htcompressfiletype: ht compress file type
+htconfirm: ht confirm
+htconfirmcookie: ht confirm cookie
+htconfirmdefault: ht confirm default
+htconfirmpostredirect: ht confirm post redirect
+htconverter: ht converter
+htcoord: ht coordinate
+htcopy: ht copy
+htcopynocr: ht copy on ocr
+htcountcommandargs: ht count command arguments
+htcreatepath: ht create path
+htcurrentform: ht current form
+htcurselect: ht curs elect
+htcurselectedoptionvalue: ht cur selected option value
+htcurselectgroup: ht cur select group
+htcurselectgroupcharset: ht cur select group char set
+htcurselectgroupsize: ht cur select grou psize
+htcurselectgrouptype: ht cur select group type
+htdiraccess: ht directory access
+htdirentry: ht directory entry
+htdirreadme: ht directory readme
+htdirtitles: ht directory titles
+htdisplaypartial: ht display partial
+htdoconnect: ht document connect
+htdocument: ht document
+htdoread: ht do read
+htdos: ht dos
+htdumptostdout: ht dump to stdout
+hteditable: ht edit table
+htelement: ht element
+htendparam: ht end param
+hterror: ht error
+hterrorstream: ht error stream
+hterrorstreamclass: ht error stream class
+htescape: ht escape
+htescapesp: ht escape space
+htescapeunsafe: ht escape unsafe
+htext: ht text
+htextapplytosimilar: ht ext apply to similar
+htextselectunstyled: ht ext select unstyled
+htfile: ht file
+htfilecopy: ht file copy
+htfileformat: ht file format
+htfileinit: ht file init
+htfilesavestream: ht file save stream
+htfilesortmethod: ht file sort method
+htfilesuffix: ht file suffix
+htfilevalue: ht file value
+htfilterpresentations: ht filter presentations
+htfindpoundselector: ht find pound selector
+htfindpresentation: ht find presentation
+htfinger: ht finger
+htfinishdisplaypartial: ht finish display partial
+htfont: ht font
+htforcedprompt: ht forced prompt
+htform: ht form
+htformacceptcharset: ht form accept charset
+htformaction: ht form action
+htformat: ht format
+htformatinit: ht format init
+htformdisabled: ht form disabled
+htformenctype: ht form encode type
+htformfields: ht form fields
+htformmethod: ht form method
+htformnumber: ht form number
+htformtitle: ht form title
+htfreepresentations: ht free presentations
+htftp: ht ftp
+htftpload: ht ftp load
+htfullurl: ht full url
+htfwriter: ht file writer
+htgetaddrinfo: ht get address info
+htgetcharacter: ht get character
+htgetline: ht get line
+htgetlinkinfo: ht get link info
+htgetlinkorfieldstart: ht get link or field start
+htgetnewshost: ht get news host
+htgetprogrampath: ht get program path
+htgetrellinknum: ht get relative link number
+htgetsslcharacter: ht get ssl character
+htgetsslhandle: ht get ssl handle
+htgetword: ht get word
+htgopher: ht gopher
+htgotourls: ht go to urls
+htgroup: ht group
+htgzfilecopy: ht gz file copy
+hthandleauthinfo: ht handle authorization info
+hthomeanchor: ht home anchor
+hthostaddress: ht host address
+hthostname: ht host name
+hthread: hth read
+htinetstatus: ht inet status
+htinetstring: ht inet string
+htinfomsg: ht info messages
+htinit: ht init
+htinitinput: ht init input
+htinitprogrampaths: ht init program paths
+htinternallink: ht internal link
+htioctl: ht ioctl
+htisdocumentsource: ht is document source
+htisparam: ht is paramameter
+htkcode: ht key code
+htlastconfirmcancelled: ht last confirm cancelled
+htlexeme: ht lexeme
+htlibraryversion: ht library version
+htline: ht line
+htlines: ht lines
+htlinktype: ht link type
+htlist: ht list
+htload: ht load
+htloadabsolute: ht load absolute
+htloadanchor: ht load anchor
+htloadcso: ht load cso
+htloaddocument: ht load document
+htloaded: ht loaded
+htloadeddocumentbookmark: ht loaded document bookmark
+htloadeddocumentcharset: ht loaded document char set
+htloadeddocumenteightbit: ht loaded document eight bit
+htloadeddocumentishead: ht loaded document is head
+htloadeddocumentissafe: ht loaded document is safe
+htloadeddocumentpost: ht loaded document post
+htloadeddocumenttitle: ht loaded document title
+htloadeddocumenturl: ht loaded document url
+htloaderror: ht load error
+htloadextensionsconfigfile: ht load extensions config file
+htloadfile: ht load file
+htloadfinger: ht load finger
+htloadgopher: ht load gopher
+htloadhttp: ht load http
+htloadnews: ht load news
+htloadrelative: ht load relative
+htloadrules: ht load rules
+htloadtelnet: ht load telnet
+htloadtostream: ht load to stream
+htloadtypesconfigfile: ht load types config file
+htloadwais: ht load wais
+htlocalname: ht local name
+htlogfile: ht log file
+htm: htm
+htmain: ht main
+htmainanchor: ht main anchor
+htmaintext: ht main text
+htmake: ht make
+htmark: ht mark
+htmax: ht max
+htmaxsecs: ht max secs
+htmaybekanji: ht may be kanji
+htmemcopy: ht memory copy
+htmime: ht mime
+htmimeconvert: ht mime convert
+htmimeredirect: ht mime redirect
+htmin: ht min
+html: html
+htmldtd: html dtd
+htmlelement: html element
+htmlgate: html gate
+htmlgen: html gen
+htmlgeneration: html generation
+htmlgenerator: html generator
+htmlgetentityname: html get entity name
+htmlgetentityucvalue: html get entity uc value
+htmlname: html name
+htmlparsedpresent: html parsed present
+htmlpresent: html present
+htmlpresentation: html presentation
+htmlsetcharacterhandling: html set character handling
+htmlsetdisplaycharsetmatchlocale: html set display charset match locale
+htmlsethavecjkcharacterset: html set have cjk character set
+htmlsetrawmodedefault: html set raw mode default
+htmlsetusedefaultrawmode: html set use default raw mode
+htmlsrc: html src
+htmltoc: html toc
+htmltoplain: html to plain
+htmlusecharacterset: html use character set
+htmmdecode: htmm decode
+htmmquote: htmm quote
+htmountroot: ht mount root
+htnameoffile: ht name of file
+htnetmime: ht net mime
+htnettotext: ht net to text
+htnews: ht news
+htnewschunksize: ht news chunk size
+htnewsgetcharacter: ht news get character
+htnewshost: ht news host
+htnewsmaxchunk: ht news max chunk
+htnewspost: ht news post
+htnewsproxyconnect: ht news proxy connect
+htnewsreply: ht news reply
+htnextfield: ht next field
+htnexttok: ht next token
+htnntp: ht nntp
+htnocjk: ht no cjk
+htnodataok: ht no data ok
+htoptparam: ht optional parameter
+htoutputformat: ht output format
+htoutputstream: ht output stream
+htparentanchor: ht parent anchor
+htparse: ht parse
+htparseall: ht parse all
+htparseanchor: ht parse anchor
+htparsebzfile: ht parse bz file
+htparsefile: ht parse file
+htparsegzfile: ht parse gz file
+htparseinet: ht parse inet
+htparsemem: ht parse memory
+htparsesocket: ht parse socket
+htparturl: ht part url
+htpasseightbitnum: ht pass eight bit num
+htpasseightbitraw: ht pass eight bit raw
+htpasshighctrlnum: ht pass high control num
+htpasshighctrlraw: ht pass high control raw
+htpermitredir: ht permit redirection
+htplain: ht plain
+htplainpresent: ht plain present
+htplaintohtml: ht plain to html
+htpool: ht pool
+htpreparsedformatinit: ht preparsed format init
+htpresentation: ht presentation
+htpresentations: ht presentations
+htprogress: ht progress
+htprogressunits: ht progress units
+htprompt: ht prompt
+htpromptpassword: ht prompt password
+htpromptusernameandpassword: ht prompt user name and password
+htprotocol: ht protocol
+htquoteparameter: ht quote parameter
+htreadprogress: ht read progress
+htregisterprotocol: ht register protocol
+htrelative: ht relative
+htreorderpresentation: ht reorder presentation
+htreparse: ht reparse
+htrjis: ht rjis
+htrlogin: ht rlogin
+htrule: ht rule
+htruleop: ht rule op
+htrules: ht rules
+htsabcat: ht sab cat
+htsabcopy: ht sab copy
+htsabeql: ht sab eqals
+htsabfree: ht sab free
+htsacat: ht sa cat
+htsacopy: ht sa copy
+htsafree: ht sa free
+htsaveandexecute: ht save and execute
+htsavelocally: ht save locally
+htsavestream: ht save stream
+htsavetofile: ht save to file
+htsearch: ht search
+htsearchabsolute: ht search absolute
+htsearchqueries: ht search queries
+htsearchscript: ht search script
+htsecure: ht secure
+htsequivalent: ht sequivalent
+htsetconfiguration: ht set configuration
+htsetconversion: ht set conversion
+htsetnewshost: ht set news host
+htsetpresentation: ht set presentation
+htsetprogrampath: ht set program path
+htsetsuffix: ht set suffix
+htsimplify: ht simplify
+htsnews: hts news
+htsnewspost: hts news post
+htsnewsreply: hts news reply
+htsprintf: hts printf
+htsprintflike: hts printf like
+htsrc: ht src
+htsslcallback: ht ssl call back
+htsslinitprng: ht ssl init prng
+htstackvalue: ht stack value
+htstartanchor: ht start anchor
+htstartisindex: ht start is index
+htstat: ht stat
+htstream: ht stream
+htstreamclass: ht stream class
+htstreams: ht streams
+htstreamstack: ht stream stack
+htstring: ht string
+htstrip: ht strip
+htstructured: ht structured
+htstructuredclass: ht structured class
+htstyle: ht style
+htstylechange: ht style change
+htstyledump: ht style dump
+htstyleforrun: ht style for run
+htstylematching: ht style matching
+htstylenamed: ht style named
+htstylenew: ht style new
+htstylenewnamed: ht style new named
+htstyleread: ht style read
+htstylesheet: ht style sheet
+htstylesheetaddstyle: ht style sheet add style
+htstylesheetnew: ht style sheet new
+htstylesheetread: ht style sheet read
+htstylesheetwrite: ht styl esheet write
+htstylewrite: ht stylewrite
+htsuffix: ht suffix
+htsuffixes: ht suffixes
+htsugfilenames: ht sug file names
+htswitchdtd: ht switch dtd
+htsys: ht sys
+httabid: ht tab id
+httabstop: ht tab stop
+httag: ht tag
+httcp: ht tcp
+httelnet: ht telnet
+httn: httn
+http: http
+httpd: httpd
+httpds: httpds
+httplike: http like
+httranslate: ht translate
+htuncache: ht uncache
+htunescape: ht unescape
+htunescaped: ht unescaped
+htunescapesome: ht unescape some
+hturlpath: ht url path
+htusermsg: ht user message
+htutils: ht utils
+htuu: ht uu
+htvirtualmemorysize: ht virtual memory size
+htvms: ht vms
+htvmsbrowsedir: ht vms browse directory
+htvmsclosedir: ht vms close directory
+htvmsfileversions: ht vmsfile versions
+htvmsname: ht vms name
+htvmsopendir: ht vms open directory
+htvmsreaddir: ht vms read directory
+htwais: ht wais
+htwsrc: ht wais source
+htwsrcconvert: ht wais  source convert
+hyperdoc: hyper document
+hyperlink: hyper link
+hypertext: hyper text
+hytelnetgate: hy telnet gate
+ibmpc: ibm pc
+iconexclamation: icon exclamation
+iconquestion: icon question
+iconstop: icon stop
+icontained: icon contained
+icontains: icon contains
+idauthentication: identity authentication
+ifblk: if block
+ifchr: if char
+ifdef: if definition
+ifdir: if directory
+iff: if and only if
+ifndef: if not defined 
+ifsock: if socket
+ignorecase: ignore case
+ignoreexcess: ignore excess
+ignorespaces: ignore spaces
+ihmo: in  my humble opinion
+imagemaplist: image map list
+imagesrc: image spource
+imgmap: image map
+imgs: images
+impl: implement
+implementationid: implementation identifier
+implementationname: implementation name
+implementationversion: implementation version
+inaddr: in address
+inapplet: in applet
+inappletwithp: in applet wit hp
+inbadbase: in bad base
+inbadhref: in bad href
+inbadhtml: in bad html
+inbase: in base
+inbold: in bold
+inbolda: in bold a
+inboldh: in bold h
+includeslatin: includes	latin
+incurlink: incur link
+indexfile: index file
+indexname: index name
+indexof: index of
+industrycodes: industry codes
+indx: index
+infig: in figure
+infigwithp: in figure with p
+infmod: informaiton mode
+info: information
+infomsg: information message
+infont: in font
+infopage: information page
+infosecs: information secs
+infosize: information size
+initapdu: init a pdu
+initialisehashtable: initialise hash table
+initializecriticalsection: initialize critical section
+initresp: init response
+initresponse: init response
+initresponseapdu: init response a pdu
+initscr: init source 
+inlabel: in label
+inlineone: in line one
+inlines: in lines
+inlining: in lining
+inlist: in list
+inlocaldomain: in local domain
+inmimename: in mime name
+inputfielddata: input field data
+inputline: input line
+inselect: in select
+insertblanks: insert blanks
+insertblanksinstbllines: insert blanks in tables lines
+insertfile: insert file
+insertobjectat: insert object at
+instruct: in structure
+intable: in table
+intarget: in target
+intdos: int dos
+internalpagefp: internal page fp
+intextarea: in text area
+introcs: intro cs
+intvalue: int value
+inunderline: in underline
+inuse: in use
+invalidport: invalid port
+invarg: inv argument
+invariant: invariant
+invcheck: inv check
+invprompt: inv prompt
+ipport: ip port
+ipproto: ip proto
+isacceptable: is acceptable
+isalnum: is alpha numeric
+isalpha: is alpha
+isanchorblank: is anchor blank
+isatty: is a tty
+isbempty: is b empty
+isbinary: is binary
+isdefault: is default
+isdigit: is digit
+isdir: is directory
+isdirectory: is directory
+isdst: is destination
+isempty: is empty
+isendwin: is end windows
+isfile: is file
+isftp: is ftp
+isgid: is gid
+isgopher: is gopher
+isgopherurl: is gopher url
+isgraph: is graph
+isgroup: is group
+ishead: is head
+isheader: is header
+ishex: is hexadecimal
+ishttp: is http
+ishttps: is https
+isindex: is index
+isindexaction: is index action
+isindexprompt: is index prompt
+isismapscript: is is map script
+islynxcflags: is lynx cflags
+islynxcgi: is lynx cgi
+islynxcookie: is lynx cookie
+islynxdired: is lynx dired
+islynxdownload: is lynx download
+islynxexec: is lynx exec
+islynxhist: is lynx hist
+islynximgmap: is lynx imgmap
+islynxkeymap: is lynx keymap
+islynxmessages: is lynx messages
+islynxoptions: is lynx options
+islynxprint: is lynx print
+islynxprog: is lynx prog
+ismailto: is mail to
+isnews: is news
+isnmchar: is nm char
+isnmstart: is nm start
+isnntp: is nntp
+isnumber: is number
+isobject: is object
+isourfile: is source file
+isposition: is position
+isprint: is print
+isproxy: is proxy
+ispunct: is punct
+isreg: is reg
+isrlogin: is rlogin
+issep: is sep
+isset: is set
+issnews: is news
+isspace: is space
+isspecial: is special
+isspecialattrchar: is special attribute char
+isstart: is start
+isstream: is stream
+issubmitorreset: is submit or reset
+istelnet: is telnet
+istitle: is title
+istyle: is style
+isuid: is suid
+isunityenc: is unit yenc
+isunityencstr: is unit yenc str
+isurl: is url
+isvtx: is vtx
+isxdigit: is hexadecimal digit
+itemcode: item code
+itemlist: item list
+items: items
+itemstruct: item struct
+janetaccess: janet access
+japanese: japanese
+jfosterentry: j foster entry
+jumpdatum: jump datum
+jumpfile: jump file
+jumpprompt: jump prompt
+jumptable: jump table
+kblayout: keyboard layout
+keybuf: key buffer
+keycode: key code
+keycodes: key codes
+keyhandler: key handler
+keysym: key symbol
+killbuffer: kill buffer
+killme: kill me
+killreg: kill register
+kindred: kind red
+langinfo: lang info
+largesetlowerbound: large set lower bound
+lastautogn: last autogn
+lastcell: last cell
+lastchar: last char
+lastcheck: last check
+lastcount: last count
+lastcs: last cs
+lastdisplaychar: last display char
+lasthasumap: last has umap
+lasthelp: last help
+lasthndl: last hndl
+lasthost: last host
+lasthtline: last ht line
+lastline: lastline
+lastlineempty: last line empty
+lastlineoffset: last line offset
+lastlinesize: last line size
+lastmod: last mod
+lastname: last name
+lastnode: last node
+lastobject: last object
+lastoptionchecked: last option checked
+lastoptionvalue: last option value
+lastpath: last path
+lastraw: last raw
+lastrow: last row
+lastslash: last slash
+lasttfpos: last tf position
+lasttranst: last transt
+lastutf: last utf
+lastyear: last year
+leakagesink: leakage sink
+leavecriticalsection: leave critical section
+leftaligned: left aligned
+leftindent: left indent
+len: length
+lenneeded: length  needed
+lexemnames: lexem names
+lexitem: lex item
+libcmu: lib cmu
+libgettext: lib get text
+libhtml: lib html
+libiconv: lib iconv
+libintl: lib intl
+libwww: lib www
+linebuf: line buffer
+linedata: line data
+lineedit: line edit
+lineediting: line editing
+lineend: line end
+lineht: line ht
+linemode: line mode
+lineno: lineno
+linenum: line number
+linenumber: line number
+lineoffset: line offset
+linesize: line size
+linewrap: line wrap
+linkinfo: link information
+linkname: link name
+linkno: link nomber
+linknum: link number
+linkobject: link object
+linkselto: link sel to
+linksinlines: link sin lines
+linktext: link text
+linktitle: link title
+linktype: link type
+linkvlen: link vlen
+linux: linux
+listarg: list argument
+listrefs: list references 
+localalias: local alias
+localedir: locale directory
+localhost: local host
+localname: local name
+logfile: log file
+logicalname: logical name
+logicalvalue: logical value
+longheaders: long headers
+longname: long name
+longtoany: long to any
+lookfrom: look from
+loophole: loop hole
+lowercase: lower case
+lowercased: lower cased
+lparen: left paren
+lpos: left pos
+lpsecuritydescriptor: lp security descriptor
+lpthread: lp thread
+lvalue: left value
+lyacceptallcookies: ly accept all cookies
+lyaddattr: ly add attribute
+lyaddch: ly add char
+lyaddcookieheader: ly add cookie header
+lyaddhilite: ly add hilite
+lyaddhitext: ly add hit ext
+lyaddhtmlsep: ly add html sep
+lyaddimagemap: ly add image map
+lyaddjumpshortcut: ly add jump shortcut
+lyaddlocalhostalias: ly add localhost alias
+lyaddmapelement: ly add map element
+lyaddmetacharsettofd: ly add meta char set to file descriptor
+lyaddpathsep: ly add path sep
+lyaddpathtohome: ly add path to home
+lyaddpathtosave: ly add path to save
+lyaddschemeforurl: ly add scheme for url
+lyaddstr: ly add string
+lyaddtocloset: ly add to closet
+lyaddvisitedlink: ly add visited link
+lyaddwattr: ly add w attribure
+lyadjhitextpos: ly adj hi text position
+lyalloca: ly alloca
+lyappendtotxtfile: ly append to txt file
+lyarraylength: ly array length
+lyarraywidth: ly array width
+lyatexit: ly at exit
+lyattrset: ly attribute set
+lyautouncachedirlists: ly auto uncache directory lists
+lybadhtml: ly bad html
+lybox: ly box
+lycachedtemp: ly cached temp
+lycachesource: ly cache source
+lycachesourceforaborted: ly cache source for aborted
+lycanceldownload: ly cancel download
+lycancelledfetch: ly cancel led fetch
+lycandohead: ly can do head
+lycanreadfile: ly can read file
+lycanwritefile: ly can write file
+lycgi: ly cgi
+lycgidocumentroot: ly cgi document root
+lychar: ly char
+lycharinterrupt: ly char in terrupt
+lycharisinterrupt: ly char is interrupt
+lycharset: ly charset
+lycharsets: ly charsets
+lycharsetsdeclared: ly char sets declared
+lycharutils: ly char utils
+lycheckbibhost: ly check bib host
+lycheckforcontentbase: ly check for content base
+lycheckforcsi: ly check for csi
+lycheckforid: ly check for identity
+lycheckforproxyurl: ly check for proxy url
+lycheckmail: ly check mail
+lycheckuseragent: ly check user agent
+lychooseboolean: ly choose boolean
+lychoosepopup: ly choose popup
+lychosenshowcolor: ly chosen show color
+lycleanuptemp: ly cleanup temp
+lyclear: ly clear
+lyclearhitext: ly clear hit ext
+lyclosecloset: ly close closet
+lyclosecmdlogfile: ly close command log file
+lycloseinput: ly close input
+lycloselog: ly close log
+lycloseoutput: ly close output
+lyclosetemp: ly close temp
+lyclosetempfp: ly close temp fp
+lyclosetracelog: ly close trace log
+lyclosetsize: ly close t size
+lyclrtoeol: ly clr to eol
+lycollapsebrs: ly collapse brs
+lycols: ly cols
+lycommandlist: ly command list
+lycommenthacks: ly comment hacks
+lycompare: ly compare
+lycompleteexit: ly complete exit
+lyconfigcookies: ly config cookies
+lyconsoleinputfd: ly console input file descriptor
+lyconverttourl: ly convert to url
+lycookie: ly cookie
+lycookieacceptdomains: ly cookie accept domains
+lycookiefile: ly cookie file
+lycookiejar: ly cookie jar
+lycookieloosecheckdomains: ly cookie loose check domains
+lycookiequerycheckdomains: ly cookie query check domains
+lycookierejectdomains: ly cookie reject domains
+lycookiesavefile: ly cookie save file
+lycookiestrictcheckdomains: ly cookie strict check domains
+lycopyfile: ly copy file
+lycopyhitext: ly copy hit ext
+lycurses: ly curses
+lycurseson: ly curseson
+lydefaultrawmode: ly default raw mode
+lydelscr: ly delscr
+lydidrename: ly did rename
+lydocsi: ly docsi
+lydownload: ly download
+lydownloadaddress: ly download address
+lye: ly e
+lyedit: ly edit
+lyeditcode: ly edit code
+lyeditinsert: ly edit insert
+lyeditkeyforaction: ly edit key for action
+lyeditmapdeclared: ly edit map declared
+lyelidestring: ly elide string
+lyensureabsoluteurl: ly ensure absolute url
+lyensuredoublespace: ly ensure double space
+lyensuresinglespace: ly ensure singl espace
+lyentify: ly entify
+lyentitynames: ly entity names
+lyerase: ly erase
+lyescapestartfile: ly escape start file
+lyexecv: ly execv
+lyexit: ly exit
+lyexpandhostforurl: ly expand host for url
+lyexpandstring: ly expand string
+lyexterns: ly externs
+lyextsignal: ly ext signal
+lyfakezap: ly fake zap
+lyfilllocalfile: ly fill local file
+lyfilllocalfileurl: ly fill local file url
+lyfind: ly find
+lyfindendofcomment: ly find end of comment
+lyfindincloset: ly find in closet
+lyfindlocalecharset: ly find locale char set
+lyfixcurseson: ly fix current seson
+lyfixcursesonforaccess: ly fix current seson for access
+lyforce: ly force
+lyforcesslcookiessecure: ly force ssl cookies secure
+lyformtitle: ly form title
+lyfreedocinfo: ly free document  information
+lyfreehitext: ly free hi text
+lyfreepostdata: ly free post data
+lygetattrs: ly get attributes 
+lygetch: ly get character
+lygetchartransinfo: ly get char trans information
+lygetenum: ly get enum
+lygetenv: ly getenv
+lygetfile: ly get file
+lygetfileinfo: ly get file information
+lygethilitepos: ly get hilite position
+lygethilitestr: ly get hilite string
+lygethitextpos: ly get hitext pos
+lygethitextstr: ly get hitext string
+lygethostbyname: ly get host by name
+lygetnewline: ly get newline
+lygetstdinargs: ly get stdin arguments
+lygetstr: ly get string
+lygetxdisplay: ly get x display
+lygetyx: ly gety x
+lyhandlecookies: ly handle cookies
+lyhandlefig: ly handle fig
+lyhandleid: ly handle identifier
+lyhandlemeta: ly handle meta
+lyhandleplike: ly handle p like
+lyhandlepopuplist: ly handle popup list
+lyhandleselect: ly handle select
+lyhavecjkcharacterset: ly have cjk character set
+lyhavecmdscript: ly have comand script
+lyhaveimagemap: ly have imag emap
+lyhavesubbookmarks: ly have subbookmarks
+lyhiddenlinks: ly hidden links
+lyhidecursor: ly hide cursor
+lyhighlight: ly highlight
+lyhist: ly hist
+lyhistory: ly history
+lyhomedir: ly home directory
+lyhostname: ly host name
+lyimagemap: ly image map
+lyimagemaps: ly image maps
+lyindex: ly index
+lyinfoadvanced: ly information advanced
+lyinternal: ly internal
+lyisabspath: ly is abs path
+lyisascii: ly is ascii
+lyisconfiguredforx: ly is configured for x
+lyisdosdrive: ly is dos drive
+lyishtmlsep: ly is html sep
+lyislistpagetitle: ly is list page title
+lyislocalalias: ly is local alias
+lyislocalfile: ly is local file
+lyislocalhost: ly is local host
+lyisnonalnumkeyname: ly is non alnum key name
+lyisnulldevice: ly is null device
+lyispathsep: ly is path separator
+lyispipecommand: ly is pipe command
+lyisrootpath: ly is root path
+lyisuipage: ly isuipage
+lyjump: ly jump
+lyjumpfileurl: ly jump file url
+lyjumpinit: ly jump init
+lyjumptable: ly jump table
+lyk: ly k
+lykblayoutnames: ly keyboard  layout names
+lykblayouts: ly keyboard layouts
+lykeycodetokcmd: ly key code to kcmd
+lykeycodetostring: ly key code to string
+lykeyforeditaction: ly key for edit action
+lykeymap: ly key map
+lykeymapcode: ly key map code
+lylastpathsep: ly last path sep
+lyleak: ly leak
+lyleakcalloc: ly leak calloc
+lyleakfoo: ly leak foo
+lyleakfree: ly leak free
+lyleakhtsprintf: ly leak ht sprintf
+lyleakmalloc: ly leak malloc
+lyleakrealloc: ly leak realloc
+lyleaks: ly leaks
+lyleaksacat: ly leaks a cat
+lyleaksacopy: ly leaks a copy
+lyleaksavsprintf: ly leak save sprintf
+lyleaksequence: ly leak sequence
+lylegitimizehref: ly legitimize href
+lylineedit: ly line edit
+lylineedithelpurl: ly line edit help url
+lylineedithelpurls: ly line edit help urls
+lylineeditnames: ly line edit names
+lylineeditors: ly line editors
+lylines: ly lines
+lylistfmtparse: ly list fmt parse
+lylistnewsdates: ly list news dates
+lylistnewsnumbers: ly list news numbers
+lyloadcgi: ly load cgi
+lyloadcookies: ly load cookies
+lyloadimgmap: ly load image map
+lyloadkeymap: ly load keymap
+lyloadmessages: ly load messages
+lylocal: ly local
+lylocaldomain: ly local domain
+lylocalecharset: ly locale char set
+lylocalfiletourl: ly local file to url
+lylocalhostaliases: ly local host aliases
+lylowercase: ly lower case
+lylowercasea: ly lower case a
+lylowercasei: ly lower case i
+lylowest: ly lowest
+lylynxcgi: ly lynx cgi
+lylynxcookies: ly lynx cookies
+lylynximgmap: ly lynx image map
+lylynxkeymap: ly lynx key map
+lylynxmaps: ly lynx maps
+lylynxstatusmessages: ly lynx status messages
+lymailpmdf: ly mail pmdf
+lymain: ly main
+lymainloop: ly main loop
+lymap: ly map
+lymapelement: ly map element
+lymapelements: ly map elements
+lymapsonly: ly maps only
+lymbcsstrlen: ly mb css strlen
+lymbcsstrncpy: ly mb css strncpy
+lymbm: ly mbm
+lymbmadvnced: ly mbm advanced
+lymbmblocked: ly mbm blocked
+lymenuvisitedlinks: ly menu visited links
+lymessages: ly messages
+lymktime: ly mktime
+lymouse: ly mouse
+lymove: ly move
+lymovetolink: ly move to link
+lymultibookmarks: ly multibookmarks
+lyname: ly name
+lynewbinfile: ly new binary file
+lynewspost: ly news post
+lynewsposting: ly news posting
+lynewtxtfile: ly new txt file
+lyno: ly no
+lynocc: ly no cc
+lynocore: ly no core
+lynofromheader: ly no from header
+lynoismapifusemap: ly no is map if use map
+lynonrestartingsigwinch: ly non restarting sigwinch
+lynorefererforthis: ly no referer for this
+lynorefererheader: ly no referer header
+lynovideo: ly no video
+lynozapkey: ly no zap key
+lynumcharsets: lyn um char sets
+lynxactioncode: lynx action code
+lynxcfg: lynx configuration
+lynxcfginfo: lynx config information
+lynxcflags: lynx cflags
+lynxcgi: lynx cgi
+lynxchangestyle: lynx change style
+lynxcharset: lynx charset
+lynxcompile: lynx compile
+lynxcompileopts: lynx compile options
+lynxcookie: lynx cookie
+lynxcsi: lynx csi
+lynxdired: lynx dired
+lynxdownload: lynx down load
+lynxeditaction: lynx edit action
+lynxeditactioncode: lynx edit action code
+lynxexec: lynx exec
+lynxfoo: lynx foo
+lynxhist: lynx history
+lynxhome: lynx home
+lynxid: lynx identity
+lynximgmap: lynx image map
+lynxjumpfile: lynx jump file
+lynxkeycode: lynx keycode
+lynxkeycodes: lynx keycodes
+lynxkeymap: lynx keymap
+lynxlinksfile: lynx links file
+lynxlistfile: lynx list file
+lynxmaps: lynx maps
+lynxmessages: lynx messages
+lynxname: lynx name
+lynxoptions: lynx options
+lynxprint: lynx print
+lynxprog: lynx prog
+lynxrc: lynx rc
+lynxresetscreencache: lynx reset screen cache
+lynxsigfile: lynx sig file
+lynxwchangestyle: lynx w change style
+lyonedot: ly one dot
+lyopencfg: ly open configuration
+lyopencmdlogfile: ly open comand log file
+lyopencmdscript: ly open comand script
+lyopenlog: ly openlog
+lyopenscratch: ly open scratch
+lyopentemp: ly open temp
+lyopentemprewrite: ly open temp rewrite
+lyopentracelog: ly open trace log
+lyoptions: ly options
+lyoutofmemory: ly outof memory
+lyoverride: ly override
+lyp: ly p
+lypaddstr: ly padd string
+lyparserefreshurl: ly parse refresh url
+lyparsetagparam: ly parse tag param
+lypathleaf: ly path leaf
+lypathoffhomeok: ly path off home ok
+lypermiturl: ly permit url
+lypipetomailer: ly pipe to mailer
+lypop: ly pop
+lypopassumed: ly pop assumed
+lyprefixbasetosource: ly prefix base to source
+lypreparsedsource: ly preparsed source
+lyprependbase: ly prepend base
+lyprependbasetosource: ly prepend base to source
+lyprependcharsettosource: ly prepend char set to source
+lyprint: ly print
+lyprocesssetcookie: ly process set cookie
+lyprocesssetcookies: ly process set cookies
+lypsrc: ly psrc
+lypush: ly push
+lypushassumed: ly push assumed
+lyputenum: ly put enum
+lyquitdefaultyes: ly quit default yes
+lyrawmode: ly raw mode
+lyrcfile: ly rc file
+lyrcshowcolor: ly rc show color
+lyread: ly read
+lyreadcfg: ly read configuration
+lyreadcmdkey: ly read comand key
+lyrefererwithquery: ly referer with query
+lyrefresh: ly refresh
+lyrefreshedit: ly refresh edit
+lyregisterlynxprotocols: ly register lynx protocols
+lyregisteruipage: ly register ui page
+lyrelaxfilepermissions: ly relax file permissions
+lyremapeditbinding: ly remap edit binding
+lyremoveblanks: ly remove blanks
+lyremovefromcloset: ly remove from closet
+lyremovenewlines: ly remove newlines
+lyremovetemp: ly remove temp
+lyrenamedtemp: ly renamed temp
+lyreopentemp: ly reopen temp
+lyreopentracelog: ly reopen trace log
+lyrequestreferer: ly request referer
+lyrequesttitle: ly request title
+lyresetparagraphalignment: ly reset paragraph alignment
+lyrestricted: ly restricted
+lyresubmit: ly resubmit
+lyreusetempfiles: ly reuse temp files
+lyreversekeymap: ly reverse keymap
+lysafegets: ly safe gets
+lysamefilename: ly same file name
+lysamehostname: ly same host name
+lysb: ly sb
+lyscreen: ly screen
+lyscreenheight: ly screen height
+lyscreenwidth: ly screen width
+lyseekfragareaincur: ly seek fragment are a in cur
+lyseekfragmapincur: ly seek fragment map in currrent
+lyselectpopups: ly select popups
+lysendmailfile: ly send mail file
+lysetconfigvalue: ly set config value
+lysetcookie: ly set cookie
+lysetcookies: ly set cookies
+lysethilite: ly set hilite
+lysethitext: ly set hi text
+lysetkblayout: ly set keyboard layout
+lysetlasttfpos: ly set last tf position
+lysetnewline: ly set newline
+lysetupedit: ly setup edit
+lysetwattr: ly set w attribute
+lysetxdisplay: ly set x display
+lyshiftwin: ly shift win
+lyshowcolor: ly show color
+lyshowcursor: ly show cursor
+lyshowinfo: ly show info
+lyshowscrollbar: ly show scrol lbar
+lyshowtransferrate: ly show transfer rate
+lyshowvisitedlinks: ly show visited links
+lysighandlerfunc: ly sig handler function
+lyskipblanks: ly skip blanks
+lyskipcblanks: ly skip c blanks
+lyskipcnonblanks: ly skip c non blanks
+lyskipnonblanks: ly skip non blanks
+lysleep: ly sleep
+lysleepalert: ly sleep alert
+lysleepdebug: ly sleep debug
+lysleepinfo: ly sleep information
+lysleepmsg: ly sleep message
+lysleepreplay: ly sleep replay
+lystartarea: ly start area
+lystartpopup: ly start popup
+lystarttargetemphasis: ly start target emphasis
+lystatusline: ly status line
+lystdinargs: ly stdin arguments
+lystoppopup: ly stop popup
+lystoptargetemphasis: ly stop target emphasis
+lystore: ly store
+lystorecookies: ly store cookies
+lystowcursor: ly stow cursor
+lystrerror: ly string error
+lystring: ly string
+lystrings: ly strings
+lystringtokcmd: ly string tok comand
+lystringtokeycode: ly string to key code
+lystripdotdoturls: ly strip dotdot urls
+lystrncpy: ly string n copy
+lystrsep: ly string separator
+lystrstr: ly strstr
+lystyles: ly styles
+lysubattr: ly sub attribute
+lysubwattr: ly sub wattr
+lysubwindow: ly sub window
+lysuffixrules: ly suffix rules
+lysyslog: ly system log
+lysysshell: ly system shell
+lysystem: ly system
+lysystemmail: ly system mail
+lytablecols: ly table cols
+lytogglesigdfl: ly toggle sig dfl
+lytoolbarname: ly toolbar name
+lytopwindow: ly top window
+lytouchline: ly touch line
+lytracelogfp: ly trace log fp
+lytracelogpath: ly trace log path
+lytransfername: ly transfer name
+lytransferrate: ly transfer rate
+lytrimallstartfile: ly trim all start file
+lytrimhead: ly trim head
+lytrimhtmlsep: ly trim html separator
+lytriminputfields: ly trim input fields
+lytrimleading: ly trim leading
+lytrimnewline: ly trim newline
+lytrimpathsep: ly trim path separator
+lytrimrelfromabspath: ly trim relative from absolute path
+lytrimstartfile: ly trim start file
+lytrimtail: ly trim tail
+lytrimtrailing: ly trim trailing
+lytrusted: ly trusted
+lyuccharset: ly uc charset
+lyucfullytranslatestring: ly uc fully translate string
+lyucpopassumed: ly uc pop assumed
+lyucpushassumed: ly uc push assumed
+lyuctranslatebackformdata: ly uc translate back form data
+lyuctranslatebackheadertext: ly uc translate back header text
+lyuctranslatehtmlstring: ly uc translate html string
+lyuipages: ly ui pages
+lyunderlinelinks: ly underline links
+lyunescapeentities: ly unescape entities
+lyunescapetolatinone: ly unescape to latin one
+lyunregisteruipage: ly unregister ui page
+lyupload: ly upload
+lyuppercase: ly upper case
+lyuppercasea: ly upper casea
+lyuppercasei: ly upper casei
+lyusebuiltinsuffixes: ly use builtin suffixes
+lyusecursespads: ly use curses pads
+lyusedefaultrawmode: ly use default raw mode
+lyusedefselpop: ly usedef sel pop
+lyuseformsoptions: ly use forms options
+lyusemouse: ly use mouse
+lyusenovicelinetwo: ly use novice line two
+lyuseragent: ly user agent
+lyuseragentdefault: ly user agent default
+lyuserspecifiedurl: ly user specified url
+lyusetracelog: ly use trace log
+lyutil: ly util
+lyutils: ly utils
+lyva: ly validate
+lyvalidate: ly validate
+lyvalidatefilename: ly validate filename
+lyvalidateoutput: ly validate output
+lyvaliddownloadfile: ly valid download file
+lyvalidpermitfile: ly valid permit file
+lyversiondate: ly version date
+lyversionisrelease: ly version is release
+lyversionstatus: ly version status
+lyvms: ly vms
+lywidelines: ly wide lines
+lywin: ly win
+lywouldpush: ly would push
+lywritecmdkey: ly write command key
+lyx: lynx
+lyzero: ly zero
+macbinhex: mac binary hexadecimal
+madgoat: mad goat
+mailcap: mail cap
+mailcapentry: mail cap entry
+mailmsg: mail message
+mailrobot: mail robot
+mailto: mail to
+mainloop: main loop
+maintext: main text
+maintype: main type
+makeany: make any
+makeattributeterm: make attribute term
+makebitmap: make bitmap
+makediag: make diag
+makedocobjusingbytes: make document  object using bytes
+makedocobjusinglines: make  document  object using lines
+makedocobjusingparagraphs: make  document  object using paragraphs
+makedocobjusingwholedocument: make  document  object using whole document
+makefile: make file
+makeinitresponseapdu: make init response a pdu
+makenewimagevalue: make new image value
+makenewmapvalue: make new map value
+makenewtitle: make new title
+makeoperatorterm: make operator term
+makeprotectiontemplate: make protection template
+makeresultsetterm: make result set term
+makesearchapdu: make search a pdu
+makesearchresponseapdu: make search response a pdu
+maketags: make tags
+makewaisdocumentcodes: make wais document codes
+makewaisdocumentheader: make wais document header
+makewaisdocumentheadlines: make wais document headlines
+makewaisdocumentlongheader: make wais document long header
+makewaisdocumentshortheader: make wais document short header
+makewaisdocumenttext: make wais document text
+makewaisfoo: make wais foo
+makewaisinitresponse: make wais init response
+makewaisquerydocs: make wais query docs
+makewaisqueryterms: make wais query terms
+makewaissearch: make wais search
+makewaissearchresponse: make wais search response
+makewaistextquery: make wais text query
+makeword: make word
+mapaddress: map address
+mapgn: map gn
+maptitle: map title
+maxbuf: max buffer
+maxbytes: max bytes
+maxchars: max chars
+maxcharsets: max char sets
+maxchoices: max choices
+maxclick: max click
+maxcolspan: max column span
+maxdocs: max documents
+maxdocsretrieved: max documents retrieved
+maxdsp: max dsp
+maxfiles: max files
+maxhist: max history
+maxhostnamelen: max host name lenght
+maximumrecordsize: maximum record size
+maximumsize: maximum size
+maxlen: max lenghth
+maxlength: max length
+maxlinks: max links
+maxmessage: max message
+maxmsgsize: max message size
+maxnaml: max name lenght
+maxpath: maxpath
+maxpathname: max path name
+maxpos: max position
+maxrec: max rec
+maxrowspan: max row span
+maxrss: max rss
+maxstr: max string
+maxstringsize: max string size
+maxtoadd: max to add
+maxtotal: max total
+maxval: max value
+maxvalue: max value
+maybe: may be
+maybeselect: may be select
+mbmcodes: mbm codes
+mbrtowc: mbr to wc
+mbstate: mb state
+mediumsetpresentnumber: medium set present number
+memalloccopy: memory alloc copy
+messagebox: message box
+messageid: message identity
+messagesecs: message secs
+micache: mi cache
+micheck: mi check
+miconnection: mi connection
+micontent: mi content
+micookie: mi cookie
+midate: mi date
+miexpires: mi expires
+miget: mi get
+mijunk: mi junk
+mikeep: mi keep
+milast: mi last
+milink: mi link
+milocation: mi location
+mimecharset: mime charset
+mimename: mime name
+minewline: mi new line
+minoffset: min offset
+mipragma: mi pragma
+miproxy: mi proxy
+mipublic: mi public
+mirefresh: mi refresh
+miretry: mi retry
+misafe: mi safe
+miserver: mi server
+miset: mi set
+miwww: mi www
+modeflag: mode flag
+monoattr: mono attributes
+monobyte: mono byte
+monochrome: mono chrome
+morehelp: more help
+mostlikely: most likely
+mouseinterval: mouse interval
+mousemask: mouse mask
+msgbuffer: message buffer
+msgid: message identity
+msgprefix: message prefix
+msgstr: message string
+msgtmp:message tmp
+msvideo: ms video
+mtaddress: mt address
+multibookmark: multi bookmark
+multibookmarks: multi bookmarks
+multibye: multi bye
+multibyte: multi byte
+multibytes: multi bytes
+multiformat: multi format
+multiline: multi line
+multipartcontenttype: multipart content type
+multithread: multi thread
+multithreading: multi threading
+mustshow: must show
+mutable: mu table
+mycopy: my copy
+myedit: my edit
+myenc: my encoding
+myencoding: my encoding
+mygetchar: my get char
+myhash: my hash
+mylist: my list
+mymimename: my mime name
+mypos: my position
+myputc: my putc
+mytag: my tag
+mytty: my tty
+myuid: my uid
+namefld: name field
+namelen: name len
+namelength: name length
+nameless: name less
+nameoffile: name of file
+nametogid: name to gid
+nametouid: name to uid
+namlen: name lenght
+nbytesdecoded: number bytes decoded
+ncells: number cells
+ncols: number columns
+nconfiguration: number configuration
+ncontent: nnumber content
+needsterminal: needs terminal
+needtofree: need to free
+negatelineone: negate line one
+nerror: number error
+netclose: net close
+netdb: net db
+netinet: net inet
+netlib: net lib
+netpresenz: net presenz
+netread: net read
+nettotext: net to text
+nettotextclass: net to text class
+newanchor: new anchor
+newbytes: new bytes
+newcookie: new cookie
+newcs: new cs
+newdata: new data
+newdoc: new document
+newfile: new file
+newfont: new font
+newform: new form
+newhost: new host
+newlen: new lenght
+newline: newline
+newlinecharacters: newline characters
+newlinechars: newline chars
+newlines: newlines
+newlink: new link
+newlist: new list
+newmail: new mail
+newmode: new mode
+newmsg: new message
+newname: new name
+newnode: new node
+newobject: new object
+newpad: new pad
+newpath: new path
+newpool: new pool
+newpos: new position
+newreply: new reply
+newrow: new row
+newschunksize: news chunk size
+newscr: news cr
+newscratchsize: new scratch size
+newsecurevalue: new secure value
+newsfoo: news foo
+newsgroup: news group
+newsgroups: news groups
+newshost: news host
+newshref: news href
+newsmaxchunk: news max chunk
+newspost: news post
+newsposting: news posting
+newsreply: news reply
+newstate: new state
+newstyle: news tyle
+newterm: new term
+newtitle: new title
+newval: new valie
+newwin: new window
+newwithaddress: new with address
+newwithparent: new with parent
+nextfield: next field
+nextfld: next fld
+nextid: next identofier
+nextlink: next link
+nextobject: next object
+nextpos: next pos
+nextresultsetposition: next result set position
+nextrow: next row
+nextstep: next step
+nfields: number fields
+nget: number get
+nntpauth: nntp authorization
+nntpauthresult: nntp authorization result
+nntps: nntps
+nntpserver: nntp server
+noaccount: no account
+noargv: no argv
+noarrow: no arrow
+noauth: no authorization
+nobody: no body
+nobold: no bold
+nobook: no book
+nobrowse: no browse
+nocache: no cache
+nochop: no chop
+nocjk: no cjk
+nocmdline: no command line
+nocolor: no color
+noconfirm: no confirm
+nodeanchor: node anchor
+nodelay: no delay
+nodename: node name
+noecho: no echo
+noedit: no edit
+nofiltr: no filter
+nofix: no fix
+noframes: no frames
+nogroup: no group
+nokanji: no kanji
+nolinks: no links
+nolist: no list
+nolog: no log
+nonascii: non ascii
+nonblank: non blank
+nonblock: non block
+nonempty: non empty
+nonesuch: none such
+nonexisting: non existing
+noninternal: non internal
+nonnull: non null
+nonoption: non option
+nonprintable: non print table
+nonprinting: non printing
+nonrest: non rest
+nonsense: non sense
+nonsensical: non sensical
+nonspaces: non spaces
+nonstandard: non standard
+nonwhite: non white
+nonzero: non zero
+noopen: no open
+nooutput: no output
+nop: nop
+nopause: no pause
+noprompt: no prompt
+noproxy: no proxy
+norecall: no recall
+noreverse: no reverse
+normalcmplist: normal compare list
+noself: no self
+nosighup: no sighup
+nosocks: no socks
+nostyle: no style
+notag: no tag
+notdefined: not defined
+notreached: not reached
+notrepeat: not repeat
+notty: no tty
+notused: not used
+notyet: not yet
+nouctb: no uctb
+nounderline: no underline
+nousers: no users
+noviceline: novice line
+nowait: no wait
+nowhere: no where
+nowtime: now time
+nozap: no zap
+npage: number page
+npages: number pages
+nplease: number please
+nptr: number poiter
+nrdisplayed: number displayed
+nremove: number remove
+nreturn: number return
+nrows: number rows
+nsave: number save
+nsize: number size
+nsorry: number sorry
+nstartp: number start p
+nstring: number string
+nstyle: number style
+nsubject: number subject
+nsummary: number summary
+ntext: number text
+nthere: number there
+nto: number to
+ntohs: number to hs
+ntreetopobject: number tree to p object
+nttyb: number tty b
+nturning: number turning
+nullfile: null file
+numbera: number a
+numberb: number b
+numberofrecordsreturned: number of records returned
+numbits: number its
+numbytes: number ytes
+numcookies: number cookies
+numerichost: numeric host
+numericserv: numeric serv
+numlock: number lock
+nummsg: number message
+numoflines: number of lines
+nums: numbers
+numsize: number size
+numstyles: number styles
+numtabs: number tabs
+numterms: number terms
+nvalue: number value
+nxgetdefaultvalue: nx get default value
+nxprintf: nx printf
+nxrun: nx run
+nxrunalertpanel: nx run alert panel
+nxscanf: nx scanf
+nxstream: nx stream
+nxtextstyle: nx text style
+objectat: object at
+objectdata: object data
+objnum: object number
+objtype: object type
+oct: octal
+ohandle: o handle
+ohcode: oh code
+okcancel: ok cancel
+oktosleep: ok to sleep
+oldalloced: old alloc ed
+oldmode: old mode
+oldname: old name
+oldobject: old object
+oldpos: old position
+olstring: old string
+oneline: one line
+online: on line
+onscreen: on screen
+openbr: open br
+opendir: open dir
+opendirx: open dirx
+openhiddenfile: open hidden file
+openssl: open ssl
+openvms: open vms
+operatorcode: operator code
+opname: op name
+opnum: op number
+oprompt: o prompt
+optionsbm: option sbm
+optiontype: option type
+optname: opt name
+optptr: opt pointer
+opts: options 
+optvalues: option values
+orignumvalue: orig number value
+othersym: other sym
+outbuf: out buffer
+outbufsize: out buffer size
+outchar: out char
+outfile: out file
+outfmod: out file mode
+outformat: out format
+outmimename: out mime name
+outof: out of
+outofmem: out of memory
+outofmemory: out of memory
+outptr: out pointer
+outputset: output set
+outuci: out uci
+paccept: p accept
+pagedir: page directory
+pagedisplay: page display
+pagehasprevtarget: page has previus target
+pagelen: page lenght
+parastyle: paragraph style
+parentanchor: parent anchor
+parentanchors: parent anchors
+parsearglist: parse argument list
+parsefunc: parse function
+parsegroupdef: parse group definition
+parsehtml: parse html
+parseprotfile: parse prot file
+parseunionof: parse union of
+parseunionptr: parse union pointer
+partescape: part escape
+passestest: passes test
+passhi: pass hi
+passhictrl: pass hi ctrl
+passthrucache: pass thru cache
+pathconf: path configuration
+pathend: path end
+pathlen: path lenght
+pathname: path name
+pathsep: path separator
+pcbinary: pc binary
+pcdata: pc data
+pcharset: p charset
+pclose: p close
+pdcurses: pd curses
+pdesc: p description
+pdoctitle: p document title
+pdutype: pdu type
+peekpdutype: peek pdu type
+peektag: peek tag
+pencoding: p encoding
+pending:  p ending
+penultimate: p enultimate
+performinfo: perform information
+perlservers: perl servers
+permitredir: permit redirection
+permitredirection: permit redirection
+placeholder: place holder
+placeholders: place holders
+plainpresenter: plain presenter
+plaintext: plain text
+plaintohtml: plain to html
+plaintohtmlconversion: plain to html conversion
+poolallocstring: pool alloc string
+poolallocstyles: pool alloc styles
+poolptr: pool pointer
+pooltypecalloc: pool type calloc
+portnumber: port number
+postfile: post file
+postoptions: post options
+postpair: post pair
+postreplyloaded: post reply loaded
+preferredmessagesize: preferred message size
+prefsize: pref size
+presentapdu: present a pdu
+presentresponseapdu: present response a pdu
+presentstatus: present status
+prettysrc: pretty source 
+prev: previous
+prevdata: previus data
+previouslineempty: previous line empty
+previouslinesize: previous line size
+previoussearch: previous search
+prevnode: previous node
+prevsumpos: previous sum pos
+prevvisitedlink: previous visited link
+printcommand: print command
+printfile: print file
+printgroupdef: print group definition
+printlist: print list
+processmailcapentry: process mail cap entry
+processmailcapfile: process mail cap file
+procinfo: process information
+programpaths: program paths
+protectiontemplate: protection template
+protocolversion: protocol version
+proxiedhost: proxied host
+proxyauth: proxy authorization
+proxycmd: proxy command
+proxyhost: proxy host
+proxyhref: proxy href
+pubkey: public key
+pumpdata: pump data
+putdefs: put definitions
+putenv: put environment
+putlabel: put label
+putoption: put option
+putoptvalues: put option values
+puttextinput: put text input
+queryinfo: query information
+querynum: query number
+queryresponse: query response
+querytotal: query total
+querytype: query type
+quicktime: quick time
+raccept: r accept
+rateoff: rate off
+rawentry: raw entry
+rawentryalloc: raw entry alloc
+rawlength: raw length
+rawmode: raw mode
+rawtarget: raw target
+rawtargetclass: raw target class
+rawtext: raw text
+rconnect: r connect
+rdstdin: rd stdin
+rdstdout: rd stdout
+readbinaryinteger: read binary integer
+readbitmap: read bitmap
+readboolean: read boolean
+readbyte: read byte
+readcfg: read configuration
+readcompressedinteger: read compress ed integer
+readcss: read css
+readdiag: read diagnostic
+readdir: read directory
+readdocobj: read document object
+readfromfile: read from file
+readfromfilerec: read from file rec
+readgroupfile: read group file
+readinitresponseapdu: read init response a pdu
+readinitresponseinfo: read init response info
+readjust: read just
+readlink: read link
+readnum: read number
+readpos: read position
+readpresentinfo: read present information
+readpresentresponseinfo: read present response info
+readprogress: read progress
+readquery: read query
+readqueryterm: read query term
+readret: read ret
+readsearchinfo: read search information
+readsearchresponseapdu: read search response a pdu
+readsearchresponseinfo: read search response info
+readstring: read string
+readtag: read tag
+readuserinfoheader: read user info header
+readvblk: read v block
+readwaisdocumentcodes: read wais document codes
+readwaisdocumentheader: read wais document header
+readwaisdocumentheadlines: read wais documen thead lines
+readwaisdocumentlongheader: read wais document long header
+readwaisdocumentshortheader: read wais document shor theader
+readwaisdocumenttext: read wais document text
+readwaispacketheader: read wais packet header
+readwaistextquery: read wais text query
+reallyemptytag: really empty tag
+reallyemptytagnum: really empty tag number
+realmname: realm name
+recallfilename: recall file name
+recalltype: recall type
+recordlength: record length
+recordsreturned: records returned
+redone: re done
+redopen: re dopen
+redraw: re draw
+redrawing: re drawing
+redrawn: re drawn
+redraws: re draws
+redswitch: red switch
+redunswitch: redun switch
+referenceid: reference identifier
+references: references
+referenceselected: reference selected
+rehostent: re hostent
+rehostentlen: re hostent lenength
+rehostentsize: re hostent size
+reinsertedit: reinsert edit
+relatedname: related name
+relatedproducts: related products
+relevancefeedbackquery: relevance feedback query
+relpath: rel path
+reltitle: rel title
+remembertestresult: remember test result
+remoteaddr: remote address
+removefirstobject: remove first object
+removefromlist: remove from list
+removelastobject: remove last object
+removeobject: remove object
+removeobjectat: remove object at
+removepreviousline: remove previous line
+replaceindicator: replace indicator
+replacesel: replace selection
+replaysecs: replay secs
+replyto: reply to
+replytoinitapdu: reply to init a pdu
+reservecellsinrow: reserve cell sin row
+reservecellsintable: reserve cell sin table
+reservedcell: reserved cell
+resetform: reset form
+resetucinfostage: reset uc info stage
+resizeterm: resize term
+resolvegroupreferences: resolve group preferences
+resolveyield: resolve yield
+resourcecontrol: resource control
+restorepoundselector: restore pound selector
+resultsetid: result set identity
+resultsetname: result set name
+resultsetstatus: result set status
+resultstatus: result status
+returnlengthaddress: return length address
+revtitle: rev title
+rgetsockname: r get sock name
+rhs: right ernd side 
+richtext: rich text
+rightindent: right indent
+rlink: r link
+rlisten: r listen
+rlogin: r login
+rowinfo: row information
+rowspan: row span
+rowspans: row spans
+rparen: right parentheesis
+rqst: request
+rulesfile: rules file
+runaway: run away
+runoff: run off
+runparsed: run parsed
+runtimeallocations: runtime allocations
+safehtunescape: safe ht unescape
+safeucgetlyhndl: safe uc get lyhndl
+samepage: same page
+sametext: same text
+savechar: save char
+saveflag: save flag
+savelocally: save locally
+saveme: save me
+savepath: save path
+savesize: save size
+savestream: save stream
+savetofile: save to file
+savevmsbinaryfile: save vms binary file
+screenclear: screen clear
+screenful: screen ful
+screensahead: screens ahead
+screensback: screens back
+scrollamount: scroll amount
+scrollback: scroll back
+scrollbar: scroll bar
+scrollbottom: scroll bottom
+scrolldown: scroll down
+scrollok: scroll ok
+scrolltop: scroll top
+scrollup: scroll up
+scrsize: source size
+scrtop: source top
+searchapdu: search a pdu
+searchpanel: search panel
+searchpart: search part
+searchresponseapdu: search response a pdu
+searchstatus: search status
+searchstring: search string
+seedwords: seed words
+seedwordsused: seed words used
+seekdir: seek dir
+seeother: see other
+selectanchor: select anchor
+selectionstyle: selection style
+selectscheme: select scheme
+sensemode: sense mode
+servertype: server type
+setbookmark: set bookmark
+setbreakpoint: set break point
+setby: set by
+setcallerdata: set caller data
+setcitehost: set cite host
+setconsolectrlhandler: set console control handler
+setconsolemode: set console mode
+setconsoletitle: set console title
+setcookie: set cookie
+setcurrentprotection: set current protection
+setdefaultmode: set default mode
+setdefaultprotection: set default protection
+setdocument: set document
+setext: set ext
+setfont: set font
+setforeground: set foreground
+setforegroundwindow: set foreground window
+setformat: set format
+setgid: set gid
+sethashstyle: set hash style
+setids: set ids
+setignoreexcess: set ignore excess
+setindex: set index
+setkcode: set k code
+setkey: set key
+setlastchar: set last char
+setlastoptionvalue: set last option value
+setlocale: set locale
+setmaintextowner: set main text owner
+setmark: set mark
+setmask: set mask
+setmessageid: set message identity
+setmode: set mode
+setnocache: set no cache
+setnodeanchorbookmark: set node anchor bookmark
+setoutputmode: setout put mode
+setowner: set owner
+setphysical: set physical
+setprompt: set prompt
+setprotocol: set protocol
+setrevtitle: set rev title
+setstale: set stale
+setstyle: set style
+setsubject: set subject
+settabid: set tab id
+settitle: set title
+settoolbar: set toolbar
+setucinfostage: set uc information stage
+setuid: set uid
+setupchosenshowcolor: setup chosen show color
+setupfilename: setup file name
+setupreader: setup reader
+sevenbitapproximations: seven bit approximations
+sgmlele: sgml element
+sgmlent: sgml entity
+sgmlfindtag: sgml find tag
+sgmlparser: sgml parser
+sgmlshortref: sgml short reference
+sgmlspecial: sgml special
+sgmlstream: sgml stream
+sgmltag: sgml tag
+shortcutnum: shortcut number
+shortcuttotal: shortcut total
+shortheaders: short headers
+shortname: short name
+shortref: short reference
+shouldretrywithauth: should retry with authorization
+showbool: show boolean
+showdiags: show diagnostics
+showhistory: show history
+showinfo: show information
+showlist: show list
+showpage: show page
+showtags: show tags
+sigabrt: sig abort
+sigaction: sig action
+sigaddset: sig add set
+singlekey: single key
+sitename: site name
+sizechange: size change
+skipoptionnumprefix: skip option number  prefix
+skipwhite: skip white
+slashedtag: slashed tag
+smallsetupperbound: small set upper bound
+snacopy: sna copy
+sockaddr: sock address
+somepath: some path
+sortedlist: sorted list
+sourceanchors: source anchors
+sourcecache: source cache
+sourcecachewriter: source cache writer
+spaceafter: space after
+spacebefore: space before
+spanlen: span length
+specialattrchars: special attribute  chars
+specialchars: special chars
+specialcodes: special codes
+spilledname: spilled name
+srcmode: source mode
+srcpath: source path
+srcs: sources
+srcsize: source size
+srcstart: source start
+srcstop: source stop
+sslcp: ssl cp
+ssleay: ssl leavy
+sslen: ssl length
+sslerror: ssl error
+ssllibraryversion: ssl library version
+sslprogress: ssl progress
+stacklevel: stack level
+stackpos: stack position
+stagemax: stage max
+startat: start at
+startchunk: start chunk
+startcol: start column
+startfile: start file
+startline: start line
+starto: star to
+startrealm: start realm
+startstblcol: starts table  column
+startstblrowgroup: starts table row group
+startstbltable: starts tbl table
+startstbltd: starts tbltd
+startstbltr: starts tbltr
+starttable: start table
+startterm: start term
+starttermoffset: start term offset
+startupinfo: startup information
+statusbufsize: status buffer size
+statusinfo: status information
+statusline: status line
+statuslines: status lines
+stockcodes: stock codes
+storinglinks: storing links
+straightforward: straight forward
+streamstack: stream stack
+stringlength: string length
+stringresult: string result
+stringtoany: string to any
+strnames: string names
+strsmall: string small
+strtolower: string to lower
+stylechanges: style changes
+styleclassname: style class name
+stylename: style name
+subbookmark: sub bookmark
+subclass: sub class
+subdescript: sub description
+subdirectories: sub directories
+subdirectory: sub directory
+subj: subject
+sublist: sub list
+submitform: submit form
+submittable: submit table
+subsetof: subset of
+subspace: sub space
+subthread: sub thread
+subtitle: sub title
+subtract: sub tract
+subtracting: sub tracting
+subtype: sub type
+subwindow: sub window
+supersetof: superset of
+supportaccesscontrol: support access control
+supportresourcecontrol: support resource control
+sysfail: system fail
+syshlp: system help
+syslog: system log
+sysroot: system root
+systemdrive: system drive
+tablesize: table size
+tabstop: tab stop
+tagclass: tag class
+tagend: tag end
+tagflag: tag flag
+taglist: tag list
+tagname: tag name
+tagnum: tag number
+tagstart: tag start
+tahasmorelines: ta has more lines
+tailtrim: tail trim
+targetclass: target class
+targetemphasison: target emphasis on
+targetrep: target report
+telnethopper: telnet hopper
+tempfile: temp file
+tempfiles: temp files
+templatecasematch: template case match
+templatematch: template match
+templatematches: template matches
+tempopen: temp open
+tempstringsize: temp string size
+terminalslash: terminal slash
+terminfo: term information
+testcode: test code
+testcommand: test command
+testlast: test last
+testpath: test path
+testtag: test tag
+texinfo: tex info
+textanchor: text anchor
+textarea: text area
+textdomain: text domain
+textfield: text field
+textfields: text fields
+textflow: text flow
+textinput: text input
+textlike: text like
+textlist: text list
+textretrievalquery: text retrieval query
+textsearch: text search
+textualnewlines: textual newlines
+thatparent: that parent
+thedata: the data
+thedate: the date
+thehost: the host
+thelink: the link
+thelist: the list
+themap: the map
+theport: the port
+theproject: the project
+thetime: the time
+thetitle: the title
+thisacceptcs: this acceptcs
+thisanchor: this anchor
+thisform: this form
+thisgroup: this group
+thisname: this name
+thisparent: this parent
+thisyear: this year
+tickcount: tick count
+tildeexpand: tilde expand
+tildeistop: tilde is top
+timestring: time string
+tmpaddress: tmp address
+tmpanchor: tmp anchor
+tmpbuf: tmp buffer
+tmpchptr: tmp char pointer
+tmpdest: tmp destination
+tmpdir: tmp directory
+tmpdst: tmp  destination
+tmpf: tmp file
+tmpfile: tmp file
+tmpfilelen: tmp file length
+tmpfilename: tmp file name
+tmphash: tmp hash
+tmpstyleoff: tmp style off
+tmpstyleon: tmp style on
+tmptarptr: tmp tar pointer
+tmptitle: tmp title
+toascii: to ascii
+tobuffer: to buffer
+tofile: to file
+tolower: to lower
+toname: to name
+toplevel: top level
+topmost: top most
+topofstack: top of stack
+toread: to read
+totalread: total read
+traceflag: trace flag
+tracelog: trace log
+tracelogopenfailed: trace log open failed
+trimcolorclass: trim color class
+trimdoublequotes: trim double quotes
+trimhightext: trim high text
+trimpoundselector: trim pound selector
+trueemptyline: true empty line
+truelinesize: true line size
+truncalert: trunc alert
+trydefault: try default
+typeahead: type ahead
+typecalloc: type calloc
+typecallocn: type callocn
+typemalloc: type malloc
+typemallocn: type mallocn
+typeterm: type term
+ucanchorinfo: uc anchor information
+ucassume: uc assume
+uccantranslatefromto: uc can translate from to
+uccantranslateunito: uc can translate unit to
+uccanunitranslatefrom: uc can unit translate from
+ucchangeterminalcodepage: uc change terminal code page
+uccleanup: uc cleanup
+ucconsole: uc console
+ucconvertunitoutf: uc convert unit out f
+ucdefs: uc definitions
+ucforce: uc force
+ucfree: uc free
+ucgetlyhndl: uc get ly handler
+ucgetlyhntl: uc get ly handler
+ucgetrawunimode: uc get raw unit mode
+ucgetunifromutf: uc get unit from utf
+ucinfo: uc information
+ucinfostage: uc information stage
+ucinit: uc init
+ucinitialized: uc initialized
+uclyhdnl: uc ly handler
+uclyhndl: uc ly handler
+ucneednottranslate: uc need not translate
+ucnumcharsets: uc number char sets
+ucode: uc code
+ucontext: uc context
+ucpututf: uc put utf
+ucreset: uc reset
+ucreversetranschar: uc reverse translated char
+ucsavebookmarksinunicode: uc save bookmarks in unicode
+ucsetboxchars: uc set box chars
+ucstages: uc stages
+uctranschar: uc trans char
+uctranscharstr: uc trans char string
+uctranstouni: uc translate to uni
+uctransunichar: uc translate uni char
+uctransunicharstr: uc translate uni char string
+uidtoname: uid to name
+uilist: ui list
+ultrixname: ultrix name
+unfreed: un freed
+ungetc: un getc
+ungetmouse: un get mouse
+ungzip: un gzip
+unhandled: un handled
+unhidden: un hidden
+unhighlight: un highlight
+unhighlighted: un highlighted
+unidefault: uni default
+unimapdesc: uni map descriptor
+unionwait: union wait
+unipair: uni pair
+unitolowercase: uni to lower case
+unlinklastobject: unlink last object
+unlinkobject: un link object
+unlinkselection: unlink selection
+unsetkey: unset key
+updateboundary: update boundary
+updated: updated
+updatekcode: update k code
+updatespecifics: update specifics
+updatespecifiedkcode: update specified k code
+updatestyle: update style
+urlchar: url char
+urldoc: url doc
+urldomainprefixes: url domain prefixes
+urldomainsuffixes: url domain suffixes
+urlencoded: url encoded
+urlnum: url number
+urlpath: url path
+urlstring: url string
+urltotal: url total
+urltypes: url types
+usealtasvalue: use alt as value
+usecmdline: use comand line
+usecontained: use contained
+usecontains: use contains
+usedefault: use default
+usefixedrecords: use fixed records
+useplainspace: use plain space
+useproxy: use proxy
+useragent: user agent
+userandinetingroup: user and inet in group
+userdeflist: user defined list
+userdefs: user definitions
+userid: user identifier
+userinfo: user information
+userinformationfield: user information field
+userinfotagsize: user information tag size
+userlen: user lenght
+usermode: user mode
+usermsg: user message
+username: user name
+usernamedesc: user name descriptor
+userprofile: user profile
+userspec: user specification
+userspecified: user specified
+userstyles: user styles
+usingval: using value
+versionnumber: version number
+versionvms: version vms
+verstring: version string
+visitedlink: visited link
+vmsbox: vms box
+vmsdir: vms directory
+vmsentry: vms entry
+vmsentryinfo: vms entry information
+vmserrno: vms error number
+vmsexit: vms exit
+vmshelp: vms help
+vmsized: vm sized
+vmslogical: vms logical
+vmsmailitemlist: vms mail item list
+vmsname: vms name
+vmssignal: vms signal
+vmsversion: vms version
+vmsysu: vms system
+vmtotal: vm total
+vmtype: vm type
+voidfunc: void function
+waisdocumentcodes: wais document codes
+waisdocumentheader: wais document header
+waisdocumentheadlines: wais document headlines
+waisdocumentlongheader: wais document long header
+waisdocumentshortheader: wais document short header
+waisdocumenttext: wais document text
+waisinitresponse: wais init response
+waismessage: wais message
+waissearch: wais search
+waissearchresponse: wais search response
+waitforsingleobject: wait for single object
+waitstat: wait stat
+wasinterrupted: was interrupted
+watchpoints: watch points
+whichrecall: which recall
+whitespace: white space
+willdelete: will delete
+willpresent: will present
+willsearch: will search
+wincancelshutdown: win cancel shut down
+wincloseclipbrd: win close clipboard
+wincreatemsgqueue: win create message queue
+wincyrillic: win cyrillic
+windestroymsgqueue: win destroy message queue
+wingreek: win greek
+winhebrew: win hebrew
+wininitialize: win initialize
+winlatin: win latin
+winsize: win size
+winsock: win sock
+wordwrap: word wrap
+workhorse: work horse
+workingnotes: working notes
+worldwideweb: world wide web
+wrapalert: wrap alert
+wrapsource: wrap source
+writeany: write any
+writebinaryinteger: write binary integer
+writebitmap: write bitmap
+writeboolean: write boolean
+writebyte: write byte
+writecompressedinteger: write compressed integer
+writecompressedintwithpadding: write compressed integer with padding
+writediag: write diagnostic
+writedocobj: write document object
+writefds: write file descriptor
+writeinitresponseapdu: write init response apdu
+writeinitresponseinfo: write init response info
+writenum: write number
+writepdutype: write pdu type
+writepos: write position
+writepresentinfo: write present information
+writepresentresponseinfo: write present response information
+writeprotocolversion: write protocol version
+writequery: write query
+writequeryterm: write query term
+writesearchapdu: write search apdu
+writesearchinfo: write search information
+writesearchresponseapdu: write search response apdu
+writesearchresponseinfo: write search response information
+writestring: write string
+writetag: write tag
+writeuserinfoheader: write user information header
+writewaisdocumentcodes: write wais document codes
+writewaisdocumentheader: write wais document header
+writewaisdocumentheadlines: write wais document headlines
+writewaisdocumentlongheader: write wais document long header
+writewaisdocumentshortheader: write wais document short header
+writewaisdocumenttext: write wais document text
+writewaispacketheader: write wais packet header
+writtenanysize: written any size
+writtencompressedbinintsize: written compresse db in int size
+writtencompressedintsize: written compressed int size
+writtennumsize: written number size
+writtenstringsize: written string size
+writtentagsize: written tag size
+wsacleanup: wsa cleanup
+wsadata: wsa data
+wsagetlasterror: wsa get last error
+wsasetlasterror: wsa set last error
+wsastartup: wsa startup
+wwwdoc: www document
+wwwfile: www file
+wwwlib: www library
+wwwname: www name
+wwwteam: www team
+wwwuser: www user
+xloadimage: xload image
+xloadimagecommand: xload image command
