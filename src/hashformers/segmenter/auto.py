@@ -10,6 +10,7 @@ from hashformers.segmenter.unigram_segmenter import UnigramWordSegmenter
 
 class FastWordSegmenter(BaseWordSegmenter):
     def __init__(
+        self,
         unigram_lang = "en",
         unigram_wordlist = "best",
         unigram_match_cutoff = None,
