@@ -84,6 +84,10 @@ pip install -e .
 
 * [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
 
+## Blog Posts
+
+* [15 Datasets for Word Segmentation on the Hugging Face Hub](https://ruanchaves.medium.com/15-datasets-for-word-segmentation-on-the-hugging-face-hub-4f24cb971e48)
+
 ## Citation
 
 ```
