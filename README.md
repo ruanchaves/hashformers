@@ -2,10 +2,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) 
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/project/pip/)  
-![issues](https://img.shields.io/github/issues/ruanchaves/hashformers)
-![forks](https://img.shields.io/github/forks/ruanchaves/hashformers)
-![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)
-![tweet](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fruanchaves%2Fhashformers)
+[![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)]
 
 Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
 
