@@ -11,11 +11,10 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 
 <p align="center">
 
+<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
+
 <h3> <a href="https://ruanchaves.github.io/hashformers/html/README.html"> ✂️ Read the documentation </a> </h3>
 
-<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Segment hashtags on Google Colab </a> </h3>
-
-<h3> <a href="https://github.com/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Follow the step-by-step tutorial </a> </h3>
 </p>
 
 
