@@ -10,6 +10,8 @@ Hashtag segmentation is the task of automatically adding spaces between the word
 Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
 <p align="center">
+    
+<h3> <a href="https://ruanchaves-hashtag-segmentation.hf.space/"> Segment hashtags on Hugging Face Spaces </a> </h3>
 
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
 
