@@ -11,7 +11,7 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 
 <p align="center">
     
-<h3> <a href="https://ruanchaves-hashtag-segmentation.hf.space/"> Segment hashtags on Hugging Face Spaces </a> </h3>
+<h3> <a href="https://ruanchaves-hashtag-segmentation.hf.space/"> ✂️ Segment hashtags on Hugging Face Spaces </a> </h3>
 
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
 
