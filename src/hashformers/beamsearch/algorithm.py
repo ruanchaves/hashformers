@@ -15,6 +15,15 @@ class Beamsearch(ModelLM):
             model_type="gpt2", 
             device='cuda', 
             gpu_batch_size=1000):
+        """
+        Initializes the Beamsearch class.
+
+        Args:
+            model_name_or_path (str): Name of the model or path to the model to be loaded. Default is "gpt2".
+            model_type (str): Type of the model. Default is "gpt2".
+            device (str): Device to be used for computation. Default is 'cuda'.
+            gpu_batch_size (int): Size of the batch to be processed on the GPU. Default is 1000.
+        """
         super().__init__(
             model_name_or_path=model_name_or_path, 
             model_type=model_type, 
@@ -22,6 +31,15 @@ class Beamsearch(ModelLM):
             gpu_batch_size=gpu_batch_size)
 
     def next_step(self, list_of_candidates):
+        """
+        Generates the next possible candidates.
+
+        Args:
+            list_of_candidates (List[str]): List of current candidate strings.
+        
+        Returns:
+            List[str]: List of possible next candidates.
+        """
         output = []
         for candidate_string in list_of_candidates:
             candidates = [ 
@@ -33,6 +51,16 @@ class Beamsearch(ModelLM):
         return output
 
     def update_probabilities(self, tree, prob_dict):
+        """
+        Updates the probabilities in the given probability dictionary.
+
+        Args:
+            tree (List[str]): List of candidate strings.
+            prob_dict (dict): Dictionary of probabilities of the candidates.
+        
+        Returns:
+            dict: Updated probability dictionary.
+        """
         for item in tree:
             current_batch = []
             for word in item:
@@ -47,12 +75,42 @@ class Beamsearch(ModelLM):
         return prob_dict
 
     def reshape_tree(self, tree, measure):
+        """
+        Reshapes the tree according to the provided measure.
+
+        Args:
+            tree (List[str]): List of candidate strings.
+            measure (int): Measure to reshape the tree.
+        
+        Returns:
+            List[List[str]]: Reshaped tree.
+        """
         return [ tree[x:x+measure] for x in range(0, len(tree), measure) ]
 
     def flatten_list(self, list_):
+        """
+        Flattens a nested list.
+
+        Args:
+            list_ (List[List[Any]]): Nested list to be flattened.
+        
+        Returns:
+            List[Any]: Flattened list.
+        """
         return [ item for sublist in list_ for item in sublist ]
 
     def trim_tree(self, tree, prob_dict, topk):
+        """
+        Trims the tree to the top k candidates.
+
+        Args:
+            tree (List[str]): List of candidate strings.
+            prob_dict (dict): Dictionary of probabilities of the candidates.
+            topk (int): Number of top candidates to be retained.
+        
+        Returns:
+            List[str]: List of top k candidates.
+        """
         output = []
         probs = [ prob_dict[x] for x in tree ]
         candidates = [
@@ -66,6 +124,17 @@ class Beamsearch(ModelLM):
         return output
 
     def run(self, dataset, topk=20, steps=13):
+        """
+        Runs the beamsearch algorithm on the provided dataset.
+
+        Args:
+            dataset (List[str]): List of initial candidate strings.
+            topk (int): Number of top candidates to be retained in each step. Default is 20.
+            steps (int): Number of steps to run the algorithm. Default is 13.
+        
+        Returns:
+            ProbabilityDictionary: Dictionary of final probabilities of the candidates.
+        """
         tree = dataset
         prob_dict = {}
         for i in range(steps):
