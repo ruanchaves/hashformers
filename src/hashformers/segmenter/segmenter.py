@@ -13,46 +13,6 @@ from functools import reduce
 import dataclasses
 import pandas as pd
 
-class WordSegmenterCascade(BaseSegmenter):
-
-    def __init__(self, cascade_nodes):
-        self.cascade_nodes = cascade_nodes
-
-    def generate_pipeline(self, word_list):
-
-        self.cascade_nodes[0].word_segmenter_kwargs.setdefault("return_ranks", True)
-
-        first_ws_output = self.cascade_nodes[0].word_segmenter.segment(
-            word_list, 
-            **self.cascade_nodes[0].word_segmenter_kwargs)
-
-        cascade_stack = [first_ws_output]
-        pipeline = [first_ws_output]
-        
-        for idx in range(len(self.cascade_nodes)):
-
-            self.cascade_nodes[idx].word_segmenter_kwargs.setdefault("return_ranks", True)
-
-            if idx:
-                previous_ws_output = cascade_stack.pop()
-                for item in ["ensemble_rank", "reranker_rank", "segmenter_rank"]:
-                    next_input = getattr(previous_ws_output, item)
-                    if isinstance(next_input, pd.DataFrame):
-                        break
-                current_kwargs = self.cascade_nodes[idx].word_segmenter_kwargs
-                if isinstance(next_input, pd.DataFrame):
-                    current_kwargs.setdefault("segmenter_run", next_input)
-                current_ws_output = self.cascade_nodes[idx].word_segmenter.segment(
-                    word_list, 
-                    **current_kwargs)
-                cascade_stack.append(current_ws_output)
-                pipeline.append(current_ws_output)
-
-        return pipeline
-
-    def segment(self, word_list, **kwargs):
-        word_list = super().preprocess(word_list, **kwargs)
-        return self.generate_pipeline(word_list)[-1]
 
 class BaseWordSegmenter(BaseSegmenter):
     """A general-purpose word segmentation API.
