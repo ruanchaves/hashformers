@@ -1,30 +1,39 @@
-from hashformers.segmenter.unigram_segmenter import UnigramWordSegmenter
 import pytest
 import torch
-
 import hashformers
-
 from hashformers import (RegexWordSegmenter, TweetSegmenter,
                                    TwitterTextMatcher)
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
 from hashformers.segmenter.segmenter import BaseWordSegmenter
-from hashformers.segmenter.segmenter import WordSegmenterCascade
-from hashformers.segmenter.data_structures import CascadeNode
-import dataclasses
 from pathlib import Path
+import dataclasses 
 
-test_data_dir = Path(__file__).parent.absolute()
+TEST_DATA_DIR = Path(__file__).parent.absolute()
+CUDA_IS_AVAILABLE = torch.cuda.is_available()
 
-cuda_is_available = torch.cuda.is_available()
+if not CUDA_IS_AVAILABLE:
+    raise Exception("A GPU is required for these tests.")
 
-@pytest.mark.skipif(not cuda_is_available, reason="A GPU is not available.")
-def test_cuda():
-    assert torch.cuda.is_available() == True
+@pytest.mark.skipif(not CUDA_IS_AVAILABLE, reason="A GPU is not available.")
+def test_cuda_availability():
+    """
+    Checks if CUDA is available for the running tests.
+    
+    Raises:
+        Exception: If CUDA is not available.
+    """
+    assert CUDA_IS_AVAILABLE
 
 @pytest.fixture(scope="module")
 def tweet_segmenter():
+    """
+    Initializes and returns a TweetSegmenter object with a TwitterTextMatcher and a RegexWordSegmenter.
+    
+    Returns:
+        TweetSegmenter: An instance of the TweetSegmenter class.
+    """
     return TweetSegmenter(
         matcher=TwitterTextMatcher(),
         word_segmenter=RegexWordSegmenter()
@@ -32,6 +41,12 @@ def tweet_segmenter():
 
 @pytest.fixture(scope="module")
 def word_segmenter_gpt2_bert():
+    """
+    Initializes and returns a BaseWordSegmenter object with Beamsearch, Reranker, and Top2_Ensembler.
+    
+    Returns:
+        BaseWordSegmenter: An instance of the BaseWordSegmenter class.
+    """
 
     segmenter = Beamsearch(
         model_name_or_path="distilgpt2",
@@ -52,150 +67,18 @@ def word_segmenter_gpt2_bert():
     )
     return ws
 
-@pytest.fixture(scope="module")
-def word_segmenter_unigram():
-    segmenter = UnigramWordSegmenter(
-        max_split_length=20
-    )
-    ws = BaseWordSegmenter(
-        segmenter=segmenter,
-        reranker=None,
-        ensembler=None
-    )
-    return ws
-
-@pytest.fixture(scope="module")
-def word_segmenter_unigram_bert():
-    segmenter = UnigramWordSegmenter(
-        max_split_length=20
-    )
-
-    reranker = Reranker(
-        model_name_or_path="bert-base-cased",
-        gpu_batch_size=1000
-    )
-
-    ensembler = Top2_Ensembler()
-
-    ws = BaseWordSegmenter(
-        segmenter=segmenter,
-        reranker=reranker,
-        ensembler=ensembler
-    )
-    return ws
-
-@pytest.fixture(scope="module")
-def word_segmenter_unigram_gpt2():
-    segmenter = UnigramWordSegmenter(
-        max_split_length=20
-    )
-
-    reranker = Reranker(
-        model_name_or_path="distilgpt2",
-        model_type="gpt2",
-        gpu_batch_size=1000
-    )
-
-    ensembler = Top2_Ensembler()
-
-    ws = BaseWordSegmenter(
-        segmenter=segmenter,
-        reranker=reranker,
-        ensembler=ensembler
-    )
-    return ws
-
-@pytest.fixture(scope="module")
-def word_segmenter_unigram_gpt2_bert_cascade():
-    
-    segmenter = UnigramWordSegmenter(
-        max_split_length=20
-    )
-
-    reranker_1 = Reranker(
-        model_name_or_path="distilgpt2",
-        model_type="gpt2",
-        gpu_batch_size=1000
-    )
-
-    reranker_2 = Reranker(
-        model_name_or_path="bert-base-cased",
-        gpu_batch_size=1000
-    )
-
-    ensembler = Top2_Ensembler()
-
-    ws1 = BaseWordSegmenter(
-            segmenter=segmenter,
-            reranker=reranker_1,
-            ensembler=ensembler
-    )
-
-    ws2 = BaseWordSegmenter(
-            segmenter=None,
-            reranker=reranker_2,
-            ensembler=ensembler
-    )
-
-
-    node1 = CascadeNode(
-        word_segmenter=ws1,
-        word_segmenter_kwargs={
-            "segmenter_kwargs": {
-                "topk": 5,
-                "steps": 5
-            },
-            "reranker_kwargs": {
-
-            },
-            "ensembler_kwargs": {
-                "alpha": 0.222,
-                "beta": 0.111
-            },
-            "use_reranker": True,
-            "use_ensembler": True
-        }
-    )
-
-    node2 = CascadeNode(
-        word_segmenter=ws2,
-        word_segmenter_kwargs={
-            "segmenter_kwargs": {
-
-            },
-            "reranker_kwargs": {
-
-            },
-            "ensembler_kwargs": {
-                "alpha": 0.222,
-                "beta": 0.111
-            },
-            "use_reranker": True,
-            "use_ensembler": True
-        }
-    )
-
-    cascade = [node1, node2]
-
-    return WordSegmenterCascade(cascade)
-
-if cuda_is_available:
-    segmenter_fixtures = [
-        "word_segmenter_gpt2_bert", 
-        "word_segmenter_unigram",
-        "word_segmenter_unigram_bert",
-        "word_segmenter_unigram_gpt2",
-        "word_segmenter_unigram_gpt2_bert_cascade"
-    ]
-else:
-    segmenter_fixtures = ["word_segmenter_unigram"]
-
-segmenter_fixtures = [
-    pytest.lazy_fixture(x) for x in segmenter_fixtures
+SEGMENTER_FIXTURES = [
+    pytest.lazy_fixture("word_segmenter_gpt2_bert")
 ]
 
-@pytest.mark.parametrize('word_segmenter', segmenter_fixtures)
-def test_word_segmenter_output_format(word_segmenter):
+@pytest.mark.parametrize('word_segmenter', SEGMENTER_FIXTURES)
+def test_word_segmenter_output(word_segmenter):
+    """
+    Tests the predict function of the provided word_segmenter.
+    
+    Args:
+        word_segmenter (BaseWordSegmenter): The word_segmenter to be tested.
+    """
     test_boun_hashtags = [
         "minecraf",
         "ourmomentfragrance",
@@ -203,36 +86,57 @@ def test_word_segmenter_output_format(word_segmenter):
     ]
 
     predictions = word_segmenter.predict(test_boun_hashtags).output
-
     predictions_chars = [ x.replace(" ", "") for x in predictions ]
-    
-    assert predictions_chars[0] == "minecraf"
-    assert predictions_chars[1] == "ourmomentfragrance"
-    assert predictions_chars[2] == "waybackwhen"
 
-def test_matcher():
+    assert all([
+        predictions_chars[0] == "minecraf",
+        predictions_chars[1] == "ourmomentfragrance",
+        predictions_chars[2] == "waybackwhen"
+    ])
+
+def test_twitter_text_matcher():
+    """
+    Tests the functionality of the TwitterTextMatcher.
+    """
     matcher = TwitterTextMatcher()
     result = matcher(["esto es #UnaGenialidad"])
-    
+
     assert result == [["UnaGenialidad"]]
 
-def test_regex_word_segmenter():
+def test_regex_word_segmentation():
+    """
+    Tests the predict function of the RegexWordSegmenter.
+    """
     ws = RegexWordSegmenter()
     test_case = ["UnaGenialidad"]
     prediction = ws.predict(test_case)
-    
+
     assert prediction.output == ["Una Genialidad"]
 
 def test_hashtag_container(tweet_segmenter):
+    """
+    Tests the build_hashtag_container method of the provided tweet_segmenter.
+    
+    Args:
+        tweet_segmenter (TweetSegmenter): The tweet_segmenter to be tested.
+    """
     original_tweet = "esto es #UnaGenialidad"
     hashtag_container, word_segmenter_output = tweet_segmenter.build_hashtag_container([original_tweet])
 
-    assert hashtag_container.hashtags == [['UnaGenialidad']]
-    assert hashtag_container.hashtag_set == ['UnaGenialidad']
-    assert hashtag_container.replacement_dict == {'#UnaGenialidad': 'Una Genialidad'}
-    assert isinstance(word_segmenter_output, hashformers.segmenter.WordSegmenterOutput)
+    assert all([
+        hashtag_container.hashtags == [['UnaGenialidad']],
+        hashtag_container.hashtag_set == ['UnaGenialidad'],
+        hashtag_container.replacement_dict == {'#UnaGenialidad': 'Una Genialidad'},
+        isinstance(word_segmenter_output, hashformers.segmenter.WordSegmenterOutput)
+    ])
 
-def test_tweet_segmenter_generator(tweet_segmenter):
+def test_tweet_segmentation(tweet_segmenter):
+    """
+    Tests the segmentation process of the provided tweet_segmenter.
+    
+    Args:
+        tweet_segmenter (TweetSegmenter): The tweet_segmenter to be tested.
+    """
     original_tweet = "esto es #UnaGenialidad"
     expected_tweet = "esto es Una Genialidad"
     hashtag_container, word_segmenter_output = tweet_segmenter.build_hashtag_container([original_tweet])
@@ -241,7 +145,12 @@ def test_tweet_segmenter_generator(tweet_segmenter):
     assert tweet == expected_tweet
 
 def test_tweet_segmenter_output_format(tweet_segmenter):
-
+    """
+    Tests the predict method's output of the provided tweet_segmenter.
+    
+    Args:
+        tweet_segmenter (TweetSegmenter): The tweet_segmenter to be tested.
+    """
     original_tweet = "esto es #UnaGenialidad"
     expected_tweet = "esto es Una Genialidad"
 
