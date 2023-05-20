@@ -5,6 +5,18 @@ from hashformers.experiments.evaluation import evaluate_df
 import pandas as pd
 
 def main():
+    """
+    Process text data and evaluate the segmentation results for different datasets.
+
+    This script uses the `TextPreProcessor` class from the `ekphrasis` package to preprocess and tokenize text data.
+    It retrieves various datasets containing hashtags and their corresponding gold-standard segmentations.
+
+    The datasets used in this script include the BOUN and STAN-Dev datasets, the HashSet Distant-sampled dataset,
+    and the HashSet Manual dataset. For each dataset, the script reads the data, preprocesses the hashtags,
+    computes the segmentation, and evaluates the results using the `evaluate_df` function.
+
+    The evaluation results for each dataset are printed to the console.
+    """
     text_processor = TextPreProcessor(
         # terms that will be normalized
         normalize=['url', 'email', 'percent', 'money', 'phone', 'user',

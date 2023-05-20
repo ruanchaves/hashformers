@@ -12,7 +12,6 @@ setup(
    "mlm-hashformers",
    "lm-scorer-hashformers",
    "twitter-text-python",
-   "pandas",
-   "wordfreq"
+   "pandas"
    ]
 )

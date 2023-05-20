@@ -2,7 +2,18 @@ from hashformers.beamsearch.data_structures import enforce_prob_dict
 from hashformers.evaluation.modeler import Modeler
 
 def evaluate_dictionary(data, gold, n=10):
+    """
+    Evaluates the input data dictionary against a gold standard using various metrics. 
+    It computes these metrics for the top 'n' entries of the data.
 
+    Args:
+        data (dict or ProbabilityDictionary): The input data to be evaluated.
+        gold (list): The gold standard list of strings to compare against.
+        n (int, optional): The number of top entries from the data to be considered for evaluation. Default is 10.
+
+    Returns:
+        dict: A dictionary containing the computed metrics (F1 score, accuracy, precision, recall) for each of the top 'n' entries.
+    """
     gold_dict = {}
     for item in gold:
         gold_dict.update({item.replace(" ", ""): item})

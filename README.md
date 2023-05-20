@@ -5,7 +5,7 @@
 
 Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
 
-[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation. On average, hashformers is **10% more accurate** than the second best hashtag segmentation library ( more details [on the docs](https://ruanchaves.github.io/hashformers/html/EVALUATION.html) ).
+[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation. On average, hashformers is **10% more accurate** than the second best hashtag segmentation library ( [Learn More](https://github.com/ruanchaves/hashformers/blob/master/tutorials/EVALUATION.md) ).
 
 Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
 
@@ -14,8 +14,6 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 <h3> <a href="https://ruanchaves-hashtag-segmentation.hf.space/"> ✂️ Segment hashtags on Hugging Face Spaces </a> </h3>
 
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
-
-<h3> <a href="https://ruanchaves.github.io/hashformers/html/README.html"> ✂️ Read the documentation </a> </h3>
 
 </p>
 
@@ -83,7 +81,7 @@ pip install -e .
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
-* [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
+* [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
 
 ## Blog Posts
 
