@@ -81,7 +81,7 @@ pip install -e .
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
-* [HashSet -- A Dataset For Hashtag Segmentation](https://arxiv.org/abs/2201.06741)
+* [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
 
 ## Blog Posts
 
