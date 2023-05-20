@@ -6,43 +6,6 @@ from hashformers.segmenter import (
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
 from hashformers.ensemble.top2_fusion import Top2_Ensembler
-from hashformers.segmenter.unigram_segmenter import UnigramWordSegmenter
-
-class FastWordSegmenter(BaseWordSegmenter):
-    def __init__(
-        self,
-        unigram_lang = "en",
-        unigram_wordlist = "best",
-        unigram_match_cutoff = None,
-        max_split_length=20,
-        reranker_gpu_batch_size = 1000,
-        reranker_model_name_or_path = "distilgpt2",
-        reranker_model_type = "gpt2"      
-    ):
-
-        segmenter_model = UnigramWordSegmenter(
-            max_split_length=max_split_length,
-            lang=unigram_lang,
-            wordlist=unigram_wordlist,
-            match_cutoff=unigram_match_cutoff
-        )
-
-        if reranker_model_name_or_path:
-            reranker_model = Reranker(
-                model_name_or_path=reranker_model_name_or_path,
-                model_type=reranker_model_type,
-                gpu_batch_size=reranker_gpu_batch_size
-            )
-        else:
-            reranker_model = None
-
-        ensembler = Top2_Ensembler()
-
-        super().__init__(
-            segmenter=segmenter_model,
-            reranker=reranker_model,
-            ensembler=ensembler
-        )    
 
 class TransformerWordSegmenter(BaseWordSegmenter):
     def __init__(
