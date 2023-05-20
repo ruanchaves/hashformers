@@ -79,11 +79,15 @@ pip install -e .
 
 ## Relevant Papers 
 
+This is a collection of papers that have utilized the *hashformers* library as a tool in their research.
+
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
 * [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
 
-* [Generalizability of Abusive Language Detection Models on Homogeneous German Datasets (Datenbank-Spektrum) ](https://link.springer.com/article/10.1007/s13222-023-00438-1#Fn3) 
+* [Generalizability of Abusive Language Detection Models on Homogeneous German Datasets](https://link.springer.com/article/10.1007/s13222-023-00438-1#Fn3) 
+
+* [The problem of varying annotations to identify abusive language in social media content](https://www.cambridge.org/core/journals/natural-language-engineering/article/problem-of-varying-annotations-to-identify-abusive-language-in-social-media-content/B47FCCCEBF6EDF9C628DCC69EC5E0826)
 
 ## Blog Posts
 
