@@ -33,6 +33,36 @@ class BaseWordSegmenter(BaseSegmenter):
         self.reranker_model = reranker
         self.ensembler = ensembler
 
+    def get_segmenter(self):
+        """
+        Returns the segmenter model.
+        """
+        return self.segmenter_model.model
+
+    def get_reranker(self):
+        """
+        Returns the reranker model.
+        """
+        return self.reranker_model.model
+
+    def set_segmenter(self, segmenter):
+        """
+        Sets the segmenter model.
+
+        Args:
+            segmenter: The model used for initial hashtag segmentation.
+        """
+        self.segmenter_model.model = segmenter
+    
+    def set_reranker(self, reranker):
+        """
+        Sets the reranker model.
+
+        Args:
+            reranker: The model used for reranking the segmented hashtags.
+        """
+        self.reranker_model.model = reranker
+
     def segment(
             self,
             word_list: List[str],
