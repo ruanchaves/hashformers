@@ -45,6 +45,12 @@ class BaseWordSegmenter(BaseSegmenter):
         """
         return self.reranker_model.model
 
+    def get_ensembler(self):
+        """
+        Returns the ensembler model.
+        """
+        return self.ensembler
+
     def set_segmenter(self, segmenter):
         """
         Sets the segmenter model.
@@ -62,6 +68,15 @@ class BaseWordSegmenter(BaseSegmenter):
             reranker: The model used for reranking the segmented hashtags.
         """
         self.reranker_model.model = reranker
+
+    def set_ensembler(self, ensembler):
+        """
+        Sets the ensembler model.
+
+        Args:
+            ensembler: The model used for ensemble operations over the segmenter and reranker models.
+        """
+        self.ensembler = ensembler
 
     def segment(
             self,
@@ -163,7 +178,7 @@ class TwitterTextMatcher(object):
             tweets: A list of strings, where each string is a tweet.
 
         Returns:
-            A list of tags for each tweet.
+            A list of hashtags for each tweet.
         """
         return [ self.parser.parse(x).tags for x in tweets ]
     
