@@ -18,7 +18,7 @@ class MiniconsLM(object):
     
     def get_batch_scores(self, batch):
         if self.model_type == 'IncrementalLMScorer':
-            return self.scorer.sequence_score(batch, reduction = lambda x: x.prod(0).item())
+            return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
         elif self.model_type == 'MaskedLMScorer':
             return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
         elif self.model_type == 'Seq2SeqScorer':
