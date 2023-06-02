@@ -1,6 +1,7 @@
 from minicons import scorer
 from torch.utils.data import DataLoader
 import warnings
+import numpy as np
 
 class MiniconsLM(object):
 
@@ -18,7 +19,9 @@ class MiniconsLM(object):
     
     def get_batch_scores(self, batch):
         if self.model_type == 'IncrementalLMScorer':
-            return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
+            tokens = self.scorer.prepare_text(batch, bos_token=True, eos_token=True)
+            stats = self.scorer.compute_stats(tokens, prob=True)
+            return np.array(stats).sum(axis=1)
         elif self.model_type == 'MaskedLMScorer':
             return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
         elif self.model_type == 'Seq2SeqScorer':
