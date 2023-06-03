@@ -18,7 +18,6 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 </p>
 
 
-
 ## Basic usage
 
 ```python
@@ -49,6 +48,37 @@ It is also possible to use hashformers without a reranker by setting the `rerank
 ```
 pip install hashformers
 ```
+
+## What models can I use?
+
+Visit the [HuggingFace Model Hub](https://huggingface.co/models) and choose your models for the `WordSegmenter` class.
+
+You can use any model supported by the [minicons](https://github.com/kanishkamisra/minicons) library. Currently `hashformers` supports the following model types as the `segmenter_model_type` or `reranker_model_type`:
+
+### `incremental`
+
+Auto-regressive models like GPT-2 and XLNet, or any model that can be loaded with `AutoModelForCausalLM`. This includes large language models (LLMs) such as Alpaca-LoRA ( `chainyo/alpaca-lora-7b` ) and GPT-J ( `EleutherAI/gpt-j-6b` ).
+
+```python
+ws = WordSegmenter(
+    segmenter_model_name_or_path="EleutherAI/gpt-j-6b",
+    segmenter_model_type="incremental",
+    reranker_model_name_or_path=None,
+    reranker_model_type=None
+)
+```
+
+### `masked`
+
+Masked language models like BERT, or any model that can be loaded with `AutoModelForMaskedLM`.
+
+### `seq2seq`
+
+Seq2Seq models like FLAN-T5 ( `google/flan-t5-base` ), or any model that can be loaded with `AutoModelForSeq2SeqLM`.
+
+Best results are usually achieved by using an `incremental` model as the `segmenter_model_name_or_path` and a `masked` or `seq2seq` model as the `reranker_model_name_or_path`. 
+
+A segmenter is always required, however a reranker is optional. 
 
 ## Contributing 
 
