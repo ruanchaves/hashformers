@@ -5,9 +5,9 @@
 
 Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
 
-[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation. On average, hashformers is **10% more accurate** than the second best hashtag segmentation library ( [Learn More](https://github.com/ruanchaves/hashformers/blob/master/tutorials/EVALUATION.md) ).
+[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation, as demonstrated on [this paper accepted at LREC 2022](https://aclanthology.org/2022.lrec-1.782.pdf). 
 
-Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
+Hashformers is also **language-agnostic**: you can use it to segment hashtags not just with English models, but also using any language model available on the [Hugging Face Model Hub](https://huggingface.co/models).
 
 <p align="center">
     
@@ -15,8 +15,9 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
 
-</p>
+<h3> <a href="https://github.com/ruanchaves/hashformers/wiki"> ✂️ Read the Docs </a> </h3>
 
+</p>
 
 
 ## Basic usage
@@ -26,7 +27,9 @@ from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
-    reranker_model_name_or_path="bert-base-uncased"
+    segmenter_model_type="incremental",
+    reranker_model_name_or_path="google/flan-t5-base",
+    reranker_model_type="seq2seq"
 )
 
 segmentations = ws.segment([
@@ -40,30 +43,44 @@ print(segmentations)
 # 'ice cold' ]
 ```
 
-## Installation
+It is also possible to use hashformers without a reranker by setting the `reranker_model_name_or_path` and the `reranker_model_type` to `None`. 
 
-Hashformers is compatible with Python 3.7.
+## Installation
 
 ```
 pip install hashformers
 ```
 
-It is possible to use **hashformers** without a reranker:
+## What models can I use?
+
+Visit the [HuggingFace Model Hub](https://huggingface.co/models) and choose your models for the `WordSegmenter` class.
+
+You can use any model supported by the [minicons](https://github.com/kanishkamisra/minicons) library. Currently `hashformers` supports the following model types as the `segmenter_model_type` or `reranker_model_type`:
+
+### `incremental`
+
+Auto-regressive models like GPT-2 and XLNet, or any model that can be loaded with `AutoModelForCausalLM`. This includes large language models (LLMs) such as Alpaca-LoRA ( `chainyo/alpaca-lora-7b` ) and GPT-J ( `EleutherAI/gpt-j-6b` ).
 
 ```python
-from hashformers import TransformerWordSegmenter as WordSegmenter
 ws = WordSegmenter(
-    segmenter_model_name_or_path="gpt2",
-    reranker_model_name_or_path=None
+    segmenter_model_name_or_path="EleutherAI/gpt-j-6b",
+    segmenter_model_type="incremental",
+    reranker_model_name_or_path=None,
+    reranker_model_type=None
 )
 ```
 
-If you want to use a BERT model as a reranker, you must install [mxnet](https://pypi.org/project/mxnet/). Here we install **hashformers** with `mxnet-cu110`, which is compatible with Hugging Face Spaces. If installing in another environment, replace it by the [mxnet package](https://pypi.org/project/mxnet/) compatible with your CUDA version.
+### `masked`
 
-```
-pip install mxnet-cu110 
-pip install hashformers
-```
+Masked language models like BERT, or any model that can be loaded with `AutoModelForMaskedLM`.
+
+### `seq2seq`
+
+Seq2Seq models like FLAN-T5 ( `google/flan-t5-base` ), or any model that can be loaded with `AutoModelForSeq2SeqLM`.
+
+Best results are usually achieved by using an `incremental` model as the `segmenter_model_name_or_path` and a `masked` or `seq2seq` model as the `reranker_model_name_or_path`. 
+
+A segmenter is always required, however a reranker is optional. 
 
 ## Contributing 
 
@@ -80,6 +97,10 @@ pip install -e .
 ## Relevant Papers 
 
 This is a collection of papers that have utilized the *hashformers* library as a tool in their research.
+
+### hashformers v1.3
+
+These papers have utilized `hashformers` version 1.3 or below.
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 

@@ -16,7 +16,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
         segmenter_gpu_batch_size = 1000,
         reranker_gpu_batch_size = 1000,
         reranker_model_name_or_path = None,
-        reranker_model_type = "bert"
+        reranker_model_type = "bert",
+        reranker_device = "cuda"
     ):
         """Word segmentation API initialization. 
            A GPT-2 model must be passed to `segmenter_model_name_or_path`, and optionally a BERT model to `reranker_model_name_or_path`.
@@ -43,7 +44,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
             reranker_model = Reranker(
                 model_name_or_path=reranker_model_name_or_path,
                 model_type=reranker_model_type,
-                gpu_batch_size=reranker_gpu_batch_size
+                gpu_batch_size=reranker_gpu_batch_size,
+                device=reranker_device
             )
         else:
             reranker_model = None
