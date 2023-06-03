@@ -5,9 +5,9 @@
 
 Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
 
-[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation. On average, hashformers is **10% more accurate** than the second best hashtag segmentation library ( [Learn More](https://github.com/ruanchaves/hashformers/blob/master/tutorials/EVALUATION.md) ).
+[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation, as demonstrated on [this paper accepted at LREC 2022](https://aclanthology.org/2022.lrec-1.782.pdf). 
 
-Hashformers is also **language-agnostic**: you can use it to segment hashtags not just in English, but also in any language with a GPT-2 model on the [Hugging Face Model Hub](https://huggingface.co/models).
+Hashformers is also **language-agnostic**: you can use it to segment hashtags not just with English models, but also using any language model available on the [Hugging Face Model Hub](https://huggingface.co/models).
 
 <p align="center">
     
@@ -26,7 +26,9 @@ from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="gpt2",
-    reranker_model_name_or_path="bert-base-uncased"
+    segmenter_model_type="incremental",
+    reranker_model_name_or_path="google/flan-t5-base",
+    reranker_model_type="seq2seq"
 )
 
 segmentations = ws.segment([
@@ -40,28 +42,11 @@ print(segmentations)
 # 'ice cold' ]
 ```
 
+It is also possible to use hashformers without a reranker by setting the `reranker_model_name_or_path` and the `reranker_model_type` to `None`. 
+
 ## Installation
 
-Hashformers is compatible with Python 3.7.
-
 ```
-pip install hashformers
-```
-
-It is possible to use **hashformers** without a reranker:
-
-```python
-from hashformers import TransformerWordSegmenter as WordSegmenter
-ws = WordSegmenter(
-    segmenter_model_name_or_path="gpt2",
-    reranker_model_name_or_path=None
-)
-```
-
-If you want to use a BERT model as a reranker, you must install [mxnet](https://pypi.org/project/mxnet/). Here we install **hashformers** with `mxnet-cu110`, which is compatible with Hugging Face Spaces. If installing in another environment, replace it by the [mxnet package](https://pypi.org/project/mxnet/) compatible with your CUDA version.
-
-```
-pip install mxnet-cu110 
 pip install hashformers
 ```
 
@@ -80,6 +65,10 @@ pip install -e .
 ## Relevant Papers 
 
 This is a collection of papers that have utilized the *hashformers* library as a tool in their research.
+
+### hashformers v1.3
+
+These papers have utilized `hashformers` version 1.3 or below.
 
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
