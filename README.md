@@ -15,6 +15,8 @@ Hashformers is also **language-agnostic**: you can use it to segment hashtags no
 
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
 
+<h3> <a href="https://github.com/ruanchaves/hashformers/wiki"> ✂️ Read the Docs </a> </h3>
+
 </p>
 
 
