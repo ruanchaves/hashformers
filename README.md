@@ -51,6 +51,8 @@ It is also possible to use hashformers without a reranker by setting the `rerank
 pip install hashformers
 ```
 
+**Important**: Hashformers is designed to work with `Python 3.10.12`, the version currently used on Google Colab.
+
 ## What models can I use?
 
 Visit the [HuggingFace Model Hub](https://huggingface.co/models) and choose your models for the `WordSegmenter` class.
