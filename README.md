@@ -100,10 +100,6 @@ pip install -e .
 
 This is a collection of papers that have utilized the *hashformers* library as a tool in their research.
 
-### hashformers v1.3
-
-These papers have utilized `hashformers` version 1.3 or below.
-
 * [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
 * [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
@@ -111,6 +107,8 @@ These papers have utilized `hashformers` version 1.3 or below.
 * [Generalizability of Abusive Language Detection Models on Homogeneous German Datasets](https://link.springer.com/article/10.1007/s13222-023-00438-1#Fn3) 
 
 * [The problem of varying annotations to identify abusive language in social media content](https://www.cambridge.org/core/journals/natural-language-engineering/article/problem-of-varying-annotations-to-identify-abusive-language-in-social-media-content/B47FCCCEBF6EDF9C628DCC69EC5E0826)
+
+* [NUSS: An R package for mixed N-grams and unigram sequence segmentation](https://www.sciencedirect.com/science/article/pii/S2352711025002754#bbib0017)
 
 ## Blog Posts
 
@@ -128,3 +126,4 @@ These papers have utilized `hashformers` version 1.3 or below.
       primaryClass={cs.CL}
 }
 ```
+
