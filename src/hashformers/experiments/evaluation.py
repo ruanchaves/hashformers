@@ -1,4 +1,5 @@
 from hashformers.evaluation.modeler import Modeler
+from hashformers.utils.filtering import filter_top_k
 import pandas as pd
 import copy
 import numpy as np
@@ -53,58 +54,6 @@ def evaluate_df(
       "precision": evaluator.calculatePrecision()
   }
   return metrics
-
-def filter_top_k(
-    input_df, 
-    k, 
-    gold_field="hashtag", 
-    score_field="score",
-    segmentation_field="segmentation",
-    fill=False):
-  """
-  Filters the top k rows of the input_df for each group defined by the gold_field. 
-
-  The function sorts the input_df by score_field in ascending order and retains the first k rows for each group.
-  If fill option is set to True, it also clones the records based on the length of each group. 
-
-  Args:
-      input_df (pandas.DataFrame): The input dataframe to filter.
-      k (int): The number of top records to retain for each group.
-      gold_field (str, optional): The field used to define groups in the dataframe. Defaults to "hashtag".
-      score_field (str, optional): The field used to sort the dataframe. Defaults to "score".
-      segmentation_field (str, optional): The field used if the fill option is set to True. Defaults to "segmentation".
-      fill (bool, optional): Whether to clone the records based on the length of each group. Defaults to False.
-
-  Returns:
-      pandas.DataFrame: The filtered dataframe.
-  """
-  df = copy.deepcopy(input_df)
-  
-  df = df\
-    .sort_values(by=score_field, ascending=True)\
-    .groupby(gold_field)\
-    .head(k)
-
-  if fill:
-    df["group_length"] = df.groupby(gold_field)[segmentation_field].transform(len)
-    df["group_length"] = df["group_length"] * -1 + k + 1
-    len_array = df["group_length"].values
-    
-    df = df.drop(columns=["group_length"])
-    records = np.array(df.to_dict("records"))
-    cloned_records = list(np.repeat(records, len_array))
-    df = pd.DataFrame(cloned_records)
-    
-    df = df\
-      .sort_values(by=score_field, ascending=True)\
-      .groupby(gold_field)\
-      .head(k)
-
-    length = df.groupby(gold_field).size().values
-    assert (length == k).all()
-  
-  return df
-
 
 def read_experiment_dataset(data, dataset, model):
     """

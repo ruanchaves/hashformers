@@ -1,4 +1,10 @@
-minicons
-twitter-text-python
-ekphrasis
-pandas
+twitter-text-python>=1.1.0
+pandas>=1.3.0
+torch>=1.9.0
+transformers>=4.10.0
+
+# Test dependencies
+pytest>=7.0.0
+pytest-lazy-fixture>=0.6.3
+pytest-mock>=3.10.0
+pytest-cov>=4.0.0

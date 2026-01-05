@@ -1,7 +1,8 @@
 import pandas as pd
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json 
 import numpy as np 
+from typing import Optional, Tuple, Any
 
 @dataclass
 class Node:
@@ -11,10 +12,14 @@ class Node:
         hypothesis (str): The hypothesis segmentation of the hashtag.
         characters (str): The characters in the hashtag.
         score (float): The score assigned to the segmentation.
+        token_ids (tuple, optional): Token IDs for this hypothesis (HASH-301).
+        past_key_values (tuple, optional): Cached KV states for incremental inference (HASH-302).
     """
     hypothesis: str
     characters: str
     score: float
+    token_ids: Optional[Tuple[int, ...]] = None
+    past_key_values: Optional[Tuple[Any, ...]] = field(default=None, repr=False)
 
 @dataclass
 class ProbabilityDictionary(object):

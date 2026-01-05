@@ -5,16 +5,17 @@ from hashformers import (RegexWordSegmenter, TweetSegmenter,
                                    TwitterTextMatcher)
 from hashformers.beamsearch.algorithm import Beamsearch
 from hashformers.beamsearch.reranker import Reranker
-from hashformers.ensemble.top2_fusion import Top2_Ensembler
+from hashformers.ensemble.top2_fusion import Top2Ensembler
 from hashformers.segmenter.segmenter import BaseWordSegmenter
 from pathlib import Path
 import dataclasses 
 
 TEST_DATA_DIR = Path(__file__).parent.absolute()
 CUDA_IS_AVAILABLE = torch.cuda.is_available()
+GPU_SKIP_REASON = "GPU required for this test"
 
-if not CUDA_IS_AVAILABLE:
-    raise Exception("A GPU is required for these tests.")
+# HASH-014: Removed module-level exception that blocked CPU-only CI/CD
+# GPU tests are now skipped via pytest decorators instead
 
 @pytest.mark.skipif(not CUDA_IS_AVAILABLE, reason="A GPU is not available.")
 def test_cuda_availability():
@@ -42,11 +43,13 @@ def tweet_segmenter():
 @pytest.fixture(scope="module")
 def word_segmenter_gpt2_bert():
     """
-    Initializes and returns a BaseWordSegmenter object with Beamsearch, Reranker, and Top2_Ensembler.
+    Initializes and returns a BaseWordSegmenter object with Beamsearch, Reranker, and Top2Ensembler.
     
     Returns:
         BaseWordSegmenter: An instance of the BaseWordSegmenter class.
     """
+    if not CUDA_IS_AVAILABLE:
+        pytest.skip(GPU_SKIP_REASON)
 
     segmenter = Beamsearch(
         model_name_or_path="distilgpt2",
@@ -58,7 +61,7 @@ def word_segmenter_gpt2_bert():
         gpu_batch_size=1000
     )
 
-    ensembler = Top2_Ensembler()
+    ensembler = Top2Ensembler()
 
     ws = BaseWordSegmenter(
         segmenter=segmenter,
@@ -71,6 +74,7 @@ SEGMENTER_FIXTURES = [
     pytest.lazy_fixture("word_segmenter_gpt2_bert")
 ]
 
+@pytest.mark.skipif(not CUDA_IS_AVAILABLE, reason=GPU_SKIP_REASON)
 @pytest.mark.parametrize('word_segmenter', SEGMENTER_FIXTURES)
 def test_word_segmenter_output(word_segmenter):
     """

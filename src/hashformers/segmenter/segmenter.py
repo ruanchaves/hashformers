@@ -82,13 +82,13 @@ class BaseWordSegmenter(BaseSegmenter):
             self,
             word_list: List[str],
             segmenter_run: Any = None,
-            preprocessing_kwargs: dict = {},
-            segmenter_kwargs: dict = {},
-            ensembler_kwargs: dict = {},
-            reranker_kwargs: dict = {},
+            preprocessing_kwargs: dict = None,
+            segmenter_kwargs: dict = None,
+            ensembler_kwargs: dict = None,
+            reranker_kwargs: dict = None,
             use_reranker: bool = True,
             use_ensembler: bool = True,
-            return_ranks: bool = False) -> Any :
+            return_ranks: bool = False) -> Any:
         """
         Segments the input list of words using the segmenter, reranker, and ensembler models.
         Allows customization of the segmenting process with multiple keyword arguments.
@@ -107,6 +107,16 @@ class BaseWordSegmenter(BaseSegmenter):
         Returns:
             Returns the segmented words. If return_ranks is True, also returns the segmenter_rank, reranker_rank, and ensemble_rank.
         """
+        # Fix mutable default arguments (HASH-007)
+        if preprocessing_kwargs is None:
+            preprocessing_kwargs = {}
+        if segmenter_kwargs is None:
+            segmenter_kwargs = {}
+        if ensembler_kwargs is None:
+            ensembler_kwargs = {}
+        if reranker_kwargs is None:
+            reranker_kwargs = {}
+        
         word_list = super().preprocess(word_list, **preprocessing_kwargs)
 
         if not isinstance(segmenter_run, pd.DataFrame):
@@ -306,7 +316,7 @@ class TweetSegmenter(BaseSegmenter):
             tweet = self.replace_hashtags(tweets[idx], regex_pattern, tweet_dict)
             yield tweet
 
-    def build_hashtag_container(self, tweets: str, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
+    def build_hashtag_container(self, tweets: str, preprocessing_kwargs: dict = None, segmenter_kwargs: dict = None):
         """
         Constructs a HashtagContainer from a list of tweets.
 
@@ -317,7 +327,13 @@ class TweetSegmenter(BaseSegmenter):
 
         Returns:
             tuple: A tuple containing a HashtagContainer instance and the output from the word segmenter.
-        """        
+        """
+        # Fix mutable default arguments (HASH-007)
+        if preprocessing_kwargs is None:
+            preprocessing_kwargs = {}
+        if segmenter_kwargs is None:
+            segmenter_kwargs = {}
+        
         hashtags = self.extract_hashtags(tweets)
 
         hashtag_set = list(set(reduce(lambda x, y: x + y, hashtags)))
@@ -330,7 +346,7 @@ class TweetSegmenter(BaseSegmenter):
 
         return HashtagContainer(hashtags, hashtag_set, replacement_dict), word_segmenter_output
   
-    def segment(self, tweets: List[str], regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
+    def segment(self, tweets: List[str], regex_flag: Any = 0, preprocessing_kwargs: dict = None, segmenter_kwargs: dict = None):
         """
         Segments a list of tweets into individual words and replaces the hashtags based on the preprocessing and segmenter configurations.
 
@@ -343,6 +359,12 @@ class TweetSegmenter(BaseSegmenter):
         Returns:
             TweetSegmenterOutput: Contains the output of WordSegmenter and the segmented tweets.
         """
+        # Fix mutable default arguments (HASH-007)
+        if preprocessing_kwargs is None:
+            preprocessing_kwargs = {}
+        if segmenter_kwargs is None:
+            segmenter_kwargs = {}
+        
         hashtag_container, word_segmenter_output = self.build_hashtag_container(tweets, preprocessing_kwargs, segmenter_kwargs)
         output = list(self.segmented_tweet_generator(tweets, *dataclasses.astuple(hashtag_container), flag=regex_flag))
 

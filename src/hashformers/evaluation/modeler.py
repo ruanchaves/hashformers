@@ -14,20 +14,23 @@
 # Arda Celebi, TABI Labs, CMPE, Bogazici University, 
 #
 
-class Modeler(object):
+class Modeler:
+    """Evaluation metrics modeler with per-instance state.
     
-    hashtagSegmentor = None
-    t = 0
-    totals = 0
-    totalh = 0
-    p = 0
-    r = 0
-    n = 0
-    
-    modelerParams = {}
+    Note: Class refactored from class-level mutable state to instance attributes
+    for thread-safety (HASH-008).
+    """
     
     def __init__(self):
-        pass
+        """Initialize instance with its own state (HASH-008: Thread-safe instance attributes)."""
+        self.hashtagSegmentor = None
+        self.t = 0
+        self.totals = 0
+        self.totalh = 0
+        self.p = 0
+        self.r = 0
+        self.n = 0
+        self.modelerParams = {}
     
     def loadParameters(self, args):
         leftoverArgs = []
@@ -96,23 +99,26 @@ class Modeler(object):
         
     def calculatePrecision(self):
         if self.totals > 0:
-            return ((float)(self.p*100)/(float)(self.totals))
+            # Modernized Python casting style (HASH-013)
+            return float(self.p * 100) / float(self.totals)
         return 0
     
     def calculateRecall(self):
         if self.totalh > 0:
-            return ((float)(self.r*100)/(float)(self.totalh))
+            # Modernized Python casting style (HASH-013)
+            return float(self.r * 100) / float(self.totalh)
         return 0
     
     def calculateFScore(self):
         precision = self.calculatePrecision()
         recall = self.calculateRecall()
         
-        if precision+recall > 0:
-            return 2*precision*recall/(precision+recall)
+        if precision + recall > 0:
+            return 2 * precision * recall / (precision + recall)
         return 0
     
     def calculateAccuracy(self):
         if self.n > 0:
-            return ((float)(100*self.t)/(float)(self.n))
+            # Modernized Python casting style (HASH-013)
+            return float(100 * self.t) / float(self.n)
         return 0
