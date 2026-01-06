@@ -30,7 +30,7 @@ A **production-grade Jupyter Notebook** (Google Colab compatible) that benchmark
 | Classic Statistical | `wordninja`, `symspellpy` |
 | Social Media Specialist | `ekphrasis` |
 | Modern LLMs | Local quantized model (e.g., `microsoft/Phi-3-mini-4k-instruct`) |
-| Hashformers Variants | `gpt2` (baseline) + a more capable HF model that fits on Colab |
+| Hashformers Variants | `gpt2` (baseline) + a more capable HF model that fits on Colab. No reranker |
 
 ---
 
