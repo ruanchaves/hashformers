@@ -1,4 +1,3 @@
-from lib2to3.pytree import Base
 from hashformers.segmenter import (
     BaseWordSegmenter
 )
