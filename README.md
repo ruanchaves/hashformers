@@ -2,9 +2,9 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
 
-**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLMs. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models).
+**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models).
 
-**Hashformers** uses transformers and a beam search approach to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLMs below 1B parameters on word segmentation tasks.
+**Hashformers** uses transformers and a beam search approach to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLMs on word segmentation tasks.
 
 <p align="center">
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> Try hashformers on Google Colab </a> </h3>
@@ -119,3 +119,4 @@ pip install -e .
 - [Benchmark Scripts](scripts/)
 - [Evaluation Report (January 2026)](tutorials/EVALUATION-January_2026.md)
 - [Evaluation Report (February 2022)](tutorials/EVALUATION-February_2022.md)
+
