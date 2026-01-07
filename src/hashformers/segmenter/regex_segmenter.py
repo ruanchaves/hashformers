@@ -1,5 +1,4 @@
 from hashformers.segmenter.base_segmenter import BaseSegmenter
-from typing import List
 import re
 
 class RegexWordSegmenter(BaseSegmenter):
@@ -51,7 +50,7 @@ class RegexWordSegmenter(BaseSegmenter):
             for idx, word in enumerate(word_list):
                 yield self.segment_word(rule, word)
 
-    def segment(self, inputs: List[str], **kwargs):
+    def segment(self, inputs: list[str], **kwargs):
         """
         Segments a list of strings based on the regex rules. Before segmentation, 
         the inputs are preprocessed using the inherited preprocess method.

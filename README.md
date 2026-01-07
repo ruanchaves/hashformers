@@ -1,36 +1,37 @@
 # ✂️ hashformers
 
-[![HF Spaces](https://raw.githubusercontent.com/obss/sahi/main/resources/hf_spaces_badge.svg)](https://ruanchaves-hashtag-segmentation.hf.space/) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers) [![tweet](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fruanchaves%2Fhashformers)](https://www.twitter.com/share?url=https://github.com/ruanchaves/hashformers)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
 
+**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLMs. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models).
 
-Hashtag segmentation is the task of automatically adding spaces between the words on a hashtag. 
-
-[Hashformers](https://github.com/ruanchaves/hashformers) is the current **state-of-the-art** for hashtag segmentation, as demonstrated on [this paper accepted at LREC 2022](https://aclanthology.org/2022.lrec-1.782.pdf). 
-
-Hashformers is also **language-agnostic**: you can use it to segment hashtags not just with English models, but also using any language model available on the [Hugging Face Model Hub](https://huggingface.co/models).
+**Hashformers** uses transformers and a beam search approach to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLMs below 1B parameters on word segmentation tasks.
 
 <p align="center">
-    
-<h3> <a href="https://ruanchaves-hashtag-segmentation.hf.space/"> ✂️ Segment hashtags on Hugging Face Spaces </a> </h3>
-
-<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Get started - Google Colab tutorial </a> </h3>
-
-<h3> <a href="https://github.com/ruanchaves/hashformers/wiki"> ✂️ Read the Docs </a> </h3>
-
+<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> Try hashformers on Google Colab </a> </h3>
 </p>
 
+<p align="center">
+<h3> <a href="https://github.com/ruanchaves/hashformers/blob/master/tutorials/EVALUATION-January_2026.md"> Read the Evaluation Report </a> </h3>
+</p>
 
-## Basic usage
+---
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+pip install hashformers
+```
+
+### Basic Usage
 
 ```python
 from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
-    segmenter_model_name_or_path="gpt2",
-    segmenter_model_type="incremental",
-    reranker_model_name_or_path="google/flan-t5-base",
-    reranker_model_type="seq2seq"
-)
+    segmenter_model_name_or_path="distilgpt2"
+) # You can use any model from the Hugging Face Model Hub
 
 segmentations = ws.segment([
     "#weneedanationalpark",
@@ -38,85 +39,56 @@ segmentations = ws.segment([
 ])
 
 print(segmentations)
-
-# [ 'we need a national park',
-# 'ice cold' ]
+# ['we need a national park', 'ice cold']
 ```
 
-It is also possible to use hashformers without a reranker by setting the `reranker_model_name_or_path` and the `reranker_model_type` to `None`. 
-
-## Installation
-
-```
-pip install hashformers
-```
-
-**Important**: Hashformers is designed to work with `Python 3.10.12`, the version currently used on Google Colab.
-
-## What models can I use?
-
-Visit the [HuggingFace Model Hub](https://huggingface.co/models) and choose your models for the `WordSegmenter` class.
-
-You can use any model supported by the [minicons](https://github.com/kanishkamisra/minicons) library. Currently `hashformers` supports the following model types as the `segmenter_model_type` or `reranker_model_type`:
-
-### `incremental`
-
-Auto-regressive models like GPT-2 and XLNet, or any model that can be loaded with `AutoModelForCausalLM`. This includes large language models (LLMs) such as Alpaca-LoRA ( `chainyo/alpaca-lora-7b` ) and GPT-J ( `EleutherAI/gpt-j-6b` ).
+### Using Language-Specific Models
 
 ```python
+# Russian hashtags with RuGPT3
 ws = WordSegmenter(
-    segmenter_model_name_or_path="EleutherAI/gpt-j-6b",
-    segmenter_model_type="incremental",
-    reranker_model_name_or_path=None,
-    reranker_model_type=None
+    segmenter_model_name_or_path="ai-forever/rugpt3small_based_on_gpt2"
 )
+
+segmentations = ws.segment(["#москвасити"])
+
+print(segmentations)
+# ['москва сити']
 ```
 
-### `masked`
+## When to Use Hashformers?
 
-Masked language models like BERT, or any model that can be loaded with `AutoModelForMaskedLM`.
+The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
 
-### `seq2seq`
+| Approach | Examples | Recommended When... | Notes |
+|----------|----------|---------------------|-------|
+| **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
+| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • **Scalability** is needed.<br><br>• You are working in a domain or language where a Language Model is readily available, but compiling a manual vocabulary for your task is too burdensome. | Evidence shows Hashformers can be superior to LLMs of similar scale (0.5B parameters). |
+| **Large LLMs** | [OpenAI](https://openai.com/), Local LLM Deployment | • **Cost, latency, and scalability** are not concerns.<br><br>• You are segmenting a **low volume** of items. | To gain an accuracy advantage over Hashformers, you generally need to use significantly larger LLMs. |
 
-Seq2Seq models like FLAN-T5 ( `google/flan-t5-base` ), or any model that can be loaded with `AutoModelForSeq2SeqLM`.
+---
 
-Best results are usually achieved by using an `incremental` model as the `segmenter_model_name_or_path` and a `masked` or `seq2seq` model as the `reranker_model_name_or_path`. 
+## 📚 Research & Citations
 
-A segmenter is always required, however a reranker is optional. 
+Hashformers was recognized as **state-of-the-art** for hashtag segmentation at [LREC 2022](https://aclanthology.org/2022.lrec-1.782.pdf).
 
-## Contributing 
+### Papers Using Hashformers
 
-Pull requests are welcome!  [Read our paper](https://arxiv.org/abs/2112.03213) for more details on the inner workings of our framework.
+- [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
 
-If you want to develop the library, you can install **hashformers** directly from this repository ( or your fork ):
+- [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
 
-```
-git clone https://github.com/ruanchaves/hashformers.git
-cd hashformers
-pip install -e .
-```
+- [Generalizability of Abusive Language Detection Models on Homogeneous German Datasets](https://link.springer.com/article/10.1007/s13222-023-00438-1#Fn3) 
 
-## Relevant Papers 
+- [The problem of varying annotations to identify abusive language in social media content](https://www.cambridge.org/core/journals/natural-language-engineering/article/problem-of-varying-annotations-to-identify-abusive-language-in-social-media-content/B47FCCCEBF6EDF9C628DCC69EC5E0826)
 
-This is a collection of papers that have utilized the *hashformers* library as a tool in their research.
+- [NUSS: An R package for mixed N-grams and unigram sequence segmentation](https://www.sciencedirect.com/science/article/pii/S2352711025002754#bbib0017)
 
-* [Zero-shot hashtag segmentation for multilingual sentiment analysis](https://arxiv.org/abs/2112.03213)
+### Citation
 
-* [HashSet -- A Dataset For Hashtag Segmentation (LREC 2022)](https://aclanthology.org/2022.lrec-1.782/)
+If you find **Hashformers** useful, please consider citing our paper:
 
-* [Generalizability of Abusive Language Detection Models on Homogeneous German Datasets](https://link.springer.com/article/10.1007/s13222-023-00438-1#Fn3) 
-
-* [The problem of varying annotations to identify abusive language in social media content](https://www.cambridge.org/core/journals/natural-language-engineering/article/problem-of-varying-annotations-to-identify-abusive-language-in-social-media-content/B47FCCCEBF6EDF9C628DCC69EC5E0826)
-
-* [NUSS: An R package for mixed N-grams and unigram sequence segmentation](https://www.sciencedirect.com/science/article/pii/S2352711025002754#bbib0017)
-
-## Blog Posts
-
-* [15 Datasets for Word Segmentation on the Hugging Face Hub](https://ruanchaves.medium.com/15-datasets-for-word-segmentation-on-the-hugging-face-hub-4f24cb971e48)
-
-## Citation
-
-```
+```bibtex
 @misc{rodrigues2021zeroshot,
       title={Zero-shot hashtag segmentation for multilingual sentiment analysis}, 
       author={Ruan Chaves Rodrigues and Marcelo Akira Inuzuka and Juliana Resplande Sant'Anna Gomes and Acquila Santos Rocha and Iacer Calixto and Hugo Alexandre Dantas do Nascimento},
@@ -127,3 +99,23 @@ This is a collection of papers that have utilized the *hashformers* library as a
 }
 ```
 
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! [Read our paper](https://arxiv.org/abs/2112.03213) for details on the framework architecture.
+
+```bash
+git clone https://github.com/ruanchaves/hashformers.git
+cd hashformers
+pip install -e .
+```
+
+---
+
+## 📖 Resources
+
+- [15 Datasets for Word Segmentation on the Hugging Face Hub](https://medium.com/@ruanchaves/15-datasets-for-word-segmentation-on-the-hugging-face-hub-4f24cb971e48)
+- [Benchmark Scripts](scripts/)
+- [Evaluation Report (January 2026)](tutorials/EVALUATION-January_2026.md)
+- [Evaluation Report (February 2022)](tutorials/EVALUATION-February_2022.md)

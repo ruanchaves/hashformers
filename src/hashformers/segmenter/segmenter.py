@@ -1,5 +1,5 @@
 from hashformers.beamsearch.data_structures import enforce_prob_dict
-from typing import List, Any
+from typing import Any
 from ttp import ttp
 from hashformers.segmenter.base_segmenter import BaseSegmenter
 from hashformers.segmenter.regex_segmenter import RegexWordSegmenter
@@ -80,7 +80,7 @@ class BaseWordSegmenter(BaseSegmenter):
 
     def segment(
             self,
-            word_list: List[str],
+            word_list: list[str],
             segmenter_run: Any = None,
             preprocessing_kwargs: dict = {},
             segmenter_kwargs: dict = {},
@@ -330,7 +330,7 @@ class TweetSegmenter(BaseSegmenter):
 
         return HashtagContainer(hashtags, hashtag_set, replacement_dict), word_segmenter_output
   
-    def segment(self, tweets: List[str], regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
+    def segment(self, tweets: list[str], regex_flag: Any = 0, preprocessing_kwargs: dict = {}, segmenter_kwargs: dict = {} ):
         """
         Segments a list of tweets into individual words and replaces the hashtags based on the preprocessing and segmenter configurations.
 
