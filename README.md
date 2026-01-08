@@ -56,6 +56,27 @@ print(segmentations)
 # ['москва сити']
 ```
 
+### spaCy Integration
+
+Hashformers can be used as a spaCy pipeline component:
+
+```python
+import spacy
+import hashformers.spacy  # registers the "hashformers" component
+
+nlp = spacy.blank("en")
+nlp.add_pipe("hashformers", config={"model": "distilgpt2"})
+
+doc = nlp("#weneedanationalpark")
+print(doc._.segmented)  # "we need a national park"
+```
+
+Install with spaCy support:
+
+```bash
+pip install hashformers[spacy]
+```
+
 ## When to Use Hashformers?
 
 The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
