@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='hashformers',
-    version='2.1.0',
+    version='2.2.0',
     author='Ruan Chaves Rodrigues',
     author_email='ruanchave93@gmail.com',
     description='Word segmentation with transformers',
