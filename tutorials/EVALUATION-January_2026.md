@@ -133,16 +133,6 @@ LLM-Qwen2 (0.5B)           6th        4th        4th         5th
 
 5. **Hashformers outperforms similarly-sized LLMs.** When compared to LLM-Qwen2 (0.5B parameters), Hashformers variants consistently deliver better accuracy across English and Foreign hashtag tasks, proving that the specialized architecture is more effective than general-purpose LLMs at comparable scale.
 
-### Recommendations
-
-| Use Case | Recommended Approach |
-|----------|---------------------|
-| High-throughput English/Foreign hashtags | **Ekphrasis** (best balance of speed + accuracy) |
-| Maximum accuracy on English hashtags | **Hashformers-DistilGPT2** |
-| Code identifier splitting | **Ekphrasis** or **WordNinja** |
-| Non-English language hashtags | **Hashformers** with language-specific backbone |
-| Resource-constrained environments | **WordNinja** (fastest, decent accuracy) |
-
 ---
 
 ## When to Use Hashformers?
