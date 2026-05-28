@@ -10,27 +10,28 @@ class TransformerWordSegmenter(BaseWordSegmenter):
     def __init__(
         self,
         segmenter_model_name_or_path = "gpt2",
-        segmenter_model_type = "gpt2",
+        segmenter_model_type = "incremental",
         segmenter_device = "cuda",
         segmenter_gpu_batch_size = 1000,
         reranker_gpu_batch_size = 1000,
         reranker_model_name_or_path = None,
-        reranker_model_type = "bert",
+        reranker_model_type = "masked",
         reranker_device = "cuda"
     ):
         """Word segmentation API initialization. 
-           A GPT-2 model must be passed to `segmenter_model_name_or_path`, and optionally a BERT model to `reranker_model_name_or_path`.
+           A causal language model must be passed to `segmenter_model_name_or_path`, and optionally
+           a masked or seq2seq language model to `reranker_model_name_or_path`.
            If `reranker_model_name_or_path` is set to `False` or `None`, the word segmenter object will work without a reranker.
 
 
         Args:
-            segmenter_model_name_or_path (str, optional): GPT-2 that will be fetched from the Hugging Face Model Hub. Defaults to "gpt2".
-            segmenter_model_type (str, optional): Transformer decoder model type. Defaults to "gpt2".
+            segmenter_model_name_or_path (str, optional): Causal language model that will be fetched from the Hugging Face Model Hub. Defaults to "gpt2".
+            segmenter_model_type (str, optional): Transformer decoder model type. Defaults to "incremental".
             segmenter_device (str, optional): Device. Defaults to "cuda".
             segmenter_gpu_batch_size (int, optional): Segmenter GPU batch size. Defaults to 1.
             reranker_gpu_batch_size (int, optional): Reranker GPU split size. Defaults to 2000.
-            reranker_model_name_or_path (str, optional): BERT model that will be fetched from the Hugging Face Model Hub. It is possible to turn off the reranker by passing a None or False value to this argument. Defaults to "bert-base-uncased".
-            reranker_model_type (str, optional): Transformer encoder model type. Defaults to "bert".
+            reranker_model_name_or_path (str, optional): Masked or seq2seq model that will be fetched from the Hugging Face Model Hub. It is possible to turn off the reranker by passing a None or False value to this argument. Defaults to None.
+            reranker_model_type (str, optional): Transformer reranker model type. Defaults to "masked".
         """
         segmenter_model = Beamsearch(
         model_name_or_path=segmenter_model_name_or_path,

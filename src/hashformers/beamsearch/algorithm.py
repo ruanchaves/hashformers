@@ -12,7 +12,7 @@ class Beamsearch(ModelLM):
     def __init__(
             self,
             model_name_or_path="gpt2", 
-            model_type="gpt2", 
+            model_type="incremental", 
             device='cuda', 
             gpu_batch_size=1000):
         """
@@ -20,7 +20,7 @@ class Beamsearch(ModelLM):
 
         Args:
             model_name_or_path (str): Name of the model or path to the model to be loaded. Default is "gpt2".
-            model_type (str): Type of the model. Default is "gpt2".
+            model_type (str): Type of the model. Default is "incremental".
             device (str): Device to be used for computation. Default is 'cuda'.
             gpu_batch_size (int): Size of the batch to be processed on the GPU. Default is 1000.
         """

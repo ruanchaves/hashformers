@@ -14,7 +14,7 @@ class Reranker(ModelLM):
 
     Args:
         model_name_or_path (str, optional): The name or path of the pre-trained model. Default is "bert-base-cased".
-        model_type (str, optional): The type of the model to use. Default is "bert".
+        model_type (str, optional): The type of the model to use. Default is "masked".
         gpu_batch_size (int, optional): The batch size to use when performing computations on the GPU. Default is 1000.
         gpu_id (int, optional): The ID of the GPU to use. Default is 0.
         device (str, optional): The device on which to run the computations. Default is "cuda".
@@ -23,7 +23,7 @@ class Reranker(ModelLM):
     def __init__(
         self,
         model_name_or_path="bert-base-cased",
-        model_type="bert",
+        model_type="masked",
         gpu_batch_size=1000,
         gpu_id=0,
         device="cuda"

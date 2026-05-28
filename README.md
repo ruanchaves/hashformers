@@ -2,7 +2,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
 
-**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
+**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It works with supported Hugging Face language-model checkpoints: causal models for segmentation, and masked or seq2seq models for reranking.
 
 **Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLM prompt-based approaches on word segmentation tasks.
 
@@ -24,6 +24,8 @@
 pip install hashformers
 ```
 
+This installs the transformer runtime used by the built-in scorers. Multilingual tokenizers that depend on SentencePiece are supported out of the box.
+
 ### Basic Usage
 
 ```python
@@ -31,7 +33,7 @@ from hashformers import TransformerWordSegmenter as WordSegmenter
 
 ws = WordSegmenter(
     segmenter_model_name_or_path="distilgpt2"
-) # You can use any model from the Hugging Face Model Hub
+)
 
 segmentations = ws.segment([
     "#weneedanationalpark",
@@ -54,6 +56,32 @@ segmentations = ws.segment(["#москвасити"])
 
 print(segmentations)
 # ['москва сити']
+```
+
+### Supported Model Types
+
+`hashformers` supports these model families:
+
+- `incremental`: causal language models loadable with `AutoModelForCausalLM`
+- `masked`: masked language models loadable with `AutoModelForMaskedLM`
+- `seq2seq`: encoder-decoder models loadable with `AutoModelForSeq2SeqLM`
+
+Legacy aliases still work with a deprecation warning:
+
+- `gpt2` -> `incremental`
+- `bert` -> `masked`
+
+Sequence-classification and cross-encoder checkpoints are not supported as rerankers in the current API.
+
+Example with a masked reranker:
+
+```python
+ws = WordSegmenter(
+    segmenter_model_name_or_path="distilgpt2",
+    segmenter_model_type="incremental",
+    reranker_model_name_or_path="distilbert-base-uncased",
+    reranker_model_type="masked",
+)
 ```
 
 ### spaCy Integration

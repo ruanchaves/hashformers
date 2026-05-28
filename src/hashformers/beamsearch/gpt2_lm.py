@@ -15,5 +15,5 @@ class GPT2LM(MiniconsLM):
             model_name_or_path=model_name_or_path,
             device=device,
             gpu_batch_size=gpu_batch_size,
-            model_type='IncrementalLMScorer'
+            model_type='incremental'
         )
