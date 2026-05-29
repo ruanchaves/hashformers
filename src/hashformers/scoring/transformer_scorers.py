@@ -16,6 +16,9 @@ SUPPORTED_MODEL_TYPES = ("incremental", "masked", "seq2seq")
 MODEL_TYPE_ALIASES = {
     "gpt2": "incremental",
     "bert": "masked",
+    "IncrementalLMScorer": "incremental",
+    "MaskedLMScorer": "masked",
+    "Seq2SeqScorer": "seq2seq",
 }
 
 
@@ -215,8 +218,9 @@ class IncrementalScorer(BaseTransformerScorer):
 
         sequence_scores = []
         for index in range(model_inputs["input_ids"].shape[0]):
-            attention_mask = model_inputs["attention_mask"][index].bool()
-            valid_ids = model_inputs["input_ids"][index][attention_mask]
+            input_ids = model_inputs["input_ids"][index].to(logits.device)
+            attention_mask = model_inputs["attention_mask"][index].to(logits.device).bool()
+            valid_ids = input_ids[attention_mask]
 
             if valid_ids.shape[0] <= 1:
                 token_scores = torch.zeros(1, device=logits.device)

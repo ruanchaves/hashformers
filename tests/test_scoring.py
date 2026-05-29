@@ -286,8 +286,18 @@ def test_masked_scorer_rejects_sequence_classification_checkpoint(monkeypatch):
         scorer_module.MaskedScorer("demo-model", device="cpu", gpu_batch_size=1)
 
 
-def test_minicons_lm_accepts_legacy_alias(monkeypatch):
-    class FakeIncrementalScorer:
+@pytest.mark.parametrize(
+    ("legacy_model_type", "canonical_model_type"),
+    [
+        ("gpt2", "incremental"),
+        ("bert", "masked"),
+        ("IncrementalLMScorer", "incremental"),
+        ("MaskedLMScorer", "masked"),
+        ("Seq2SeqScorer", "seq2seq"),
+    ],
+)
+def test_minicons_lm_accepts_legacy_alias(monkeypatch, legacy_model_type, canonical_model_type):
+    class FakeScorer:
         def __init__(self, model_name_or_path, device, gpu_batch_size):
             self.model = object()
             self.tokenizer = object()
@@ -295,14 +305,14 @@ def test_minicons_lm_accepts_legacy_alias(monkeypatch):
         def sequence_score(self, batch, reduction, **kwargs):
             return [reduction(torch.tensor([0.0])) for _ in batch]
 
-    monkeypatch.setitem(MiniconsLM.scorer_map, "incremental", FakeIncrementalScorer)
+    monkeypatch.setitem(MiniconsLM.scorer_map, canonical_model_type, FakeScorer)
 
     with pytest.deprecated_call():
         lm = MiniconsLM(
             model_name_or_path="demo-model",
             device="cpu",
             gpu_batch_size=2,
-            model_type="gpt2",
+            model_type=legacy_model_type,
         )
 
-    assert lm.model_type == "incremental"
+    assert lm.model_type == canonical_model_type
