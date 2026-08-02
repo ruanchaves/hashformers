@@ -8,15 +8,16 @@ class BertLM(MiniconsLM):
     Args:
         model_name_or_path (str): Identifier for the model to be loaded, which can be a model 
             name or the path to the directory where the model is stored.
-        gpu_batch_size (int, optional): The size of the batch to be processed on the GPU. 
+        gpu_batch_size (int, optional): The size of the batch to be processed on the GPU.
             Defaults to 1.
         gpu_id (int, optional): Identifier of the GPU device to be used. Defaults to 0.
+        device (str, optional): Device on which to run the model. Defaults to "cuda".
 
     """
-    def __init__(self, model_name_or_path, gpu_batch_size=1, gpu_id=0):
+    def __init__(self, model_name_or_path, gpu_batch_size=1, gpu_id=0, device='cuda'):
         super().__init__(
             model_name_or_path=model_name_or_path,
-            device='cuda',
+            device=device,
             gpu_batch_size=gpu_batch_size,
             model_type='MaskedLMScorer'
         )
