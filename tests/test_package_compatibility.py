@@ -32,6 +32,19 @@ def test_supported_python_and_transformers_versions(monkeypatch):
     assert "Programming Language :: Python :: 3.9" not in metadata["classifiers"]
 
 
+def test_mcp_server_is_an_optional_extra(monkeypatch):
+    metadata = read_setup_kwargs(monkeypatch)
+
+    assert metadata["extras_require"]["mcp"] == ["mcp>=2,<3"]
+    assert all(
+        not dependency.startswith("mcp")
+        for dependency in metadata["install_requires"]
+    )
+    assert metadata["entry_points"]["console_scripts"] == [
+        "hashformers-mcp=hashformers.mcp_server:main",
+    ]
+
+
 def test_dependency_files_and_readme_match_package_metadata():
     requirements = (ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines()
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -39,3 +52,13 @@ def test_dependency_files_and_readme_match_package_metadata():
     assert "transformers>=4.46.1,<6" in requirements
     assert "Python 3.10 or newer" in readme
     assert "Transformers 4.46.1" in readme
+
+
+def test_readme_documents_mcp_and_agent_skill_setup():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert 'pip install "hashformers[mcp]"' in readme
+    assert "codex mcp add hashformers -- hashformers-mcp" in readme
+    assert "claude mcp add --transport stdio --scope user" in readme
+    assert ".agents/skills/segment-hashtags" in readme
+    assert "~/.claude/skills" in readme

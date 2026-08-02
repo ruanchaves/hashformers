@@ -1,0 +1,4 @@
+interface:
+  display_name: "Segment Hashtags"
+  short_description: "Segment hashtags with Hashformers MCP"
+  default_prompt: "Use $segment-hashtags to segment these hashtags with Hashformers."

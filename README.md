@@ -85,6 +85,57 @@ Install with spaCy support:
 pip install hashformers[spacy]
 ```
 
+### MCP and Agent Skill
+
+Install the optional local MCP server on Python 3.10 or newer:
+
+```bash
+pip install "hashformers[mcp]"
+```
+
+The core `pip install hashformers` installation does not include the MCP SDK.
+Start the server over stdio with:
+
+```bash
+hashformers-mcp
+```
+
+MCP clients normally launch that command for you. For example, configure Codex
+or Claude Code with:
+
+```bash
+codex mcp add hashformers -- hashformers-mcp
+claude mcp add --transport stdio --scope user hashformers -- hashformers-mcp
+```
+
+The server exposes one tool, `segment_hashtags`, which accepts a `hashtags`
+list and an optional positive `top_k` (default: 5). It returns the selected
+segmentation and up to `top_k` lower-is-better scored candidates for each input.
+The Transformer segmenter is initialized on the first tool call and reused for
+the life of the server process. CUDA is selected when available, with CPU as a
+fallback.
+
+This repository also includes the `segment-hashtags` Agent Skill at
+`.agents/skills/segment-hashtags`. Codex discovers it automatically when run
+from this repository. To make it available from every project, copy it to the
+user skill directory:
+
+```bash
+mkdir -p ~/.agents/skills
+cp -R .agents/skills/segment-hashtags ~/.agents/skills/
+```
+
+Claude Code uses a different discovery directory:
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R .agents/skills/segment-hashtags ~/.claude/skills/
+```
+
+Restart the client if a newly created skill directory is not detected. The
+Skill calls the MCP tool and does not implement segmentation itself, so the MCP
+server must also be installed and configured.
+
 ## When to Use Hashformers?
 
 The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
