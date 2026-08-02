@@ -46,9 +46,10 @@ class RegexWordSegmenter(BaseSegmenter):
         Yields:
             str: The segmented word.
         """
-        for rule in self.regex_rules:
-            for idx, word in enumerate(word_list):
-                yield self.segment_word(rule, word)
+        for word in word_list:
+            for rule in self.regex_rules:
+                word = self.segment_word(rule, word)
+            yield word
 
     def segment(self, inputs: list[str], **kwargs):
         """

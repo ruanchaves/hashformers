@@ -14,10 +14,10 @@ setup(
     url="https://github.com/ruanchaves/hashformers",
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=[
         "minicons>=0.3.39,<0.4",
-        "transformers>=4.41,<6",
+        "transformers>=4.46.1,<6",
         "twitter-text-python",
         "pandas"
     ],
@@ -30,8 +30,6 @@ setup(
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",

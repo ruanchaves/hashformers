@@ -115,7 +115,10 @@ class Beamsearch(ModelLM):
             Node(item, item.replace(" ", ""), probs[idx]) for idx, item in enumerate(tree)
         ]
         for key, group in itertools.groupby(candidates, key=lambda x: x.characters):
-            sorted_group = sorted(list(group), key=lambda x: x.score)
+            unique_group = {}
+            for candidate in group:
+                unique_group.setdefault(candidate.hypothesis, candidate)
+            sorted_group = sorted(unique_group.values(), key=lambda x: x.score)
             trimmed_group = sorted_group[0:topk]
             trimmed_group = [x.hypothesis for x in trimmed_group]
             output.extend(trimmed_group)

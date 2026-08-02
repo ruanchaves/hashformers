@@ -24,7 +24,8 @@
 pip install hashformers
 ```
 
-Hashformers supports Transformers 4.41 through 5.x.
+Hashformers requires Python 3.10 or newer and supports Transformers 4.46.1
+through 5.x.
 
 ### Basic Usage
 
