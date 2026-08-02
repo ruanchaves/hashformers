@@ -46,7 +46,7 @@ class HashformersComponent:
         name: str,
         model: str = "distilgpt2",
         device: str = "cuda",
-        gpu_batch_size: int = 1000
+        gpu_batch_size: int = 64
     ):
         """
         Initialize the HashformersComponent.
@@ -59,7 +59,7 @@ class HashformersComponent:
             device: Device to run the model on ("cuda" or "cpu").
                 Defaults to "cuda".
             gpu_batch_size: Batch size for GPU processing.
-                Defaults to 1000.
+                Defaults to 64.
         """
         self.nlp = nlp
         self.name = name
@@ -106,7 +106,7 @@ if SPACY_AVAILABLE:
         default_config={
             "model": "distilgpt2",
             "device": "cuda",
-            "gpu_batch_size": 1000
+            "gpu_batch_size": 64
         }
     )
     def create_hashformers_component(
