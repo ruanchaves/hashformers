@@ -11,7 +11,6 @@ from hashformers.segmenter.data_structures import (
 import re
 from functools import reduce
 import dataclasses
-import pandas as pd
 
 
 class BaseWordSegmenter(BaseSegmenter):
@@ -109,7 +108,7 @@ class BaseWordSegmenter(BaseSegmenter):
         """
         word_list = super().preprocess(word_list, **preprocessing_kwargs)
 
-        if not isinstance(segmenter_run, pd.DataFrame):
+        if segmenter_run is None:
             segmenter_run = self.segmenter_model.run(
                 word_list,
                 **segmenter_kwargs
@@ -132,6 +131,12 @@ class BaseWordSegmenter(BaseSegmenter):
                 **ensembler_kwargs
             )
             segs = ensemble_prob_dict.get_segmentations(
+                astype="list",
+                gold_array=word_list
+            )
+
+        elif use_reranker and self.reranker_model:
+            segs = reranker_run.get_segmentations(
                 astype="list",
                 gold_array=word_list
             )
