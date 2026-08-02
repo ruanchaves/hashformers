@@ -12,8 +12,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
         segmenter_model_name_or_path = "gpt2",
         segmenter_model_type = "gpt2",
         segmenter_device = "cuda",
-        segmenter_gpu_batch_size = 1000,
-        reranker_gpu_batch_size = 1000,
+        segmenter_gpu_batch_size = 64,
+        reranker_gpu_batch_size = 64,
         reranker_model_name_or_path = None,
         reranker_model_type = "bert",
         reranker_device = "cuda"
@@ -27,8 +27,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
             segmenter_model_name_or_path (str, optional): GPT-2 that will be fetched from the Hugging Face Model Hub. Defaults to "gpt2".
             segmenter_model_type (str, optional): Transformer decoder model type. Defaults to "gpt2".
             segmenter_device (str, optional): Device. Defaults to "cuda".
-            segmenter_gpu_batch_size (int, optional): Segmenter GPU batch size. Defaults to 1.
-            reranker_gpu_batch_size (int, optional): Reranker GPU split size. Defaults to 2000.
+            segmenter_gpu_batch_size (int, optional): Segmenter GPU batch size. Defaults to 64.
+            reranker_gpu_batch_size (int, optional): Reranker GPU split size. Defaults to 64.
             reranker_model_name_or_path (str, optional): BERT model that will be fetched from the Hugging Face Model Hub. It is possible to turn off the reranker by passing a None or False value to this argument. Defaults to "bert-base-uncased".
             reranker_model_type (str, optional): Transformer encoder model type. Defaults to "bert".
         """
@@ -60,8 +60,8 @@ class TransformerWordSegmenter(BaseWordSegmenter):
     def segment(
             self,
             word_list,
-            topk: int = 20,
-            steps: int = 13,
+            topk: int = 5,
+            steps: int = 5,
             alpha: float = 0.222,
             beta: float = 0.111,
             use_reranker: bool = True,

@@ -42,6 +42,11 @@ print(segmentations)
 # ['we need a national park', 'ice cold']
 ```
 
+The default search uses `topk=5` and `steps=5` for interactive performance.
+For a wider search, use `ws.segment(inputs, topk=20, steps=13)`. Inference
+batches default to 64 candidates and can be configured when constructing the
+segmenter.
+
 ### Using Language-Specific Models
 
 ```python

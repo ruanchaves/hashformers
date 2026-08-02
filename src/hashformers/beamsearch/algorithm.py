@@ -14,7 +14,7 @@ class Beamsearch(ModelLM):
             model_name_or_path="gpt2", 
             model_type="gpt2", 
             device='cuda', 
-            gpu_batch_size=1000):
+            gpu_batch_size=64):
         """
         Initializes the Beamsearch class.
 
@@ -22,7 +22,7 @@ class Beamsearch(ModelLM):
             model_name_or_path (str): Name of the model or path to the model to be loaded. Default is "gpt2".
             model_type (str): Type of the model. Default is "gpt2".
             device (str): Device to be used for computation. Default is 'cuda'.
-            gpu_batch_size (int): Size of the batch to be processed on the GPU. Default is 1000.
+            gpu_batch_size (int): Size of the batch to be processed on the GPU. Default is 64.
         """
         super().__init__(
             model_name_or_path=model_name_or_path, 
@@ -61,17 +61,15 @@ class Beamsearch(ModelLM):
         Returns:
             dict: Updated probability dictionary.
         """
-        for item in tree:
-            current_batch = []
-            for word in item:
-                if word in prob_dict:
-                    continue
-                else:
-                    current_batch.append(word)
-            if current_batch:
-                current_batch_probs = self.model.get_probs(current_batch)
-            for idx, word in enumerate(current_batch):
-                prob_dict[word] = current_batch_probs[idx]
+        current_batch = list(dict.fromkeys(
+            word
+            for item in tree
+            for word in item
+            if word not in prob_dict
+        ))
+        if current_batch:
+            current_batch_probs = self.model.get_probs(current_batch)
+            prob_dict.update(zip(current_batch, current_batch_probs))
         return prob_dict
 
     def reshape_tree(self, tree, measure):
@@ -123,14 +121,14 @@ class Beamsearch(ModelLM):
             output.extend(trimmed_group)
         return output
 
-    def run(self, dataset, topk=20, steps=13):
+    def run(self, dataset, topk=5, steps=5):
         """
         Runs the beamsearch algorithm on the provided dataset.
 
         Args:
             dataset (List[str]): List of initial candidate strings.
-            topk (int): Number of top candidates to be retained in each step. Default is 20.
-            steps (int): Number of steps to run the algorithm. Default is 13.
+            topk (int): Number of top candidates to be retained in each step. Default is 5.
+            steps (int): Number of steps to run the algorithm. Default is 5.
         
         Returns:
             ProbabilityDictionary: Dictionary of final probabilities of the candidates.
