@@ -3,6 +3,21 @@ from torch.utils.data import DataLoader
 import warnings
 import math
 
+
+def ensure_tokenizer_compatibility(tokenizer):
+    """Provide the tokenizer API expected by the minicons 0.3.39 wheel.
+
+    Args:
+        tokenizer: Hugging Face tokenizer used by the minicons scorer.
+
+    Returns:
+        The tokenizer with a compatible ``batch_encode_plus`` method.
+    """
+    if not callable(getattr(tokenizer, 'batch_encode_plus', None)):
+        tokenizer.batch_encode_plus = tokenizer.__call__
+    return tokenizer
+
+
 class MiniconsLM(object):
     """Score candidate sequences using lower-is-better costs.
 
@@ -14,6 +29,7 @@ class MiniconsLM(object):
 
     def __init__(self, model_name_or_path, device='cuda', gpu_batch_size=20, model_type='IncrementalLMScorer'):
         self.scorer = getattr(scorer, model_type)(model_name_or_path, device)
+        ensure_tokenizer_compatibility(self.scorer.tokenizer)
         self.gpu_batch_size = gpu_batch_size
         self.model_type = model_type
     

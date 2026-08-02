@@ -16,7 +16,8 @@ setup(
     package_dir={'': 'src'},
     python_requires=">=3.8",
     install_requires=[
-        "minicons",
+        "minicons>=0.3.39,<0.4",
+        "transformers>=4.41,<6",
         "twitter-text-python",
         "pandas"
     ],
