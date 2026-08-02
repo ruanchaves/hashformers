@@ -28,7 +28,12 @@ class ModelLM(object):
         elif model_type == 'gpt2':
             self.model = GPT2LM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size)
         elif model_type == 'bert':
-            self.model = BertLM(model_name_or_path, gpu_batch_size=gpu_batch_size, gpu_id=gpu_id)
+            self.model = BertLM(
+                model_name_or_path,
+                gpu_batch_size=gpu_batch_size,
+                gpu_id=gpu_id,
+                device=device,
+            )
         elif model_type == 'seq2seq':
             self.model = MiniconsLM(model_name_or_path, device=device, gpu_batch_size=gpu_batch_size, model_type='Seq2SeqScorer')
         elif model_type == 'masked':
