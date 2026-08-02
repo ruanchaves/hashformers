@@ -4,6 +4,13 @@ import warnings
 import math
 
 class MiniconsLM(object):
+    """Score candidate sequences using lower-is-better costs.
+
+    Attributes:
+        scorer: The minicons scorer used for the selected model type.
+        gpu_batch_size: Maximum number of candidates scored in one batch.
+        model_type: Name of the configured minicons scorer type.
+    """
 
     def __init__(self, model_name_or_path, device='cuda', gpu_batch_size=20, model_type='IncrementalLMScorer'):
         self.scorer = getattr(scorer, model_type)(model_name_or_path, device)
@@ -29,9 +36,10 @@ class MiniconsLM(object):
         if self.model_type == 'IncrementalLMScorer':
             return self.incremental_sequence_score(batch)
         elif self.model_type == 'MaskedLMScorer':
-            return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
+            return self.scorer.sequence_score(batch, reduction = lambda x: -x.sum(0).item())
         elif self.model_type == 'Seq2SeqScorer':
-            return self.scorer.sequence_score(batch, source_format = 'blank')
+            scores = self.scorer.sequence_score(batch, source_format = 'blank')
+            return [-score for score in scores]
         else:
-            warnings.warn(f"Model type {self.model_type} not implemented. Assuming reduction = lambda x: x.sum(0).item()")
-            return self.scorer.sequence_score(batch, reduction = lambda x: x.sum(0).item())
+            warnings.warn(f"Model type {self.model_type} not implemented. Assuming negative summed log probability.")
+            return self.scorer.sequence_score(batch, reduction = lambda x: -x.sum(0).item())
