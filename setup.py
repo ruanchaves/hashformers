@@ -22,7 +22,13 @@ setup(
         "pandas"
     ],
     extras_require={
+        "mcp": ["anyio>=4.9", "mcp>=2,<3", "regex"],
         "spacy": ["spacy>=3.0.0"]
+    },
+    entry_points={
+        "console_scripts": [
+            "hashformers-mcp=hashformers.mcp_server:main",
+        ]
     },
     classifiers=[
         "Development Status :: 4 - Beta",

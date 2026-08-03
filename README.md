@@ -85,6 +85,99 @@ Install with spaCy support:
 pip install hashformers[spacy]
 ```
 
+### MCP and Agent Skill
+
+Install the optional local MCP server on Python 3.10 or newer:
+
+```bash
+pip install "hashformers[mcp]"
+```
+
+The core `pip install hashformers` installation does not include the MCP SDK.
+Start the server over stdio with the same model settings accepted by the Python
+API:
+
+```bash
+hashformers-mcp \
+  --model distilgpt2 \
+  --batch-size 64 \
+  --file-root /path/to/project
+```
+
+Optional startup flags configure the segmenter model and scorer type, device,
+and batch size. Supplying `--reranker-model` enables reranker-only and ensemble
+selection, with corresponding model-type, device, and batch-size flags. Run
+`hashformers-mcp --help` for the complete list. Models are loaded lazily and
+reused for the life of the process; `auto` selects CUDA when available and
+otherwise uses CPU. File-job tools are restricted to the server working
+directory by default; repeat `--file-root` to authorize other directories.
+File jobs currently require Linux descriptor-backed filesystem support through
+`/proc/self/fd`; the interactive, regex, tweet, and candidate-ranking tools
+remain available on other platforms.
+
+MCP clients normally launch that command for you. For example, configure Codex
+or Claude Code with:
+
+```bash
+codex mcp add hashformers -- hashformers-mcp --model distilgpt2
+claude mcp add --transport stdio --scope user hashformers -- \
+  hashformers-mcp --model distilgpt2
+```
+
+The server exposes the complete user-facing segmentation workflow:
+
+| Tool | Purpose |
+|------|---------|
+| `segment_hashtags` | Run Transformer beam search with configurable search depth, preprocessing, reranker or ensemble selection, and component rankings. |
+| `start_hashtag_file_job` | Index and deduplicate text, CSV, or JSON Lines locally without loading a model or placing the dataset in agent context. |
+| `continue_hashtag_file_job` | Process and atomically checkpoint one bounded batch of a file job; repeat until completion. |
+| `segment_with_regex` | Apply the library's ordered regex rules without loading a model. |
+| `segment_tweets` | Extract and replace hashtags in full tweets with either regex or Transformer segmentation. |
+| `rank_candidates` | Select, rerank, or ensemble precomputed hypotheses without rerunning beam search. |
+
+`top_k` controls beam width while `max_candidates` independently limits the
+returned or written alternatives and is capped at 64. Model identity, devices,
+and GPU batch sizes are startup settings so an agent cannot accidentally
+download or retain several models during ordinary calls. Interactive
+Transformer calls accept at most 64 inputs, `top_k` is capped at 64, and `steps`
+at 32. An aggregate expansion budget also rejects combinations of long inputs,
+wide beams, and deep searches that would still consume excessive memory. Larger
+inputs belong in the resumable file workflow.
+
+For large local datasets, pass only paths to `start_hashtag_file_job`. A text
+file contains one hashtag per line; CSV and JSON Lines inputs use the `hashtag`
+field by default. Repeatedly call `continue_hashtag_file_job` with the returned
+job path until its status is `completed`. Each call processes at most 64 unique
+hashtags by default and persists an atomic SQLite checkpoint, so client timeouts
+or restarts do not lose completed work. The final JSON Lines file preserves
+every source row and duplicate in order. Full inputs and results never consume
+agent-context tokens unless the user later asks the agent to open the output.
+The checkpoint contains the indexed inputs, so continuation does not repeatedly
+reread the source file. Existing outputs are never replaced unless the server
+was started with `--allow-file-overwrite` and the caller also passes
+`overwrite=true`.
+
+This repository also includes the `segment-hashtags` Agent Skill at
+`.agents/skills/segment-hashtags`. Codex discovers it automatically when run
+from this repository. To make it available from every project, copy it to the
+user skill directory:
+
+```bash
+mkdir -p ~/.agents/skills
+cp -R .agents/skills/segment-hashtags ~/.agents/skills/
+```
+
+Claude Code uses a different discovery directory:
+
+```bash
+mkdir -p ~/.claude/skills
+cp -R .agents/skills/segment-hashtags ~/.claude/skills/
+```
+
+Restart the client if a newly created skill directory is not detected. The
+Skill chooses the appropriate MCP workflow and does not implement segmentation
+itself, so the MCP server must also be installed and configured.
+
 ## When to Use Hashformers?
 
 The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
