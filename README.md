@@ -50,6 +50,37 @@ For a wider search, use `ws.segment(inputs, topk=20, steps=13)`. Inference
 batches default to 64 candidates and can be configured when constructing the
 segmenter.
 
+For bulk CUDA workloads, opt into adaptive scorer microbatching independently
+for beam search and reranking:
+
+```python
+ws = WordSegmenter(
+    segmenter_model_name_or_path="distilgpt2",
+    segmenter_gpu_batch_size="auto",
+    segmenter_max_gpu_batch_size=512,
+    reranker_model_name_or_path="bert-base-uncased",
+    reranker_gpu_batch_size="auto",
+    reranker_max_gpu_batch_size=512,
+)
+```
+
+Automatic mode starts at 64, tries geometrically larger full microbatches, and
+keeps a larger size only when synchronized candidate throughput improves while
+at least 20% of CUDA memory remains free. It backs off and retries the same
+candidates after a CUDA out-of-memory error. The selected size is cached only
+for that scorer and process; the segmenter and reranker therefore tune
+independently. Small calls do not trigger growth, and CPU execution uses the
+safe starting size without CUDA tuning. Inspect
+`ws.get_segmenter().batch_telemetry` (or `ws.get_reranker().batch_telemetry`)
+for the configured and effective sizes, tuning state, throughput, memory, and
+OOM backoff count.
+
+This controller targets bulk candidate throughput, not a particular reported
+GPU-utilization percentage. CUDA utilization is sampled too coarsely to be the
+control signal for short beam-search scorer calls. Keep an explicit integer
+batch size, which remains the default, for predictable shared-GPU memory or
+latency.
+
 ### Using Language-Specific Models
 
 ```python
@@ -100,7 +131,8 @@ API:
 ```bash
 hashformers-mcp \
   --model distilgpt2 \
-  --batch-size 64 \
+  --batch-size auto \
+  --max-batch-size 512 \
   --file-root /path/to/project
 ```
 
@@ -133,9 +165,13 @@ Optional startup flags configure the segmenter model and scorer type, device,
 and batch size. Supplying `--reranker-model` enables reranker-only and ensemble
 selection, with corresponding model-type, device, and batch-size flags. Run
 `hashformers-mcp --help` for the complete list. Models are loaded lazily and
-reused for the life of the process; `auto` selects CUDA when available and
-otherwise uses CPU. File-job tools are restricted to the server working
-directory by default; repeat `--file-root` to authorize other directories.
+reused for the life of the process; `--device auto` selects CUDA when available
+and otherwise uses CPU. `--batch-size auto` and
+`--reranker-batch-size auto` opt the two scorers into independent adaptive
+microbatching; bound them with `--max-batch-size` and
+`--reranker-max-batch-size`. File-job tools are restricted to the server
+working directory by default; repeat `--file-root` to authorize other
+directories.
 File jobs currently require Linux descriptor-backed filesystem support through
 `/proc/self/fd`; the interactive, regex, tweet, and candidate-ranking tools
 remain available on other platforms.

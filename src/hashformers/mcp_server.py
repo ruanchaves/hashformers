@@ -30,6 +30,11 @@ from mcp.types import ToolAnnotations
 from typing_extensions import NotRequired, TypedDict
 
 from hashformers.beamsearch.data_structures import ProbabilityDictionary
+from hashformers.beamsearch.minicons_lm import (
+    DEFAULT_MAX_BATCH_SIZE,
+    validate_batch_size,
+    validate_max_batch_size,
+)
 from hashformers.segmenter import BaseWordSegmenter
 from hashformers.segmenter.auto import TransformerWordSegmenter
 from hashformers.segmenter.data_structures import WordSegmenterOutput
@@ -305,33 +310,37 @@ class ServerConfig:
         segmenter_model: Hugging Face model name or local path.
         segmenter_model_type: Hashformers scorer type for beam search.
         segmenter_device: Device string or ``auto``.
-        segmenter_batch_size: Maximum segmenter inference batch size.
+        segmenter_batch_size: Fixed segmenter inference batch size or ``"auto"``.
         reranker_model: Optional Hugging Face reranker name or local path.
         reranker_model_type: Hashformers scorer type for reranking.
         reranker_device: Device string or ``inherit``.
-        reranker_batch_size: Maximum reranker inference batch size.
+        reranker_batch_size: Fixed reranker inference batch size or ``"auto"``.
         file_roots: Directories available to file-job tools.
         allow_file_overwrite: Whether callers may replace existing files.
         defer_model_selection: Whether a one-time Hub selection is required.
         max_model_parameters: Maximum parameter count accepted from the Hub.
         max_model_size_bytes: Maximum repository download size accepted.
+        segmenter_max_batch_size: Maximum automatic segmenter batch size.
+        reranker_max_batch_size: Maximum automatic reranker batch size.
     """
 
     segmenter_model: str | None = "gpt2"
     segmenter_model_type: str = "gpt2"
     segmenter_revision: str | None = None
     segmenter_device: str = "auto"
-    segmenter_batch_size: int = 64
+    segmenter_batch_size: int | Literal["auto"] = 64
     reranker_model: str | None = None
     reranker_model_type: str = "bert"
     reranker_revision: str | None = None
     reranker_device: str = "inherit"
-    reranker_batch_size: int = 64
+    reranker_batch_size: int | Literal["auto"] = 64
     file_roots: tuple[str, ...] = (".",)
     allow_file_overwrite: bool = False
     defer_model_selection: bool = False
     max_model_parameters: int = DEFAULT_MAX_MODEL_PARAMETERS
     max_model_size_bytes: int = DEFAULT_MAX_MODEL_SIZE_BYTES
+    segmenter_max_batch_size: int = DEFAULT_MAX_BATCH_SIZE
+    reranker_max_batch_size: int = DEFAULT_MAX_BATCH_SIZE
 
 
 @dataclass(frozen=True)
@@ -379,6 +388,13 @@ def _positive_integer(value: str) -> int:
     return parsed
 
 
+def _batch_size(value: str) -> int | Literal["auto"]:
+    """Parse a positive fixed size or the adaptive batching sentinel."""
+    if value.lower() == "auto":
+        return "auto"
+    return _positive_integer(value)
+
+
 def build_argument_parser() -> ArgumentParser:
     """Build the MCP server command-line parser.
 
@@ -420,9 +436,17 @@ def build_argument_parser() -> ArgumentParser:
         "--batch-size",
         "--segmenter-batch-size",
         dest="segmenter_batch_size",
-        type=_positive_integer,
+        type=_batch_size,
         default=64,
-        help="Maximum segmenter inference batch size.",
+        help="Fixed segmenter inference batch size, or 'auto' for CUDA tuning.",
+    )
+    parser.add_argument(
+        "--max-batch-size",
+        "--segmenter-max-batch-size",
+        dest="segmenter_max_batch_size",
+        type=_positive_integer,
+        default=DEFAULT_MAX_BATCH_SIZE,
+        help="Maximum segmenter microbatch size in automatic mode.",
     )
     parser.add_argument(
         "--reranker-model",
@@ -441,9 +465,15 @@ def build_argument_parser() -> ArgumentParser:
     )
     parser.add_argument(
         "--reranker-batch-size",
-        type=_positive_integer,
+        type=_batch_size,
         default=64,
-        help="Maximum reranker inference batch size.",
+        help="Fixed reranker inference batch size, or 'auto' for CUDA tuning.",
+    )
+    parser.add_argument(
+        "--reranker-max-batch-size",
+        type=_positive_integer,
+        default=DEFAULT_MAX_BATCH_SIZE,
+        help="Maximum reranker microbatch size in automatic mode.",
     )
     parser.add_argument(
         "--file-root",
@@ -521,6 +551,14 @@ def _validate_server_config(config: ServerConfig) -> None:
     for name, value in {
         "segmenter_batch_size": config.segmenter_batch_size,
         "reranker_batch_size": config.reranker_batch_size,
+    }.items():
+        validate_batch_size(value, name)
+    for name, value in {
+        "segmenter_max_batch_size": config.segmenter_max_batch_size,
+        "reranker_max_batch_size": config.reranker_max_batch_size,
+    }.items():
+        validate_max_batch_size(value, name)
+    for name, value in {
         "max_model_parameters": config.max_model_parameters,
         "max_model_size_bytes": config.max_model_size_bytes,
     }.items():
@@ -595,11 +633,13 @@ def _model_config_payload() -> dict[str, object]:
         "segmenter_revision": _server_config.segmenter_revision,
         "segmenter_device": _server_config.segmenter_device,
         "segmenter_batch_size": _server_config.segmenter_batch_size,
+        "segmenter_max_batch_size": _server_config.segmenter_max_batch_size,
         "reranker_model": _server_config.reranker_model,
         "reranker_model_type": _server_config.reranker_model_type,
         "reranker_revision": _server_config.reranker_revision,
         "reranker_device": _server_config.reranker_device,
         "reranker_batch_size": _server_config.reranker_batch_size,
+        "reranker_max_batch_size": _server_config.reranker_max_batch_size,
     }
 
 
@@ -1633,10 +1673,16 @@ def get_segmenter() -> TransformerWordSegmenter:
                     segmenter_model_type=_server_config.segmenter_model_type,
                     segmenter_device=segmenter_device,
                     segmenter_gpu_batch_size=_server_config.segmenter_batch_size,
+                    segmenter_max_gpu_batch_size=(
+                        _server_config.segmenter_max_batch_size
+                    ),
                     reranker_model_name_or_path=reranker_path,
                     reranker_model_type=_server_config.reranker_model_type,
                     reranker_device=reranker_device,
                     reranker_gpu_batch_size=_server_config.reranker_batch_size,
+                    reranker_max_gpu_batch_size=(
+                        _server_config.reranker_max_batch_size
+                    ),
                 )
     return _segmenter
 

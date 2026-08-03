@@ -133,6 +133,8 @@ def test_get_segmenter_forwards_complete_startup_configuration_once():
             reranker_model_type="masked",
             reranker_device="inherit",
             reranker_batch_size=7,
+            segmenter_max_batch_size=256,
+            reranker_max_batch_size=128,
         )
     )
 
@@ -146,10 +148,12 @@ def test_get_segmenter_forwards_complete_startup_configuration_once():
         segmenter_model_type="incremental",
         segmenter_device="cpu",
         segmenter_gpu_batch_size=11,
+        segmenter_max_gpu_batch_size=256,
         reranker_model_name_or_path="custom/bert",
         reranker_model_type="masked",
         reranker_device="cpu",
         reranker_gpu_batch_size=7,
+        reranker_max_gpu_batch_size=128,
     )
 
 
@@ -182,7 +186,9 @@ def test_parse_server_config_accepts_every_model_option():
             "--device",
             "cpu",
             "--batch-size",
-            "12",
+            "auto",
+            "--max-batch-size",
+            "256",
             "--reranker-model",
             "custom/bert",
             "--reranker-model-type",
@@ -190,7 +196,9 @@ def test_parse_server_config_accepts_every_model_option():
             "--reranker-device",
             "cuda",
             "--reranker-batch-size",
-            "8",
+            "auto",
+            "--reranker-max-batch-size",
+            "128",
         ]
     )
 
@@ -198,11 +206,13 @@ def test_parse_server_config_accepts_every_model_option():
         segmenter_model="custom/gpt",
         segmenter_model_type="incremental",
         segmenter_device="cpu",
-        segmenter_batch_size=12,
+        segmenter_batch_size="auto",
         reranker_model="custom/bert",
         reranker_model_type="masked",
         reranker_device="cuda",
-        reranker_batch_size=8,
+        reranker_batch_size="auto",
+        segmenter_max_batch_size=256,
+        reranker_max_batch_size=128,
     )
 
 
@@ -212,6 +222,12 @@ def test_parse_server_config_rejects_invalid_batch_size():
     """
     with pytest.raises(SystemExit):
         parse_server_config(["--batch-size", "0"])
+
+    with pytest.raises(SystemExit):
+        parse_server_config(["--max-batch-size", "0"])
+
+    with pytest.raises(SystemExit):
+        parse_server_config(["--reranker-max-batch-size", "0"])
 
 
 def test_parse_server_config_accepts_file_policy(tmp_path):
