@@ -1,5 +1,4 @@
 minicons>=0.3.39,<0.4
 transformers>=4.46.1,<6
-twitter-text-python
 ekphrasis
 pandas

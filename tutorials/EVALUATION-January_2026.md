@@ -2,7 +2,20 @@
 
 > **Benchmark Overview:** This report evaluates the performance of various text segmentation approaches across English hashtags, foreign hashtags, and code identifier splitting tasks.
 
-The benchmark scripts are available in the [scripts](https://github.com/ruanchaves/hashformers/tree/main/scripts) directory ( `scripts/benchmark_script_focused.py` and `scripts/benchmark_script.py` ).
+> [!CAUTION]
+> This is an archival report. The prompted-model row evaluates only one
+> five-shot, 4-bit NF4 `Qwen/Qwen2-0.5B-Instruct` configuration. The run did not
+> retain sample IDs or raw generations, did not measure invalid-output rates,
+> and did not calculate confidence intervals. Its accuracy and timing values
+> are descriptive historical results, not a general comparison with LLMs.
+
+The original scripts are available in the [scripts](https://github.com/ruanchaves/hashformers/tree/main/scripts)
+directory (`scripts/benchmark_script_focused.py` and
+`scripts/benchmark_script.py`). A new pinned
+[Qwen3 protocol](../benchmarks/qwen/README.md) fixes the sampling, output,
+provenance, statistical, and performance-measurement issues. It uses
+Qwen3-0.6B as the documented text-only, non-thinking fallback for Qwen3.5-0.8B.
+No refreshed model result is reported until its raw artifacts are published.
 
 ---
 
@@ -30,7 +43,7 @@ The benchmark scripts are available in the [scripts](https://github.com/ruanchav
 
 ---
 
-## ⏱️ Global Latency Performance
+## ⏱️ Historical Global Latency Performance
 
 | Model | Mean (ms) | Std (ms) | Min (ms) | Max (ms) | Throughput (items/sec) |
 |-------|----------:|---------:|---------:|---------:|-----------------------:|
@@ -38,11 +51,14 @@ The benchmark scripts are available in the [scripts](https://github.com/ruanchav
 | SymSpell | 0.28 | 0.21 | 0.04 | 1.49 | 3,580 |
 | Ekphrasis | 0.69 | 0.97 | 0.11 | 9.17 | 1,449 |
 | Hashformers-DistilGPT2 | 264.11 | 320.63 | 13.56 | 3,124.96 | 3.79 |
-| LLM-Qwen2 (0.5B) | 300.63 | 166.81 | 134.10 | 2,444.61 | 3.33 |
+| LLM-Qwen2 (0.5B, historical NF4 run) | 300.63 | 166.81 | 134.10 | 2,444.61 | 3.33 |
 | Hashformers-GPT2 | 362.97 | 424.75 | 22.04 | 3,644.44 | 2.76 |
 
-> [!TIP]
-> Heuristic-based approaches (WordNinja, SymSpell, Ekphrasis) are **~1,000x faster** than transformer-based methods, making them ideal for high-throughput scenarios.
+> [!WARNING]
+> These latency values used one-item calls without a documented warm-up, CUDA
+> synchronization, isolated model processes, common precision, or peak-memory
+> measurement. They describe this run only and should not be used for a current
+> hardware or architecture comparison.
 
 ---
 
@@ -98,7 +114,9 @@ The benchmark scripts are available in the [scripts](https://github.com/ruanchav
 | 7 | WordNinja | 0.00% | 10.00% | 6.25% | 7.69% |
 
 > [!IMPORTANT]
-> Using a language-specific backbone (**RuGPT3Small**) improves Russian segmentation accuracy by **+5–10%** over English-pretrained models.
+> On these 20 sampled records, **RuGPT3Small** scored 5 percentage points above
+> GPT-2 and 10 points above DistilGPT2. This small historical result does not by
+> itself establish a causal or population-level improvement.
 
 ---
 
@@ -123,27 +141,28 @@ LLM-Qwen2 (0.5B)           6th        4th        4th         5th
 
 ### Key Findings
 
-1. **Hashformers excels at English hashtag segmentation**, achieving the highest accuracy (76.67%) and F1-score (81.99%) with DistilGPT2. This represents a **+8.3 percentage point improvement** over the comparable-scale LLM-Qwen2 (0.5B).
+1. **Hashformers-DistilGPT2 had the highest observed English exact-match accuracy in this sample** (76.67%). Its observed difference from the historical Qwen2-0.5B configuration was 8.34 percentage points (10 of 120 predictions). Because raw paired predictions were not saved, the report cannot attach a paired confidence interval or significance test to that difference.
 
-2. **Heuristic methods dominate code identifier splitting.** Ekphrasis leads with 66% accuracy, while Hashformers models underperform on programmatic naming conventions (camelCase, snake_case). This suggests the pretraining corpus of GPT-2 models lacks sufficient code-style text.
+2. **Heuristic methods led on this code-identifier sample.** Ekphrasis had 66% observed accuracy, while the two Hashformers configurations had lower observed accuracy. The experiment does not isolate whether pretraining data, tokenization, search settings, or another factor caused the difference.
 
-3. **Language-specific backbones matter.** For Russian hashtags, Hashformers-RuGPT3Small (80% accuracy) substantially outperforms English-pretrained alternatives, demonstrating the importance of matching the LM to the target language.
+3. **The language-specific backbone had the highest observed Russian result.** Hashformers-RuGPT3Small reached 80% on the 20 sampled NRU HSE records. This small result is consistent with a benefit from matching the backbone to the language, but it is not a precise estimate of that benefit.
 
-4. **Latency vs. accuracy trade-off is significant.** Heuristic splitters are ~1,000x faster but sacrifice 5–15% accuracy on hashtag tasks. For batch processing millions of items, heuristics may be acceptable; for quality-critical applications, Hashformers is preferred.
+4. **This run showed a latency/accuracy trade-off, but its timing protocol was insufficient for a hardware-independent conclusion.** Deployment choices should be benchmarked on the target workload with warm-up, synchronization, throughput, precision, and memory reported.
 
-5. **Hashformers outperforms similarly-sized LLMs.** When compared to LLM-Qwen2 (0.5B parameters), Hashformers variants consistently deliver better accuracy across English and Foreign hashtag tasks, proving that the specialized architecture is more effective than general-purpose LLMs at comparable scale.
+5. **The useful comparison is specialized beam-search segmentation versus one prompted generative configuration.** Qwen2-0.5B has substantially more parameters than the GPT-2 and DistilGPT2 backbones, and both approaches use Transformer-family language models. This experiment does not show that Hashformers outperforms similarly sized models or LLMs generally.
 
 ---
 
 ## When to Use Hashformers?
 
-The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
+The table below records practical considerations rather than conclusions about
+an entire model class.
 
 | Approach | Examples | Recommended When... | Notes |
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
-| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • **Scalability** is needed.<br><br>• You are working in a domain or language where a Language Model is readily available, but compiling a manual vocabulary is too burdensome. | Evidence shows Hashformers is superior to LLMs of similar scale (0.5B parameters). |
-| **Large LLMs** | [OpenAI](https://openai.com/), Local LLM Deployment | • **Cost, latency, and scalability** are not concerns.<br><br>• You are segmenting a **low volume** of items. | To gain an accuracy advantage over Hashformers, you generally need to use significantly larger LLMs. |
+| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• An appropriate domain/language backbone is available, while a manual vocabulary is not. | Results depend on the backbone, language, dataset, and search configuration. |
+| **Prompted generative segmentation** | [Pinned Qwen protocol](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The historical row covers one Qwen2-0.5B prompt/configuration only. A current Qwen3 fallback run is pending publication of raw artifacts. |
 
 ---
 
@@ -156,10 +175,11 @@ The table below outlines when to use **Hashformers** versus other approaches lik
 | **Heuristic** | [Ekphrasis](https://github.com/cbaziotis/ekphrasis) | Text preprocessing tool optimized for social media text |
 | **Heuristic** | [Spiral-Ronin](https://github.com/casics/spiral) | Identifier splitting for source code analysis |
 | **Hashformers** | [Hashformers-GPT2](https://github.com/ruanchaves/hashformers) | GPT-2 backbone with specialized hashtag segmentation head |
-| **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Distilled GPT-2 for faster inference with minimal accuracy loss |
+| **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Smaller GPT-2 variant used by the historical beam-search configuration |
 | **Hashformers** | [Hashformers-RuGPT3Small](https://github.com/ruanchaves/hashformers) | Russian-language GPT-3 backbone for Cyrillic text: [ai-forever/rugpt3small_based_on_gpt2](https://huggingface.co/ai-forever/rugpt3small_based_on_gpt2) |
-| **LLM** | [LLM-Qwen2 (0.5B)](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) | General-purpose 0.5B parameter language model: [Qwen/Qwen2-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) |
+| **Prompted generative (historical)** | [LLM-Qwen2 (0.5B)](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) | Five-shot, 4-bit NF4 `Qwen/Qwen2-0.5B-Instruct`; raw outputs, fixed IDs, confidence intervals, and invalid-output rates were not retained. |
+| **Prompted generative (refresh pending)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; see the [reproducible protocol](../benchmarks/qwen/README.md). No result is claimed yet. |
 
 ---
 
-*Report generated: January 2026*
+*Report generated: January 2026. Methodology caveats and refresh protocol added August 2026.*

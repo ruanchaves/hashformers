@@ -1,8 +1,10 @@
 from hashformers.beamsearch.data_structures import (
+    ProbabilityDictionary,
     enforce_prob_dict,
-    ProbabilityDictionary
 )
+from hashformers.beamsearch.minicons_lm import DEFAULT_MAX_BATCH_SIZE
 from hashformers.beamsearch.model_lm import ModelLM
+
 
 class Reranker(ModelLM):
     """
@@ -15,7 +17,8 @@ class Reranker(ModelLM):
     Args:
         model_name_or_path (str, optional): The name or path of the pre-trained model. Default is "bert-base-cased".
         model_type (str, optional): The type of the model to use. Default is "bert".
-        gpu_batch_size (int, optional): The batch size to use when performing computations on the GPU. Default is 64.
+        gpu_batch_size (int or str, optional): Fixed batch size or ``"auto"``.
+        max_gpu_batch_size (int, optional): Maximum automatic batch size.
         gpu_id (int, optional): The ID of the GPU to use. Default is 0.
         device (str, optional): The device on which to run the computations. Default is "cuda".
 
@@ -26,14 +29,16 @@ class Reranker(ModelLM):
         model_type="bert",
         gpu_batch_size=64,
         gpu_id=0,
-        device="cuda"
+        device="cuda",
+        max_gpu_batch_size=DEFAULT_MAX_BATCH_SIZE,
     ):
         super().__init__(
             model_name_or_path=model_name_or_path,
             model_type=model_type,
             device=device,
             gpu_batch_size=gpu_batch_size,
-            gpu_id=gpu_id
+            max_gpu_batch_size=max_gpu_batch_size,
+            gpu_id=gpu_id,
         )
     
     def rerank(

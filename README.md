@@ -4,7 +4,7 @@
 
 **Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
 
-**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLM prompt-based approaches on word segmentation tasks.
+**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Historical benchmarks compare specific Hashformers, heuristic, and prompted-model configurations; their conclusions are scoped to the evaluated samples and settings.
 
 <p align="center">
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Google Colab Tutorial </a> </h3>
@@ -49,6 +49,37 @@ The default search uses `topk=5` and `steps=5` for interactive performance.
 For a wider search, use `ws.segment(inputs, topk=20, steps=13)`. Inference
 batches default to 64 candidates and can be configured when constructing the
 segmenter.
+
+For bulk CUDA workloads, opt into adaptive scorer microbatching independently
+for beam search and reranking:
+
+```python
+ws = WordSegmenter(
+    segmenter_model_name_or_path="distilgpt2",
+    segmenter_gpu_batch_size="auto",
+    segmenter_max_gpu_batch_size=512,
+    reranker_model_name_or_path="bert-base-uncased",
+    reranker_gpu_batch_size="auto",
+    reranker_max_gpu_batch_size=512,
+)
+```
+
+Automatic mode starts at 64, tries geometrically larger full microbatches, and
+keeps a larger size only when synchronized candidate throughput improves while
+at least 20% of CUDA memory remains free. It backs off and retries the same
+candidates after a CUDA out-of-memory error. The selected size is cached only
+for that scorer and process; the segmenter and reranker therefore tune
+independently. Small calls do not trigger growth, and CPU execution uses the
+safe starting size without CUDA tuning. Inspect
+`ws.get_segmenter().batch_telemetry` (or `ws.get_reranker().batch_telemetry`)
+for the configured and effective sizes, tuning state, throughput, memory, and
+OOM backoff count.
+
+This controller targets bulk candidate throughput, not a particular reported
+GPU-utilization percentage. CUDA utilization is sampled too coarsely to be the
+control signal for short beam-search scorer calls. Keep an explicit integer
+batch size, which remains the default, for predictable shared-GPU memory or
+latency.
 
 ### Using Language-Specific Models
 
@@ -100,20 +131,50 @@ API:
 ```bash
 hashformers-mcp \
   --model distilgpt2 \
-  --batch-size 64 \
+  --batch-size auto \
+  --max-batch-size 512 \
   --file-root /path/to/project
 ```
+
+When the language is not known until an agent sees the request, start the same
+server in explicitly authorized deferred-selection mode:
+
+```bash
+hashformers-mcp \
+  --defer-model-selection \
+  --file-root /path/to/project
+```
+
+That process starts without selecting, downloading, or loading a Transformer.
+The agent can inspect at most 20 local examples with `sample_hashtag_file`,
+infer and report a language and confidence, obtain a bounded public-model
+shortlist with `discover_huggingface_models`, and make one `configure_models`
+call. Configuration anonymously re-fetches both repositories, rejects private,
+gated, over-size, unsupported, or custom-code models, and requires the exact
+Hub commit SHA returned by discovery. The first later inference downloads that
+pinned revision lazily. Identical configuration retries are safe; selecting a
+different model requires restarting the server.
+
+The default Hub ceilings are one billion parameters and 5 GB of selected pinned
+snapshot files. Operators can lower them with `--max-model-parameters` and
+`--max-model-size-bytes`. Deferred selection is the operator's authorization
+for its single remote selection and download; ordinary startup does not allow
+callers to change models.
 
 Optional startup flags configure the segmenter model and scorer type, device,
 and batch size. Supplying `--reranker-model` enables reranker-only and ensemble
 selection, with corresponding model-type, device, and batch-size flags. Run
 `hashformers-mcp --help` for the complete list. Models are loaded lazily and
-reused for the life of the process; `auto` selects CUDA when available and
-otherwise uses CPU. File-job tools are restricted to the server working
-directory by default; repeat `--file-root` to authorize other directories.
+reused for the life of the process; `--device auto` selects CUDA when available
+and otherwise uses CPU. `--batch-size auto` and
+`--reranker-batch-size auto` opt the two scorers into independent adaptive
+microbatching; bound them with `--max-batch-size` and
+`--reranker-max-batch-size`. File-job tools are restricted to the server
+working directory by default; repeat `--file-root` to authorize other
+directories.
 File jobs currently require Linux descriptor-backed filesystem support through
-`/proc/self/fd`; the interactive, regex, tweet, and candidate-ranking tools
-remain available on other platforms.
+`/proc/self/fd`; interactive segmentation, model discovery/configuration, and
+candidate ranking remain available on other platforms.
 
 MCP clients normally launch that command for you. For example, configure Codex
 or Claude Code with:
@@ -128,17 +189,24 @@ The server exposes the complete user-facing segmentation workflow:
 
 | Tool | Purpose |
 |------|---------|
+| `sample_hashtag_file` | Return at most 20 distinct reservoir-sampled hashtags and compact text, CSV, or JSON Lines metadata without copying the dataset into agent context. |
+| `discover_huggingface_models` | Return a deterministic, hard-capped shortlist of anonymously validated public Transformers models for a language and role. |
+| `configure_models` | Validate and publish one segmenter and optional reranker at exact Hub revisions when deferred selection was authorized at startup. |
 | `segment_hashtags` | Run Transformer beam search with configurable search depth, preprocessing, reranker or ensemble selection, and component rankings. |
 | `start_hashtag_file_job` | Index and deduplicate text, CSV, or JSON Lines locally without loading a model or placing the dataset in agent context. |
 | `continue_hashtag_file_job` | Process and atomically checkpoint one bounded batch of a file job; repeat until completion. |
-| `segment_with_regex` | Apply the library's ordered regex rules without loading a model. |
-| `segment_tweets` | Extract and replace hashtags in full tweets with either regex or Transformer segmentation. |
 | `rank_candidates` | Select, rerank, or ensemble precomputed hypotheses without rerunning beam search. |
+
+Hashformers intentionally operates on hashtags rather than complete social
+posts. Applications that process full text should extract hashtags, call
+`segment_hashtags`, and perform replacements in application code. Generic
+regex substitution belongs in the caller or a dedicated heuristic splitter.
 
 `top_k` controls beam width while `max_candidates` independently limits the
 returned or written alternatives and is capped at 64. Model identity, devices,
-and GPU batch sizes are startup settings so an agent cannot accidentally
-download or retain several models during ordinary calls. Interactive
+and GPU batch sizes are startup settings, except for the single exact-revision
+selection explicitly authorized by `--defer-model-selection`. The process
+retains at most one segmenter and one reranker. Interactive
 Transformer calls accept at most 64 inputs, `top_k` is capped at 64, and `steps`
 at 32. An aggregate expansion budget also rejects combinations of long inputs,
 wide beams, and deep searches that would still consume excessive memory. Larger
@@ -156,6 +224,15 @@ The checkpoint contains the indexed inputs, so continuation does not repeatedly
 reread the source file. Existing outputs are never replaced unless the server
 was started with `--allow-file-overwrite` and the caller also passes
 `overwrite=true`.
+
+If the file language is unknown, call `sample_hashtag_file` before starting the
+job. Its deterministic hash-reservoir keeps memory and response size bounded
+independently of file length and returns only distinct samples, record count,
+format, and file size. No file contents or hashtags are sent to Hugging Face.
+File-job checkpoints, progress responses, interactive results, and final JSON
+Lines records preserve selected repository IDs and revisions. Deferred/pinned
+selection always records an exact revision; ordinary unpinned startup records
+`null`.
 
 This repository also includes the `segment-hashtags` Agent Skill at
 `.agents/skills/segment-hashtags`. Codex discovers it automatically when run
@@ -180,13 +257,17 @@ itself, so the MCP server must also be installed and configured.
 
 ## When to Use Hashformers?
 
-The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
+The table below describes the practical trade-offs between Hashformers,
+vocabulary-based splitters, and direct prompted generation. The January 2026
+Qwen2 result is a single historical configuration, not evidence about LLMs as a
+class. A pinned, auditable [Qwen3 benchmark protocol](benchmarks/qwen/README.md)
+is ready for a fresh run; no new result is reported yet.
 
 | Approach | Examples | Recommended When... | Notes |
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
-| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • **Scalability** is needed.<br><br>• You are working in a domain or language where a Language Model is readily available, but compiling a manual vocabulary for your task is too burdensome. | Evidence shows Hashformers can be superior to LLMs of similar scale (0.5B parameters). |
-| **Large LLMs** | [OpenAI](https://openai.com/), Local LLM Deployment | • **Cost, latency, and scalability** are not concerns.<br><br>• You are segmenting a **low volume** of items. | To gain an accuracy advantage over Hashformers, you generally need to use significantly larger LLMs. |
+| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• You are working in a domain or language where an appropriate backbone is available, but compiling a manual vocabulary is too burdensome. | Accuracy and performance depend on the selected backbone, language, dataset, and search settings. |
+| **Prompted generative segmentation** | [Qwen3 benchmark protocol](benchmarks/qwen/README.md) | • You want to test a generative model under an explicit insertion-only output contract.<br><br>• Generation latency and invalid outputs are acceptable and measured. | The published report evaluated only one five-shot Qwen2-0.5B configuration. It does not establish a general size or quality threshold for prompted models. |
 
 ---
 
