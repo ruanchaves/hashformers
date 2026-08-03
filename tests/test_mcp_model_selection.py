@@ -48,6 +48,7 @@ def _model_info(
     *,
     language="en",
     architecture="GPT2LMHeadModel",
+    model_type=None,
     pipeline_tag="text-generation",
     parameters=100_000_000,
     download_size=400_000_000,
@@ -57,7 +58,12 @@ def _model_info(
     downloads=100,
 ):
     """Build complete fake Hub metadata without making network requests."""
-    config = {"architectures": [architecture]}
+    if model_type is None:
+        model_type = {
+            "GPT2LMHeadModel": "gpt2",
+            "BertForMaskedLM": "bert",
+        }.get(architecture, "unknown-test-model")
+    config = {"architectures": [architecture], "model_type": model_type}
     if auto_map is not None:
         config["auto_map"] = auto_map
     return SimpleNamespace(
@@ -72,7 +78,13 @@ def _model_info(
         config=config,
         transformers_info=None,
         safetensors=SimpleNamespace(total=parameters),
-        siblings=[SimpleNamespace(size=download_size, lfs=None)],
+        siblings=[
+            SimpleNamespace(
+                rfilename="model.safetensors",
+                size=download_size,
+                lfs=None,
+            )
+        ],
         used_storage=download_size,
         pipeline_tag=pipeline_tag,
         downloads=downloads,
@@ -111,6 +123,26 @@ def _enable_deferred(tmp_path, **changes):
             **changes,
         )
     )
+
+
+def test_download_size_matches_files_selected_for_pinned_snapshot():
+    info = _model_info("example/model", SEGMENTER_REVISION, download_size=400)
+    info.siblings.append(
+        SimpleNamespace(
+            rfilename="model.onnx",
+            size=10_000,
+            lfs=None,
+        )
+    )
+
+    assert mcp_server._hub_download_size(info) == 400
+
+
+def test_download_size_is_unknown_when_selected_file_metadata_is_incomplete():
+    info = _model_info("example/model", SEGMENTER_REVISION)
+    info.siblings[0].size = None
+
+    assert mcp_server._hub_download_size(info) is None
 
 
 def test_parse_server_config_accepts_deferred_selection_and_size_ceilings(tmp_path):
@@ -244,10 +276,9 @@ def test_discover_huggingface_models_validates_languages_and_exact_revisions(
     assert candidate["scorer_type"] == "gpt2"
     assert language in candidate["language_tags"]
     assert "public non-gated" in candidate["reason"]
-    api.list_models.assert_called_once_with(
-        filter=("transformers", f"language:{language}"),
+    expected_list_options = dict(
+        filter=("transformers", language),
         gated=False,
-        num_parameters=f"max:{mcp_server.DEFAULT_MAX_MODEL_PARAMETERS}",
         sort="downloads",
         limit=mcp_server.MAX_MODEL_DISCOVERY_SCAN,
         full=True,
@@ -255,9 +286,14 @@ def test_discover_huggingface_models_validates_languages_and_exact_revisions(
         fetch_config=True,
         token=False,
     )
+    if mcp_server.HUB_SUPPORTS_PARAMETER_FILTER:
+        expected_list_options["num_parameters"] = (
+            f"max:{mcp_server.DEFAULT_MAX_MODEL_PARAMETERS}"
+        )
+    api.list_models.assert_called_once_with(**expected_list_options)
 
 
-def test_discovery_skips_unavailable_gated_oversize_and_custom_code_models(
+def test_discovery_skips_unavailable_gated_oversize_custom_and_unloadable_models(
     tmp_path,
 ):
     """Verify every unsafe candidate is excluded without configuring state."""
@@ -266,7 +302,13 @@ def test_discovery_skips_unavailable_gated_oversize_and_custom_code_models(
         max_model_parameters=50,
         max_model_size_bytes=500,
     )
-    repository_ids = ["x/unavailable", "x/gated", "x/large", "x/custom"]
+    repository_ids = [
+        "x/unavailable",
+        "x/gated",
+        "x/large",
+        "x/custom",
+        "x/unsupported-weights",
+    ]
     summaries = [
         SimpleNamespace(id=name, sha=str(index + 4) * 40, downloads=10 - index)
         for index, name in enumerate(repository_ids)
@@ -286,13 +328,22 @@ def test_discovery_skips_unavailable_gated_oversize_and_custom_code_models(
                 parameters=51,
                 download_size=100,
             )
-        return _model_info(
+        if repository_id == "x/custom":
+            return _model_info(
+                repository_id,
+                "7" * 40,
+                parameters=10,
+                download_size=100,
+                auto_map={"AutoModel": "model.CustomModel"},
+            )
+        info = _model_info(
             repository_id,
-            "7" * 40,
+            "8" * 40,
             parameters=10,
             download_size=100,
-            auto_map={"AutoModel": "model.CustomModel"},
         )
+        info.siblings[0].rfilename = "model.onnx"
+        return info
 
     api.model_info.side_effect = model_info
     with patch("hashformers.mcp_server.HfApi", return_value=api):
@@ -419,6 +470,44 @@ def test_configuration_failure_does_not_publish_a_partial_selection(tmp_path):
         segment_hashtags(["#icecold"])
 
 
+@pytest.mark.parametrize(
+    ("info", "message"),
+    [
+        (
+            _model_info(
+                "example/segmenter",
+                SEGMENTER_REVISION,
+                architecture="FutureForCausalLM",
+                model_type="future",
+            ),
+            "not registered by the installed Transformers",
+        ),
+        (
+            _model_info("example/segmenter", SEGMENTER_REVISION),
+            "incomplete size metadata",
+        ),
+    ],
+)
+def test_configuration_fails_closed_for_unsupported_or_unbounded_models(
+    tmp_path,
+    info,
+    message,
+):
+    """Reject selections that cannot load locally or enforce the byte ceiling."""
+    _enable_deferred(tmp_path)
+    if "incomplete" in message:
+        info.siblings[0].size = None
+    api = Mock()
+    api.model_info.return_value = info
+
+    with patch("hashformers.mcp_server.HfApi", return_value=api):
+        with pytest.raises(ValueError, match=message):
+            configure_models("example/segmenter", SEGMENTER_REVISION)
+
+    assert mcp_server._models_configured() is False
+    assert mcp_server._server_config.segmenter_model is None
+
+
 def test_concurrent_identical_configuration_validates_and_publishes_once(tmp_path):
     """Serialize concurrent configuration calls around one atomic validation."""
     _enable_deferred(tmp_path)
@@ -465,6 +554,7 @@ def test_concurrent_lazy_loading_retains_one_pinned_segmenter_instance(tmp_path)
         repo_id="example/segmenter",
         revision=SEGMENTER_REVISION,
         token=False,
+        allow_patterns=mcp_server.HUB_MODEL_FILE_PATTERNS,
     )
     constructor.assert_called_once()
     assert constructor.call_args.kwargs["segmenter_model_name_or_path"] == (

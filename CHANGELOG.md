@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## v3.0.0 (Unreleased)
+
+### Added
+
+- Added bounded local file sampling plus deferred, one-time discovery and
+  exact-revision configuration of language-appropriate public Hugging Face
+  models in the MCP server.
+- Added opt-in adaptive CUDA microbatching with independent segmenter and
+  reranker controllers, throughput/memory tuning, OOM backoff, and telemetry.
+- Added a pinned Qwen3-0.6B benchmark protocol, fixed auditable samples, strict
+  insertion-only validation, confidence intervals, and reproducibility
+  metadata while retaining Qwen2 as a historical comparison.
 
 ### Breaking changes
 

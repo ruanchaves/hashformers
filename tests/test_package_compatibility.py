@@ -28,6 +28,7 @@ def read_setup_kwargs(monkeypatch):
 def test_supported_python_and_transformers_versions(monkeypatch):
     metadata = read_setup_kwargs(monkeypatch)
 
+    assert metadata["version"] == "3.0.0"
     assert metadata["python_requires"] == ">=3.10"
     assert "transformers>=4.46.1,<6" in metadata["install_requires"]
     assert "Programming Language :: Python :: 3.8" not in metadata["classifiers"]

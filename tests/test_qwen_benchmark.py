@@ -1,17 +1,27 @@
 import hashlib
 import json
+from argparse import ArgumentTypeError
+from contextlib import nullcontext
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
 
 from scripts.build_qwen_sample_manifest import selected_indices
 from scripts.qwen_benchmark import (
     MODEL_SPECS,
+    PROTOCOL_ID,
+    SYSTEM_PROMPT,
+    cpu_metadata,
+    generate_once,
     paired_bootstrap_interval,
     paired_comparisons,
+    single_device,
     summarize_records,
     validate_insertion_only,
     validate_manifest,
+    validate_revision,
     wilson_interval,
 )
 
@@ -27,12 +37,31 @@ def load_manifest():
 
 
 def prediction(sample_id, *, model="left", valid=True, correct=False, group="English"):
+    source = f"{sample_id}value"
+    gold = f"{sample_id} value"
+    raw_output = gold if correct else source if valid else "changed"
     return {
+        "schema_version": 1,
         "sample_id": sample_id,
+        "protocol_id": PROTOCOL_ID,
+        "manifest_sha256": "f" * 64,
         "model_label": model,
         "model_id": f"example/{model}",
         "model_revision": "a" * 40,
+        "requested_precision": "bfloat16",
+        "actual_parameter_dtype": "torch.bfloat16",
+        "quantization": "none",
+        "resolved_device": "cuda:0",
+        "dataset": "example/data",
+        "dataset_revision": "b" * 40,
+        "split": "test",
+        "row_index": int(sample_id == "two"),
+        "input": source,
+        "gold": gold,
+        "raw_output": raw_output,
+        "prediction": raw_output if valid else None,
         "valid": valid,
+        "invalid_reason": None if valid else "changed_non_space_characters",
         "correct": correct,
         "generation_ms": 10.0,
         "group": group,
@@ -109,6 +138,72 @@ def test_manifest_validation_rejects_duplicate_ids():
         validate_manifest(records)
 
 
+def test_manifest_validation_enforces_insertion_only_gold():
+    records = load_manifest()[:1]
+    records[0]["gold"] += "!"
+
+    with pytest.raises(ValueError, match="only by inserted spaces"):
+        validate_manifest(records)
+
+
+def test_model_revision_must_be_an_exact_commit_sha():
+    assert validate_revision("a" * 40) == "a" * 40
+    for revision in ("main", "A" * 40, "a" * 39, "a" * 41):
+        with pytest.raises(ValueError, match="exact 40-character"):
+            validate_revision(revision)
+
+
+def test_benchmark_device_must_be_one_explicit_cpu_or_cuda_device():
+    assert single_device("cpu") == "cpu"
+    assert single_device("cuda") == "cuda:0"
+    assert single_device("CUDA:2") == "cuda:2"
+    with pytest.raises(ArgumentTypeError, match="device must be"):
+        single_device("auto")
+
+
+def test_generation_uses_one_chat_template_without_duplicate_special_tokens():
+    class FakeBatch(dict):
+        def to(self, device):
+            self.device = device
+            return self
+
+    input_ids = SimpleNamespace(shape=(1, 2))
+    batch = FakeBatch(input_ids=input_ids)
+    tokenizer = Mock()
+    tokenizer.apply_chat_template.return_value = "formatted prompt"
+    tokenizer.return_value = batch
+    tokenizer.decode.return_value = "ice cold"
+    model = Mock(device=None)
+    model.generate.return_value = [[101, 102, 103]]
+    torch = SimpleNamespace(inference_mode=lambda: nullcontext())
+
+    raw_output, _, _, generated_tokens = generate_once(
+        torch,
+        tokenizer,
+        model,
+        MODEL_SPECS["qwen3"],
+        "icecold",
+        64,
+    )
+
+    tokenizer.apply_chat_template.assert_called_once_with(
+        [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": "icecold"},
+        ],
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=False,
+    )
+    tokenizer.assert_called_once_with(
+        "formatted prompt",
+        return_tensors="pt",
+        add_special_tokens=False,
+    )
+    assert raw_output == "ice cold"
+    assert generated_tokens == 1
+
+
 def test_wilson_interval_and_paired_bootstrap_are_bounded_and_deterministic():
     low, high = wilson_interval(5, 10)
     assert low == pytest.approx(0.236593, abs=1e-6)
@@ -137,11 +232,24 @@ def test_summary_separates_runtime_errors_from_invalid_model_outputs():
     record = prediction("one", valid=False, correct=False)
     record["error"] = "RuntimeError: backend failed"
     record["generation_ms"] = None
+    record["raw_output"] = None
 
     summary = summarize_records([record])["overall"]
 
     assert summary["invalid_output_rate"]["successes"] == 0
     assert summary["runtime_error_rate"]["successes"] == 1
+
+
+def test_summary_rejects_missing_or_inconsistent_prediction_fields():
+    missing = prediction("one", valid=True, correct=True)
+    del missing["raw_output"]
+    with pytest.raises(ValueError, match="is missing: raw_output"):
+        summarize_records([missing])
+
+    inconsistent = prediction("one", valid=True, correct=True)
+    inconsistent["correct"] = False
+    with pytest.raises(ValueError, match="correct does not match"):
+        summarize_records([inconsistent])
 
 
 def test_paired_comparison_joins_by_stable_sample_id():
@@ -159,6 +267,21 @@ def test_paired_comparison_joins_by_stable_sample_id():
     assert comparison["accuracy_difference"] == 0.5
     assert comparison["left"] == "left"
     assert comparison["right"] == "right"
+    assert comparison["protocol_id"] == PROTOCOL_ID
+    assert comparison["manifest_sha256"] == "f" * 64
+    assert comparison["left_configuration"]["model_id"] == "example/left"
+    assert comparison["right_configuration"]["model_id"] == "example/right"
+
+
+def test_paired_comparison_rejects_different_samples_or_protocols():
+    left = [prediction("one", model="left")]
+    with pytest.raises(ValueError, match="same sample IDs"):
+        paired_comparisons([left, [prediction("two", model="right")]])
+
+    right = [prediction("one", model="right")]
+    right[0]["protocol_id"] = "different-protocol"
+    with pytest.raises(ValueError, match="same protocol_id"):
+        paired_comparisons([left, right])
 
 
 def test_model_pins_preserve_qwen2_and_disable_qwen3_thinking():
@@ -170,4 +293,14 @@ def test_model_pins_preserve_qwen2_and_disable_qwen3_thinking():
         "status": "current-fallback",
     }
     assert MODEL_SPECS["qwen2-historical"]["model_id"] == "Qwen/Qwen2-0.5B-Instruct"
-    assert MODEL_SPECS["qwen2-historical"]["status"] == "historical-reproduction"
+    assert MODEL_SPECS["qwen2-historical"]["status"] == (
+        "historical-model-under-refreshed-protocol"
+    )
+
+
+def test_cpu_metadata_records_architecture_and_available_core_count():
+    metadata = cpu_metadata()
+
+    assert metadata["architecture"]
+    assert metadata["logical_cores"] is None or metadata["logical_cores"] > 0
+    assert metadata["model_name"] is None or metadata["model_name"].strip()

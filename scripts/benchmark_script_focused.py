@@ -10,9 +10,11 @@ Based on the original benchmark_script.py but focused on specific evaluations.
 
 Requirements: pip install datasets hashformers wordninja symspellpy ekphrasis pandas
 
-This is the archival January 2026 focused script. Its Qwen2 adapter is retained
-only to reproduce the historical row. Use ``scripts/qwen_benchmark.py`` for the
-fixed-sample, auditable Qwen3 fallback protocol.
+This is the archival January 2026 focused script. Its Qwen2 adapter documents
+the historical configuration but cannot reproduce the published row because
+fixed sample IDs, raw outputs, and the exact model revision were not retained.
+Use ``scripts/qwen_benchmark.py`` for the fixed-sample, auditable Qwen3 fallback
+protocol.
 """
 
 import os
@@ -340,7 +342,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 
 class LocalLLMSegmenter(Segmenter):
-    """Reproduce the historical local Qwen2 prompting configuration."""
+    """Implement the historical local Qwen2 prompting configuration."""
 
     def __init__(
         self,

@@ -16,16 +16,21 @@ import math
 import os
 import platform
 import random
+import re
 import statistics
 import subprocess
 import sys
 import time
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
 SCHEMA_VERSION = 1
+PROTOCOL_ID = "hashformers-qwen-space-insertion-v1"
+REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("benchmarks/qwen/samples.jsonl")
 MODEL_SPECS = {
     "qwen3": {
@@ -38,9 +43,9 @@ MODEL_SPECS = {
     "qwen2-historical": {
         "model_id": "Qwen/Qwen2-0.5B-Instruct",
         "revision": "c540970f9e29518b1d8f06ab8b24cba66ad77b6d",
-        "label": "Qwen2-0.5B-Instruct (historical reproduction)",
+        "label": "Qwen2-0.5B-Instruct (refreshed protocol)",
         "enable_thinking": None,
-        "status": "historical-reproduction",
+        "status": "historical-model-under-refreshed-protocol",
     },
 }
 
@@ -121,6 +126,38 @@ def validate_manifest(records: Sequence[Mapping[str, Any]]) -> None:
         for field in ("input", "gold"):
             if not isinstance(record[field], str) or not record[field]:
                 raise ValueError(f"{sample_id}: {field} must be a non-empty string")
+        for field in ("dataset", "split", "group"):
+            if not isinstance(record[field], str) or not record[field]:
+                raise ValueError(f"{sample_id}: {field} must be a non-empty string")
+        validate_revision(record["dataset_revision"], "dataset revision")
+        row_index = record["row_index"]
+        if isinstance(row_index, bool) or not isinstance(row_index, int) or row_index < 0:
+            raise ValueError(f"{sample_id}: row_index must be a non-negative integer")
+        if record["gold"].replace(" ", "") != record["input"]:
+            raise ValueError(
+                f"{sample_id}: gold must differ from input only by inserted spaces"
+            )
+
+
+def validate_revision(revision: str, name: str = "model revision") -> str:
+    """Require an immutable lowercase Hub commit SHA."""
+
+    if not isinstance(revision, str) or REVISION_PATTERN.fullmatch(revision) is None:
+        raise ValueError(f"{name} must be an exact 40-character Hub commit SHA")
+    return revision
+
+
+def single_device(value: str) -> str:
+    """Parse one explicit CPU or CUDA device for isolated measurements."""
+
+    normalized = value.strip().lower()
+    if normalized == "cpu":
+        return normalized
+    if normalized == "cuda":
+        return "cuda:0"
+    if re.fullmatch(r"cuda:[0-9]+", normalized):
+        return normalized
+    raise argparse.ArgumentTypeError("device must be cpu, cuda, or cuda:<index>")
 
 
 def validate_insertion_only(
@@ -233,12 +270,103 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
     if not records:
         raise ValueError("prediction file is empty")
-    sample_ids = [record.get("sample_id") for record in records]
-    if len(set(sample_ids)) != len(sample_ids):
-        raise ValueError("prediction file contains duplicate sample IDs")
-    model_labels = {record.get("model_label") for record in records}
-    if len(model_labels) != 1:
-        raise ValueError("prediction file must contain exactly one model label")
+    required_fields = {
+        "schema_version",
+        "protocol_id",
+        "manifest_sha256",
+        "sample_id",
+        "dataset",
+        "dataset_revision",
+        "split",
+        "row_index",
+        "group",
+        "input",
+        "gold",
+        "model_label",
+        "model_id",
+        "model_revision",
+        "requested_precision",
+        "actual_parameter_dtype",
+        "quantization",
+        "resolved_device",
+        "raw_output",
+        "prediction",
+        "valid",
+        "invalid_reason",
+        "correct",
+        "generation_ms",
+        "error",
+    }
+    for position, record in enumerate(records, 1):
+        missing = sorted(required_fields.difference(record))
+        if missing:
+            raise ValueError(
+                f"prediction record {position} is missing: {', '.join(missing)}"
+            )
+    validate_manifest(records)
+
+    singleton_fields = (
+        "protocol_id",
+        "manifest_sha256",
+        "model_label",
+        "model_id",
+        "model_revision",
+        "requested_precision",
+        "actual_parameter_dtype",
+        "quantization",
+        "resolved_device",
+    )
+    for position, record in enumerate(records, 1):
+        sample_id = record["sample_id"]
+        if record["schema_version"] != SCHEMA_VERSION:
+            raise ValueError(f"{sample_id}: unsupported prediction schema version")
+        for field in singleton_fields:
+            if not isinstance(record[field], str) or not record[field]:
+                raise ValueError(
+                    f"prediction record {position} has an invalid {field}"
+                )
+        if not isinstance(record["valid"], bool) or not isinstance(
+            record["correct"], bool
+        ):
+            raise ValueError(f"{sample_id}: valid and correct must be booleans")
+        for field in ("raw_output", "prediction", "invalid_reason", "error"):
+            if record[field] is not None and not isinstance(record[field], str):
+                raise ValueError(f"{sample_id}: {field} must be text or null")
+        generation_ms = record["generation_ms"]
+        if generation_ms is not None and (
+            isinstance(generation_ms, bool)
+            or not isinstance(generation_ms, (int, float))
+            or not math.isfinite(float(generation_ms))
+            or generation_ms < 0
+        ):
+            raise ValueError(
+                f"{sample_id}: generation_ms must be a non-negative number or null"
+            )
+        if record["valid"]:
+            valid, prediction, _ = validate_insertion_only(
+                record["input"], record["raw_output"]
+            )
+            if not valid or prediction != record["prediction"] or record["error"]:
+                raise ValueError(f"{sample_id}: inconsistent valid prediction record")
+        elif record["prediction"] is not None:
+            raise ValueError(f"{sample_id}: invalid output must not have a prediction")
+        expected_correct = bool(
+            record["valid"]
+            and normalize_segmentation(record["prediction"] or "")
+            == normalize_segmentation(record["gold"])
+        )
+        if record["correct"] != expected_correct:
+            raise ValueError(f"{sample_id}: correct does not match the prediction")
+
+    identities = {
+        field: {record[field] for record in records} for field in singleton_fields
+    }
+    for field, values in identities.items():
+        if len(values) != 1:
+            raise ValueError(f"prediction file must contain exactly one {field}")
+    validate_revision(records[0]["model_revision"])
+    if re.fullmatch(r"[0-9a-f]{64}", records[0]["manifest_sha256"]) is None:
+        raise ValueError("manifest_sha256 must be an exact lowercase SHA-256 digest")
 
     def summarize_subset(subset: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         correct = sum(bool(record.get("correct")) for record in subset)
@@ -272,9 +400,15 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
     groups = sorted({str(record.get("group")) for record in records})
     return {
-        "model_label": next(iter(model_labels)),
-        "model_id": records[0].get("model_id"),
-        "model_revision": records[0].get("model_revision"),
+        "protocol_id": records[0]["protocol_id"],
+        "manifest_sha256": records[0]["manifest_sha256"],
+        "model_label": records[0]["model_label"],
+        "model_id": records[0]["model_id"],
+        "model_revision": records[0]["model_revision"],
+        "requested_precision": records[0]["requested_precision"],
+        "actual_parameter_dtype": records[0]["actual_parameter_dtype"],
+        "quantization": records[0]["quantization"],
+        "resolved_device": records[0]["resolved_device"],
         "overall": summarize_subset(records),
         "groups": {
             group: summarize_subset(
@@ -292,12 +426,38 @@ def paired_comparisons(
 
     comparisons: list[dict[str, Any]] = []
     for left_index, left in enumerate(runs):
+        summarize_records(left)
         left_by_id = {str(record["sample_id"]): record for record in left}
         for right in runs[left_index + 1 :]:
+            summarize_records(right)
             right_by_id = {str(record["sample_id"]): record for record in right}
-            shared_ids = sorted(left_by_id.keys() & right_by_id.keys())
-            if not shared_ids:
-                continue
+            if set(left_by_id) != set(right_by_id):
+                raise ValueError(
+                    "paired runs must contain exactly the same sample IDs"
+                )
+            for field in ("protocol_id", "manifest_sha256"):
+                if left[0][field] != right[0][field]:
+                    raise ValueError(
+                        f"paired runs must use the same {field}"
+                    )
+            shared_ids = sorted(left_by_id)
+            provenance_fields = (
+                "dataset",
+                "dataset_revision",
+                "split",
+                "row_index",
+                "group",
+                "input",
+                "gold",
+            )
+            for sample_id in shared_ids:
+                for field in provenance_fields:
+                    if left_by_id[sample_id].get(field) != right_by_id[
+                        sample_id
+                    ].get(field):
+                        raise ValueError(
+                            f"paired sample {sample_id!r} differs in {field}"
+                        )
             left_values = [
                 bool(left_by_id[sample_id].get("correct")) for sample_id in shared_ids
             ]
@@ -312,6 +472,30 @@ def paired_comparisons(
                 {
                     "left": left[0].get("model_label"),
                     "right": right[0].get("model_label"),
+                    "protocol_id": left[0]["protocol_id"],
+                    "manifest_sha256": left[0]["manifest_sha256"],
+                    "left_configuration": {
+                        field: left[0][field]
+                        for field in (
+                            "model_id",
+                            "model_revision",
+                            "requested_precision",
+                            "actual_parameter_dtype",
+                            "quantization",
+                            "resolved_device",
+                        )
+                    },
+                    "right_configuration": {
+                        field: right[0][field]
+                        for field in (
+                            "model_id",
+                            "model_revision",
+                            "requested_precision",
+                            "actual_parameter_dtype",
+                            "quantization",
+                            "resolved_device",
+                        )
+                    },
                     "paired_samples": len(shared_ids),
                     "accuracy_difference": difference,
                     "ci_95": [low, high],
@@ -340,12 +524,39 @@ def git_revision() -> str | None:
             ["git", "rev-parse", "HEAD"],
             check=True,
             capture_output=True,
+            cwd=REPOSITORY_ROOT,
             text=True,
             timeout=5,
         )
     except (OSError, subprocess.SubprocessError):
         return None
     return result.stdout.strip() or None
+
+
+def git_dirty() -> bool | None:
+    """Report tracked working-tree changes for the benchmark source revision."""
+
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            check=True,
+            capture_output=True,
+            cwd=REPOSITORY_ROOT,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return bool(result.stdout.strip())
+
+
+def package_version(distribution: str) -> str | None:
+    """Read one installed distribution version without importing it."""
+
+    try:
+        return version(distribution)
+    except PackageNotFoundError:
+        return None
 
 
 def gpu_driver_metadata() -> list[dict[str, str]]:
@@ -375,6 +586,28 @@ def gpu_driver_metadata() -> list[dict[str, str]]:
     return devices
 
 
+def cpu_metadata() -> dict[str, Any]:
+    """Return a stable CPU description even when ``platform.processor`` is empty."""
+
+    model_name = platform.processor().strip() or None
+    cpuinfo = Path("/proc/cpuinfo")
+    if model_name is None and cpuinfo.is_file():
+        try:
+            for line in cpuinfo.read_text(encoding="utf-8", errors="replace").splitlines():
+                field, separator, value = line.partition(":")
+                if separator and field.strip() in {"model name", "Hardware"}:
+                    model_name = value.strip() or None
+                    if model_name is not None:
+                        break
+        except OSError:
+            pass
+    return {
+        "model_name": model_name,
+        "architecture": platform.machine(),
+        "logical_cores": os.cpu_count(),
+    }
+
+
 def resolve_torch_dtype(torch: Any, precision: str) -> Any:
     """Map the CLI precision name to a torch dtype."""
 
@@ -387,11 +620,11 @@ def resolve_torch_dtype(torch: Any, precision: str) -> Any:
     }[precision]
 
 
-def cuda_sync(torch: Any) -> None:
+def cuda_sync(torch: Any, device: str) -> None:
     """Synchronize CUDA when it is active so timings include completed kernels."""
 
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
+    if device.startswith("cuda"):
+        torch.cuda.synchronize(device)
 
 
 def build_messages(source: str) -> list[dict[str, str]]:
@@ -434,11 +667,16 @@ def load_model(
         )
 
     tokenizer = AutoTokenizer.from_pretrained(
-        spec["model_id"], revision=spec["revision"]
+        spec["model_id"],
+        revision=spec["revision"],
+        token=False,
+        trust_remote_code=False,
     )
     model = AutoModelForCausalLM.from_pretrained(
         spec["model_id"],
         revision=spec["revision"],
+        token=False,
+        trust_remote_code=False,
         device_map=args.device,
         torch_dtype=dtype,
         quantization_config=quantization_config,
@@ -451,20 +689,57 @@ def load_model(
     except StopIteration:
         actual_dtype = None
 
+    model_commit = getattr(model.config, "_commit_hash", None)
+    tokenizer_commit = tokenizer.init_kwargs.get("_commit_hash")
+    model_device = str(getattr(model, "device", ""))
+    if model_device == "cuda":
+        model_device = "cuda:0"
+    if model_device != args.device:
+        raise RuntimeError(
+            f"model resolved to {model_device!r}, expected isolated device "
+            f"{args.device!r}"
+        )
+    device_map = getattr(model, "hf_device_map", None)
+    if isinstance(device_map, Mapping):
+        mapped_devices = {
+            f"cuda:{value}" if isinstance(value, int) else str(value)
+            for value in device_map.values()
+        }
+        mapped_devices.discard("cuda")
+        if mapped_devices and mapped_devices != {args.device}:
+            raise RuntimeError(
+                "model must be resident on exactly one requested device; "
+                f"resolved map uses {sorted(mapped_devices)}"
+            )
+
     runtime = {
         "python_version": platform.python_version(),
         "torch_version": torch.__version__,
         "transformers_version": transformers.__version__,
+        "accelerate_version": package_version("accelerate"),
+        "bitsandbytes_version": package_version("bitsandbytes"),
         "cuda_runtime": torch.version.cuda,
         "cuda_available": torch.cuda.is_available(),
-        "device_map": args.device,
+        "requested_device": args.device,
+        "resolved_device": model_device,
+        "resolved_device_map": (
+            {key: str(value) for key, value in device_map.items()}
+            if isinstance(device_map, Mapping)
+            else None
+        ),
         "requested_precision": args.precision,
         "actual_parameter_dtype": actual_dtype,
         "quantization": args.quantization,
-        "model_commit": getattr(model.config, "_commit_hash", None) or spec["revision"],
-        "tokenizer_commit": tokenizer.init_kwargs.get("_commit_hash")
-        or spec["revision"],
+        "model_commit": model_commit,
+        "tokenizer_commit": tokenizer_commit,
     }
+    if model_device.startswith("cuda"):
+        properties = torch.cuda.get_device_properties(model_device)
+        runtime["cuda_device"] = {
+            "name": properties.name,
+            "total_memory_bytes": properties.total_memory,
+            "compute_capability": [properties.major, properties.minor],
+        }
     return torch, tokenizer, model, runtime
 
 
@@ -486,13 +761,16 @@ def generate_once(
         template_options["enable_thinking"] = spec["enable_thinking"]
     preprocessing_start = time.perf_counter()
     prompt = tokenizer.apply_chat_template(build_messages(source), **template_options)
-    inputs = tokenizer(prompt, return_tensors="pt")
+    inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
     model_device = getattr(model, "device", None)
     if model_device is not None:
         inputs = inputs.to(model_device)
     preprocessing_ms = (time.perf_counter() - preprocessing_start) * 1000
 
-    cuda_sync(torch)
+    resolved_device = str(model_device)
+    if resolved_device == "cuda":
+        resolved_device = "cuda:0"
+    cuda_sync(torch, resolved_device)
     generation_start = time.perf_counter()
     with torch.inference_mode():
         output_ids = model.generate(
@@ -502,7 +780,7 @@ def generate_once(
             pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
-    cuda_sync(torch)
+    cuda_sync(torch, resolved_device)
     generation_ms = (time.perf_counter() - generation_start) * 1000
     prompt_tokens = inputs["input_ids"].shape[1]
     generated = output_ids[0][prompt_tokens:]
@@ -510,19 +788,19 @@ def generate_once(
     return raw_output, preprocessing_ms, generation_ms, len(generated)
 
 
-def memory_snapshot(torch: Any) -> dict[str, int | None]:
+def memory_snapshot(torch: Any, device: str) -> dict[str, int | None]:
     """Report measured CUDA allocation separately from model-loading memory."""
 
-    if not torch.cuda.is_available():
+    if not device.startswith("cuda"):
         return {
             "baseline_allocated_bytes": None,
             "peak_allocated_bytes": None,
             "peak_reserved_bytes": None,
         }
     return {
-        "baseline_allocated_bytes": torch.cuda.memory_allocated(),
-        "peak_allocated_bytes": torch.cuda.max_memory_allocated(),
-        "peak_reserved_bytes": torch.cuda.max_memory_reserved(),
+        "baseline_allocated_bytes": torch.cuda.memory_allocated(device),
+        "peak_allocated_bytes": torch.cuda.max_memory_allocated(device),
+        "peak_reserved_bytes": torch.cuda.max_memory_reserved(device),
     }
 
 
@@ -549,20 +827,26 @@ def run_benchmark(args: argparse.Namespace) -> None:
     manifest_path = args.manifest.resolve()
     manifest = load_jsonl(manifest_path)
     validate_manifest(manifest)
+    manifest_sha256 = file_sha256(manifest_path)
     spec = dict(MODEL_SPECS[args.model])
     if args.revision:
-        spec["revision"] = args.revision
+        spec["revision"] = validate_revision(args.revision)
+    else:
+        validate_revision(spec["revision"])
     predictions_path, metadata_path = prepare_output_directory(
         args.output_dir.resolve(), args.overwrite
     )
 
     metadata: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
+        "protocol_id": PROTOCOL_ID,
         "status": "loading-model",
         "started_at": utc_now(),
         "repository_revision": git_revision(),
+        "repository_dirty": git_dirty(),
+        "runner_sha256": file_sha256(Path(__file__).resolve()),
         "manifest": str(manifest_path),
-        "manifest_sha256": file_sha256(manifest_path),
+        "manifest_sha256": manifest_sha256,
         "sample_count": len(manifest),
         "model": spec,
         "generation": {
@@ -580,14 +864,19 @@ def run_benchmark(args: argparse.Namespace) -> None:
         },
         "hardware": {
             "platform": platform.platform(),
-            "machine": platform.machine(),
-            "processor": platform.processor(),
+            "cpu": cpu_metadata(),
             "gpus_from_nvidia_smi": gpu_driver_metadata(),
         },
     }
     write_json(metadata_path, metadata)
     torch, tokenizer, model, runtime = load_model(args, spec)
+    for component in ("model_commit", "tokenizer_commit"):
+        if runtime[component] != spec["revision"]:
+            raise RuntimeError(
+                f"{component} does not match requested revision {spec['revision']}"
+            )
     metadata["runtime"] = runtime
+    runtime_device = runtime["resolved_device"]
 
     warmup_ids = []
     for sample in manifest[: args.warmup]:
@@ -595,10 +884,10 @@ def run_benchmark(args: argparse.Namespace) -> None:
             torch, tokenizer, model, spec, sample["input"], args.max_new_tokens
         )
         warmup_ids.append(sample["sample_id"])
-    cuda_sync(torch)
-    if torch.cuda.is_available():
-        torch.cuda.reset_peak_memory_stats()
-    baseline_memory = memory_snapshot(torch)
+    cuda_sync(torch, runtime_device)
+    if runtime_device.startswith("cuda"):
+        torch.cuda.reset_peak_memory_stats(runtime_device)
+    baseline_memory = memory_snapshot(torch, runtime_device)
     metadata["measurement"]["warmup_sample_ids"] = warmup_ids
     metadata["measurement"]["baseline_gpu_memory"] = baseline_memory
     metadata["status"] = "running"
@@ -640,10 +929,16 @@ def run_benchmark(args: argparse.Namespace) -> None:
             )
             record = {
                 "schema_version": SCHEMA_VERSION,
+                "protocol_id": PROTOCOL_ID,
+                "manifest_sha256": manifest_sha256,
                 **sample,
                 "model_label": spec["label"],
                 "model_id": spec["model_id"],
                 "model_revision": runtime["model_commit"],
+                "requested_precision": runtime["requested_precision"],
+                "actual_parameter_dtype": runtime["actual_parameter_dtype"],
+                "quantization": runtime["quantization"],
+                "resolved_device": runtime["resolved_device"],
                 "raw_output": raw_output,
                 "prediction": prediction,
                 "valid": valid,
@@ -656,7 +951,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
             }
             output_handle.write(canonical_json(record) + "\n")
             output_handle.flush()
-    cuda_sync(torch)
+    cuda_sync(torch, runtime_device)
     measured_seconds = time.perf_counter() - measured_start
     completed_records = load_jsonl(predictions_path)
     runtime_error_count = sum(bool(record.get("error")) for record in completed_records)
@@ -668,7 +963,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
     metadata["measurement"]["throughput_items_per_wall_second"] = (
         len(completed_records) / measured_seconds if measured_seconds else None
     )
-    memory = memory_snapshot(torch)
+    memory = memory_snapshot(torch, runtime_device)
     memory["baseline_allocated_bytes"] = baseline_memory["baseline_allocated_bytes"]
     metadata["measurement"]["gpu_memory"] = memory
     metadata["measurement"]["runtime_error_count"] = runtime_error_count
@@ -719,7 +1014,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--quantization", choices=("none", "bnb-4bit-nf4"), default="none")
     run.add_argument(
-        "--device", default="auto", help="Transformers device_map value (default: auto)"
+        "--device",
+        type=single_device,
+        default="cuda:0",
+        help="single isolated device: cpu, cuda, or cuda:<index> (default: cuda:0)",
     )
     run.add_argument("--max-new-tokens", type=int, default=64)
     run.add_argument("--warmup", type=int, default=5)

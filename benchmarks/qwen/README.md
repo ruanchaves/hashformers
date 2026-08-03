@@ -19,10 +19,11 @@ excluding its vision components from measurement backend-dependent.
 
 `Qwen/Qwen2-0.5B-Instruct` remains available under the
 `qwen2-historical` runner key at revision
-`c540970f9e29518b1d8f06ab8b24cba66ad77b6d`. This enables an auditable
-reproduction; it does not convert the January 2026 numbers into a paired result.
-That old run did not save sample IDs or raw outputs and therefore cannot be
-given a retrospective confidence interval or invalid-output rate.
+`c540970f9e29518b1d8f06ab8b24cba66ad77b6d`. This evaluates the historical
+model under the refreshed zero-shot, fixed-manifest protocol; it does not
+reproduce the January 2026 five-shot NF4 row. That old run did not save sample
+IDs or raw outputs and therefore cannot be given a retrospective confidence
+interval or invalid-output rate.
 
 ## Fixed samples
 
@@ -57,14 +58,17 @@ dependencies. Qwen3 requires Transformers 4.51 or newer.
 python -m pip install 'transformers>=4.51,<6' 'accelerate>=1'
 ```
 
-Run one model per fresh process. Use the same explicit precision and
-quantization for any new model comparison; the example uses unquantized
-BF16. Do not compare these measurements with the January 2026 Qwen2 NF4 timing.
+Run one model on one explicit device per fresh process from a clean checkout.
+Use the same precision and quantization for any new model comparison; the
+example uses unquantized BF16 on `cuda:0`. Automatic or multi-device placement
+is rejected so synchronization and peak-memory measurements identify one GPU.
+Do not compare these measurements with the January 2026 Qwen2 NF4 timing.
 
 ```bash
 python scripts/qwen_benchmark.py run \
   --model qwen3 \
   --manifest benchmarks/qwen/samples.jsonl \
+  --device cuda:0 \
   --precision bfloat16 \
   --quantization none \
   --warmup 5 \
@@ -73,6 +77,7 @@ python scripts/qwen_benchmark.py run \
 python scripts/qwen_benchmark.py run \
   --model qwen2-historical \
   --manifest benchmarks/qwen/samples.jsonl \
+  --device cuda:0 \
   --precision bfloat16 \
   --quantization none \
   --warmup 5 \
@@ -100,30 +105,38 @@ rate.
 Each run saves:
 
 - `predictions.jsonl`: stable sample IDs, raw decoded generations, validated
-  predictions, validity reasons, exact-match outcomes, token counts, and
-  per-item preprocessing/generation timings;
+  predictions, validity reasons, exact-match outcomes, token counts,
+  per-item preprocessing/generation timings, protocol/manifest identity, and
+  the model precision, quantization, and resolved device;
 - `run_metadata.json`: requested and resolved model/tokenizer revisions,
   generation settings, precision/quantization, package versions, OS/CPU/GPU,
-  driver/CUDA metadata, manifest hash, repository revision, warm-up IDs,
-  throughput, and baseline/peak GPU allocation;
+  driver/CUDA metadata, manifest and runner hashes, repository revision and
+  dirty state, resolved single-device placement, warm-up IDs, throughput, and
+  baseline/peak GPU allocation;
 - an optional comparison JSON from `summarize`, containing accuracy and
   invalid-rate 95% Wilson intervals plus paired accuracy-difference 95%
   percentile-bootstrap intervals (10,000 resamples, seed 42).
+The summarizer refuses paired runs whose protocol, manifest hash, sample IDs,
+or per-sample provenance differ.
 
-Latency uses batch size one, five unrecorded warm-up items by default, and CUDA
-synchronization immediately before and after `model.generate`. Tokenization is
-reported separately. Throughput is reported both over summed generation time
-and measured wall time. CUDA model-resident baseline, peak allocated memory,
-and peak reserved memory are separate fields. Model loading is intentionally
-outside the inference peak.
+Latency uses batch size one, five unrecorded warm-up items by default, and
+synchronizes the explicitly selected CUDA device immediately before and after
+`model.generate`. Tokenization is reported separately. Throughput is reported
+both over summed generation time and measured wall time. CUDA model-resident
+baseline, peak allocated memory, and peak reserved memory are separate fields.
+Model loading is intentionally outside the inference peak.
 
 ## Publishing a result
 
-Before adding a row to the evaluation report, publish or commit the complete
-prediction JSONL, metadata JSON, and generated comparison JSON. Verify that all
-280 sample IDs occur exactly once, metadata status is `completed` (not
-`completed-with-errors`), the manifest
-hash matches this file, and the model/tokenizer revisions equal their requested
-pins. Report the exact model/configuration and its confidence intervals,
-invalid-output rate, latency, throughput, and peak memory; do not generalize the
-result to prompted models or LLMs as a class.
+Publish refreshed runs in a separate fixed-protocol section. Do not insert them
+into the archival January tables or compare them with historical Hashformers
+rows unless those Hashformers configurations are rerun on this exact manifest
+under a documented compatible protocol.
+
+Commit or publish the complete prediction JSONL, metadata JSON, and generated
+comparison JSON. Verify that all 280 sample IDs occur exactly once, metadata
+status is `completed` (not `completed-with-errors`), the manifest hash matches
+this file, and the model/tokenizer revisions equal their requested pins. Report
+the exact model/configuration and its confidence intervals, invalid-output
+rate, latency, throughput, and peak memory; do not generalize the result to
+prompted models or LLMs as a class.

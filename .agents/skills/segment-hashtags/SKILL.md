@@ -1,6 +1,6 @@
 ---
 name: segment-hashtags
-description: Segment hashtags or tweets, sample and process hashtag files without copying their contents into agent context, discover and configure language-appropriate public Hub models, apply regex rules, and rank precomputed segmentation candidates with the Hashformers MCP server. Use when a user asks to split or decompound hashtags, run bulk local segmentation, select a model for an unknown language, replace hashtags in tweets, compare candidates, rerank hypotheses, or inspect component scores.
+description: Segment hashtags, sample and process hashtag files without copying their contents into agent context, discover and configure language-appropriate public Hub models, and rank precomputed segmentation candidates with the Hashformers MCP server. Use when a user asks to split or decompound hashtags, run bulk local segmentation, select a model for an unknown language, compare candidates, rerank hypotheses, or inspect component scores.
 ---
 
 # Segment with Hashformers
@@ -23,12 +23,13 @@ model directly, or guess segmentations when the tools are unavailable.
      ambiguous or mixed, ask the user. Prefer a multilingual model without
      asking only when it is a clearly safe fallback for the request.
 3. If the server reports that model selection is deferred and unconfigured,
-   follow the one-time model-selection workflow below before segmentation.
-4. Choose one segmentation tool:
+   follow the one-time model-selection workflow below before segmentation. For
+   inline inputs, configuration state may not be known in advance: if the first
+   `segment_hashtags` call reports the specific deferred-selection error, treat
+   that as a status signal, complete model selection, and retry the call once.
+4. Choose one workflow:
    - Use `start_hashtag_file_job`, then `continue_hashtag_file_job`, when the
      user identifies a local input file.
-   - Use `segment_tweets` for complete tweets whose hashtags must be replaced.
-   - Use `segment_with_regex` when the user requests deterministic regex rules.
    - Use `rank_candidates` for hypotheses and scores already supplied by the
      user or another tool.
    - Otherwise use `segment_hashtags`.
@@ -40,13 +41,21 @@ model directly, or guess segmentations when the tools are unavailable.
 7. Report selected segmentations. Include candidates or component rankings only
    when requested.
 
+Hashformers does not extract or replace hashtags in complete posts. For a
+whole-text workflow, extract hashtags outside the library, pass only those
+hashtags to the Transformer workflow, and perform replacement in application
+code. Use Python's `re` module or a dedicated heuristic splitter when the user
+specifically needs generic regex substitution.
+
 ## Deferred Model Selection
 
 Use this workflow only when `deferred_model_selection` is true and
-`models_configured` is false in a sampling or discovery response. That state
-means the operator started the server with `--defer-model-selection`, which is
-authorization for one validated public Hub selection and its later download.
-Proceed directly without asking for a second download confirmation.
+`models_configured` is false in a sampling or discovery response, or when an
+inline segmentation call returns the server's specific deferred-selection
+error. That state means the operator started the server with
+`--defer-model-selection`, which is authorization for one validated public Hub
+selection and its later download. Proceed directly without asking for a second
+download confirmation.
 
 1. Call `discover_huggingface_models` with the inferred language tag (for
    example `en` or `pt`), `role="segmenter"`, and the default bounded limit.
@@ -100,7 +109,7 @@ the requested rows or a small sample.
 
 ## Transformer Options
 
-For `segment_hashtags`, Transformer-mode `segment_tweets`, and file jobs:
+For `segment_hashtags` and file jobs:
 
 - `top_k` is the beam-search width and can change the selected segmentation.
 - `steps` is the beam-search depth. MCP calls cap `top_k` at 64 and `steps` at
@@ -110,8 +119,8 @@ For `segment_hashtags`, Transformer-mode `segment_tweets`, and file jobs:
 - `max_candidates` only limits serialized alternatives; it does not narrow the
   search. It must be between 1 and 64.
 - `ranking_strategy` can be `auto`, `segmenter`, `reranker`, or `ensemble`.
-  Reranker and ensemble strategies require a reranker configured when the MCP
-  server starts.
+  Reranker and ensemble strategies require a reranker configured for the MCP
+  process, either at startup or through authorized deferred selection.
 - `alpha` and `beta` configure ensemble selection.
 - `lower`, `remove_hashtag`, and `hashtag_character` configure preprocessing.
 - `include_component_rankings=true` returns segmenter, reranker, and ensemble
@@ -129,7 +138,9 @@ Call `segment_hashtags` with a `hashtags` list and optional Transformer options.
 Expect a `results` list preserving input order. Each item contains the original
 and normalized input, selected segmentation, selected ranking strategy, ordered
 lower-is-better candidates, and optional component rankings. The response also
-records the selected repository IDs and revisions.
+records the selected repository IDs and revisions; an exact revision is always
+present for deferred/pinned selection and may be null for ordinary unpinned
+startup configuration.
 
 Call `sample_hashtag_file` with `input_path` and optional `input_format`,
 `input_field`, and `sample_size`. Expect no more than 20 distinct samples and
@@ -150,17 +161,11 @@ the file without model inference and returns a persistent `job_path`.
 
 Call `continue_hashtag_file_job` with that path and optional
 `max_unique_hashtags`. Expect only paths, checkpoint counts, and active model
-metadata including exact revisions. Repeat while status is `in_progress`;
-segmentation records appear in
-the final output file only when the job completes. The maximum value is 64;
-call the tool repeatedly instead of requesting a larger chunk.
-
-Call `segment_with_regex` with `inputs` and optional ordered `regex_rules` and
-preprocessing options. Rules are applied sequentially to each input.
-
-Call `segment_tweets` with `tweets` and `segmenter_kind` set to `regex` or
-`transformer`. It returns transformed text and per-occurrence hashtag results.
-Tweet extraction supports the standard `#` marker only.
+metadata. Repeat while status is `in_progress`; deferred/pinned selections
+always contain an exact revision, while ordinary unpinned startup may report
+null. Segmentation records appear in the final output file only when the job
+completes. The maximum value is 64; call the tool repeatedly instead of
+requesting a larger chunk.
 
 Call `rank_candidates` with candidate sets shaped as:
 

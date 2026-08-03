@@ -155,8 +155,8 @@ Hub commit SHA returned by discovery. The first later inference downloads that
 pinned revision lazily. Identical configuration retries are safe; selecting a
 different model requires restarting the server.
 
-The default Hub ceilings are one billion parameters and 5 GB of repository
-files. Operators can lower them with `--max-model-parameters` and
+The default Hub ceilings are one billion parameters and 5 GB of selected pinned
+snapshot files. Operators can lower them with `--max-model-parameters` and
 `--max-model-size-bytes`. Deferred selection is the operator's authorization
 for its single remote selection and download; ordinary startup does not allow
 callers to change models.
@@ -173,8 +173,8 @@ microbatching; bound them with `--max-batch-size` and
 working directory by default; repeat `--file-root` to authorize other
 directories.
 File jobs currently require Linux descriptor-backed filesystem support through
-`/proc/self/fd`; the interactive, regex, tweet, and candidate-ranking tools
-remain available on other platforms.
+`/proc/self/fd`; interactive segmentation, model discovery/configuration, and
+candidate ranking remain available on other platforms.
 
 MCP clients normally launch that command for you. For example, configure Codex
 or Claude Code with:
@@ -195,9 +195,12 @@ The server exposes the complete user-facing segmentation workflow:
 | `segment_hashtags` | Run Transformer beam search with configurable search depth, preprocessing, reranker or ensemble selection, and component rankings. |
 | `start_hashtag_file_job` | Index and deduplicate text, CSV, or JSON Lines locally without loading a model or placing the dataset in agent context. |
 | `continue_hashtag_file_job` | Process and atomically checkpoint one bounded batch of a file job; repeat until completion. |
-| `segment_with_regex` | Apply the library's ordered regex rules without loading a model. |
-| `segment_tweets` | Extract and replace hashtags in full tweets with either regex or Transformer segmentation. |
 | `rank_candidates` | Select, rerank, or ensemble precomputed hypotheses without rerunning beam search. |
+
+Hashformers intentionally operates on hashtags rather than complete social
+posts. Applications that process full text should extract hashtags, call
+`segment_hashtags`, and perform replacements in application code. Generic
+regex substitution belongs in the caller or a dedicated heuristic splitter.
 
 `top_k` controls beam width while `max_candidates` independently limits the
 returned or written alternatives and is capped at 64. Model identity, devices,
@@ -227,7 +230,9 @@ job. Its deterministic hash-reservoir keeps memory and response size bounded
 independently of file length and returns only distinct samples, record count,
 format, and file size. No file contents or hashtags are sent to Hugging Face.
 File-job checkpoints, progress responses, interactive results, and final JSON
-Lines records preserve selected repository IDs and exact revisions.
+Lines records preserve selected repository IDs and revisions. Deferred/pinned
+selection always records an exact revision; ordinary unpinned startup records
+`null`.
 
 This repository also includes the `segment-hashtags` Agent Skill at
 `.agents/skills/segment-hashtags`. Codex discovers it automatically when run

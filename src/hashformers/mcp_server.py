@@ -13,9 +13,10 @@ import secrets
 import sqlite3
 import stat
 from argparse import ArgumentParser
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, replace
+from fnmatch import fnmatchcase
 from itertools import islice
 from pathlib import Path
 from threading import Lock
@@ -62,6 +63,18 @@ MAX_JOB_RESULT_CHARS = 1_000_000
 DEFAULT_MAX_MODEL_PARAMETERS = 1_000_000_000
 DEFAULT_MAX_MODEL_SIZE_BYTES = 5_000_000_000
 HUB_REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
+HUB_WEIGHT_FILE_PATTERNS = (
+    "model*.safetensors",
+    "pytorch_model*.bin",
+)
+HUB_MODEL_FILE_PATTERNS = (
+    "*.json",
+    *HUB_WEIGHT_FILE_PATTERNS,
+    "*.model",
+    "*.txt",
+    "*.tiktoken",
+    "*.jinja",
+)
 SUPPORTED_SCORER_TYPES = frozenset(
     {"gpt2", "bert", "incremental", "masked", "seq2seq"}
 )
@@ -1357,11 +1370,21 @@ def _hub_parameter_count(info: object) -> int | None:
 
 
 def _hub_download_size(info: object) -> int | None:
-    """Calculate bounded repository bytes from file or storage metadata."""
+    """Calculate bytes selected by the exact pinned snapshot policy."""
     sibling_sizes: list[int] = []
     siblings = _hub_value(info, "siblings", []) or []
-    complete = bool(siblings)
+    selected_siblings = []
     for sibling in siblings:
+        filename = _hub_value(sibling, "rfilename")
+        if filename is None:
+            filename = _hub_value(sibling, "path")
+        if isinstance(filename, str) and not any(
+            fnmatchcase(filename, pattern) for pattern in HUB_MODEL_FILE_PATTERNS
+        ):
+            continue
+        selected_siblings.append(sibling)
+    complete = bool(selected_siblings)
+    for sibling in selected_siblings:
         size = _optional_non_negative_integer(_hub_value(sibling, "size"))
         if size is None:
             lfs = _hub_value(sibling, "lfs")
@@ -1372,13 +1395,21 @@ def _hub_download_size(info: object) -> int | None:
             sibling_sizes.append(size)
         else:
             complete = False
-    sibling_total = sum(sibling_sizes) if complete else None
-    used_storage = _optional_non_negative_integer(
-        _hub_value(info, "used_storage")
-    )
-    if sibling_total is not None and used_storage is not None:
-        return max(sibling_total, used_storage)
-    return sibling_total if sibling_total is not None else used_storage
+    return sum(sibling_sizes) if complete else None
+
+
+def _hub_has_loadable_weights(info: object) -> bool:
+    """Return whether the snapshot contains standard Transformers LM weights."""
+
+    for sibling in _hub_value(info, "siblings", []) or []:
+        filename = _hub_value(sibling, "rfilename")
+        if filename is None:
+            filename = _hub_value(sibling, "path")
+        if isinstance(filename, str) and any(
+            fnmatchcase(filename, pattern) for pattern in HUB_WEIGHT_FILE_PATTERNS
+        ):
+            return True
+    return False
 
 
 def _hub_language_tags(
@@ -1417,7 +1448,37 @@ def _hub_architecture_and_scorer(
     requested_scorer: str | None,
 ) -> tuple[str, SupportedScorerType]:
     """Validate a Transformers architecture and choose its Hashformers scorer."""
+    # Load the large auto-model registry only when discovery/configuration needs
+    # it so an idle deferred-selection server remains lightweight.
+    from transformers.models.auto.modeling_auto import (
+        MODEL_FOR_CAUSAL_LM_MAPPING_NAMES,
+        MODEL_FOR_MASKED_LM_MAPPING_NAMES,
+        MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES,
+    )
+
     config = _hub_value(info, "config") or {}
+    model_type = _hub_value(config, "model_type")
+    if not isinstance(model_type, str) or not model_type:
+        raise ValueError("model does not publish a supported Transformers model_type")
+
+    def registered_architectures(mapping: Mapping) -> set[str]:
+        """Return installed AutoModel classes registered for this model type."""
+        names = mapping.get(model_type, ())
+        if isinstance(names, str):
+            names = (names,)
+        elif not isinstance(names, (list, tuple, set, frozenset)):
+            names = ()
+        return {name for name in names if isinstance(name, str) and name}
+
+    causal_architectures = registered_architectures(
+        MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
+    )
+    masked_architectures = registered_architectures(
+        MODEL_FOR_MASKED_LM_MAPPING_NAMES
+    )
+    seq2seq_architectures = registered_architectures(
+        MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
+    )
     architectures = _hub_value(config, "architectures", []) or []
     if isinstance(architectures, str):
         architectures = [architectures]
@@ -1434,44 +1495,48 @@ def _hub_architecture_and_scorer(
         if transformers_info is not None
         else None
     )
-    if not architectures and isinstance(auto_model, str) and auto_model:
-        architectures = [auto_model]
+    if not architectures:
+        auto_mapping = {
+            "AutoModelForCausalLM": causal_architectures,
+            "AutoModelForMaskedLM": masked_architectures,
+            "AutoModelForSeq2SeqLM": seq2seq_architectures,
+        }
+        architectures = sorted(
+            auto_mapping.get(auto_model, set())
+            if isinstance(auto_model, str)
+            else set()
+        )
     if not architectures:
         raise ValueError("model does not publish a supported architecture")
 
-    lowered = [architecture.lower() for architecture in architectures]
-    is_encoder_decoder = _hub_value(config, "is_encoder_decoder") is True
-    causal = any(
-        name.endswith("forcausallm")
-        or name.endswith("lmheadmodel")
-        or name == "automodelforcausallm"
-        for name in lowered
-    ) and not is_encoder_decoder
-    masked = any(
-        name.endswith("formaskedlm") or name == "automodelformaskedlm"
-        for name in lowered
-    )
-    seq2seq = is_encoder_decoder or any(
-        name == "automodelforseq2seqlm"
-        or (name.endswith("forconditionalgeneration") and not causal)
-        for name in lowered
-    )
+    causal_matches = [
+        name for name in architectures if name in causal_architectures
+    ]
+    masked_matches = [
+        name for name in architectures if name in masked_architectures
+    ]
+    seq2seq_matches = [
+        name for name in architectures if name in seq2seq_architectures
+    ]
 
     compatible: list[SupportedScorerType] = []
     if role == "reranker":
-        if masked:
+        if masked_matches:
             compatible.extend(["bert", "masked"])
-        if causal:
+        if causal_matches:
             compatible.extend(["gpt2", "incremental"])
     else:
-        if causal:
+        if causal_matches:
             compatible.extend(["gpt2", "incremental"])
-        if masked:
+        if masked_matches:
             compatible.extend(["bert", "masked"])
-    if seq2seq:
+    if seq2seq_matches:
         compatible.append("seq2seq")
     if not compatible:
-        raise ValueError("model architecture is not supported by Hashformers")
+        raise ValueError(
+            "model architecture is not registered by the installed Transformers "
+            "AutoModel classes supported by Hashformers"
+        )
     if requested_scorer is not None:
         scorer = _validate_scorer_type(requested_scorer, "scorer_type")
         if scorer not in compatible:
@@ -1481,7 +1546,13 @@ def _hub_architecture_and_scorer(
             )
     else:
         scorer = compatible[0]
-    return architectures[0], scorer
+    if scorer in {"gpt2", "incremental"}:
+        architecture = causal_matches[0]
+    elif scorer in {"bert", "masked"}:
+        architecture = masked_matches[0]
+    else:
+        architecture = seq2seq_matches[0]
+    return architecture, scorer
 
 
 def _validate_hub_model_info(
@@ -1550,8 +1621,12 @@ def _validate_hub_model_info(
     )
     parameter_count = _hub_parameter_count(info)
     download_size = _hub_download_size(info)
-    if parameter_count is None and download_size is None:
-        raise ValueError("model has no verifiable size metadata")
+    if not _hub_has_loadable_weights(info):
+        raise ValueError("model has no standard safetensors or PyTorch LM weights")
+    if download_size is None:
+        raise ValueError(
+            "model has incomplete size metadata for the selected snapshot files"
+        )
     if (
         parameter_count is not None
         and parameter_count > _server_config.max_model_parameters
@@ -1560,10 +1635,7 @@ def _validate_hub_model_info(
             f"model exceeds the {_server_config.max_model_parameters} "
             "parameter ceiling"
         )
-    if (
-        download_size is not None
-        and download_size > _server_config.max_model_size_bytes
-    ):
+    if download_size > _server_config.max_model_size_bytes:
         raise ValueError(
             f"model exceeds the {_server_config.max_model_size_bytes}-byte "
             "download ceiling"
@@ -1631,6 +1703,7 @@ def _pinned_model_path(repository_id: str, revision: str | None) -> str:
             repo_id=repository_id,
             revision=revision,
             token=False,
+            allow_patterns=HUB_MODEL_FILE_PATTERNS,
         )
     except Exception as error:
         raise ValueError(
@@ -2743,6 +2816,12 @@ MODEL_READ_ANNOTATIONS = ToolAnnotations(
     idempotent_hint=True,
     open_world_hint=True,
 )
+LOCAL_READ_ANNOTATIONS = ToolAnnotations(
+    read_only_hint=True,
+    destructive_hint=False,
+    idempotent_hint=True,
+    open_world_hint=False,
+)
 FILE_WRITE_ANNOTATIONS = ToolAnnotations(
     read_only_hint=False,
     destructive_hint=True,
@@ -2837,7 +2916,7 @@ def discover_huggingface_models(
     _validate_at_most(limit, MAX_MODEL_CANDIDATES, "limit")
     api = HfApi()
     list_options = {
-        "filter": ("transformers", f"language:{normalized_language}"),
+        "filter": ("transformers", normalized_language),
         "gated": False,
         "sort": "downloads",
         "limit": MAX_MODEL_DISCOVERY_SCAN,

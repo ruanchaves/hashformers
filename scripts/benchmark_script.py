@@ -23,9 +23,11 @@ Benchmark Data: 20 samples from each dataset on HF Hub
 
 Requirements: pip install datasets hashformers wordninja symspellpy ekphrasis pandas
 
-This is the archival January 2026 exploratory script. Its Qwen2 adapter is
-retained only to reproduce the historical row and does not implement the fixed
-sample, output-contract, provenance, statistics, or timing protocol. Use
+This is the archival January 2026 exploratory script. Its Qwen2 adapter
+documents the historical configuration but cannot reproduce the published row
+because the run did not retain fixed sample IDs, raw outputs, or an exact model
+revision. It does not implement the fixed-sample, output-contract, provenance,
+statistics, or timing protocol. Use
 ``scripts/qwen_benchmark.py`` for current prompted-model evaluation.
 """
 
@@ -368,7 +370,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 
 class LocalLLMSegmenter(Segmenter):
-    """Reproduce the historical local Qwen2 prompting configuration."""
+    """Implement the historical local Qwen2 prompting configuration."""
 
     def __init__(
         self,

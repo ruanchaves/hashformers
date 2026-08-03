@@ -144,6 +144,7 @@ class MiniconsLM(object):
             remaining = len(candidates) - cursor
             batch_size, measurement = self._next_adaptive_batch(remaining)
             batch = candidates[cursor:cursor + batch_size]
+            retry_after_oom = False
             try:
                 if measurement is None:
                     scores = self.get_batch_scores(batch)
@@ -155,6 +156,10 @@ class MiniconsLM(object):
                     raise
                 if batch_size <= 1:
                     raise
+                retry_after_oom = True
+            if retry_after_oom:
+                # Run cache cleanup after leaving the exception handler so its
+                # traceback no longer retains failed forward-pass tensors.
                 self._recover_from_oom(batch_size)
                 continue
 

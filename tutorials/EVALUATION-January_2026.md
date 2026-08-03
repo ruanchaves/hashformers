@@ -114,7 +114,9 @@ No refreshed model result is reported until its raw artifacts are published.
 | 7 | WordNinja | 0.00% | 10.00% | 6.25% | 7.69% |
 
 > [!IMPORTANT]
-> Using a language-specific backbone (**RuGPT3Small**) improves Russian segmentation accuracy by **+5–10%** over English-pretrained models.
+> On these 20 sampled records, **RuGPT3Small** scored 5 percentage points above
+> GPT-2 and 10 points above DistilGPT2. This small historical result does not by
+> itself establish a causal or population-level improvement.
 
 ---
 
@@ -173,7 +175,7 @@ an entire model class.
 | **Heuristic** | [Ekphrasis](https://github.com/cbaziotis/ekphrasis) | Text preprocessing tool optimized for social media text |
 | **Heuristic** | [Spiral-Ronin](https://github.com/casics/spiral) | Identifier splitting for source code analysis |
 | **Hashformers** | [Hashformers-GPT2](https://github.com/ruanchaves/hashformers) | GPT-2 backbone with specialized hashtag segmentation head |
-| **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Distilled GPT-2 for faster inference with minimal accuracy loss |
+| **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Smaller GPT-2 variant used by the historical beam-search configuration |
 | **Hashformers** | [Hashformers-RuGPT3Small](https://github.com/ruanchaves/hashformers) | Russian-language GPT-3 backbone for Cyrillic text: [ai-forever/rugpt3small_based_on_gpt2](https://huggingface.co/ai-forever/rugpt3small_based_on_gpt2) |
 | **Prompted generative (historical)** | [LLM-Qwen2 (0.5B)](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) | Five-shot, 4-bit NF4 `Qwen/Qwen2-0.5B-Instruct`; raw outputs, fixed IDs, confidence intervals, and invalid-output rates were not retained. |
 | **Prompted generative (refresh pending)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; see the [reproducible protocol](../benchmarks/qwen/README.md). No result is claimed yet. |

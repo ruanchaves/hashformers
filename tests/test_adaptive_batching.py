@@ -1,5 +1,7 @@
 from contextlib import nullcontext
 
+import sys
+
 import pytest
 
 from hashformers.beamsearch import minicons_lm
@@ -164,6 +166,14 @@ def test_cuda_oom_retries_exact_slice_without_reordering(monkeypatch):
 
     lm.get_batch_scores = score
     lm._score_timed_batch = score_timed
+    recover = lm._recover_from_oom
+    cleanup_exceptions = []
+
+    def recover_without_live_exception(batch_size):
+        cleanup_exceptions.append(sys.exc_info()[1])
+        recover(batch_size)
+
+    lm._recover_from_oom = recover_without_live_exception
     candidates = list(range(192))
 
     assert lm.get_probs(candidates) == candidates
@@ -178,6 +188,7 @@ def test_cuda_oom_retries_exact_slice_without_reordering(monkeypatch):
     assert lm.effective_gpu_batch_size == 64
     assert lm.batch_telemetry["failed_upper_bound"] == 128
     assert lm.batch_telemetry["oom_backoff_events"] == 1
+    assert cleanup_exceptions == [None]
 
 
 def test_converged_controller_still_recovers_from_later_oom(monkeypatch):
