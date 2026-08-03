@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Breaking changes
+
+- Removed the legacy `RegexWordSegmenter`, `TweetSegmenter`, and
+  `TwitterTextMatcher` APIs together with their tweet-only result containers.
+  Regex callers should use Python's `re` module or a dedicated heuristic
+  splitter. Applications processing complete posts should extract hashtags,
+  pass them to `TransformerWordSegmenter`, and replace them in application
+  code.
+- Removed the corresponding regex and tweet MCP tools. The MCP server remains
+  focused on Transformer segmentation, file workflows, model discovery, and
+  candidate ranking.
+- Removed the mandatory `twitter-text-python` dependency and the MCP-only
+  `regex` dependency after their final consumers were deleted.
+
 ## v2.2.0 (2026-01-08)
 
 ### ✨ New Features

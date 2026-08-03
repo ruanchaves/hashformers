@@ -3,6 +3,8 @@ from pathlib import Path
 
 import setuptools
 
+import hashformers
+
 
 ROOT = Path(__file__).parent.parent
 
@@ -30,6 +32,17 @@ def test_supported_python_and_transformers_versions(monkeypatch):
     assert "transformers>=4.46.1,<6" in metadata["install_requires"]
     assert "Programming Language :: Python :: 3.8" not in metadata["classifiers"]
     assert "Programming Language :: Python :: 3.9" not in metadata["classifiers"]
+
+
+def test_legacy_regex_and_tweet_apis_are_not_exported():
+    for name in (
+        "RegexWordSegmenter",
+        "TweetSegmenter",
+        "TwitterTextMatcher",
+        "TweetSegmenterOutput",
+        "HashtagContainer",
+    ):
+        assert not hasattr(hashformers, name)
 
 
 def test_mcp_server_is_an_optional_extra(monkeypatch):
