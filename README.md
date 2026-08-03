@@ -4,7 +4,7 @@
 
 **Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
 
-**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Benchmarks show that it can outperform heuristic-based splitters and LLM prompt-based approaches on word segmentation tasks.
+**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Historical benchmarks compare specific Hashformers, heuristic, and prompted-model configurations; their conclusions are scoped to the evaluated samples and settings.
 
 <p align="center">
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Google Colab Tutorial </a> </h3>
@@ -180,13 +180,17 @@ itself, so the MCP server must also be installed and configured.
 
 ## When to Use Hashformers?
 
-The table below outlines when to use **Hashformers** versus other approaches like heuristic-based splitters (e.g., SymSpell, WordNinja) or large LLMs.
+The table below describes the practical trade-offs between Hashformers,
+vocabulary-based splitters, and direct prompted generation. The January 2026
+Qwen2 result is a single historical configuration, not evidence about LLMs as a
+class. A pinned, auditable [Qwen3 benchmark protocol](benchmarks/qwen/README.md)
+is ready for a fresh run; no new result is reported yet.
 
 | Approach | Examples | Recommended When... | Notes |
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
-| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • **Scalability** is needed.<br><br>• You are working in a domain or language where a Language Model is readily available, but compiling a manual vocabulary for your task is too burdensome. | Evidence shows Hashformers can be superior to LLMs of similar scale (0.5B parameters). |
-| **Large LLMs** | [OpenAI](https://openai.com/), Local LLM Deployment | • **Cost, latency, and scalability** are not concerns.<br><br>• You are segmenting a **low volume** of items. | To gain an accuracy advantage over Hashformers, you generally need to use significantly larger LLMs. |
+| **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• You are working in a domain or language where an appropriate backbone is available, but compiling a manual vocabulary is too burdensome. | Accuracy and performance depend on the selected backbone, language, dataset, and search settings. |
+| **Prompted generative segmentation** | [Qwen3 benchmark protocol](benchmarks/qwen/README.md) | • You want to test a generative model under an explicit insertion-only output contract.<br><br>• Generation latency and invalid outputs are acceptable and measured. | The published report evaluated only one five-shot Qwen2-0.5B configuration. It does not establish a general size or quality threshold for prompted models. |
 
 ---
 

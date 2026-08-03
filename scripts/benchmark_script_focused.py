@@ -9,6 +9,10 @@ This script performs two focused benchmark evaluations:
 Based on the original benchmark_script.py but focused on specific evaluations.
 
 Requirements: pip install datasets hashformers wordninja symspellpy ekphrasis pandas
+
+This is the archival January 2026 focused script. Its Qwen2 adapter is retained
+only to reproduce the historical row. Use ``scripts/qwen_benchmark.py`` for the
+fixed-sample, auditable Qwen3 fallback protocol.
 """
 
 import os
@@ -330,13 +334,13 @@ class SpiralSegmenter(Segmenter):
 
 
 # ----------------------------------------------------------------------------
-# Local LLM Segmenter (using Qwen2-0.5B - small, stable, instruction-tuned)
+# Historical Local LLM Segmenter (January 2026 Qwen2 configuration)
 # ----------------------------------------------------------------------------
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 
 class LocalLLMSegmenter(Segmenter):
-    """Word segmentation using a local quantized LLM with prompting."""
+    """Reproduce the historical local Qwen2 prompting configuration."""
 
     def __init__(
         self,
@@ -857,6 +861,8 @@ def main():
     print("✂️ HASHFORMERS FOCUSED BENCHMARK")
     print("=" * 80)
     print()
+    print("ARCHIVAL RUN: Qwen2 is historical; use scripts/qwen_benchmark.py for Qwen3.")
+    print()
 
     # -------------------------------------------------------------------------
     # EVALUATION 1: CodeGPT-small-py on Identifier Splitting
@@ -984,11 +990,11 @@ def main():
         print(f"Total GPU Memory: {gpu_mem_gb:.1f} GB")
 
         if gpu_mem_gb >= 2:
-            print("\n  • Local LLM (Qwen2-0.5B-Instruct, 4-bit quantized)...")
+            print("\n  • Historical LLM (Qwen2-0.5B-Instruct, 4-bit quantized)...")
             print("    This may take a few minutes...")
 
             try:
-                nru_segmenters["LLM-Qwen2"] = LocalLLMSegmenter(
+                nru_segmenters["LLM-Qwen2-Historical"] = LocalLLMSegmenter(
                     model_name="Qwen/Qwen2-0.5B-Instruct",
                     load_in_4bit=True,
                     max_new_tokens=64

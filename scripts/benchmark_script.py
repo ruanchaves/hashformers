@@ -22,6 +22,11 @@ Benchmark Data: 20 samples from each dataset on HF Hub
 - Identifier Splitting: loyola, lynx, jhotdraw, binkley, bt11
 
 Requirements: pip install datasets hashformers wordninja symspellpy ekphrasis pandas
+
+This is the archival January 2026 exploratory script. Its Qwen2 adapter is
+retained only to reproduce the historical row and does not implement the fixed
+sample, output-contract, provenance, statistics, or timing protocol. Use
+``scripts/qwen_benchmark.py`` for current prompted-model evaluation.
 """
 
 import os
@@ -357,13 +362,13 @@ class SpiralSegmenter(Segmenter):
 
 
 # ----------------------------------------------------------------------------
-# Local LLM Segmenter (using Qwen2-0.5B - small, stable, instruction-tuned)
+# Historical Local LLM Segmenter (January 2026 Qwen2 configuration)
 # ----------------------------------------------------------------------------
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 
 class LocalLLMSegmenter(Segmenter):
-    """Word segmentation using a local quantized LLM with prompting."""
+    """Reproduce the historical local Qwen2 prompting configuration."""
 
     def __init__(
         self,
@@ -967,6 +972,8 @@ def main():
     print("✂️ HASHFORMERS BENCHMARK: Hugging Face Hub Datasets")
     print("=" * 80)
     print()
+    print("ARCHIVAL RUN: Qwen2 is historical; use scripts/qwen_benchmark.py for Qwen3.")
+    print()
 
     # -------------------------------------------------------------------------
     # 1. Load datasets
@@ -1031,11 +1038,11 @@ def main():
         print(f"Total GPU Memory: {gpu_mem_gb:.1f} GB")
 
         if gpu_mem_gb >= 2:
-            print("\n  • Local LLM (Qwen2-0.5B-Instruct, 4-bit quantized)...")
+            print("\n  • Historical LLM (Qwen2-0.5B-Instruct, 4-bit quantized)...")
             print("    This may take a few minutes...")
 
             try:
-                segmenters["LLM-Qwen2"] = LocalLLMSegmenter(
+                segmenters["LLM-Qwen2-Historical"] = LocalLLMSegmenter(
                     model_name="Qwen/Qwen2-0.5B-Instruct",
                     load_in_4bit=True,
                     max_new_tokens=64
