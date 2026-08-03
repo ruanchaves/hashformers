@@ -147,6 +147,45 @@ def validate_revision(revision: str, name: str = "model revision") -> str:
     return revision
 
 
+def resolve_hub_file_commit(
+    model_id: str,
+    revision: str,
+    filename: str,
+    *,
+    download_file: Any | None = None,
+) -> str:
+    """Resolve the immutable commit backing one downloaded Hub file.
+
+    Transformers 5 no longer preserves ``_commit_hash`` in tokenizer
+    ``init_kwargs``.  Hugging Face Hub still returns the downloaded artifact
+    through its ``snapshots/<commit>/`` cache path, so use that path as the
+    version-independent source of tokenizer provenance.
+    """
+
+    if download_file is None:
+        from huggingface_hub import hf_hub_download
+
+        download_file = hf_hub_download
+    cached_path = Path(
+        download_file(
+            repo_id=model_id,
+            filename=filename,
+            revision=revision,
+            token=False,
+        )
+    )
+    parts = cached_path.parts
+    for index, part in enumerate(parts[:-1]):
+        if part == "snapshots" and index + 1 < len(parts):
+            commit = parts[index + 1]
+            if REVISION_PATTERN.fullmatch(commit) is not None:
+                return commit
+    raise RuntimeError(
+        f"could not resolve an immutable Hub commit from cached {filename}: "
+        f"{cached_path}"
+    )
+
+
 def single_device(value: str) -> str:
     """Parse one explicit CPU or CUDA device for isolated measurements."""
 
@@ -691,6 +730,10 @@ def load_model(
 
     model_commit = getattr(model.config, "_commit_hash", None)
     tokenizer_commit = tokenizer.init_kwargs.get("_commit_hash")
+    if tokenizer_commit is None:
+        tokenizer_commit = resolve_hub_file_commit(
+            spec["model_id"], spec["revision"], "tokenizer_config.json"
+        )
     model_device = str(getattr(model, "device", ""))
     if model_device == "cuda":
         model_device = "cuda:0"

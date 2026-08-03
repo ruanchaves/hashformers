@@ -17,6 +17,7 @@ from scripts.qwen_benchmark import (
     generate_once,
     paired_bootstrap_interval,
     paired_comparisons,
+    resolve_hub_file_commit,
     single_device,
     summarize_records,
     validate_insertion_only,
@@ -151,6 +152,39 @@ def test_model_revision_must_be_an_exact_commit_sha():
     for revision in ("main", "A" * 40, "a" * 39, "a" * 41):
         with pytest.raises(ValueError, match="exact 40-character"):
             validate_revision(revision)
+
+
+def test_tokenizer_revision_falls_back_to_hub_snapshot_path():
+    revision = "a" * 40
+
+    def download_file(**kwargs):
+        assert kwargs == {
+            "repo_id": "example/model",
+            "filename": "tokenizer_config.json",
+            "revision": revision,
+            "token": False,
+        }
+        return f"/cache/models--example--model/snapshots/{revision}/tokenizer_config.json"
+
+    assert (
+        resolve_hub_file_commit(
+            "example/model",
+            revision,
+            "tokenizer_config.json",
+            download_file=download_file,
+        )
+        == revision
+    )
+
+
+def test_tokenizer_revision_rejects_unversioned_cache_path():
+    with pytest.raises(RuntimeError, match="could not resolve an immutable Hub commit"):
+        resolve_hub_file_commit(
+            "example/model",
+            "a" * 40,
+            "tokenizer_config.json",
+            download_file=lambda **_: "/cache/models--example--model/tokenizer.json",
+        )
 
 
 def test_benchmark_device_must_be_one_explicit_cpu_or_cuda_device():
