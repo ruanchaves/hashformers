@@ -15,6 +15,7 @@ from scripts.qwen_benchmark import (
     SYSTEM_PROMPT,
     cpu_metadata,
     generate_once,
+    load_jsonl,
     paired_bootstrap_interval,
     paired_comparisons,
     resolve_hub_file_commit,
@@ -29,6 +30,9 @@ from scripts.qwen_benchmark import (
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = REPOSITORY_ROOT / "benchmarks/qwen/samples.jsonl"
 MANIFEST_SHA256 = "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d"
+PUBLISHED_RESULTS = (
+    REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16"
+)
 
 
 def load_manifest():
@@ -330,6 +334,41 @@ def test_model_pins_preserve_qwen2_and_disable_qwen3_thinking():
     assert MODEL_SPECS["qwen2-historical"]["status"] == (
         "historical-model-under-refreshed-protocol"
     )
+
+
+def test_published_gpu_results_are_complete_clean_and_recomputable():
+    manifest_ids = {record["sample_id"] for record in load_manifest()}
+    runs = []
+    for directory, model_key in (("qwen3", "qwen3"), ("qwen2", "qwen2-historical")):
+        predictions = load_jsonl(PUBLISHED_RESULTS / directory / "predictions.jsonl")
+        metadata = json.loads(
+            (PUBLISHED_RESULTS / directory / "run_metadata.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        summary = summarize_records(predictions)
+
+        assert len(predictions) == 280
+        assert {record["sample_id"] for record in predictions} == manifest_ids
+        assert metadata["status"] == "completed"
+        assert metadata["repository_dirty"] is False
+        assert metadata["measurement"]["runtime_error_count"] == 0
+        assert metadata["runtime"]["model_commit"] == MODEL_SPECS[model_key][
+            "revision"
+        ]
+        assert metadata["runtime"]["tokenizer_commit"] == MODEL_SPECS[model_key][
+            "revision"
+        ]
+        assert metadata["results"] == summary
+        runs.append(predictions)
+
+    published_comparison = json.loads(
+        (PUBLISHED_RESULTS / "comparison.json").read_text(encoding="utf-8")
+    )
+    assert published_comparison["runs"] == [
+        summarize_records(records) for records in runs
+    ]
+    assert published_comparison["paired_comparisons"] == paired_comparisons(runs)
 
 
 def test_cpu_metadata_records_architecture_and_available_core_count():

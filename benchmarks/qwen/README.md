@@ -1,11 +1,11 @@
 # Prompted-Qwen segmentation benchmark
 
 This directory defines the reproducible replacement for the prompted-Qwen
-portion of the January 2026 benchmark. It does **not** contain a new result yet:
-no suitable CUDA benchmark run was produced during implementation. No values
-have been inferred from the historical run or fabricated to fill that gap. A
-CPU run is supported and auditable, but it cannot supply the requested CUDA
-memory measurements or a comparable GPU performance result.
+portion of the January 2026 benchmark. A complete CUDA run is published under
+[`results/2026-08-03-colab-t4-fp16`](results/2026-08-03-colab-t4-fp16/),
+including fixed sample IDs, raw generations, run metadata, and the paired
+comparison. The archival January numbers remain separate because they used a
+different sample and measurement protocol.
 
 ## Model scope
 
@@ -24,6 +24,36 @@ model under the refreshed zero-shot, fixed-manifest protocol; it does not
 reproduce the January 2026 five-shot NF4 row. That old run did not save sample
 IDs or raw outputs and therefore cannot be given a retrospective confidence
 interval or invalid-output rate.
+
+## Published fixed-protocol result
+
+Both models were run on August 3, 2026 from repository revision
+`b30e66e163bb5ac9d43da23edd725eda7353adf3` in separate processes on one Google
+Colab Tesla T4. The checkout was clean for both measurements. The environment
+used Python 3.12.13, PyTorch 2.11.0+cu128, Transformers 5.14.1, Accelerate
+1.14.0, CUDA runtime 12.8, and NVIDIA driver 580.82.07. Both runs used
+unquantized FP16, greedy decoding, batch size one, five warm-up items, CUDA
+synchronization, and a 64-token generation ceiling.
+
+| Model | Exact-match accuracy (95% Wilson CI) | Invalid output rate (95% Wilson CI) | Generation latency mean / median / p95 (ms) | Generation throughput (items/s) | Peak allocated / reserved GPU memory (MiB) |
+|---|---:|---:|---:|---:|---:|
+| Qwen3-0.6B, non-thinking | 8.57% (5.83%–12.44%) | 66.07% (60.34%–71.37%) | 277.62 / 258.72 / 481.83 | 3.60 | 1,159.39 / 1,606 |
+| Qwen2-0.5B-Instruct | 6.43% (4.10%–9.93%) | 86.07% (81.53%–89.64%) | 374.55 / 212.48 / 1,864.39 | 2.67 | 955.63 / 962 |
+
+Wall-clock throughput was 3.59 items/s for Qwen3 and 2.66 items/s for Qwen2.
+The paired Qwen3-minus-Qwen2 accuracy difference was 2.14 percentage points
+with a 95% paired percentile-bootstrap interval of −1.43 to 5.71 points. The
+interval includes zero, so this run does not establish an accuracy difference.
+The strict invalid-output contract is part of the measured task: invalid
+generations count as incorrect and are not repaired.
+
+These results compare two prompted generative configurations under the same
+protocol. They do not compare prompted generation with Hashformers, whose
+beam-search configurations were not rerun on this manifest, and they do not
+support a claim about LLMs as a class. See the
+[`results` README](results/2026-08-03-colab-t4-fp16/README.md) for artifact
+checksums and the committed
+[`Colab notebook`](issue_78_qwen_benchmark_colab.ipynb) for the GPU workflow.
 
 ## Fixed samples
 
@@ -60,7 +90,7 @@ python -m pip install 'transformers>=4.51,<6' 'accelerate>=1'
 
 Run one model on one explicit device per fresh process from a clean checkout.
 Use the same precision and quantization for any new model comparison; the
-example uses unquantized BF16 on `cuda:0`. Automatic or multi-device placement
+example uses unquantized FP16 on `cuda:0`. Automatic or multi-device placement
 is rejected so synchronization and peak-memory measurements identify one GPU.
 Do not compare these measurements with the January 2026 Qwen2 NF4 timing.
 
@@ -69,23 +99,23 @@ python scripts/qwen_benchmark.py run \
   --model qwen3 \
   --manifest benchmarks/qwen/samples.jsonl \
   --device cuda:0 \
-  --precision bfloat16 \
+  --precision float16 \
   --quantization none \
   --warmup 5 \
-  --output-dir benchmark-results/qwen3-bf16
+  --output-dir benchmark-results/qwen3-fp16
 
 python scripts/qwen_benchmark.py run \
   --model qwen2-historical \
   --manifest benchmarks/qwen/samples.jsonl \
   --device cuda:0 \
-  --precision bfloat16 \
+  --precision float16 \
   --quantization none \
   --warmup 5 \
-  --output-dir benchmark-results/qwen2-bf16
+  --output-dir benchmark-results/qwen2-fp16
 
 python scripts/qwen_benchmark.py summarize \
-  --predictions benchmark-results/qwen3-bf16/predictions.jsonl \
-                benchmark-results/qwen2-bf16/predictions.jsonl \
+  --predictions benchmark-results/qwen3-fp16/predictions.jsonl \
+                benchmark-results/qwen2-fp16/predictions.jsonl \
   --output benchmark-results/qwen-comparison.json
 ```
 

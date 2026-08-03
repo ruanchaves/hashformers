@@ -11,7 +11,8 @@
   reranker controllers, throughput/memory tuning, OOM backoff, and telemetry.
 - Added a pinned Qwen3-0.6B benchmark protocol, fixed auditable samples, strict
   insertion-only validation, confidence intervals, and reproducibility
-  metadata while retaining Qwen2 as a historical comparison.
+  metadata while retaining Qwen2 as a historical comparison. Published the
+  complete FP16 Tesla T4 run with raw generations and paired statistics.
 
 ### Breaking changes
 

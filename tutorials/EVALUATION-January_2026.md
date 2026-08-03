@@ -15,7 +15,27 @@ directory (`scripts/benchmark_script_focused.py` and
 [Qwen3 protocol](../benchmarks/qwen/README.md) fixes the sampling, output,
 provenance, statistical, and performance-measurement issues. It uses
 Qwen3-0.6B as the documented text-only, non-thinking fallback for Qwen3.5-0.8B.
-No refreshed model result is reported until its raw artifacts are published.
+The August 2026 fixed-protocol artifacts are now published separately; they do
+not retrofit the archival table or create a comparison with the historical
+Hashformers runs.
+
+## August 2026 fixed-protocol prompted comparison
+
+The [published artifacts](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16/)
+contain all 280 raw generations for both prompted configurations. On the shared
+manifest, unquantized FP16 Qwen3-0.6B in non-thinking mode had 24/280 exact
+matches (8.57%, 95% Wilson CI 5.83%–12.44%) and a 66.07% invalid-output rate
+(95% CI 60.34%–71.37%). Qwen2-0.5B-Instruct under the same refreshed zero-shot
+protocol had 18/280 exact matches (6.43%, 95% CI 4.10%–9.93%) and an 86.07%
+invalid-output rate (95% CI 81.53%–89.64%).
+
+The paired Qwen3-minus-Qwen2 accuracy difference was 2.14 percentage points
+(95% paired bootstrap CI −1.43 to 5.71 points). Because this interval includes
+zero, the run does not establish an accuracy difference between the two models.
+It also does not compare either prompted model with Hashformers: doing that
+requires rerunning the Hashformers configurations on the same fixed manifest.
+Hardware, latency, throughput, memory, revisions, and per-group results are in
+the [benchmark report](../benchmarks/qwen/README.md).
 
 ---
 
@@ -162,7 +182,7 @@ an entire model class.
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
 | **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• An appropriate domain/language backbone is available, while a manual vocabulary is not. | Results depend on the backbone, language, dataset, and search configuration. |
-| **Prompted generative segmentation** | [Pinned Qwen protocol](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The historical row covers one Qwen2-0.5B prompt/configuration only. A current Qwen3 fallback run is pending publication of raw artifacts. |
+| **Prompted generative segmentation** | [Pinned Qwen protocol and artifacts](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The archival row covers one five-shot Qwen2 configuration; the separate fixed-protocol run covers Qwen3-0.6B and Qwen2-0.5B-Instruct only. |
 
 ---
 
@@ -178,7 +198,7 @@ an entire model class.
 | **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Smaller GPT-2 variant used by the historical beam-search configuration |
 | **Hashformers** | [Hashformers-RuGPT3Small](https://github.com/ruanchaves/hashformers) | Russian-language GPT-3 backbone for Cyrillic text: [ai-forever/rugpt3small_based_on_gpt2](https://huggingface.co/ai-forever/rugpt3small_based_on_gpt2) |
 | **Prompted generative (historical)** | [LLM-Qwen2 (0.5B)](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) | Five-shot, 4-bit NF4 `Qwen/Qwen2-0.5B-Instruct`; raw outputs, fixed IDs, confidence intervals, and invalid-output rates were not retained. |
-| **Prompted generative (refresh pending)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; see the [reproducible protocol](../benchmarks/qwen/README.md). No result is claimed yet. |
+| **Prompted generative (fixed-protocol refresh)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; raw outputs and measured results are published under the [reproducible protocol](../benchmarks/qwen/README.md). |
 
 ---
 
