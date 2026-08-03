@@ -4,26 +4,30 @@
 
 import csv
 import hashlib
+import inspect
 import json
 import math
 import os
+import re
 import secrets
 import sqlite3
 import stat
 from argparse import ArgumentParser
 from collections.abc import Iterator
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from itertools import islice
 from pathlib import Path
 from threading import Lock
 from typing import Literal, TextIO
 
 import anyio
 import torch
+from huggingface_hub import HfApi, snapshot_download
 from mcp.server import MCPServer
 from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
-from typing_extensions import TypedDict
+from typing_extensions import NotRequired, TypedDict
 
 from hashformers.beamsearch.data_structures import ProbabilityDictionary
 from hashformers.segmenter import BaseWordSegmenter
@@ -33,6 +37,8 @@ from hashformers.segmenter.data_structures import WordSegmenterOutput
 RankingStrategy = Literal["auto", "segmenter", "reranker", "ensemble"]
 ResolvedRankingStrategy = Literal["segmenter", "reranker", "ensemble"]
 FileInputFormat = Literal["auto", "text", "csv", "jsonl"]
+HubModelRole = Literal["segmenter", "reranker"]
+SupportedScorerType = Literal["gpt2", "bert", "incremental", "masked", "seq2seq"]
 
 MAX_INTERACTIVE_INPUTS = 64
 MAX_FILE_UNIQUE_HASHTAGS = 64
@@ -43,8 +49,20 @@ MAX_RETURNED_CANDIDATES = 64
 MAX_PRECOMPUTED_CANDIDATES = 4096
 MAX_HASHTAG_LENGTH = 512
 MAX_FILE_RECORD_CHARS = 65_536
+MAX_FILE_SAMPLES = 20
+MAX_MODEL_CANDIDATES = 10
+MAX_MODEL_DISCOVERY_SCAN = 40
 MAX_JOB_METADATA_CHARS = 65_536
 MAX_JOB_RESULT_CHARS = 1_000_000
+DEFAULT_MAX_MODEL_PARAMETERS = 1_000_000_000
+DEFAULT_MAX_MODEL_SIZE_BYTES = 5_000_000_000
+HUB_REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
+SUPPORTED_SCORER_TYPES = frozenset(
+    {"gpt2", "bert", "incremental", "masked", "seq2seq"}
+)
+HUB_SUPPORTS_PARAMETER_FILTER = (
+    "num_parameters" in inspect.signature(HfApi.list_models).parameters
+)
 JOB_APPLICATION_ID = 0x48464D52
 JOB_SCHEMA_VERSION = 1
 JOB_METADATA_KEYS = (
@@ -149,9 +167,70 @@ class SegmentationsResult(TypedDict):
 
     Attributes:
         results: Per-input results in input order.
+        models: Models selected for Transformer-backed segmentation.
     """
 
     results: list[SegmentationResult]
+    models: NotRequired["SelectedModels | None"]
+
+
+class HubModelMetadata(TypedDict):
+    """Describe one validated public Hugging Face model revision."""
+
+    repository_id: str
+    revision: str | None
+    scorer_type: str
+    task: str | None
+    architecture: str
+    language_tags: list[str]
+    parameter_count: int | None
+    download_size_bytes: int | None
+    downloads: int | None
+    likes: int | None
+
+
+class HubModelCandidate(HubModelMetadata):
+    """Describe why one validated Hub model entered a discovery shortlist."""
+
+    reason: str
+
+
+class SelectedModels(TypedDict):
+    """Describe the process-wide model selection used for inference."""
+
+    segmenter: HubModelMetadata
+    reranker: HubModelMetadata | None
+
+
+class ModelDiscoveryResult(TypedDict):
+    """Return a deterministic, bounded Hub model shortlist."""
+
+    language: str
+    role: HubModelRole
+    candidates: list[HubModelCandidate]
+    deferred_model_selection: bool
+    models_configured: bool
+
+
+class ModelConfigurationResult(TypedDict):
+    """Return the immutable process-wide model selection."""
+
+    configured: bool
+    models: SelectedModels
+
+
+class FileSampleResult(TypedDict):
+    """Return a bounded local sample and compact file metadata."""
+
+    input_path: str
+    input_format: Literal["text", "csv", "jsonl"]
+    input_field: str
+    file_size_bytes: int
+    total_hashtags: int
+    sample_size: int
+    samples: list[str]
+    deferred_model_selection: bool
+    models_configured: bool
 
 
 class ScoredCandidateInput(TypedDict):
@@ -194,7 +273,9 @@ class FileJobStatus(TypedDict):
         processed_this_call: Number checkpointed by the latest continuation.
         remaining_unique: Number still requiring inference.
         segmenter_model: Model that generated beam-search candidates.
+        segmenter_revision: Exact Hub revision used by the segmenter, when pinned.
         reranker_model: Optional model used for reranking.
+        reranker_revision: Exact Hub revision used by the reranker, when pinned.
         ranking_strategy: Component used to select output segmentations.
     """
 
@@ -210,7 +291,9 @@ class FileJobStatus(TypedDict):
     processed_this_call: int
     remaining_unique: int
     segmenter_model: str
+    segmenter_revision: str | None
     reranker_model: str | None
+    reranker_revision: str | None
     ranking_strategy: ResolvedRankingStrategy
 
 
@@ -229,18 +312,26 @@ class ServerConfig:
         reranker_batch_size: Maximum reranker inference batch size.
         file_roots: Directories available to file-job tools.
         allow_file_overwrite: Whether callers may replace existing files.
+        defer_model_selection: Whether a one-time Hub selection is required.
+        max_model_parameters: Maximum parameter count accepted from the Hub.
+        max_model_size_bytes: Maximum repository download size accepted.
     """
 
-    segmenter_model: str = "gpt2"
+    segmenter_model: str | None = "gpt2"
     segmenter_model_type: str = "gpt2"
+    segmenter_revision: str | None = None
     segmenter_device: str = "auto"
     segmenter_batch_size: int = 64
     reranker_model: str | None = None
     reranker_model_type: str = "bert"
+    reranker_revision: str | None = None
     reranker_device: str = "inherit"
     reranker_batch_size: int = 64
     file_roots: tuple[str, ...] = (".",)
     allow_file_overwrite: bool = False
+    defer_model_selection: bool = False
+    max_model_parameters: int = DEFAULT_MAX_MODEL_PARAMETERS
+    max_model_size_bytes: int = DEFAULT_MAX_MODEL_SIZE_BYTES
 
 
 @dataclass(frozen=True)
@@ -263,6 +354,8 @@ class _ConfiguredFileRoot:
 _server_config = ServerConfig()
 _configured_file_roots: tuple[_ConfiguredFileRoot, ...] = ()
 _segmenter: TransformerWordSegmenter | None = None
+_validated_model_selection: SelectedModels | None = None
+_deferred_configuration_signature: tuple[object, ...] | None = None
 _segmenter_lock = Lock()
 _file_roots_lock = Lock()
 _inference_lock = Lock()
@@ -295,6 +388,14 @@ def build_argument_parser() -> ArgumentParser:
     parser = ArgumentParser(
         prog="hashformers-mcp",
         description="Run the Hashformers MCP server over stdio.",
+    )
+    parser.add_argument(
+        "--defer-model-selection",
+        action="store_true",
+        help=(
+            "Start without loading or selecting a model and authorize one "
+            "configure_models call for validated public Hub revisions."
+        ),
     )
     parser.add_argument(
         "--model",
@@ -358,6 +459,24 @@ def build_argument_parser() -> ArgumentParser:
         action="store_true",
         help="Allow file jobs with overwrite=true to replace existing output.",
     )
+    parser.add_argument(
+        "--max-model-parameters",
+        type=_positive_integer,
+        default=DEFAULT_MAX_MODEL_PARAMETERS,
+        help=(
+            "Largest Hub model parameter count accepted during discovery "
+            "and deferred configuration."
+        ),
+    )
+    parser.add_argument(
+        "--max-model-size-bytes",
+        type=_positive_integer,
+        default=DEFAULT_MAX_MODEL_SIZE_BYTES,
+        help=(
+            "Largest Hub repository download size accepted during discovery "
+            "and deferred configuration."
+        ),
+    )
     return parser
 
 
@@ -387,12 +506,13 @@ def _validate_server_config(config: ServerConfig) -> None:
         ValueError: If a required string is blank or a batch size is invalid.
     """
     required_strings = {
-        "segmenter_model": config.segmenter_model,
         "segmenter_model_type": config.segmenter_model_type,
         "segmenter_device": config.segmenter_device,
         "reranker_model_type": config.reranker_model_type,
         "reranker_device": config.reranker_device,
     }
+    if not config.defer_model_selection:
+        required_strings["segmenter_model"] = config.segmenter_model
     if config.reranker_model is not None:
         required_strings["reranker_model"] = config.reranker_model
     for name, value in required_strings.items():
@@ -401,8 +521,23 @@ def _validate_server_config(config: ServerConfig) -> None:
     for name, value in {
         "segmenter_batch_size": config.segmenter_batch_size,
         "reranker_batch_size": config.reranker_batch_size,
+        "max_model_parameters": config.max_model_parameters,
+        "max_model_size_bytes": config.max_model_size_bytes,
     }.items():
         _validate_positive(value, name)
+    if not isinstance(config.defer_model_selection, bool):
+        raise ValueError("defer_model_selection must be a boolean")
+    if config.defer_model_selection and config.reranker_model is not None:
+        raise ValueError(
+            "reranker_model cannot be selected at startup with "
+            "defer_model_selection"
+        )
+    if config.segmenter_revision is not None:
+        _validate_hub_revision(config.segmenter_revision, "segmenter_revision")
+    if config.reranker_revision is not None:
+        if config.reranker_model is None:
+            raise ValueError("reranker_revision requires reranker_model")
+        _validate_hub_revision(config.reranker_revision, "reranker_revision")
     if not isinstance(config.file_roots, tuple) or not config.file_roots:
         raise ValueError("file_roots must contain at least one directory")
     for root in config.file_roots:
@@ -423,14 +558,26 @@ def configure_server(config: ServerConfig) -> None:
     Returns:
         None.
     """
-    global _configured_file_roots, _server_config, _segmenter
+    global _configured_file_roots, _deferred_configuration_signature
+    global _server_config, _segmenter, _validated_model_selection
     _validate_server_config(config)
     configured_file_roots = _pin_file_roots(config.file_roots)
+    effective_config = config
+    if config.defer_model_selection:
+        effective_config = replace(
+            config,
+            segmenter_model=None,
+            segmenter_revision=None,
+            reranker_model=None,
+            reranker_revision=None,
+        )
     with _segmenter_lock, _file_roots_lock:
         previous_file_roots = _configured_file_roots
-        _server_config = config
+        _server_config = effective_config
         _configured_file_roots = configured_file_roots
         _segmenter = None
+        _validated_model_selection = None
+        _deferred_configuration_signature = None
     for root in previous_file_roots:
         if root.descriptor >= 0:
             os.close(root.descriptor)
@@ -445,12 +592,85 @@ def _model_config_payload() -> dict[str, object]:
     return {
         "segmenter_model": _server_config.segmenter_model,
         "segmenter_model_type": _server_config.segmenter_model_type,
+        "segmenter_revision": _server_config.segmenter_revision,
         "segmenter_device": _server_config.segmenter_device,
         "segmenter_batch_size": _server_config.segmenter_batch_size,
         "reranker_model": _server_config.reranker_model,
         "reranker_model_type": _server_config.reranker_model_type,
+        "reranker_revision": _server_config.reranker_revision,
         "reranker_device": _server_config.reranker_device,
         "reranker_batch_size": _server_config.reranker_batch_size,
+    }
+
+
+def _models_configured() -> bool:
+    """Return whether Transformer inference has a process-wide model selection."""
+    return (
+        not _server_config.defer_model_selection
+        or _deferred_configuration_signature is not None
+    )
+
+
+def _require_models_configured() -> None:
+    """Reject inference before deferred model selection is completed."""
+    if not _models_configured():
+        raise ValueError(
+            "model selection is deferred; call discover_huggingface_models and "
+            "configure_models before Transformer segmentation"
+        )
+
+
+def _unvalidated_model_metadata(
+    repository_id: str,
+    revision: str | None,
+    scorer_type: str,
+) -> HubModelMetadata:
+    """Describe a conventional startup model whose Hub metadata was not fetched."""
+    return {
+        "repository_id": repository_id,
+        "revision": revision,
+        "scorer_type": scorer_type,
+        "task": None,
+        "architecture": "unknown",
+        "language_tags": [],
+        "parameter_count": None,
+        "download_size_bytes": None,
+        "downloads": None,
+        "likes": None,
+    }
+
+
+def _selected_models_payload() -> SelectedModels:
+    """Return JSON-safe metadata for the active process-wide model selection."""
+    if _validated_model_selection is not None:
+        segmenter = dict(_validated_model_selection["segmenter"])
+        segmenter["language_tags"] = list(segmenter["language_tags"])
+        reranker = None
+        if _validated_model_selection["reranker"] is not None:
+            reranker = dict(_validated_model_selection["reranker"])
+            reranker["language_tags"] = list(reranker["language_tags"])
+        return {
+            "segmenter": segmenter,
+            "reranker": reranker,
+        }
+    _require_models_configured()
+    if _server_config.segmenter_model is None:
+        raise RuntimeError("configured segmenter metadata is missing")
+    return {
+        "segmenter": _unvalidated_model_metadata(
+            _server_config.segmenter_model,
+            _server_config.segmenter_revision,
+            _server_config.segmenter_model_type,
+        ),
+        "reranker": (
+            _unvalidated_model_metadata(
+                _server_config.reranker_model,
+                _server_config.reranker_revision,
+                _server_config.reranker_model_type,
+            )
+            if _server_config.reranker_model is not None
+            else None
+        ),
     }
 
 
@@ -1011,6 +1231,373 @@ def _resolve_device(device: str, inherited_device: str | None = None) -> str:
     return device
 
 
+def _validate_hub_revision(revision: str, name: str) -> None:
+    """Require an exact lowercase Hub commit SHA rather than a movable ref."""
+    if (
+        not isinstance(revision, str)
+        or HUB_REVISION_PATTERN.fullmatch(revision) is None
+    ):
+        raise ValueError(f"{name} must be an exact 40-character Hub revision SHA")
+
+
+def _validate_repository_id(repository_id: str, name: str) -> None:
+    """Validate the bounded Hub repository identifier accepted by remote calls."""
+    if (
+        not isinstance(repository_id, str)
+        or not repository_id.strip()
+        or repository_id != repository_id.strip()
+        or len(repository_id) > 256
+        or "\\" in repository_id
+        or repository_id.startswith("/")
+        or repository_id.endswith("/")
+        or any(part in {"", ".", ".."} for part in repository_id.split("/"))
+        or len(repository_id.split("/")) > 2
+        or re.fullmatch(r"[A-Za-z0-9._/-]+", repository_id) is None
+    ):
+        raise ValueError(f"{name} must be a Hugging Face repository ID")
+
+
+def _normalize_language(language: str) -> str:
+    """Normalize a bounded Hub language tag supplied by an agent."""
+    if not isinstance(language, str):
+        raise ValueError("language must contain a Hub language tag")
+    normalized = language.strip().lower().replace("_", "-")
+    if (
+        not normalized
+        or len(normalized) > 63
+        or re.fullmatch(r"[a-z0-9][a-z0-9-]*", normalized) is None
+    ):
+        raise ValueError("language must contain a valid Hub language tag")
+    return normalized
+
+
+def _validate_scorer_type(scorer_type: str, name: str) -> SupportedScorerType:
+    """Restrict deferred models to scorer implementations Hashformers supports."""
+    if scorer_type not in SUPPORTED_SCORER_TYPES:
+        supported = ", ".join(sorted(SUPPORTED_SCORER_TYPES))
+        raise ValueError(f"{name} must be one of: {supported}")
+    return scorer_type
+
+
+def _hub_value(value: object, name: str, default=None):
+    """Read one field from either a Hub object or a test-friendly mapping."""
+    if isinstance(value, dict):
+        return value.get(name, default)
+    return getattr(value, name, default)
+
+
+def _optional_non_negative_integer(value: object) -> int | None:
+    """Normalize optional non-negative numeric Hub metadata."""
+    if isinstance(value, bool) or value is None:
+        return None
+    if (
+        isinstance(value, (int, float))
+        and math.isfinite(value)
+        and value >= 0
+    ):
+        return int(value)
+    return None
+
+
+def _hub_parameter_count(info: object) -> int | None:
+    """Read parameter metadata from safetensors or model configuration."""
+    safetensors = _hub_value(info, "safetensors")
+    if safetensors is not None:
+        total = _optional_non_negative_integer(
+            _hub_value(safetensors, "total")
+        )
+        if total is not None:
+            return total
+    config = _hub_value(info, "config") or {}
+    for name in ("num_parameters", "n_parameters", "n_params"):
+        total = _optional_non_negative_integer(_hub_value(config, name))
+        if total is not None:
+            return total
+    return None
+
+
+def _hub_download_size(info: object) -> int | None:
+    """Calculate bounded repository bytes from file or storage metadata."""
+    sibling_sizes: list[int] = []
+    siblings = _hub_value(info, "siblings", []) or []
+    complete = bool(siblings)
+    for sibling in siblings:
+        size = _optional_non_negative_integer(_hub_value(sibling, "size"))
+        if size is None:
+            lfs = _hub_value(sibling, "lfs")
+            size = _optional_non_negative_integer(
+                _hub_value(lfs, "size") if lfs is not None else None
+            )
+        if size is not None:
+            sibling_sizes.append(size)
+        else:
+            complete = False
+    sibling_total = sum(sibling_sizes) if complete else None
+    used_storage = _optional_non_negative_integer(
+        _hub_value(info, "used_storage")
+    )
+    if sibling_total is not None and used_storage is not None:
+        return max(sibling_total, used_storage)
+    return sibling_total if sibling_total is not None else used_storage
+
+
+def _hub_language_tags(
+    info: object,
+    requested_language: str | None = None,
+) -> list[str]:
+    """Extract normalized language tags without returning unrelated Hub tags."""
+    languages: set[str] = set()
+    card_data = _hub_value(info, "card_data")
+    if card_data is None:
+        card_data = _hub_value(info, "cardData")
+    card_languages = _hub_value(card_data, "language") if card_data else None
+    if isinstance(card_languages, str):
+        card_languages = [card_languages]
+    if isinstance(card_languages, (list, tuple, set)):
+        languages.update(
+            value.strip().lower().replace("_", "-")
+            for value in card_languages
+            if isinstance(value, str) and value.strip()
+        )
+    for tag in _hub_value(info, "tags", []) or []:
+        if not isinstance(tag, str):
+            continue
+        normalized = tag.strip().lower().replace("_", "-")
+        if normalized.startswith("language:"):
+            languages.add(normalized.split(":", 1)[1])
+        elif normalized == "multilingual" or normalized == requested_language:
+            languages.add(normalized)
+    return sorted(languages)
+
+
+def _hub_architecture_and_scorer(
+    info: object,
+    *,
+    role: HubModelRole,
+    requested_scorer: str | None,
+) -> tuple[str, SupportedScorerType]:
+    """Validate a Transformers architecture and choose its Hashformers scorer."""
+    config = _hub_value(info, "config") or {}
+    architectures = _hub_value(config, "architectures", []) or []
+    if isinstance(architectures, str):
+        architectures = [architectures]
+    architectures = [
+        architecture
+        for architecture in architectures
+        if isinstance(architecture, str) and architecture
+    ]
+    transformers_info = _hub_value(info, "transformers_info")
+    if transformers_info is None:
+        transformers_info = _hub_value(info, "transformersInfo")
+    auto_model = (
+        _hub_value(transformers_info, "auto_model")
+        if transformers_info is not None
+        else None
+    )
+    if not architectures and isinstance(auto_model, str) and auto_model:
+        architectures = [auto_model]
+    if not architectures:
+        raise ValueError("model does not publish a supported architecture")
+
+    lowered = [architecture.lower() for architecture in architectures]
+    is_encoder_decoder = _hub_value(config, "is_encoder_decoder") is True
+    causal = any(
+        name.endswith("forcausallm")
+        or name.endswith("lmheadmodel")
+        or name == "automodelforcausallm"
+        for name in lowered
+    ) and not is_encoder_decoder
+    masked = any(
+        name.endswith("formaskedlm") or name == "automodelformaskedlm"
+        for name in lowered
+    )
+    seq2seq = is_encoder_decoder or any(
+        name == "automodelforseq2seqlm"
+        or (name.endswith("forconditionalgeneration") and not causal)
+        for name in lowered
+    )
+
+    compatible: list[SupportedScorerType] = []
+    if role == "reranker":
+        if masked:
+            compatible.extend(["bert", "masked"])
+        if causal:
+            compatible.extend(["gpt2", "incremental"])
+    else:
+        if causal:
+            compatible.extend(["gpt2", "incremental"])
+        if masked:
+            compatible.extend(["bert", "masked"])
+    if seq2seq:
+        compatible.append("seq2seq")
+    if not compatible:
+        raise ValueError("model architecture is not supported by Hashformers")
+    if requested_scorer is not None:
+        scorer = _validate_scorer_type(requested_scorer, "scorer_type")
+        if scorer not in compatible:
+            raise ValueError(
+                f"scorer type {scorer!r} is incompatible with "
+                f"architecture {architectures[0]!r}"
+            )
+    else:
+        scorer = compatible[0]
+    return architectures[0], scorer
+
+
+def _validate_hub_model_info(
+    info: object,
+    *,
+    repository_id: str,
+    requested_revision: str | None,
+    role: HubModelRole,
+    requested_language: str | None,
+    requested_scorer: str | None,
+) -> HubModelMetadata:
+    """Validate access, architecture, size, language, and immutable revision."""
+    returned_id = _hub_value(info, "id")
+    if returned_id != repository_id:
+        raise ValueError("Hub returned metadata for a different repository")
+    if _hub_value(info, "private") is True:
+        raise ValueError("private Hub models are not supported")
+    gated = _hub_value(info, "gated")
+    if gated is not None and gated is not False:
+        raise ValueError("gated Hub models are not supported")
+    if _hub_value(info, "disabled") is True:
+        raise ValueError("disabled Hub models are not supported")
+
+    tags = {
+        tag.lower()
+        for tag in (_hub_value(info, "tags", []) or [])
+        if isinstance(tag, str)
+    }
+    library_name = _hub_value(info, "library_name")
+    if library_name != "transformers" and "transformers" not in tags:
+        raise ValueError("model is not marked as Transformers-compatible")
+    config = _hub_value(info, "config") or {}
+    transformers_info = _hub_value(info, "transformers_info")
+    if transformers_info is None:
+        transformers_info = _hub_value(info, "transformersInfo")
+    if (
+        _hub_value(config, "auto_map")
+        or "custom_code" in tags
+        or "custom-code" in tags
+        or (
+            transformers_info is not None
+            and _hub_value(transformers_info, "custom_class")
+        )
+    ):
+        raise ValueError("models requiring custom remote code are not supported")
+
+    revision = _hub_value(info, "sha")
+    _validate_hub_revision(revision, "Hub revision")
+    if requested_revision is not None and revision != requested_revision:
+        raise ValueError("Hub metadata does not match the requested exact revision")
+
+    language_tags = _hub_language_tags(info, requested_language)
+    if (
+        requested_language is not None
+        and requested_language not in language_tags
+        and "multilingual" not in language_tags
+    ):
+        raise ValueError(
+            f"model is not tagged for requested language {requested_language!r}"
+        )
+
+    architecture, scorer_type = _hub_architecture_and_scorer(
+        info,
+        role=role,
+        requested_scorer=requested_scorer,
+    )
+    parameter_count = _hub_parameter_count(info)
+    download_size = _hub_download_size(info)
+    if parameter_count is None and download_size is None:
+        raise ValueError("model has no verifiable size metadata")
+    if (
+        parameter_count is not None
+        and parameter_count > _server_config.max_model_parameters
+    ):
+        raise ValueError(
+            f"model exceeds the {_server_config.max_model_parameters} "
+            "parameter ceiling"
+        )
+    if (
+        download_size is not None
+        and download_size > _server_config.max_model_size_bytes
+    ):
+        raise ValueError(
+            f"model exceeds the {_server_config.max_model_size_bytes}-byte "
+            "download ceiling"
+        )
+
+    task = _hub_value(info, "pipeline_tag")
+    if task is None and transformers_info is not None:
+        task = _hub_value(transformers_info, "pipeline_tag")
+    return {
+        "repository_id": repository_id,
+        "revision": revision,
+        "scorer_type": scorer_type,
+        "task": task if isinstance(task, str) else None,
+        "architecture": architecture,
+        "language_tags": language_tags,
+        "parameter_count": parameter_count,
+        "download_size_bytes": download_size,
+        "downloads": _optional_non_negative_integer(
+            _hub_value(info, "downloads")
+        ),
+        "likes": _optional_non_negative_integer(_hub_value(info, "likes")),
+    }
+
+
+def _fetch_and_validate_hub_model(
+    api: HfApi,
+    repository_id: str,
+    *,
+    revision: str | None,
+    role: HubModelRole,
+    language: str | None = None,
+    scorer_type: str | None = None,
+) -> HubModelMetadata:
+    """Re-fetch one anonymous Hub repository and validate its exact revision."""
+    _validate_repository_id(repository_id, "repository_id")
+    if revision is not None:
+        _validate_hub_revision(revision, "revision")
+    try:
+        info = api.model_info(
+            repository_id,
+            revision=revision,
+            files_metadata=True,
+            token=False,
+        )
+    except Exception as error:
+        raise ValueError(
+            f"Hub model is unavailable without authentication: {repository_id}"
+        ) from error
+    return _validate_hub_model_info(
+        info,
+        repository_id=repository_id,
+        requested_revision=revision,
+        role=role,
+        requested_language=language,
+        requested_scorer=scorer_type,
+    )
+
+
+def _pinned_model_path(repository_id: str, revision: str | None) -> str:
+    """Resolve an exact validated Hub revision into the local cache lazily."""
+    if revision is None:
+        return repository_id
+    try:
+        return snapshot_download(
+            repo_id=repository_id,
+            revision=revision,
+            token=False,
+        )
+    except Exception as error:
+        raise ValueError(
+            f"could not download exact Hub revision {repository_id}@{revision}"
+        ) from error
+
+
 def get_segmenter() -> TransformerWordSegmenter:
     """Return the lazily initialized process-wide Transformer segmenter.
 
@@ -1018,20 +1605,35 @@ def get_segmenter() -> TransformerWordSegmenter:
         The segmenter reused by every Transformer-backed MCP tool call.
     """
     global _segmenter
+    _require_models_configured()
     if _segmenter is None:
         with _segmenter_lock:
             if _segmenter is None:
+                if _server_config.segmenter_model is None:
+                    raise RuntimeError("configured segmenter model is missing")
                 segmenter_device = _resolve_device(_server_config.segmenter_device)
                 reranker_device = _resolve_device(
                     _server_config.reranker_device,
                     inherited_device=segmenter_device,
                 )
+                segmenter_path = _pinned_model_path(
+                    _server_config.segmenter_model,
+                    _server_config.segmenter_revision,
+                )
+                reranker_path = (
+                    _pinned_model_path(
+                        _server_config.reranker_model,
+                        _server_config.reranker_revision,
+                    )
+                    if _server_config.reranker_model is not None
+                    else None
+                )
                 _segmenter = TransformerWordSegmenter(
-                    segmenter_model_name_or_path=_server_config.segmenter_model,
+                    segmenter_model_name_or_path=segmenter_path,
                     segmenter_model_type=_server_config.segmenter_model_type,
                     segmenter_device=segmenter_device,
                     segmenter_gpu_batch_size=_server_config.segmenter_batch_size,
-                    reranker_model_name_or_path=_server_config.reranker_model,
+                    reranker_model_name_or_path=reranker_path,
                     reranker_model_type=_server_config.reranker_model_type,
                     reranker_device=reranker_device,
                     reranker_gpu_batch_size=_server_config.reranker_batch_size,
@@ -1666,6 +2268,82 @@ def _iter_file_hashtags(
         yield line_number, hashtag
 
 
+def _sample_priority(hashtag: str) -> bytes:
+    """Assign a stable pseudorandom priority for bounded distinct sampling."""
+    return hashlib.blake2b(
+        hashtag.encode("utf-8"),
+        digest_size=16,
+        person=b"hf-file-sample",
+    ).digest()
+
+
+def _reservoir_sample_file(
+    source: Path,
+    input_format: Literal["text", "csv", "jsonl"],
+    input_field: str,
+    sample_size: int,
+) -> tuple[list[str], int, int]:
+    """Stream one authorized file into a fixed-size distinct hash reservoir."""
+    source_descriptor = None
+    parent_descriptor = None
+    try:
+        source, parent_descriptor = _open_authorized_parent(
+            source,
+            "input_path",
+            must_exist=True,
+        )
+        source_descriptor = _open_regular_child(
+            parent_descriptor,
+            source.parent,
+            source.name,
+            os.O_RDONLY,
+            f"input_path is not a readable file: {source}",
+        )
+        file_size = os.fstat(source_descriptor).st_size
+        reservoir: dict[str, tuple[bytes, int]] = {}
+        total_hashtags = 0
+        source_stream = os.fdopen(
+            os.dup(source_descriptor),
+            "r",
+            encoding="utf-8",
+            newline="",
+        )
+        with source_stream:
+            for source_line, hashtag in _iter_file_hashtags(
+                source_stream,
+                input_format,
+                input_field,
+            ):
+                total_hashtags += 1
+                _validate_hashtag_lengths([hashtag])
+                if hashtag in reservoir:
+                    continue
+                priority = _sample_priority(hashtag)
+                if len(reservoir) < sample_size:
+                    reservoir[hashtag] = (priority, source_line)
+                    continue
+                worst_hashtag, (worst_priority, _) = max(
+                    reservoir.items(),
+                    key=lambda item: (item[1][0], item[0]),
+                )
+                if (priority, hashtag) < (worst_priority, worst_hashtag):
+                    del reservoir[worst_hashtag]
+                    reservoir[hashtag] = (priority, source_line)
+        samples = [
+            hashtag
+            for hashtag, (_, source_line) in sorted(
+                reservoir.items(),
+                key=lambda item: (item[1][1], item[0]),
+            )
+        ]
+        return samples, total_hashtags, file_size
+    finally:
+        if source_descriptor is not None:
+            os.close(source_descriptor)
+        if parent_descriptor is not None:
+            os.close(parent_descriptor)
+
+
 def _hash_descriptor(descriptor: int) -> str:
     """Calculate SHA-256 from an already-open regular file descriptor.
 
@@ -1803,7 +2481,9 @@ def _file_job_status(
         "processed_this_call": processed_this_call,
         "remaining_unique": remaining,
         "segmenter_model": server_config["segmenter_model"],
+        "segmenter_revision": server_config.get("segmenter_revision"),
         "reranker_model": server_config["reranker_model"],
+        "reranker_revision": server_config.get("reranker_revision"),
         "ranking_strategy": run_options["ranking_strategy"],
     }
 
@@ -1826,6 +2506,23 @@ def _finalize_file_job(
     Raises:
         ValueError: If output exists without overwrite authorization.
     """
+    persisted_config = json.loads(_job_metadata(connection)["server_config"])
+    persisted_models = {
+        "segmenter": {
+            "repository_id": persisted_config["segmenter_model"],
+            "revision": persisted_config.get("segmenter_revision"),
+            "scorer_type": persisted_config["segmenter_model_type"],
+        },
+        "reranker": (
+            {
+                "repository_id": persisted_config["reranker_model"],
+                "revision": persisted_config.get("reranker_revision"),
+                "scorer_type": persisted_config["reranker_model_type"],
+            }
+            if persisted_config["reranker_model"] is not None
+            else None
+        ),
+    }
     destination, parent_descriptor = _open_authorized_parent(
         destination,
         "output_path",
@@ -1891,6 +2588,7 @@ def _finalize_file_job(
                     )
                 record = json.loads(result_json)
                 record["input"] = original_input
+                record["models"] = persisted_models
                 output_file.write(
                     json.dumps(
                         {"source_line": source_line, **record},
@@ -1986,7 +2684,10 @@ def _finalize_file_job(
 
 mcp = MCPServer(
     "hashformers",
-    description="Segment hashtags and rank hypotheses with Hashformers.",
+    description=(
+        "Segment hashtags, sample local hashtag files, discover and pin public "
+        "Hugging Face models, and rank precomputed hypotheses with Hashformers."
+    ),
 )
 
 
@@ -2008,6 +2709,281 @@ FILE_MODEL_WRITE_ANNOTATIONS = ToolAnnotations(
     idempotent_hint=False,
     open_world_hint=True,
 )
+MODEL_CONFIGURATION_ANNOTATIONS = ToolAnnotations(
+    read_only_hint=False,
+    destructive_hint=False,
+    idempotent_hint=True,
+    open_world_hint=True,
+)
+
+
+@mcp.tool(annotations=LOCAL_READ_ANNOTATIONS)
+def sample_hashtag_file(
+    input_path: str,
+    input_format: FileInputFormat = "auto",
+    input_field: str = "hashtag",
+    sample_size: int = 20,
+) -> FileSampleResult:
+    """Return a bounded, distinct sample without exposing the complete file.
+
+    Args:
+        input_path: UTF-8 text, CSV, or JSON Lines file read by the server.
+        input_format: Input format or ``auto`` for suffix-based detection.
+        input_field: CSV column or JSON object field containing hashtags.
+        sample_size: Number of distinct examples, hard-capped at 20.
+
+    Returns:
+        At most 20 samples plus compact format, size, and record metadata.
+
+    Raises:
+        ValueError: If the path, format, records, or sample bound is invalid.
+    """
+    if not isinstance(input_path, str) or not input_path.strip():
+        raise ValueError("input_path must contain text")
+    if not isinstance(input_field, str) or not input_field.strip():
+        raise ValueError("input_field must contain text")
+    _validate_at_most(sample_size, MAX_FILE_SAMPLES, "sample_size")
+    source = _resolve_file_path(input_path, "input_path", must_exist=True)
+    if not source.is_file():
+        raise ValueError(f"input_path is not a readable file: {source}")
+    resolved_format = _resolve_input_format(source, input_format)
+    samples, total_hashtags, file_size = _reservoir_sample_file(
+        source,
+        resolved_format,
+        input_field,
+        sample_size,
+    )
+    return {
+        "input_path": str(source),
+        "input_format": resolved_format,
+        "input_field": input_field,
+        "file_size_bytes": file_size,
+        "total_hashtags": total_hashtags,
+        "sample_size": len(samples),
+        "samples": samples,
+        "deferred_model_selection": _server_config.defer_model_selection,
+        "models_configured": _models_configured(),
+    }
+
+
+@mcp.tool(annotations=MODEL_READ_ANNOTATIONS)
+def discover_huggingface_models(
+    language: str,
+    role: HubModelRole,
+    limit: int = 5,
+) -> ModelDiscoveryResult:
+    """Discover a deterministic shortlist of validated public Hub models.
+
+    Args:
+        language: Hugging Face language tag such as ``en`` or ``pt``.
+        role: Whether candidates will generate beams or rerank candidates.
+        limit: Maximum returned candidates, hard-capped at 10.
+
+    Returns:
+        Validated candidates with exact revisions and reproducibility metadata.
+
+    Raises:
+        ValueError: If inputs are invalid or Hub discovery is unavailable.
+    """
+    normalized_language = _normalize_language(language)
+    if role not in {"segmenter", "reranker"}:
+        raise ValueError("role must be segmenter or reranker")
+    _validate_at_most(limit, MAX_MODEL_CANDIDATES, "limit")
+    api = HfApi()
+    list_options = {
+        "filter": ("transformers", f"language:{normalized_language}"),
+        "gated": False,
+        "sort": "downloads",
+        "limit": MAX_MODEL_DISCOVERY_SCAN,
+        "full": True,
+        "cardData": True,
+        "fetch_config": True,
+        "token": False,
+    }
+    if HUB_SUPPORTS_PARAMETER_FILTER:
+        list_options["num_parameters"] = (
+            f"max:{_server_config.max_model_parameters}"
+        )
+    try:
+        summaries = list(
+            islice(
+                api.list_models(**list_options),
+                MAX_MODEL_DISCOVERY_SCAN,
+            )
+        )
+    except Exception as error:
+        raise ValueError("Hugging Face model discovery failed") from error
+
+    def summary_key(info: object) -> tuple[int, str]:
+        downloads = _optional_non_negative_integer(
+            _hub_value(info, "downloads")
+        )
+        repository_id = _hub_value(info, "id")
+        return (-(downloads or 0), repository_id or "")
+
+    candidates: list[HubModelCandidate] = []
+    seen_repositories: set[str] = set()
+    for summary in sorted(summaries, key=summary_key):
+        repository_id = _hub_value(summary, "id")
+        if (
+            not isinstance(repository_id, str)
+            or repository_id in seen_repositories
+        ):
+            continue
+        seen_repositories.add(repository_id)
+        revision = _hub_value(summary, "sha")
+        if (
+            not isinstance(revision, str)
+            or HUB_REVISION_PATTERN.fullmatch(revision) is None
+        ):
+            revision = None
+        try:
+            metadata = _fetch_and_validate_hub_model(
+                api,
+                repository_id,
+                revision=revision,
+                role=role,
+                language=normalized_language,
+            )
+        except ValueError:
+            continue
+        size_reason = (
+            f"{metadata['parameter_count']} parameters"
+            if metadata["parameter_count"] is not None
+            else f"{metadata['download_size_bytes']} download bytes"
+        )
+        popularity = (
+            f"{metadata['downloads']} downloads"
+            if metadata["downloads"] is not None
+            else "download count unavailable"
+        )
+        candidate: HubModelCandidate = {
+            **metadata,
+            "reason": (
+                "public non-gated Transformers model tagged for "
+                f"{normalized_language}; compatible {metadata['scorer_type']} "
+                f"scorer; within operator ceiling at {size_reason}; "
+                f"shortlisted by {popularity}"
+            ),
+        }
+        candidates.append(candidate)
+        if len(candidates) == limit:
+            break
+    return {
+        "language": normalized_language,
+        "role": role,
+        "candidates": candidates,
+        "deferred_model_selection": _server_config.defer_model_selection,
+        "models_configured": _models_configured(),
+    }
+
+
+@mcp.tool(annotations=MODEL_CONFIGURATION_ANNOTATIONS)
+def configure_models(
+    segmenter_model: str,
+    segmenter_revision: str,
+    segmenter_model_type: SupportedScorerType = "gpt2",
+    reranker_model: str | None = None,
+    reranker_revision: str | None = None,
+    reranker_model_type: SupportedScorerType = "bert",
+) -> ModelConfigurationResult:
+    """Validate and publish the one model selection authorized at startup.
+
+    Args:
+        segmenter_model: Public Hugging Face segmenter repository ID.
+        segmenter_revision: Exact revision SHA selected during discovery.
+        segmenter_model_type: Hashformers scorer compatible with that model.
+        reranker_model: Optional public Hugging Face reranker repository ID.
+        reranker_revision: Exact reranker revision SHA, when configured.
+        reranker_model_type: Hashformers scorer compatible with the reranker.
+
+    Returns:
+        The immutable process-wide model selection and exact revisions.
+
+    Raises:
+        ValueError: If startup did not authorize selection, validation fails,
+            or another selection has already been published.
+    """
+    global _deferred_configuration_signature, _server_config
+    global _validated_model_selection
+    if not _server_config.defer_model_selection:
+        raise ValueError(
+            "configure_models requires --defer-model-selection at server startup"
+        )
+    _validate_repository_id(segmenter_model, "segmenter_model")
+    _validate_hub_revision(segmenter_revision, "segmenter_revision")
+    segmenter_model_type = _validate_scorer_type(
+        segmenter_model_type,
+        "segmenter_model_type",
+    )
+    if reranker_model is None:
+        if reranker_revision is not None:
+            raise ValueError("reranker_revision requires reranker_model")
+        normalized_reranker_type = None
+    else:
+        _validate_repository_id(reranker_model, "reranker_model")
+        if reranker_revision is None:
+            raise ValueError("reranker_model requires reranker_revision")
+        _validate_hub_revision(reranker_revision, "reranker_revision")
+        normalized_reranker_type = _validate_scorer_type(
+            reranker_model_type,
+            "reranker_model_type",
+        )
+
+    signature = (
+        segmenter_model,
+        segmenter_revision,
+        segmenter_model_type,
+        reranker_model,
+        reranker_revision,
+        normalized_reranker_type,
+    )
+    with _segmenter_lock:
+        if _deferred_configuration_signature is not None:
+            if signature != _deferred_configuration_signature:
+                raise ValueError(
+                    "models are already configured; restart the MCP server to "
+                    "select different models"
+                )
+            return {"configured": True, "models": _selected_models_payload()}
+
+        api = HfApi()
+        segmenter_metadata = _fetch_and_validate_hub_model(
+            api,
+            segmenter_model,
+            revision=segmenter_revision,
+            role="segmenter",
+            scorer_type=segmenter_model_type,
+        )
+        reranker_metadata = None
+        if reranker_model is not None:
+            reranker_metadata = _fetch_and_validate_hub_model(
+                api,
+                reranker_model,
+                revision=reranker_revision,
+                role="reranker",
+                scorer_type=normalized_reranker_type,
+            )
+        selection: SelectedModels = {
+            "segmenter": segmenter_metadata,
+            "reranker": reranker_metadata,
+        }
+        _server_config = replace(
+            _server_config,
+            segmenter_model=segmenter_model,
+            segmenter_revision=segmenter_revision,
+            segmenter_model_type=segmenter_model_type,
+            reranker_model=reranker_model,
+            reranker_revision=reranker_revision,
+            reranker_model_type=(
+                normalized_reranker_type
+                if normalized_reranker_type is not None
+                else _server_config.reranker_model_type
+            ),
+        )
+        _validated_model_selection = selection
+        _deferred_configuration_signature = signature
+        return {"configured": True, "models": _selected_models_payload()}
 
 
 @mcp.tool(annotations=MODEL_READ_ANNOTATIONS)
@@ -2056,6 +3032,7 @@ def segment_hashtags(
         max_candidates,
         hashtag_character,
     )
+    _require_models_configured()
     strategy = _resolve_ranking_strategy(ranking_strategy)
     normalized = _normalize_inputs(
         hashtags,
@@ -2066,7 +3043,7 @@ def segment_hashtags(
     if any(not value.strip() for value in normalized):
         raise ValueError("hashtags must contain text after preprocessing")
     if not hashtags:
-        return {"results": []}
+        return {"results": [], "models": _selected_models_payload()}
     _validate_beam_work(normalized, top_k, steps)
 
     with _inference_lock:
@@ -2092,7 +3069,8 @@ def segment_hashtags(
             strategy,
             max_candidates,
             include_component_rankings,
-        )
+        ),
+        "models": _selected_models_payload(),
     }
 
 
@@ -2161,6 +3139,7 @@ def start_hashtag_file_job(
         max_candidates,
         hashtag_character,
     )
+    _require_models_configured()
     resolved_strategy = _resolve_ranking_strategy(ranking_strategy)
 
     source = _resolve_file_path(input_path, "input_path", must_exist=True)
@@ -2663,7 +3642,12 @@ def rank_candidates(
             }
         )
     if not prepared:
-        return {"results": []}
+        return {
+            "results": [],
+            "models": (
+                _selected_models_payload() if strategy != "segmenter" else None
+            ),
+        }
 
     batches = []
     batch_characters = []
@@ -2736,7 +3720,12 @@ def rank_candidates(
             segmenter = get_segmenter()
             for batch in batches:
                 process_batch(batch, segmenter)
-    return {"results": results}
+    return {
+        "results": results,
+        "models": (
+            _selected_models_payload() if strategy != "segmenter" else None
+        ),
+    }
 
 
 def main(argv: list[str] | None = None) -> None:

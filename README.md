@@ -104,6 +104,31 @@ hashformers-mcp \
   --file-root /path/to/project
 ```
 
+When the language is not known until an agent sees the request, start the same
+server in explicitly authorized deferred-selection mode:
+
+```bash
+hashformers-mcp \
+  --defer-model-selection \
+  --file-root /path/to/project
+```
+
+That process starts without selecting, downloading, or loading a Transformer.
+The agent can inspect at most 20 local examples with `sample_hashtag_file`,
+infer and report a language and confidence, obtain a bounded public-model
+shortlist with `discover_huggingface_models`, and make one `configure_models`
+call. Configuration anonymously re-fetches both repositories, rejects private,
+gated, over-size, unsupported, or custom-code models, and requires the exact
+Hub commit SHA returned by discovery. The first later inference downloads that
+pinned revision lazily. Identical configuration retries are safe; selecting a
+different model requires restarting the server.
+
+The default Hub ceilings are one billion parameters and 5 GB of repository
+files. Operators can lower them with `--max-model-parameters` and
+`--max-model-size-bytes`. Deferred selection is the operator's authorization
+for its single remote selection and download; ordinary startup does not allow
+callers to change models.
+
 Optional startup flags configure the segmenter model and scorer type, device,
 and batch size. Supplying `--reranker-model` enables reranker-only and ensemble
 selection, with corresponding model-type, device, and batch-size flags. Run
@@ -128,6 +153,9 @@ The server exposes the complete user-facing segmentation workflow:
 
 | Tool | Purpose |
 |------|---------|
+| `sample_hashtag_file` | Return at most 20 distinct reservoir-sampled hashtags and compact text, CSV, or JSON Lines metadata without copying the dataset into agent context. |
+| `discover_huggingface_models` | Return a deterministic, hard-capped shortlist of anonymously validated public Transformers models for a language and role. |
+| `configure_models` | Validate and publish one segmenter and optional reranker at exact Hub revisions when deferred selection was authorized at startup. |
 | `segment_hashtags` | Run Transformer beam search with configurable search depth, preprocessing, reranker or ensemble selection, and component rankings. |
 | `start_hashtag_file_job` | Index and deduplicate text, CSV, or JSON Lines locally without loading a model or placing the dataset in agent context. |
 | `continue_hashtag_file_job` | Process and atomically checkpoint one bounded batch of a file job; repeat until completion. |
@@ -137,8 +165,9 @@ The server exposes the complete user-facing segmentation workflow:
 
 `top_k` controls beam width while `max_candidates` independently limits the
 returned or written alternatives and is capped at 64. Model identity, devices,
-and GPU batch sizes are startup settings so an agent cannot accidentally
-download or retain several models during ordinary calls. Interactive
+and GPU batch sizes are startup settings, except for the single exact-revision
+selection explicitly authorized by `--defer-model-selection`. The process
+retains at most one segmenter and one reranker. Interactive
 Transformer calls accept at most 64 inputs, `top_k` is capped at 64, and `steps`
 at 32. An aggregate expansion budget also rejects combinations of long inputs,
 wide beams, and deep searches that would still consume excessive memory. Larger
@@ -156,6 +185,13 @@ The checkpoint contains the indexed inputs, so continuation does not repeatedly
 reread the source file. Existing outputs are never replaced unless the server
 was started with `--allow-file-overwrite` and the caller also passes
 `overwrite=true`.
+
+If the file language is unknown, call `sample_hashtag_file` before starting the
+job. Its deterministic hash-reservoir keeps memory and response size bounded
+independently of file length and returns only distinct samples, record count,
+format, and file size. No file contents or hashtags are sent to Hugging Face.
+File-job checkpoints, progress responses, interactive results, and final JSON
+Lines records preserve selected repository IDs and exact revisions.
 
 This repository also includes the `segment-hashtags` Agent Skill at
 `.agents/skills/segment-hashtags`. Codex discovers it automatically when run

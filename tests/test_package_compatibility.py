@@ -50,6 +50,7 @@ def test_mcp_server_is_an_optional_extra(monkeypatch):
 
     assert metadata["extras_require"]["mcp"] == [
         "anyio>=4.9",
+        "huggingface-hub>=0.26,<2",
         "mcp>=2,<3",
     ]
     assert all(
@@ -81,3 +82,7 @@ def test_readme_documents_mcp_and_agent_skill_setup():
     assert "claude mcp add --transport stdio --scope user" in readme
     assert ".agents/skills/segment-hashtags" in readme
     assert "~/.claude/skills" in readme
+    assert "--defer-model-selection" in readme
+    assert "sample_hashtag_file" in readme
+    assert "discover_huggingface_models" in readme
+    assert "configure_models" in readme

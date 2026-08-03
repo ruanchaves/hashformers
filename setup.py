@@ -21,7 +21,11 @@ setup(
         "pandas"
     ],
     extras_require={
-        "mcp": ["anyio>=4.9", "mcp>=2,<3"],
+        "mcp": [
+            "anyio>=4.9",
+            "huggingface-hub>=0.26,<2",
+            "mcp>=2,<3",
+        ],
         "spacy": ["spacy>=3.0.0"]
     },
     entry_points={

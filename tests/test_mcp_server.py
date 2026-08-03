@@ -307,7 +307,22 @@ def test_segment_hashtags_separates_beam_width_from_response_limit():
                 ],
                 "component_rankings": None,
             }
-        ]
+        ],
+        "models": {
+            "segmenter": {
+                "repository_id": "gpt2",
+                "revision": None,
+                "scorer_type": "gpt2",
+                "task": None,
+                "architecture": "unknown",
+                "language_tags": [],
+                "parameter_count": None,
+                "download_size_bytes": None,
+                "downloads": None,
+                "likes": None,
+            },
+            "reranker": None,
+        },
     }
     pipeline.assert_called_once_with(
         segmenter,
@@ -483,7 +498,24 @@ def test_segment_hashtags_empty_input_does_not_load_model():
 
     """
     with patch("hashformers.mcp_server.get_segmenter") as get_model:
-        assert segment_hashtags([]) == {"results": []}
+        assert segment_hashtags([]) == {
+            "results": [],
+            "models": {
+                "segmenter": {
+                    "repository_id": "gpt2",
+                    "revision": None,
+                    "scorer_type": "gpt2",
+                    "task": None,
+                    "architecture": "unknown",
+                    "language_tags": [],
+                    "parameter_count": None,
+                    "download_size_bytes": None,
+                    "downloads": None,
+                    "likes": None,
+                },
+                "reranker": None,
+            },
+        }
 
     get_model.assert_not_called()
 
@@ -552,7 +584,9 @@ def test_hashtag_file_job_resumes_deduplicates_and_returns_only_summary(tmp_path
         "processed_this_call": 1,
         "remaining_unique": 0,
         "segmenter_model": "gpt2",
+        "segmenter_revision": None,
         "reranker_model": None,
+        "reranker_revision": None,
         "ranking_strategy": "segmenter",
     }
     assert [call.args[1] for call in pipeline.call_args_list] == [
@@ -1742,12 +1776,18 @@ def test_mcp_server_exposes_complete_structured_surface():
     tools_by_name = {tool.name: tool for tool in tools}
 
     assert set(tools_by_name) == {
+        "sample_hashtag_file",
+        "discover_huggingface_models",
+        "configure_models",
         "segment_hashtags",
         "start_hashtag_file_job",
         "continue_hashtag_file_job",
         "rank_candidates",
     }
     assert tools_by_name["segment_hashtags"].annotations.read_only_hint is True
+    assert tools_by_name["sample_hashtag_file"].annotations.open_world_hint is False
+    assert tools_by_name["discover_huggingface_models"].annotations.open_world_hint
+    assert tools_by_name["configure_models"].annotations.read_only_hint is False
     assert tools_by_name["start_hashtag_file_job"].annotations.destructive_hint is True
     assert (
         tools_by_name["continue_hashtag_file_job"].annotations.open_world_hint
@@ -1760,6 +1800,12 @@ def test_mcp_server_exposes_complete_structured_surface():
     assert hashtag_schema["ranking_strategy"]["default"] == "auto"
     file_schema = tools_by_name["continue_hashtag_file_job"].input_schema["properties"]
     assert "context" not in file_schema
+    sample_schema = tools_by_name["sample_hashtag_file"].input_schema["properties"]
+    assert sample_schema["sample_size"]["default"] == 20
+    discovery_schema = tools_by_name["discover_huggingface_models"].input_schema[
+        "properties"
+    ]
+    assert discovery_schema["limit"]["default"] == 5
 
 
 def test_mcp_transport_validates_nested_candidate_contract():
