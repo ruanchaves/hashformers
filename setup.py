@@ -18,11 +18,10 @@ setup(
     install_requires=[
         "minicons>=0.3.39,<0.4",
         "transformers>=4.46.1,<6",
-        "twitter-text-python",
         "pandas"
     ],
     extras_require={
-        "mcp": ["anyio>=4.9", "mcp>=2,<3", "regex"],
+        "mcp": ["anyio>=4.9", "mcp>=2,<3"],
         "spacy": ["spacy>=3.0.0"]
     },
     entry_points={

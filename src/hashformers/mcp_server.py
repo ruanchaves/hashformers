@@ -19,7 +19,6 @@ from threading import Lock
 from typing import Literal, TextIO
 
 import anyio
-import regex as timeout_regex
 import torch
 from mcp.server import MCPServer
 from mcp.server.mcpserver import Context
@@ -27,18 +26,12 @@ from mcp.types import ToolAnnotations
 from typing_extensions import TypedDict
 
 from hashformers.beamsearch.data_structures import ProbabilityDictionary
-from hashformers.segmenter import (
-    BaseWordSegmenter,
-    RegexWordSegmenter,
-    TweetSegmenter,
-    TwitterTextMatcher,
-)
+from hashformers.segmenter import BaseWordSegmenter
 from hashformers.segmenter.auto import TransformerWordSegmenter
-from hashformers.segmenter.data_structures import HashtagContainer, WordSegmenterOutput
+from hashformers.segmenter.data_structures import WordSegmenterOutput
 
 RankingStrategy = Literal["auto", "segmenter", "reranker", "ensemble"]
 ResolvedRankingStrategy = Literal["segmenter", "reranker", "ensemble"]
-SegmenterKind = Literal["regex", "transformer"]
 FileInputFormat = Literal["auto", "text", "csv", "jsonl"]
 
 MAX_INTERACTIVE_INPUTS = 64
@@ -49,17 +42,9 @@ MAX_BEAM_EXPANSIONS = 250_000
 MAX_RETURNED_CANDIDATES = 64
 MAX_PRECOMPUTED_CANDIDATES = 4096
 MAX_HASHTAG_LENGTH = 512
-MAX_REGEX_RULES = 32
-MAX_REGEX_PATTERN_LENGTH = 512
-MAX_REGEX_INPUT_LENGTH = 10_000
-MAX_REGEX_OUTPUT_LENGTH = 20_000
-MAX_TWEET_HASHTAG_OCCURRENCES = 64
-MAX_TWEET_REPLACEMENT_CHARS = 128
-MAX_TWEET_OUTPUT_CHARS = 1_000_000
 MAX_FILE_RECORD_CHARS = 65_536
 MAX_JOB_METADATA_CHARS = 65_536
 MAX_JOB_RESULT_CHARS = 1_000_000
-REGEX_TIMEOUT_SECONDS = 0.1
 JOB_APPLICATION_ID = 0x48464D52
 JOB_SCHEMA_VERSION = 1
 JOB_METADATA_KEYS = (
@@ -167,54 +152,6 @@ class SegmentationsResult(TypedDict):
     """
 
     results: list[SegmentationResult]
-
-
-class RegexSegmentationResult(TypedDict):
-    """Represent one deterministic regex segmentation.
-
-    Attributes:
-        input: Original text supplied by the caller.
-        normalized_input: Text after Hashformers preprocessing.
-        segmentation: Text after applying every regex rule in order.
-    """
-
-    input: str
-    normalized_input: str
-    segmentation: str
-
-
-class RegexSegmentationsResult(TypedDict):
-    """Represent regex segmentation results.
-
-    Attributes:
-        results: Per-input results in input order.
-    """
-
-    results: list[RegexSegmentationResult]
-
-
-class TweetSegmentationResult(TypedDict):
-    """Represent one tweet after its hashtags have been segmented.
-
-    Attributes:
-        input: Original tweet.
-        segmented_text: Tweet with segmented hashtags substituted.
-        hashtags: Segmentation details in hashtag occurrence order.
-    """
-
-    input: str
-    segmented_text: str
-    hashtags: list[SegmentationResult]
-
-
-class TweetSegmentationsResult(TypedDict):
-    """Represent tweet segmentation results.
-
-    Attributes:
-        results: Per-tweet results in input order.
-    """
-
-    results: list[TweetSegmentationResult]
 
 
 class ScoredCandidateInput(TypedDict):
@@ -1235,22 +1172,6 @@ def _validate_strings(values: list[str], name: str) -> None:
         raise ValueError(f"{name} must be a list of strings")
 
 
-def _validate_regex_inputs(values: list[str]) -> None:
-    """Validate bounded text passed to the timeout-protected regex engine.
-
-    Args:
-        values: Text values to validate.
-
-    Raises:
-        ValueError: If an input exceeds the regex safety ceiling.
-    """
-    for value in values:
-        if len(value) > MAX_REGEX_INPUT_LENGTH:
-            raise ValueError(
-                f"regex inputs must contain at most {MAX_REGEX_INPUT_LENGTH} characters"
-            )
-
-
 def _validate_hashtag_lengths(values: list[str]) -> None:
     """Prevent pathological beam trees from unbounded input strings.
 
@@ -1265,82 +1186,6 @@ def _validate_hashtag_lengths(values: list[str]) -> None:
             raise ValueError(
                 f"hashtags must contain at most {MAX_HASHTAG_LENGTH} characters"
             )
-
-
-def _compile_regex_rules(
-    regex_rules: list[str] | None,
-) -> list[timeout_regex.Pattern]:
-    """Compile a bounded rule set for timeout-protected substitution.
-
-    Args:
-        regex_rules: Ordered custom rules, each containing capture group 1, or
-            ``None`` for the library default.
-
-    Returns:
-        Compiled rules in caller order.
-
-    Raises:
-        ValueError: If the rules are invalid or exceed MCP safety limits.
-    """
-    rules = regex_rules if regex_rules is not None else [r"([A-Z]+)"]
-    _validate_strings(rules, "regex_rules")
-    if not rules:
-        raise ValueError("regex_rules must not be empty when provided")
-    if len(rules) > MAX_REGEX_RULES:
-        raise ValueError(f"regex_rules must contain at most {MAX_REGEX_RULES} rules")
-    for rule in rules:
-        if len(rule) > MAX_REGEX_PATTERN_LENGTH:
-            raise ValueError(
-                "regex rules must contain at most "
-                f"{MAX_REGEX_PATTERN_LENGTH} characters"
-            )
-    try:
-        compiled_rules = [timeout_regex.compile(rule) for rule in rules]
-    except timeout_regex.error as error:
-        raise ValueError(f"invalid regex rule: {error}") from error
-    if any(rule.groups < 1 for rule in compiled_rules):
-        raise ValueError("each regex rule must contain at least one capturing group")
-    return compiled_rules
-
-
-class _TimeoutRegexWordSegmenter(RegexWordSegmenter):
-    """Apply RegexWordSegmenter semantics with per-substitution timeouts.
-
-    """
-
-    def __init__(self, regex_rules: list[str] | None = None):
-        """Compile the configured ordered regex rules.
-
-        Args:
-            regex_rules: Ordered custom rules, each containing capture group
-                1, or ``None`` for the default.
-        """
-        self.regex_rules = _compile_regex_rules(regex_rules)
-
-    def segment_word(self, rule: timeout_regex.Pattern, word: str) -> str:
-        """Apply one segmentation rule within a fixed CPU-time budget.
-
-        Args:
-            rule: Compiled timeout-capable rule.
-            word: Current intermediate segmentation.
-
-        Returns:
-            Text after inserting the rule's captured word boundary.
-
-        Raises:
-            ValueError: If the rule times out or expands the intermediate too far.
-        """
-        try:
-            segmented = rule.sub(
-                r" \1",
-                word,
-                timeout=REGEX_TIMEOUT_SECONDS,
-            ).strip()
-        except TimeoutError as error:
-            raise ValueError("regex rule exceeded the execution timeout") from error
-        if len(segmented) > MAX_REGEX_OUTPUT_LENGTH:
-            raise ValueError("regex rules produced an oversized intermediate result")
-        return segmented
 
 
 def _normalize_inputs(
@@ -1647,32 +1492,6 @@ def _serialize_word_output(
             }
         )
     return results
-
-
-def _regex_result(
-    original_input: str,
-    normalized_input: str,
-    segmentation: str,
-) -> SegmentationResult:
-    """Build a segmentation result for a deterministic regex output.
-
-    Args:
-        original_input: Text before preprocessing.
-        normalized_input: Text after preprocessing.
-        segmentation: Regex segmentation.
-
-    Returns:
-        A result compatible with Transformer hashtag results.
-    """
-    candidate: Candidate = {"segmentation": segmentation, "score": 0.0, "rank": 1}
-    return {
-        "input": original_input,
-        "normalized_input": normalized_input,
-        "selected_segmentation": segmentation,
-        "ranking_strategy": "segmenter",
-        "candidates": [candidate],
-        "component_rankings": None,
-    }
 
 
 def _resolve_input_format(
@@ -2167,10 +1986,7 @@ def _finalize_file_job(
 
 mcp = MCPServer(
     "hashformers",
-    description=(
-        "Segment hashtags and tweets, apply regex segmentation, and rank "
-        "precomputed hypotheses with Hashformers."
-    ),
+    description="Segment hashtags and rank hypotheses with Hashformers.",
 )
 
 
@@ -2179,12 +1995,6 @@ MODEL_READ_ANNOTATIONS = ToolAnnotations(
     destructive_hint=False,
     idempotent_hint=True,
     open_world_hint=True,
-)
-LOCAL_READ_ANNOTATIONS = ToolAnnotations(
-    read_only_hint=True,
-    destructive_hint=False,
-    idempotent_hint=True,
-    open_world_hint=False,
 )
 FILE_WRITE_ANNOTATIONS = ToolAnnotations(
     read_only_hint=False,
@@ -2762,271 +2572,6 @@ async def continue_hashtag_file_job(
             f"Checkpointed {status['processed_unique']} unique hashtags",
         )
     return status
-
-
-@mcp.tool(annotations=LOCAL_READ_ANNOTATIONS)
-def segment_with_regex(
-    inputs: list[str],
-    regex_rules: list[str] | None = None,
-    lower: bool = False,
-    remove_hashtag: bool = True,
-    hashtag_character: str = "#",
-) -> RegexSegmentationsResult:
-    """Segment text by applying regular-expression rules sequentially.
-
-    Args:
-        inputs: Texts to segment.
-        regex_rules: Ordered rules, each containing capture group 1, or
-            ``None`` for the library default.
-        lower: Whether to lowercase inputs before applying rules.
-        remove_hashtag: Whether to strip leading hashtag characters.
-        hashtag_character: Character stripped during preprocessing.
-
-    Returns:
-        Deterministic regex segmentations in input order.
-
-    Raises:
-        ValueError: If inputs, rules, or preprocessing options are invalid.
-    """
-    _validate_strings(inputs, "inputs")
-    _validate_input_count(inputs, "inputs")
-    _validate_regex_inputs(inputs)
-    _validate_hashtag_character(hashtag_character)
-    normalized = _normalize_inputs(
-        inputs,
-        lower=lower,
-        remove_hashtag=remove_hashtag,
-        hashtag_character=hashtag_character,
-    )
-    segmenter = _TimeoutRegexWordSegmenter(regex_rules=regex_rules)
-    segmentations = segmenter.segment(
-        inputs,
-        lower=lower,
-        remove_hashtag=remove_hashtag,
-        hashtag_character=hashtag_character,
-    )
-    return {
-        "results": [
-            {
-                "input": original,
-                "normalized_input": normalized_input,
-                "segmentation": segmentation,
-            }
-            for original, normalized_input, segmentation in zip(
-                inputs,
-                normalized,
-                segmentations,
-            )
-        ]
-    }
-
-
-@mcp.tool(annotations=MODEL_READ_ANNOTATIONS)
-def segment_tweets(
-    tweets: list[str],
-    segmenter_kind: SegmenterKind = "regex",
-    regex_rules: list[str] | None = None,
-    top_k: int = 5,
-    steps: int = 5,
-    ranking_strategy: RankingStrategy = "auto",
-    alpha: float = 0.222,
-    beta: float = 0.111,
-    word_lower: bool = False,
-    max_candidates: int = 5,
-    include_component_rankings: bool = False,
-    hashtag_token: str | None = None,
-    lower: bool = False,
-    separator: str = " ",
-    hashtag_character: str = "#",
-    regex_flags: int = 0,
-) -> TweetSegmentationsResult:
-    """Extract and segment hashtags inside complete tweets.
-
-    Args:
-        tweets: Tweet texts to transform.
-        segmenter_kind: ``regex`` or the configured ``transformer`` pipeline.
-        regex_rules: Ordered rules used by the regex segmenter; every rule must
-            contain capture group 1.
-        top_k: Transformer beam width.
-        steps: Transformer beam-search depth.
-        ranking_strategy: Transformer component used for final selection.
-        alpha: Segmenter-score weight used by the ensemble.
-        beta: Reranker-score weight used by the ensemble.
-        word_lower: Whether to lowercase hashtags before segmentation.
-        max_candidates: Transformer response limit, capped at 64.
-        include_component_rankings: Whether to include Transformer component ranks.
-        hashtag_token: Optional token prepended to each replacement.
-        lower: Whether to lowercase segmented hashtag replacements.
-        separator: Text placed between ``hashtag_token`` and a replacement.
-        hashtag_character: Character used to identify replacement keys.
-        regex_flags: Flags passed to Python regex replacement.
-
-    Returns:
-        Transformed tweets and per-occurrence hashtag segmentation details.
-
-    Raises:
-        ValueError: If inputs or selected-segmenter options are invalid.
-    """
-    _validate_strings(tweets, "tweets")
-    _validate_input_count(tweets, "tweets")
-    _validate_regex_inputs(tweets)
-    _validate_hashtag_character(hashtag_character)
-    if hashtag_character != "#":
-        raise ValueError("segment_tweets supports only hashtag_character='#'")
-    if segmenter_kind not in {"regex", "transformer"}:
-        raise ValueError("segmenter_kind must be regex or transformer")
-    if (
-        isinstance(regex_flags, bool)
-        or not isinstance(regex_flags, int)
-        or regex_flags < 0
-    ):
-        raise ValueError("regex_flags must be a non-negative integer")
-    if not isinstance(separator, str):
-        raise ValueError("separator must be a string")
-    if len(separator) > MAX_TWEET_REPLACEMENT_CHARS:
-        raise ValueError(
-            f"separator must contain at most {MAX_TWEET_REPLACEMENT_CHARS} "
-            "characters"
-        )
-    if hashtag_token is not None and not isinstance(hashtag_token, str):
-        raise ValueError("hashtag_token must be a string or null")
-    if (
-        hashtag_token is not None
-        and len(hashtag_token) > MAX_TWEET_REPLACEMENT_CHARS
-    ):
-        raise ValueError(
-            f"hashtag_token must contain at most {MAX_TWEET_REPLACEMENT_CHARS} "
-            "characters"
-        )
-    if segmenter_kind == "transformer" and regex_rules is not None:
-        raise ValueError("regex_rules are supported only with segmenter_kind='regex'")
-    if segmenter_kind == "regex":
-        _compile_regex_rules(regex_rules)
-    if segmenter_kind == "transformer":
-        _validate_runtime_options(
-            top_k,
-            steps,
-            alpha,
-            beta,
-            max_candidates,
-            hashtag_character,
-        )
-        strategy = _resolve_ranking_strategy(ranking_strategy)
-    else:
-        strategy = "segmenter"
-    if not tweets:
-        return {"results": []}
-
-    matcher = TwitterTextMatcher()
-    extracted_hashtags = matcher(tweets)
-    occurrence_count = sum(len(hashtags) for hashtags in extracted_hashtags)
-    if occurrence_count > MAX_TWEET_HASHTAG_OCCURRENCES:
-        raise ValueError(
-            "tweets must contain at most "
-            f"{MAX_TWEET_HASHTAG_OCCURRENCES} hashtag occurrences"
-        )
-    if not any(extracted_hashtags):
-        return {
-            "results": [
-                {"input": tweet, "segmented_text": tweet, "hashtags": []}
-                for tweet in tweets
-            ]
-        }
-
-    hashtag_set = list(
-        dict.fromkeys(
-            hashtag
-            for tweet_hashtags in extracted_hashtags
-            for hashtag in tweet_hashtags
-        )
-    )
-    _validate_input_count(hashtag_set, "unique tweet hashtags")
-    _validate_hashtag_lengths(hashtag_set)
-    normalized_hashtags = _normalize_inputs(
-        hashtag_set,
-        lower=word_lower,
-        remove_hashtag=True,
-        hashtag_character="#",
-    )
-    replacement_options = {
-        "hashtag_token": hashtag_token,
-        "lower": lower,
-        "separator": separator,
-        "hashtag_character": hashtag_character,
-    }
-    if segmenter_kind == "transformer":
-        _validate_beam_work(normalized_hashtags, top_k, steps)
-        word_segmenter = get_segmenter()
-        with _inference_lock:
-            word_output = _run_transformer_pipeline(
-                word_segmenter,
-                hashtag_set,
-                top_k=top_k,
-                steps=steps,
-                alpha=alpha,
-                beta=beta,
-                strategy=strategy,
-                preprocessing_kwargs={"lower": word_lower},
-            )
-    else:
-        word_segmenter = _TimeoutRegexWordSegmenter(regex_rules=regex_rules)
-        word_output = word_segmenter.predict(hashtag_set, lower=word_lower)
-
-    tweet_segmenter = TweetSegmenter(matcher=matcher, word_segmenter=word_segmenter)
-    container = HashtagContainer(
-        extracted_hashtags,
-        hashtag_set,
-        tweet_segmenter.compile_dict(
-            hashtag_set,
-            word_output.output,
-            **replacement_options,
-        )
-    )
-    segmented_tweets = list(
-        tweet_segmenter.segmented_tweet_generator(
-            tweets,
-            container.hashtags,
-            container.hashtag_set,
-            container.replacement_dict,
-            flag=regex_flags,
-        )
-    )
-    if sum(len(tweet) for tweet in segmented_tweets) > MAX_TWEET_OUTPUT_CHARS:
-        raise ValueError("tweet replacements produced an oversized response")
-
-    if segmenter_kind == "transformer":
-        unique_results = _serialize_word_output(
-            container.hashtag_set,
-            normalized_hashtags,
-            word_output,
-            strategy,
-            max_candidates,
-            include_component_rankings,
-        )
-    else:
-        unique_results = [
-            _regex_result(original, normalized, segmentation)
-            for original, normalized, segmentation in zip(
-                container.hashtag_set,
-                normalized_hashtags,
-                word_output.output,
-            )
-        ]
-    results_by_hashtag = {result["input"]: result for result in unique_results}
-    return {
-        "results": [
-            {
-                "input": tweet,
-                "segmented_text": segmented_tweet,
-                "hashtags": [results_by_hashtag[hashtag] for hashtag in hashtags],
-            }
-            for tweet, segmented_tweet, hashtags in zip(
-                tweets,
-                segmented_tweets,
-                container.hashtags,
-            )
-        ]
-    }
 
 
 @mcp.tool(annotations=MODEL_READ_ANNOTATIONS)

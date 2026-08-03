@@ -51,7 +51,6 @@ def test_mcp_server_is_an_optional_extra(monkeypatch):
     assert metadata["extras_require"]["mcp"] == [
         "anyio>=4.9",
         "mcp>=2,<3",
-        "regex",
     ]
     assert all(
         not dependency.startswith("mcp")
@@ -62,11 +61,14 @@ def test_mcp_server_is_an_optional_extra(monkeypatch):
     ]
 
 
-def test_dependency_files_and_readme_match_package_metadata():
+def test_dependency_files_and_readme_match_package_metadata(monkeypatch):
+    metadata = read_setup_kwargs(monkeypatch)
     requirements = (ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines()
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert "transformers>=4.46.1,<6" in requirements
+    assert "twitter-text-python" not in requirements
+    assert "twitter-text-python" not in metadata["install_requires"]
     assert "Python 3.10 or newer" in readme
     assert "Transformers 4.46.1" in readme
 

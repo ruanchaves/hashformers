@@ -22,8 +22,6 @@ from hashformers.mcp_server import (
     parse_server_config,
     rank_candidates,
     segment_hashtags,
-    segment_tweets,
-    segment_with_regex,
     start_hashtag_file_job,
 )
 from hashformers.segmenter.data_structures import WordSegmenterOutput
@@ -1438,130 +1436,6 @@ def test_csv_file_reader_reports_physical_line_after_blank_rows(tmp_path):
         list(mcp_server._iter_file_hashtags(input_path, "csv", "tag"))
 
 
-def test_segment_with_regex_exposes_rules_and_preprocessing():
-    """Verify regex rules run sequentially through the MCP surface.
-
-    """
-    result = segment_with_regex(
-        ["#fooBAR123", "#zipZIP456"],
-        regex_rules=[r"([A-Z]+)", r"([0-9]+)"],
-    )
-
-    assert result == {
-        "results": [
-            {
-                "input": "#fooBAR123",
-                "normalized_input": "fooBAR123",
-                "segmentation": "foo BAR 123",
-            },
-            {
-                "input": "#zipZIP456",
-                "normalized_input": "zipZIP456",
-                "segmentation": "zip ZIP 456",
-            },
-        ]
-    }
-
-
-def test_segment_with_regex_rejects_invalid_rules():
-    """Verify malformed regex configuration fails clearly.
-
-    """
-    with pytest.raises(ValueError, match="invalid regex rule"):
-        segment_with_regex(["foo"], regex_rules=["("])
-
-
-def test_segment_with_regex_rejects_rules_without_capture_groups():
-    """Verify custom rules satisfy the segmenter's replacement contract."""
-    with pytest.raises(ValueError, match="at least one capturing group"):
-        segment_with_regex(["FOO"], regex_rules=[r"[A-Z]+"])
-
-
-def test_segment_with_regex_times_out_pathological_rules():
-    """Verify caller-controlled patterns cannot monopolize the MCP process.
-
-    """
-    with patch("hashformers.mcp_server.REGEX_TIMEOUT_SECONDS", 0):
-        with pytest.raises(ValueError, match="execution timeout"):
-            segment_with_regex(
-                ["a" * 5_000 + "!"],
-                regex_rules=[r"(a+)+$"],
-            )
-
-
-def test_segment_with_regex_bounds_sequential_output_growth():
-    """Verify one regex result cannot become the next rule's huge input.
-
-    The limit is checked after every sequential substitution.
-    """
-    with patch("hashformers.mcp_server.MAX_REGEX_OUTPUT_LENGTH", 4):
-        with pytest.raises(ValueError, match="oversized intermediate result"):
-            segment_with_regex(["abc"], regex_rules=[r"(.)"])
-
-
-def test_segment_tweets_uses_regex_by_default_and_reports_occurrences():
-    """Verify the MCP mirrors ``TweetSegmenter`` default behavior.
-
-    """
-    result = segment_tweets(
-        ["First #fooBAR123 and #fooBAR123", "No tags"],
-        regex_rules=[r"([A-Z]+)", r"([0-9]+)"],
-    )
-
-    assert result["results"][0]["segmented_text"] == (
-        "First foo BAR 123 and foo BAR 123"
-    )
-    assert [
-        item["selected_segmentation"] for item in result["results"][0]["hashtags"]
-    ] == ["foo BAR 123", "foo BAR 123"]
-    assert result["results"][1] == {
-        "input": "No tags",
-        "segmented_text": "No tags",
-        "hashtags": [],
-    }
-
-
-def test_segment_tweets_without_hashtags_does_not_load_transformer():
-    """Verify Transformer mode is lazy when tweets contain no hashtags.
-
-    """
-    with patch("hashformers.mcp_server.get_segmenter") as get_model:
-        result = segment_tweets(
-            ["No tags here"],
-            segmenter_kind="transformer",
-        )
-
-    assert result["results"][0]["segmented_text"] == "No tags here"
-    get_model.assert_not_called()
-
-
-def test_segment_tweets_rejects_unsupported_hashtag_markers():
-    """Verify custom markers fail rather than silently leaving text unchanged.
-
-    """
-    with pytest.raises(ValueError, match="supports only hashtag_character='#'"):
-        segment_tweets(["Try !icecold"], hashtag_character="!")
-
-
-def test_segment_tweets_bounds_replacement_strings_and_occurrences():
-    """Verify tweet options cannot amplify a small request without limit.
-
-    Both caller-controlled replacement text and repeated hashtag details are capped.
-    """
-    with pytest.raises(ValueError, match="hashtag_token must contain at most"):
-        segment_tweets(
-            ["Try #icecold"],
-            hashtag_token="x" * (mcp_server.MAX_TWEET_REPLACEMENT_CHARS + 1),
-        )
-
-    repeated_hashtags = " ".join(
-        f"#tag{index}"
-        for index in range(mcp_server.MAX_TWEET_HASHTAG_OCCURRENCES + 1)
-    )
-    with pytest.raises(ValueError, match="hashtag occurrences"):
-        segment_tweets([repeated_hashtags])
-
-
 def test_rank_candidates_selects_precomputed_scores_without_loading_model():
     """Verify direct selection never reruns beam search or loads a model.
 
@@ -1871,12 +1745,9 @@ def test_mcp_server_exposes_complete_structured_surface():
         "segment_hashtags",
         "start_hashtag_file_job",
         "continue_hashtag_file_job",
-        "segment_with_regex",
-        "segment_tweets",
         "rank_candidates",
     }
     assert tools_by_name["segment_hashtags"].annotations.read_only_hint is True
-    assert tools_by_name["segment_with_regex"].annotations.open_world_hint is False
     assert tools_by_name["start_hashtag_file_job"].annotations.destructive_hint is True
     assert (
         tools_by_name["continue_hashtag_file_job"].annotations.open_world_hint
