@@ -27,6 +27,9 @@ DEFAULT_OUTPUT = Path("benchmarks/qwen/samples.jsonl")
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 SEED = 42
 SAMPLES_PER_DATASET = 20
+HASHTAG_SEGMENTOR_REVISION = "7724693f25c483047e224844f22fadf32368ceb4"
+HASHTAG_SEGMENTATION_REVISION = "37b253ba031ffcc9f0b7c57410ee17e39c346d55"
+HASHSET_REVISION = "747fbfe1d2fd6888e95b6f87138dc9045ea67c35"
 
 # These revisions identify the exact dataset repositories used to create the
 # committed manifest. HashSet Manual remains excluded, as it was from the 2026
@@ -363,7 +366,8 @@ def load_local_dataset(dataset: str) -> list[dict[str, str]]:
     if dataset == "ruanchaves/boun":
         return load_segmented_lines(
             request_text(
-                "https://raw.githubusercontent.com/ardax/hashtag-segmentor/master/Test-BOUN"
+                "https://raw.githubusercontent.com/ardax/hashtag-segmentor/"
+                f"{HASHTAG_SEGMENTOR_REVISION}/Test-BOUN"
             )
         )
     if dataset == "ruanchaves/stan_small":
@@ -373,7 +377,8 @@ def load_local_dataset(dataset: str) -> list[dict[str, str]]:
     if dataset == "ruanchaves/dev_stanford":
         return load_segmented_lines(
             request_text(
-                "https://raw.githubusercontent.com/ardax/hashtag-segmentor/master/Dev-Stanford"
+                "https://raw.githubusercontent.com/ardax/hashtag-segmentor/"
+                f"{HASHTAG_SEGMENTOR_REVISION}/Dev-Stanford"
             )
         )
     if dataset == "ruanchaves/test_stanford":
@@ -387,7 +392,7 @@ def load_local_dataset(dataset: str) -> list[dict[str, str]]:
     if dataset == "ruanchaves/nru_hse":
         text = request_text(
             "https://raw.githubusercontent.com/glushkovato/hashtag_segmentation/"
-            "master/data/test_rus.csv"
+            f"{HASHTAG_SEGMENTATION_REVISION}/data/test_rus.csv"
         )
         records = []
         for row in csv.DictReader(io.StringIO(text)):
@@ -402,12 +407,12 @@ def load_local_dataset(dataset: str) -> list[dict[str, str]]:
     if dataset == "ruanchaves/hashset_distant":
         return load_hashset(
             "https://raw.githubusercontent.com/prashantkodali/HashSet/"
-            "master/datasets/hashset/HashSet-Distant.csv"
+            f"{HASHSET_REVISION}/datasets/hashset/HashSet-Distant.csv"
         )
     if dataset == "ruanchaves/hashset_distant_sampled":
         return load_hashset(
             "https://raw.githubusercontent.com/prashantkodali/HashSet/"
-            "master/datasets/hashset/HashSet-Distant-sampled.csv"
+            f"{HASHSET_REVISION}/datasets/hashset/HashSet-Distant-sampled.csv"
         )
     if dataset == "ruanchaves/loyola":
         records = []
