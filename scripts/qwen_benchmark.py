@@ -27,8 +27,8 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 1
-PROTOCOL_ID = "hashformers-qwen-space-insertion-v1"
+SCHEMA_VERSION = 2
+PROTOCOL_ID = "hashformers-qwen-space-insertion-v2"
 REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("benchmarks/qwen/samples.jsonl")
@@ -50,11 +50,13 @@ MODEL_SPECS = {
 }
 
 SYSTEM_PROMPT = (
-    "Segment the supplied concatenated string into words. Return exactly the "
-    "original characters in their original order, inserting ASCII spaces only "
-    "at word boundaries. Do not add, remove, reorder, or change any non-space "
-    "character. Return no explanation."
+    "You perform word segmentation. For each user message of the form "
+    "'Input: TEXT', return TEXT with ASCII spaces inserted at word boundaries. "
+    "Preserve every non-space character, its case, and its order exactly. If "
+    "TEXT is one word, return it unchanged. Return plain text only, without "
+    "quotes, labels, backticks, code fences, or explanation."
 )
+USER_PROMPT_TEMPLATE = "Input: {source}"
 
 
 def utc_now() -> str:
@@ -199,27 +201,48 @@ def single_device(value: str) -> str:
     raise argparse.ArgumentTypeError("device must be cpu, cuda, or cuda:<index>")
 
 
-def validate_insertion_only(
+def parse_insertion_only(
     source: str, raw_output: str | None
-) -> tuple[bool, str | None, str | None]:
-    """Enforce that an output differs from its source only by inserted spaces.
+) -> tuple[bool, str | None, str | None, str | None]:
+    """Parse a minimal response envelope, then enforce insertion-only content.
 
-    Invalid generations are never repaired or silently replaced with the input.
-    The returned prediction is whitespace-normalized only after the strict
-    contract succeeds; the exact generation remains in ``raw_output``.
+    A model may wrap its entire answer in one matching pair of ASCII quotes.
+    That presentation envelope is recorded separately and removed only when
+    the enclosed text already satisfies the insertion-only contract. Invalid
+    generations are never repaired or silently replaced with the input. The
+    exact generation remains in ``raw_output``.
     """
 
     if raw_output is None:
-        return False, None, "missing_output"
+        return False, None, "missing_output", None
     if not raw_output:
-        return False, None, "empty_output"
-    if raw_output.replace(" ", "") != source:
-        return False, None, "changed_non_space_characters"
-    prediction = " ".join(raw_output.split(" "))
-    prediction = " ".join(part for part in prediction.split(" ") if part)
-    if not prediction:
-        return False, None, "empty_output"
-    return True, prediction, None
+        return False, None, "empty_output", None
+
+    candidates: list[tuple[str, str | None]] = [(raw_output, None)]
+    stripped = raw_output.strip(" ")
+    if (
+        len(stripped) >= 2
+        and stripped[0] == stripped[-1]
+        and stripped[0] in {'"', "'"}
+    ):
+        candidates.append((stripped[1:-1], "matching_ascii_quotes"))
+
+    for candidate, output_wrapper in candidates:
+        if candidate.replace(" ", "") != source:
+            continue
+        prediction = " ".join(part for part in candidate.split(" ") if part)
+        if prediction:
+            return True, prediction, None, output_wrapper
+    return False, None, "changed_non_space_characters", None
+
+
+def validate_insertion_only(
+    source: str, raw_output: str | None
+) -> tuple[bool, str | None, str | None]:
+    """Return the insertion-only validation fields used by public callers."""
+
+    valid, prediction, invalid_reason, _ = parse_insertion_only(source, raw_output)
+    return valid, prediction, invalid_reason
 
 
 def normalize_segmentation(value: str) -> str:
@@ -329,6 +352,7 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "quantization",
         "resolved_device",
         "raw_output",
+        "output_wrapper",
         "prediction",
         "valid",
         "invalid_reason",
@@ -368,9 +392,17 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             record["correct"], bool
         ):
             raise ValueError(f"{sample_id}: valid and correct must be booleans")
-        for field in ("raw_output", "prediction", "invalid_reason", "error"):
+        for field in (
+            "raw_output",
+            "output_wrapper",
+            "prediction",
+            "invalid_reason",
+            "error",
+        ):
             if record[field] is not None and not isinstance(record[field], str):
                 raise ValueError(f"{sample_id}: {field} must be text or null")
+        if record["output_wrapper"] not in (None, "matching_ascii_quotes"):
+            raise ValueError(f"{sample_id}: unsupported output_wrapper")
         generation_ms = record["generation_ms"]
         if generation_ms is not None and (
             isinstance(generation_ms, bool)
@@ -382,13 +414,20 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
                 f"{sample_id}: generation_ms must be a non-negative number or null"
             )
         if record["valid"]:
-            valid, prediction, _ = validate_insertion_only(
+            valid, prediction, _, output_wrapper = parse_insertion_only(
                 record["input"], record["raw_output"]
             )
-            if not valid or prediction != record["prediction"] or record["error"]:
+            if (
+                not valid
+                or prediction != record["prediction"]
+                or output_wrapper != record["output_wrapper"]
+                or record["error"]
+            ):
                 raise ValueError(f"{sample_id}: inconsistent valid prediction record")
-        elif record["prediction"] is not None:
-            raise ValueError(f"{sample_id}: invalid output must not have a prediction")
+        elif record["prediction"] is not None or record["output_wrapper"] is not None:
+            raise ValueError(
+                f"{sample_id}: invalid output must not have a prediction or wrapper"
+            )
         expected_correct = bool(
             record["valid"]
             and normalize_segmentation(record["prediction"] or "")
@@ -414,6 +453,7 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             for record in subset
         )
         runtime_errors = sum(bool(record.get("error")) for record in subset)
+        wrapped_outputs = sum(bool(record.get("output_wrapper")) for record in subset)
         generation_seconds = (
             sum(float(record.get("generation_ms") or 0.0) for record in subset) / 1000
         )
@@ -427,6 +467,7 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "accuracy": rate_summary(correct, len(subset)),
             "invalid_output_rate": rate_summary(invalid, len(subset)),
             "runtime_error_rate": rate_summary(runtime_errors, len(subset)),
+            "output_wrapper_rate": rate_summary(wrapped_outputs, len(subset)),
             "latency_ms": {
                 "mean": statistics.fmean(latencies) if latencies else None,
                 "median": statistics.median(latencies) if latencies else None,
@@ -671,7 +712,7 @@ def build_messages(source: str) -> list[dict[str, str]]:
 
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": source},
+        {"role": "user", "content": USER_PROMPT_TEMPLATE.format(source=source)},
     ]
 
 
@@ -895,8 +936,13 @@ def run_benchmark(args: argparse.Namespace) -> None:
         "generation": {
             "max_new_tokens": args.max_new_tokens,
             "do_sample": False,
-            "prompt": SYSTEM_PROMPT,
+            "system_prompt": SYSTEM_PROMPT,
+            "user_prompt_template": USER_PROMPT_TEMPLATE,
             "few_shot_examples": 0,
+            "accepted_output_envelopes": [
+                "plain_text",
+                "one_matching_pair_of_ascii_quotes",
+            ],
         },
         "measurement": {
             "warmup_items": min(args.warmup, len(manifest)),
@@ -951,7 +997,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
                         args.max_new_tokens,
                     )
                 )
-                valid, prediction, invalid_reason = validate_insertion_only(
+                valid, prediction, invalid_reason, output_wrapper = parse_insertion_only(
                     sample["input"], raw_output
                 )
             # Record arbitrary backend/model failures per sample so a partial
@@ -964,6 +1010,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
                 valid = False
                 prediction = None
                 invalid_reason = "runtime_error"
+                output_wrapper = None
                 error = f"{type(exc).__name__}: {exc}"
             correct = bool(
                 valid
@@ -983,6 +1030,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
                 "quantization": runtime["quantization"],
                 "resolved_device": runtime["resolved_device"],
                 "raw_output": raw_output,
+                "output_wrapper": output_wrapper,
                 "prediction": prediction,
                 "valid": valid,
                 "invalid_reason": invalid_reason,

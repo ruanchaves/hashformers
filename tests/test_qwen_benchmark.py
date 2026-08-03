@@ -12,12 +12,15 @@ from scripts.build_qwen_sample_manifest import selected_indices
 from scripts.qwen_benchmark import (
     MODEL_SPECS,
     PROTOCOL_ID,
+    SCHEMA_VERSION,
     SYSTEM_PROMPT,
+    USER_PROMPT_TEMPLATE,
     cpu_metadata,
     generate_once,
     load_jsonl,
     paired_bootstrap_interval,
     paired_comparisons,
+    parse_insertion_only,
     resolve_hub_file_commit,
     single_device,
     summarize_records,
@@ -30,9 +33,7 @@ from scripts.qwen_benchmark import (
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = REPOSITORY_ROOT / "benchmarks/qwen/samples.jsonl"
 MANIFEST_SHA256 = "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d"
-PUBLISHED_RESULTS = (
-    REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16"
-)
+PUBLISHED_RESULTS = REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v2"
 
 
 def load_manifest():
@@ -46,7 +47,7 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
     gold = f"{sample_id} value"
     raw_output = gold if correct else source if valid else "changed"
     return {
-        "schema_version": 1,
+        "schema_version": SCHEMA_VERSION,
         "sample_id": sample_id,
         "protocol_id": PROTOCOL_ID,
         "manifest_sha256": "f" * 64,
@@ -64,6 +65,7 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
         "input": source,
         "gold": gold,
         "raw_output": raw_output,
+        "output_wrapper": None,
         "prediction": raw_output if valid else None,
         "valid": valid,
         "invalid_reason": None if valid else "changed_non_space_characters",
@@ -79,9 +81,16 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
     [
         ("icecream", "ice cream", (True, "ice cream", None)),
         ("icecream", "  ice  cream ", (True, "ice cream", None)),
+        ("icecream", '"ice cream"', (True, "ice cream", None)),
+        ("icecream", "'ice cream'", (True, "ice cream", None)),
         ("CamelCase", "Camel Case", (True, "Camel Case", None)),
         ("CamelCase", "camel Case", (False, None, "changed_non_space_characters")),
         ("icecream", "ice\ncream", (False, None, "changed_non_space_characters")),
+        (
+            "icecream",
+            '\n"ice cream"\n',
+            (False, None, "changed_non_space_characters"),
+        ),
         (
             "icecream",
             "Result: ice cream",
@@ -92,8 +101,31 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
         ("icecream", None, (False, None, "missing_output")),
     ],
 )
-def test_output_contract_never_repairs_or_falls_back(source, raw_output, expected):
+def test_output_contract_never_repairs_characters_or_falls_back(
+    source, raw_output, expected
+):
     assert validate_insertion_only(source, raw_output) == expected
+
+
+def test_output_contract_records_only_a_matching_quote_envelope():
+    assert parse_insertion_only("icecream", '"ice cream"') == (
+        True,
+        "ice cream",
+        None,
+        "matching_ascii_quotes",
+    )
+    assert parse_insertion_only("icecream", '"ice cream') == (
+        False,
+        None,
+        "changed_non_space_characters",
+        None,
+    )
+    assert parse_insertion_only("icecream", '"ice cold"') == (
+        False,
+        None,
+        "changed_non_space_characters",
+        None,
+    )
 
 
 def test_manifest_is_fixed_complete_and_auditable():
@@ -227,7 +259,10 @@ def test_generation_uses_one_chat_template_without_duplicate_special_tokens():
     tokenizer.apply_chat_template.assert_called_once_with(
         [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": "icecold"},
+            {
+                "role": "user",
+                "content": USER_PROMPT_TEMPLATE.format(source="icecold"),
+            },
         ],
         tokenize=False,
         add_generation_prompt=True,
@@ -263,7 +298,20 @@ def test_summary_counts_invalid_outputs_as_incorrect_and_reports_rate_ci():
     assert summary["invalid_output_rate"]["successes"] == 1
     assert summary["invalid_output_rate"]["rate"] == 0.5
     assert summary["runtime_error_rate"]["successes"] == 0
+    assert summary["output_wrapper_rate"]["successes"] == 0
     assert summary["throughput_items_per_second"] == pytest.approx(100.0)
+
+
+def test_summary_reports_accepted_output_wrappers_separately_from_invalid_outputs():
+    record = prediction("one", valid=True, correct=True)
+    record["raw_output"] = f'"{record["raw_output"]}"'
+    record["output_wrapper"] = "matching_ascii_quotes"
+
+    summary = summarize_records([record])["overall"]
+
+    assert summary["accuracy"]["successes"] == 1
+    assert summary["invalid_output_rate"]["successes"] == 0
+    assert summary["output_wrapper_rate"]["successes"] == 1
 
 
 def test_summary_separates_runtime_errors_from_invalid_model_outputs():
@@ -288,6 +336,11 @@ def test_summary_rejects_missing_or_inconsistent_prediction_fields():
     inconsistent["correct"] = False
     with pytest.raises(ValueError, match="correct does not match"):
         summarize_records([inconsistent])
+
+    unsupported_wrapper = prediction("one", valid=True, correct=True)
+    unsupported_wrapper["output_wrapper"] = "code_fence"
+    with pytest.raises(ValueError, match="unsupported output_wrapper"):
+        summarize_records([unsupported_wrapper])
 
 
 def test_paired_comparison_joins_by_stable_sample_id():
