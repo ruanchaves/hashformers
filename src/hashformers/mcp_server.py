@@ -1273,13 +1273,14 @@ def _compile_regex_rules(
     """Compile a bounded rule set for timeout-protected substitution.
 
     Args:
-        regex_rules: Ordered custom rules or ``None`` for the library default.
+        regex_rules: Ordered custom rules, each containing capture group 1, or
+            ``None`` for the library default.
 
     Returns:
         Compiled rules in caller order.
 
     Raises:
-        ValueError: If the rule set exceeds MCP safety limits.
+        ValueError: If the rules are invalid or exceed MCP safety limits.
     """
     rules = regex_rules if regex_rules is not None else [r"([A-Z]+)"]
     _validate_strings(rules, "regex_rules")
@@ -1294,9 +1295,12 @@ def _compile_regex_rules(
                 f"{MAX_REGEX_PATTERN_LENGTH} characters"
             )
     try:
-        return [timeout_regex.compile(rule) for rule in rules]
+        compiled_rules = [timeout_regex.compile(rule) for rule in rules]
     except timeout_regex.error as error:
         raise ValueError(f"invalid regex rule: {error}") from error
+    if any(rule.groups < 1 for rule in compiled_rules):
+        raise ValueError("each regex rule must contain at least one capturing group")
+    return compiled_rules
 
 
 class _TimeoutRegexWordSegmenter(RegexWordSegmenter):
@@ -1308,7 +1312,8 @@ class _TimeoutRegexWordSegmenter(RegexWordSegmenter):
         """Compile the configured ordered regex rules.
 
         Args:
-            regex_rules: Ordered custom rules or ``None`` for the default.
+            regex_rules: Ordered custom rules, each containing capture group
+                1, or ``None`` for the default.
         """
         self.regex_rules = _compile_regex_rules(regex_rules)
 
@@ -1479,6 +1484,7 @@ def _serialize_rank(
     rank,
     normalized_input: str,
     max_candidates: int,
+    selected_segmentation: str | None = None,
 ) -> list[Candidate]:
     """Serialize one component ranking for one input.
 
@@ -1486,18 +1492,37 @@ def _serialize_rank(
         rank: Candidate ranking DataFrame returned by Hashformers.
         normalized_input: Preprocessed input used to select matching rows.
         max_candidates: Maximum rows to return.
+        selected_segmentation: Selected hypothesis to place first within its
+            equal-score tier, or ``None`` for the ranking's stable order.
 
     Returns:
         JSON-safe candidates ordered by ascending score.
 
     Raises:
-        RuntimeError: If a model emits a non-finite score.
+        RuntimeError: If a model emits an invalid ranking or non-finite score.
     """
     if rank is None:
         return []
     characters = normalized_input.replace(" ", "")
     rows = rank[rank["characters"] == characters]
-    rows = rows.sort_values(["score", "segmentation"], kind="stable")
+    rows = rows.sort_values("score", kind="stable")
+    if selected_segmentation is not None and not rows.empty:
+        selected_rows = rows[rows["segmentation"] == selected_segmentation]
+        if selected_rows.empty:
+            raise RuntimeError(
+                "Hashformers selected a segmentation absent from its ranking"
+            )
+        if float(selected_rows.iloc[0]["score"]) != float(rows.iloc[0]["score"]):
+            raise RuntimeError(
+                "Hashformers selected a segmentation that is not top-ranked"
+            )
+        selected_index = selected_rows.index[0]
+        rows = rows.loc[
+            [
+                selected_index,
+                *[index for index in rows.index if index != selected_index],
+            ]
+        ]
     rows = rows.head(max_candidates)
     candidates = []
     for position, row in enumerate(rows.itertuples(index=False), start=1):
@@ -1566,7 +1591,13 @@ def _serialize_word_output(
         normalized_inputs,
         output.output,
     ):
-        candidates = _serialize_rank(selected_rank, normalized, max_candidates)
+        selected_segmentation = str(selected)
+        candidates = _serialize_rank(
+            selected_rank,
+            normalized,
+            max_candidates,
+            selected_segmentation=selected_segmentation,
+        )
         if not candidates:
             raise RuntimeError(f"Hashformers produced no candidates for {original!r}")
         component_rankings = None
@@ -1576,14 +1607,31 @@ def _serialize_word_output(
                     output.segmenter_rank,
                     normalized,
                     max_candidates,
+                    selected_segmentation=(
+                        selected_segmentation if strategy == "segmenter" else None
+                    ),
                 ),
                 "reranker": (
-                    _serialize_rank(output.reranker_rank, normalized, max_candidates)
+                    _serialize_rank(
+                        output.reranker_rank,
+                        normalized,
+                        max_candidates,
+                        selected_segmentation=(
+                            selected_segmentation if strategy == "reranker" else None
+                        ),
+                    )
                     if output.reranker_rank is not None
                     else None
                 ),
                 "ensemble": (
-                    _serialize_rank(output.ensemble_rank, normalized, max_candidates)
+                    _serialize_rank(
+                        output.ensemble_rank,
+                        normalized,
+                        max_candidates,
+                        selected_segmentation=(
+                            selected_segmentation if strategy == "ensemble" else None
+                        ),
+                    )
                     if output.ensemble_rank is not None
                     else None
                 ),
@@ -1592,7 +1640,7 @@ def _serialize_word_output(
             {
                 "input": original,
                 "normalized_input": normalized,
-                "selected_segmentation": str(selected),
+                "selected_segmentation": selected_segmentation,
                 "ranking_strategy": strategy,
                 "candidates": candidates,
                 "component_rankings": component_rankings,
@@ -1670,7 +1718,9 @@ class _BoundedTextLines:
             file_object: Open text stream to consume.
         """
         self.file_object = file_object
+        self.physical_line = 0
         self.record_chars = 0
+        self.record_start_line: int | None = None
 
     def __iter__(self):
         """Return the iterator itself.
@@ -1698,6 +1748,11 @@ class _BoundedTextLines:
                 f"file records must contain at most {MAX_FILE_RECORD_CHARS} "
                 "characters"
             )
+        self.physical_line += 1
+        if self.record_start_line is None:
+            if not line.rstrip("\r\n"):
+                return line
+            self.record_start_line = self.physical_line
         self.record_chars += len(line)
         if self.record_chars > MAX_FILE_RECORD_CHARS:
             raise ValueError(
@@ -1713,6 +1768,7 @@ class _BoundedTextLines:
             None.
         """
         self.record_chars = 0
+        self.record_start_line = None
 
 
 def _iter_file_hashtags(
@@ -1752,9 +1808,15 @@ def _iter_file_hashtags(
         reader = csv.DictReader(lines)
         if reader.fieldnames is None or input_field not in reader.fieldnames:
             raise ValueError(f"CSV input must contain column {input_field!r}")
-        lines.reset_record()
-        for line_number, record in enumerate(reader, start=2):
+        while True:
             lines.reset_record()
+            try:
+                record = next(reader)
+            except StopIteration:
+                break
+            line_number = lines.record_start_line
+            if line_number is None:
+                raise RuntimeError("CSV reader returned a record without a source line")
             hashtag = record.get(input_field)
             if not isinstance(hashtag, str) or not hashtag.strip():
                 raise ValueError(f"blank hashtag at CSV line {line_number}")
@@ -2295,10 +2357,14 @@ def start_hashtag_file_job(
     if not source.is_file():
         raise ValueError(f"input_path is not a readable file: {source}")
     resolved_format = _resolve_input_format(source, input_format)
-    destination = (
-        _resolve_file_path(output_path, "output_path", must_exist=False)
-        if output_path is not None
-        else source.with_name(f"{source.name}.hashformers.jsonl")
+    destination = _resolve_file_path(
+        (
+            output_path
+            if output_path is not None
+            else source.with_name(f"{source.name}.hashformers.jsonl")
+        ),
+        "output_path",
+        must_exist=False,
     )
     job_path = _resolve_file_path(
         f"{destination}.job.sqlite3",
@@ -2710,7 +2776,8 @@ def segment_with_regex(
 
     Args:
         inputs: Texts to segment.
-        regex_rules: Ordered rules, or ``None`` for the library default.
+        regex_rules: Ordered rules, each containing capture group 1, or
+            ``None`` for the library default.
         lower: Whether to lowercase inputs before applying rules.
         remove_hashtag: Whether to strip leading hashtag characters.
         hashtag_character: Character stripped during preprocessing.
@@ -2778,7 +2845,8 @@ def segment_tweets(
     Args:
         tweets: Tweet texts to transform.
         segmenter_kind: ``regex`` or the configured ``transformer`` pipeline.
-        regex_rules: Ordered rules used by the regex segmenter.
+        regex_rules: Ordered rules used by the regex segmenter; every rule must
+            contain capture group 1.
         top_k: Transformer beam width.
         steps: Transformer beam-search depth.
         ranking_strategy: Transformer component used for final selection.

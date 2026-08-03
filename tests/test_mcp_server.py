@@ -708,6 +708,43 @@ def test_start_hashtag_file_job_rejects_paths_outside_configured_roots(tmp_path)
         )
 
 
+@pytest.mark.parametrize(
+    ("target_exists", "overwrite"),
+    [(False, False), (True, True)],
+)
+def test_start_hashtag_file_job_authorizes_derived_output_symlink(
+    tmp_path,
+    target_exists,
+    overwrite,
+):
+    """Verify a derived destination cannot follow a symlink outside its root."""
+    allowed_root = tmp_path / "allowed"
+    allowed_root.mkdir()
+    input_path = allowed_root / "hashtags.txt"
+    input_path.write_text("#icecold\n", encoding="utf-8")
+    outside_output = tmp_path / "outside.jsonl"
+    if target_exists:
+        outside_output.write_text("keep me", encoding="utf-8")
+    derived_output = allowed_root / "hashtags.txt.hashformers.jsonl"
+    derived_output.symlink_to(outside_output)
+    configure_server(
+        ServerConfig(file_roots=(str(allowed_root),), allow_file_overwrite=True)
+    )
+
+    with pytest.raises(ValueError, match="outside configured file roots"):
+        start_hashtag_file_job(
+            str(input_path),
+            overwrite=overwrite,
+            ranking_strategy="segmenter",
+        )
+
+    assert not list(allowed_root.glob("*.job.sqlite3"))
+    if target_exists:
+        assert outside_output.read_text(encoding="utf-8") == "keep me"
+    else:
+        assert not outside_output.exists()
+
+
 @requires_secure_file_jobs
 def test_file_job_rejects_replaced_configured_root(tmp_path):
     """Verify a same-path directory replacement does not inherit authority.
@@ -1376,6 +1413,31 @@ def test_file_reader_preserves_source_lines_across_formats(
     assert records == expected
 
 
+def test_csv_file_reader_preserves_physical_lines_for_multiline_records(tmp_path):
+    """Verify CSV source locations count embedded newlines physically."""
+    input_path = tmp_path / "hashtags.csv"
+    input_path.write_text(
+        'tag,label\n\n"#ice\ncold",a\n\n#mouraria,b\n',
+        encoding="utf-8",
+    )
+
+    records = list(mcp_server._iter_file_hashtags(input_path, "csv", "tag"))
+
+    assert records == [(3, "#ice\ncold"), (6, "#mouraria")]
+
+
+def test_csv_file_reader_reports_physical_line_after_blank_rows(tmp_path):
+    """Verify CSV validation errors identify a record's physical start."""
+    input_path = tmp_path / "hashtags.csv"
+    input_path.write_text(
+        "tag,label\n\n#icecold,a\n\n,b\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="blank hashtag at CSV line 5"):
+        list(mcp_server._iter_file_hashtags(input_path, "csv", "tag"))
+
+
 def test_segment_with_regex_exposes_rules_and_preprocessing():
     """Verify regex rules run sequentially through the MCP surface.
 
@@ -1407,6 +1469,12 @@ def test_segment_with_regex_rejects_invalid_rules():
     """
     with pytest.raises(ValueError, match="invalid regex rule"):
         segment_with_regex(["foo"], regex_rules=["("])
+
+
+def test_segment_with_regex_rejects_rules_without_capture_groups():
+    """Verify custom rules satisfy the segmenter's replacement contract."""
+    with pytest.raises(ValueError, match="at least one capturing group"):
+        segment_with_regex(["FOO"], regex_rules=[r"[A-Z]+"])
 
 
 def test_segment_with_regex_times_out_pathological_rules():
@@ -1518,6 +1586,62 @@ def test_rank_candidates_selects_precomputed_scores_without_loading_model():
     assert result["results"][0]["selected_segmentation"] == "ice cold"
     assert result["results"][0]["component_rankings"]["reranker"] is None
     get_model.assert_not_called()
+
+
+def test_rank_candidates_preserves_selected_tie_order():
+    """Verify serialized ties match ProbabilityDictionary selection order."""
+    candidate_sets = [
+        {
+            "input": "icecold",
+            "candidates": [
+                {"segmentation": "ice cold", "score": 1.0},
+                {"segmentation": "i ce cold", "score": 1.0},
+            ],
+        }
+    ]
+
+    result = rank_candidates(
+        candidate_sets,
+        ranking_strategy="segmenter",
+        max_candidates=1,
+    )
+
+    item = result["results"][0]
+    assert item["selected_segmentation"] == "ice cold"
+    assert item["candidates"] == [
+        {"segmentation": "ice cold", "score": 1.0, "rank": 1}
+    ]
+
+
+def test_rank_candidates_preserves_multi_input_tie_selections():
+    """Verify every selected tie is promoted before response truncation."""
+    result = rank_candidates(
+        [
+            {
+                "input": "aaaa",
+                "candidates": [
+                    {"segmentation": "aa aa", "score": 1.0},
+                    {"segmentation": "a aaa", "score": 1.0},
+                ],
+            },
+            {
+                "input": "bbbb",
+                "candidates": [
+                    {"segmentation": "bb bb", "score": 0.0},
+                    {"segmentation": "b bbb", "score": 0.0},
+                ],
+            },
+        ],
+        ranking_strategy="segmenter",
+        max_candidates=1,
+        include_component_rankings=True,
+    )
+
+    for item in result["results"]:
+        assert item["candidates"][0]["segmentation"] == item[
+            "selected_segmentation"
+        ]
+        assert item["component_rankings"]["segmenter"] == item["candidates"]
 
 
 def test_rank_candidates_passes_precomputed_run_to_reranker_pipeline():
