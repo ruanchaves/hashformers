@@ -35,7 +35,11 @@ def test_supported_python_and_transformers_versions(monkeypatch):
 def test_mcp_server_is_an_optional_extra(monkeypatch):
     metadata = read_setup_kwargs(monkeypatch)
 
-    assert metadata["extras_require"]["mcp"] == ["mcp>=2,<3"]
+    assert metadata["extras_require"]["mcp"] == [
+        "anyio>=4.9",
+        "mcp>=2,<3",
+        "regex",
+    ]
     assert all(
         not dependency.startswith("mcp")
         for dependency in metadata["install_requires"]

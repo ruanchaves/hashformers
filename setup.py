@@ -22,7 +22,7 @@ setup(
         "pandas"
     ],
     extras_require={
-        "mcp": ["mcp>=2,<3"],
+        "mcp": ["anyio>=4.9", "mcp>=2,<3", "regex"],
         "spacy": ["spacy>=3.0.0"]
     },
     entry_points={
