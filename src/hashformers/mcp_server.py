@@ -42,6 +42,7 @@ from hashformers.segmenter.data_structures import WordSegmenterOutput
 
 RankingStrategy = Literal["auto", "segmenter", "reranker", "ensemble"]
 ResolvedRankingStrategy = Literal["segmenter", "reranker", "ensemble"]
+FusionMethod = Literal["top2", "rrf"]
 FileInputFormat = Literal["auto", "text", "csv", "jsonl"]
 HubModelRole = Literal["segmenter", "reranker"]
 SupportedScorerType = Literal["gpt2", "bert", "incremental", "masked", "seq2seq"]
@@ -176,6 +177,7 @@ class SegmentationResult(TypedDict):
     normalized_input: str
     selected_segmentation: str
     ranking_strategy: ResolvedRankingStrategy
+    fusion_method: FusionMethod
     candidates: list[Candidate]
     component_rankings: ComponentRankings | None
 
@@ -313,6 +315,7 @@ class FileJobStatus(TypedDict):
     reranker_model: str | None
     reranker_revision: str | None
     ranking_strategy: ResolvedRankingStrategy
+    fusion_method: FusionMethod
 
 
 @dataclass(frozen=True)
@@ -1943,6 +1946,9 @@ def _validate_runtime_options(
     beta: float,
     max_candidates: int,
     hashtag_character: str,
+    fusion_method: FusionMethod = "top2",
+    rrf_k: float = 60,
+    fusion_weights: Mapping[str, float] | None = None,
 ) -> None:
     """Validate shared Transformer inference options.
 
@@ -1963,6 +1969,40 @@ def _validate_runtime_options(
     _validate_finite(beta, "beta")
     _validate_max_candidates(max_candidates)
     _validate_hashtag_character(hashtag_character)
+    _validate_fusion_options(fusion_method, rrf_k, fusion_weights)
+
+
+def _validate_fusion_options(
+    fusion_method: FusionMethod,
+    rrf_k: float,
+    fusion_weights: Mapping[str, float] | None,
+) -> None:
+    if fusion_method not in {"top2", "rrf"}:
+        raise ValueError("fusion_method must be top2 or rrf")
+    if isinstance(rrf_k, bool) or not isinstance(rrf_k, (int, float)):
+        raise ValueError("rrf_k must be a finite nonnegative number")
+    if not math.isfinite(float(rrf_k)) or rrf_k < 0:
+        raise ValueError("rrf_k must be a finite nonnegative number")
+    weights = (
+        {"segmenter": 1.0, "reranker": 1.0}
+        if fusion_weights is None
+        else fusion_weights
+    )
+    if not isinstance(weights, Mapping) or set(weights) != {
+        "segmenter",
+        "reranker",
+    }:
+        raise ValueError("fusion_weights must contain segmenter and reranker")
+    for weight in weights.values():
+        if (
+            isinstance(weight, bool)
+            or not isinstance(weight, (int, float))
+            or not math.isfinite(float(weight))
+            or weight < 0
+        ):
+            raise ValueError("fusion weights must be finite nonnegative numbers")
+    if not any(float(weight) for weight in weights.values()):
+        raise ValueError("fusion weights must not all be zero")
 
 
 def _resolve_ranking_strategy(strategy: RankingStrategy) -> ResolvedRankingStrategy:
@@ -2012,6 +2052,9 @@ def _run_transformer_pipeline(
     steps: int,
     alpha: float,
     beta: float,
+    fusion_method: FusionMethod,
+    rrf_k: float,
+    fusion_weights: Mapping[str, float] | None,
     strategy: ResolvedRankingStrategy,
     preprocessing_kwargs: dict,
     segmenter_run=None,
@@ -2039,7 +2082,12 @@ def _run_transformer_pipeline(
         segmenter_run=segmenter_run,
         preprocessing_kwargs=preprocessing_kwargs,
         segmenter_kwargs={"topk": top_k, "steps": steps},
-        ensembler_kwargs={"alpha": alpha, "beta": beta},
+        ensembler_kwargs=(
+            {"rrf_k": rrf_k, "fusion_weights": fusion_weights}
+            if fusion_method == "rrf"
+            else {"alpha": alpha, "beta": beta}
+        ),
+        fusion_method=fusion_method,
         use_reranker=use_reranker,
         use_ensembler=use_ensembler,
         return_ranks=True,
@@ -2129,6 +2177,7 @@ def _serialize_word_output(
     strategy: ResolvedRankingStrategy,
     max_candidates: int,
     include_component_rankings: bool,
+    fusion_method: FusionMethod = "top2",
 ) -> list[SegmentationResult]:
     """Serialize a ``WordSegmenterOutput`` for MCP.
 
@@ -2208,6 +2257,7 @@ def _serialize_word_output(
                 "normalized_input": normalized,
                 "selected_segmentation": selected_segmentation,
                 "ranking_strategy": strategy,
+                "fusion_method": fusion_method,
                 "candidates": candidates,
                 "component_rankings": component_rankings,
             }
@@ -2604,6 +2654,7 @@ def _file_job_status(
         "reranker_model": server_config["reranker_model"],
         "reranker_revision": server_config.get("reranker_revision"),
         "ranking_strategy": run_options["ranking_strategy"],
+        "fusion_method": run_options.get("fusion_method", "top2"),
     }
 
 
@@ -3119,6 +3170,9 @@ def segment_hashtags(
     ranking_strategy: RankingStrategy = "auto",
     alpha: float = 0.222,
     beta: float = 0.111,
+    fusion_method: FusionMethod = "top2",
+    rrf_k: float = 60,
+    fusion_weights: dict[str, float] | None = None,
     lower: bool = False,
     remove_hashtag: bool = True,
     hashtag_character: str = "#",
@@ -3156,6 +3210,9 @@ def segment_hashtags(
         beta,
         max_candidates,
         hashtag_character,
+        fusion_method,
+        rrf_k,
+        fusion_weights,
     )
     _require_models_configured()
     strategy = _resolve_ranking_strategy(ranking_strategy)
@@ -3179,6 +3236,9 @@ def segment_hashtags(
             steps=steps,
             alpha=alpha,
             beta=beta,
+            fusion_method=fusion_method,
+            rrf_k=rrf_k,
+            fusion_weights=fusion_weights,
             strategy=strategy,
             preprocessing_kwargs={
                 "lower": lower,
@@ -3194,6 +3254,7 @@ def segment_hashtags(
             strategy,
             max_candidates,
             include_component_rankings,
+            fusion_method,
         ),
         "models": _selected_models_payload(),
     }
@@ -3211,6 +3272,9 @@ def start_hashtag_file_job(
     ranking_strategy: RankingStrategy = "auto",
     alpha: float = 0.222,
     beta: float = 0.111,
+    fusion_method: FusionMethod = "top2",
+    rrf_k: float = 60,
+    fusion_weights: dict[str, float] | None = None,
     lower: bool = False,
     remove_hashtag: bool = True,
     hashtag_character: str = "#",
@@ -3263,6 +3327,9 @@ def start_hashtag_file_job(
         beta,
         max_candidates,
         hashtag_character,
+        fusion_method,
+        rrf_k,
+        fusion_weights,
     )
     _require_models_configured()
     resolved_strategy = _resolve_ranking_strategy(ranking_strategy)
@@ -3305,6 +3372,13 @@ def start_hashtag_file_job(
         "ranking_strategy": resolved_strategy,
         "alpha": float(alpha),
         "beta": float(beta),
+        "fusion_method": fusion_method,
+        "rrf_k": float(rrf_k),
+        "fusion_weights": dict(
+            {"segmenter": 1.0, "reranker": 1.0}
+            if fusion_weights is None
+            else fusion_weights
+        ),
         "lower": lower,
         "remove_hashtag": remove_hashtag,
         "hashtag_character": hashtag_character,
@@ -3684,6 +3758,9 @@ def rank_candidates(
     ranking_strategy: RankingStrategy = "auto",
     alpha: float = 0.222,
     beta: float = 0.111,
+    fusion_method: FusionMethod = "top2",
+    rrf_k: float = 60,
+    fusion_weights: dict[str, float] | None = None,
     max_candidates: int = 5,
     include_component_rankings: bool = False,
 ) -> SegmentationsResult:
@@ -3708,6 +3785,7 @@ def rank_candidates(
     _validate_input_count(candidate_sets, "candidate_sets")
     _validate_finite(alpha, "alpha")
     _validate_finite(beta, "beta")
+    _validate_fusion_options(fusion_method, rrf_k, fusion_weights)
     _validate_max_candidates(max_candidates)
     strategy = _resolve_ranking_strategy(ranking_strategy)
 
@@ -3822,6 +3900,9 @@ def rank_candidates(
                 steps=5,
                 alpha=alpha,
                 beta=beta,
+                fusion_method=fusion_method,
+                rrf_k=rrf_k,
+                fusion_weights=fusion_weights,
                 strategy=strategy,
                 segmenter_run=combined_run,
                 preprocessing_kwargs={"remove_hashtag": False},
@@ -3833,6 +3914,7 @@ def rank_candidates(
             strategy,
             max_candidates,
             include_component_rankings,
+            fusion_method,
         )
         for item, result in zip(batch, serialized):
             results[item["index"]] = result

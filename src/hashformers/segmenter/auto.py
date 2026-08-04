@@ -69,6 +69,9 @@ class TransformerWordSegmenter(BaseWordSegmenter):
             steps: int = 5,
             alpha: float = 0.222,
             beta: float = 0.111,
+            fusion_method: str = "top2",
+            rrf_k: float = 60,
+            fusion_weights: dict = None,
             use_reranker: bool = True,
             return_ranks: bool = False):
 
@@ -77,15 +80,17 @@ class TransformerWordSegmenter(BaseWordSegmenter):
                 "steps": steps
             }
 
-            ensembler_kwargs = {
-                "alpha": alpha,
-                "beta": beta
-            }
+            ensembler_kwargs = (
+                {"rrf_k": rrf_k, "fusion_weights": fusion_weights}
+                if fusion_method == "rrf"
+                else {"alpha": alpha, "beta": beta}
+            )
 
             return super().segment(
                 word_list,
                 segmenter_kwargs=segmenter_kwargs,
                 ensembler_kwargs=ensembler_kwargs,
+                fusion_method=fusion_method,
                 use_reranker=use_reranker,
                 return_ranks=return_ranks
             )
