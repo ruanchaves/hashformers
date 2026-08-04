@@ -1,9 +1,11 @@
 import pytest
 
 from scripts.segmentation_cost_projection import (
+    DEFAULT_COST_SVG,
     DEFAULT_METADATA,
     DEFAULT_SCENARIO,
     DEFAULT_SUMMARY,
+    DEFAULT_SVG,
     api_projection,
     api_scenario_seconds,
     build_projection,
@@ -125,9 +127,16 @@ def test_api_time_projection_exposes_parallel_scenario_crossover(scenario, metri
     )
 
 
-def test_published_svg_has_no_trailing_whitespace():
-    svg = DEFAULT_SUMMARY.with_name("hosted-api-cost-projection.svg").read_text(
-        encoding="utf-8"
-    )
+@pytest.mark.parametrize("path", [DEFAULT_SVG, DEFAULT_COST_SVG])
+def test_published_svgs_have_no_trailing_whitespace(path):
+    svg = path.read_text(encoding="utf-8")
 
     assert all(line == line.rstrip() for line in svg.splitlines())
+
+
+def test_standalone_cost_svg_contains_only_total_cost_panel():
+    svg = DEFAULT_COST_SVG.read_text(encoding="utf-8")
+
+    assert "Projected total inference cost" in svg
+    assert "Projected elapsed processing time" not in svg
+    assert "Projected cost per expected correct segmentation" not in svg

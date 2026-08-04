@@ -21,6 +21,7 @@ DEFAULT_RESULTS = Path("benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3")
 DEFAULT_SCENARIO = Path("benchmarks/qwen/hosted_api_cost_scenario.json")
 DEFAULT_METADATA = DEFAULT_RESULTS / "hashformers-distilgpt2/run_metadata.json"
 DEFAULT_SVG = DEFAULT_RESULTS / "hosted-api-cost-projection.svg"
+DEFAULT_COST_SVG = DEFAULT_RESULTS / "hosted-api-total-cost-projection.svg"
 DEFAULT_SUMMARY = DEFAULT_RESULTS / "hosted-api-cost-projection.json"
 
 
@@ -425,15 +426,8 @@ def write_json(path: Path, value: Mapping[str, Any]) -> None:
     )
 
 
-def plot_projection(
-    output: Path,
-    scenario: Mapping[str, Any],
-    metrics: HashformersMetrics,
-    summary: Mapping[str, Any],
-    *,
-    max_volume: int,
-) -> None:
-    """Render the three-factor projection as a deterministic SVG."""
+def load_plotting() -> tuple[Any, Any]:
+    """Import the optional plotting dependency only when rendering."""
 
     try:
         import matplotlib.pyplot as plt
@@ -442,16 +436,13 @@ def plot_projection(
         raise RuntimeError(
             "plotting requires matplotlib: python -m pip install matplotlib"
         ) from exc
+    return plt, FuncFormatter
 
-    providers = load_providers(scenario)
-    volumes = logarithmic_volumes(max_volume)
-    t4 = scenario["t4"]
-    hourly_rate = float(t4["hourly_rate"])
-    minimum_seconds = int(t4["minimum_billable_seconds"])
-    api_accuracy = float(
-        scenario["quality_scenario"]["hosted_api_exact_match_accuracy"]
-    )
-    colors = {
+
+def plot_colors() -> dict[str, str]:
+    """Return the stable color mapping shared by both SVG artifacts."""
+
+    return {
         "hashformers": "#0072B2",
         "openai-gpt-5.6-terra": "#009E73",
         "anthropic-claude-haiku-4.5": "#D55E00",
@@ -459,16 +450,9 @@ def plot_projection(
         "api-time": "#555555",
     }
 
-    hash_values = [
-        hashformers_projection(
-            volume,
-            metrics,
-            t4_hourly_rate=hourly_rate,
-            minimum_billable_seconds=minimum_seconds,
-        )
-        for volume in volumes
-    ]
-    api_time = [api_scenario_seconds(volume, scenario) for volume in volumes]
+
+def configure_plot_style(plt: Any, scenario: Mapping[str, Any]) -> None:
+    """Apply deterministic typography and grid styling."""
 
     plt.rcParams.update(
         {
@@ -483,6 +467,183 @@ def plot_projection(
             "svg.hashsalt": scenario["scenario_id"],
         }
     )
+
+
+def draw_total_cost_axis(
+    axis: Any,
+    *,
+    volumes: Sequence[int],
+    hash_values: Sequence[Mapping[str, float | int]],
+    providers: Sequence[ProviderPrice],
+    scenario: Mapping[str, Any],
+    metrics: HashformersMetrics,
+    summary: Mapping[str, Any],
+    colors: Mapping[str, str],
+    currency_formatter: Any,
+) -> None:
+    """Draw the total-inference-cost plot used in both figures."""
+
+    axis.plot(
+        volumes,
+        [value["cost_usd"] for value in hash_values],
+        color=colors["hashformers"],
+        linewidth=2.5,
+        label=f"{metrics.label}, T4 accelerator",
+    )
+    for provider_index, (provider, provider_summary) in enumerate(
+        zip(providers, summary["providers"], strict=True)
+    ):
+        values = [
+            api_projection(volume, provider, scenario)["cost_usd"] for volume in volumes
+        ]
+        axis.plot(
+            volumes,
+            values,
+            color=colors[provider.key],
+            linewidth=2,
+            label=provider.label,
+        )
+        crossover = provider_summary["first_volume_hashformers_total_cost_is_lower"]
+        if crossover is not None:
+            crossover_cost = api_projection(crossover, provider, scenario)["cost_usd"]
+            axis.scatter(
+                [crossover],
+                [crossover_cost],
+                color=colors[provider.key],
+                edgecolor="white",
+                linewidth=0.8,
+                s=36,
+                zorder=5,
+            )
+            axis.annotate(
+                f"{crossover:,}",
+                xy=(crossover, crossover_cost),
+                xytext=(4, 12 - provider_index * 12),
+                textcoords="offset points",
+                color=colors[provider.key],
+                fontsize=8,
+            )
+    axis.set_title("Projected total inference cost")
+    axis.set_xlabel("Hashtags in one batch")
+    axis.set_ylabel("USD")
+    axis.set_xscale("log")
+    axis.set_yscale("log")
+    axis.yaxis.set_major_formatter(currency_formatter)
+    axis.legend(loc="upper left", frameon=False)
+
+
+def save_figure(
+    figure: Any,
+    plt: Any,
+    output: Path,
+    scenario: Mapping[str, Any],
+) -> None:
+    """Save one deterministic plot and normalize Matplotlib SVG whitespace."""
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output_format = output.suffix.removeprefix(".").lower()
+    if output_format not in {"png", "svg"}:
+        raise ValueError("plot output must use a .png or .svg extension")
+    figure.savefig(
+        output,
+        format=output_format,
+        bbox_inches="tight",
+        dpi=180,
+        metadata={
+            "Date": scenario["pricing_retrieved_date"],
+            "Description": (
+                "Projection from measured Hashformers T4 throughput and explicit "
+                "hosted-API cost, latency, concurrency, and quality assumptions."
+            ),
+        },
+    )
+    plt.close(figure)
+    if output_format == "svg":
+        normalized = "\n".join(
+            line.rstrip() for line in output.read_text(encoding="utf-8").splitlines()
+        )
+        output.write_text(normalized + "\n", encoding="utf-8")
+
+
+def plot_total_cost_projection(
+    output: Path,
+    scenario: Mapping[str, Any],
+    metrics: HashformersMetrics,
+    summary: Mapping[str, Any],
+    *,
+    max_volume: int,
+) -> None:
+    """Render the total-inference-cost panel as a standalone SVG."""
+
+    plt, FuncFormatter = load_plotting()
+    providers = load_providers(scenario)
+    volumes = logarithmic_volumes(max_volume)
+    t4 = scenario["t4"]
+    hourly_rate = float(t4["hourly_rate"])
+    minimum_seconds = int(t4["minimum_billable_seconds"])
+    hash_values = [
+        hashformers_projection(
+            volume,
+            metrics,
+            t4_hourly_rate=hourly_rate,
+            minimum_billable_seconds=minimum_seconds,
+        )
+        for volume in volumes
+    ]
+
+    configure_plot_style(plt, scenario)
+    figure, axis = plt.subplots(figsize=(8, 5.4), layout="constrained")
+    draw_total_cost_axis(
+        axis,
+        volumes=volumes,
+        hash_values=hash_values,
+        providers=providers,
+        scenario=scenario,
+        metrics=metrics,
+        summary=summary,
+        colors=plot_colors(),
+        currency_formatter=FuncFormatter(format_currency_tick),
+    )
+    axis.spines["top"].set_visible(False)
+    axis.spines["right"].set_visible(False)
+    axis.set_xlim(1, max_volume)
+    save_figure(figure, plt, output, scenario)
+
+
+def plot_projection(
+    output: Path,
+    scenario: Mapping[str, Any],
+    metrics: HashformersMetrics,
+    summary: Mapping[str, Any],
+    *,
+    max_volume: int,
+) -> None:
+    """Render the three-factor projection as a deterministic SVG."""
+
+    plt, FuncFormatter = load_plotting()
+
+    providers = load_providers(scenario)
+    volumes = logarithmic_volumes(max_volume)
+    t4 = scenario["t4"]
+    hourly_rate = float(t4["hourly_rate"])
+    minimum_seconds = int(t4["minimum_billable_seconds"])
+    api_accuracy = float(
+        scenario["quality_scenario"]["hosted_api_exact_match_accuracy"]
+    )
+    colors = plot_colors()
+
+    hash_values = [
+        hashformers_projection(
+            volume,
+            metrics,
+            t4_hourly_rate=hourly_rate,
+            minimum_billable_seconds=minimum_seconds,
+        )
+        for volume in volumes
+    ]
+    api_time = [api_scenario_seconds(volume, scenario) for volume in volumes]
+
+    configure_plot_style(plt, scenario)
     figure = plt.figure(figsize=(14, 9), layout="constrained")
     grid = figure.add_gridspec(2, 2, height_ratios=(1, 1.05))
     time_axis = figure.add_subplot(grid[0, 0])
@@ -529,55 +690,17 @@ def plot_projection(
     time_axis.yaxis.set_major_formatter(FuncFormatter(format_duration_tick))
     time_axis.legend(loc="upper left", frameon=False)
 
-    cost_axis.plot(
-        volumes,
-        [value["cost_usd"] for value in hash_values],
-        color=colors["hashformers"],
-        linewidth=2.5,
-        label=f"{metrics.label}, T4 accelerator",
+    draw_total_cost_axis(
+        cost_axis,
+        volumes=volumes,
+        hash_values=hash_values,
+        providers=providers,
+        scenario=scenario,
+        metrics=metrics,
+        summary=summary,
+        colors=colors,
+        currency_formatter=FuncFormatter(format_currency_tick),
     )
-    for provider_index, (provider, provider_summary) in enumerate(
-        zip(providers, summary["providers"], strict=True)
-    ):
-        values = [
-            api_projection(volume, provider, scenario)["cost_usd"] for volume in volumes
-        ]
-        cost_axis.plot(
-            volumes,
-            values,
-            color=colors[provider.key],
-            linewidth=2,
-            label=provider.label,
-        )
-        crossover = provider_summary["first_volume_hashformers_total_cost_is_lower"]
-        if crossover is not None:
-            cost_axis.scatter(
-                [crossover],
-                [api_projection(crossover, provider, scenario)["cost_usd"]],
-                color=colors[provider.key],
-                edgecolor="white",
-                linewidth=0.8,
-                s=36,
-                zorder=5,
-            )
-            cost_axis.annotate(
-                f"{crossover:,}",
-                xy=(
-                    crossover,
-                    api_projection(crossover, provider, scenario)["cost_usd"],
-                ),
-                xytext=(4, 12 - provider_index * 12),
-                textcoords="offset points",
-                color=colors[provider.key],
-                fontsize=8,
-            )
-    cost_axis.set_title("Projected total inference cost")
-    cost_axis.set_xlabel("Hashtags in one batch")
-    cost_axis.set_ylabel("USD")
-    cost_axis.set_xscale("log")
-    cost_axis.set_yscale("log")
-    cost_axis.yaxis.set_major_formatter(FuncFormatter(format_currency_tick))
-    cost_axis.legend(loc="upper left", frameon=False)
 
     quality_axis.plot(
         volumes,
@@ -664,29 +787,7 @@ def plot_projection(
         fontsize=9,
         color="#444444",
     )
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output_format = output.suffix.removeprefix(".").lower()
-    if output_format not in {"png", "svg"}:
-        raise ValueError("plot output must use a .png or .svg extension")
-    figure.savefig(
-        output,
-        format=output_format,
-        bbox_inches="tight",
-        dpi=180,
-        metadata={
-            "Date": scenario["pricing_retrieved_date"],
-            "Description": (
-                "Projection from measured Hashformers T4 throughput and explicit "
-                "hosted-API cost, latency, concurrency, and quality assumptions."
-            ),
-        },
-    )
-    plt.close(figure)
-    if output_format == "svg":
-        normalized = "\n".join(
-            line.rstrip() for line in output.read_text(encoding="utf-8").splitlines()
-        )
-        output.write_text(normalized + "\n", encoding="utf-8")
+    save_figure(figure, plt, output, scenario)
 
 
 def format_duration_tick(value: float, _position: float) -> str:
@@ -724,13 +825,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--scenario", type=Path, default=DEFAULT_SCENARIO)
     parser.add_argument("--hashformers-metadata", type=Path, default=DEFAULT_METADATA)
     parser.add_argument("--output", type=Path, default=DEFAULT_SVG)
+    parser.add_argument("--cost-output", type=Path, default=DEFAULT_COST_SVG)
     parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY)
     parser.add_argument("--max-volume", type=int, default=10_000_000)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Generate the projection JSON and SVG."""
+    """Generate the projection JSON and SVG artifacts."""
 
     args = build_parser().parse_args(argv)
     scenario = read_json(args.scenario)
@@ -739,6 +841,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     write_json(args.summary_output, summary)
     plot_projection(
         args.output,
+        scenario,
+        metrics,
+        summary,
+        max_volume=args.max_volume,
+    )
+    plot_total_cost_projection(
+        args.cost_output,
         scenario,
         metrics,
         summary,
