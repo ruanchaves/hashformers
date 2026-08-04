@@ -1,6 +1,8 @@
+import json
 import subprocess
 import sys
 from argparse import ArgumentTypeError
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -16,7 +18,13 @@ from scripts.hashformers_benchmark import (
     select_manifest,
     stable_id_hash,
 )
-from scripts.qwen_benchmark import SCHEMA_VERSION
+from scripts.qwen_benchmark import SCHEMA_VERSION, load_jsonl, summarize_records
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+PUBLISHED_RESULTS = (
+    REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3"
+)
+PUBLISHED_RUNNER_REVISION = "d4180e11e383608387685d8f595103adfae8ee72"
 
 
 def prediction(sample_id, *, model, protocol, correct=False):
@@ -212,3 +220,54 @@ def test_cross_protocol_comparison_rejects_manifest_or_provenance_mismatch():
     right[0]["gold"] = "av alue"
     with pytest.raises(ValueError, match="differs in gold"):
         compare_runs([left, right])
+
+
+def test_published_adaptive_hashformers_results_are_clean_and_recomputable():
+    runs = []
+    for directory, model_key, expected_count in (
+        ("hashformers-gpt2", "gpt2", 280),
+        ("hashformers-distilgpt2", "distilgpt2", 280),
+        ("hashformers-rugpt3small", "rugpt3small", 20),
+    ):
+        predictions = load_jsonl(PUBLISHED_RESULTS / directory / "predictions.jsonl")
+        metadata = json.loads(
+            (PUBLISHED_RESULTS / directory / "run_metadata.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        assert len(predictions) == expected_count
+        assert metadata["status"] == "completed"
+        assert metadata["repository_revision"] == PUBLISHED_RUNNER_REVISION
+        assert metadata["repository_dirty"] is False
+        assert metadata["measurement"]["runtime_error_count"] == 0
+        assert metadata["segmentation"]["gpu_batch_size"] == "auto"
+        assert metadata["segmentation"]["max_gpu_batch_size"] == 512
+        telemetry = metadata["measurement"]["candidate_batch_telemetry"]
+        assert telemetry["configured_batch_size"] == "auto"
+        assert telemetry["max_batch_size"] == 512
+        assert telemetry["oom_backoff_events"] == 0
+        assert metadata["runtime"]["model_commit"] == MODEL_SPECS[model_key]["revision"]
+        assert metadata["results"] == summarize_records(predictions)
+        assert all(
+            record["prediction_source"] == "model_output" for record in predictions
+        )
+        runs.append(predictions)
+
+    qwen_runs = [
+        load_jsonl(PUBLISHED_RESULTS / model / "predictions.jsonl")
+        for model in ("qwen3", "qwen2")
+    ]
+    published = json.loads(
+        (PUBLISHED_RESULTS / "combined_comparison.json").read_text(encoding="utf-8")
+    )
+    recomputed = compare_runs([*qwen_runs, *runs])
+
+    for field in (
+        "schema_version",
+        "evaluation_contract_id",
+        "manifest_sha256",
+        "runs",
+        "paired_comparisons",
+    ):
+        assert published[field] == recomputed[field]

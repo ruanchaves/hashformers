@@ -12,7 +12,17 @@
 - Added a pinned Qwen3-0.6B benchmark protocol, fixed auditable samples, strict
   insertion-only validation, confidence intervals, and reproducibility
   metadata while retaining Qwen2 as a historical comparison. Published the
-  complete FP16 Tesla T4 run with raw generations and paired statistics.
+  complete protocol-v3 FP16 Tesla T4 run with raw generations and paired
+  statistics. Protocol v3 records benign quote envelopes separately from the
+  strict insertion-only content check, uses an explicit zero-shot input format
+  that does not encourage quoted echoes, and independently reports strict
+  validity, deterministic boundary-projection recovery, source fallback, and
+  scored proposal accuracy.
+- Added a fixed-manifest Hashformers benchmark runner with pinned GPT-2,
+  DistilGPT2, and RuGPT3Small snapshots, raw per-sample predictions, paired
+  cross-protocol statistics, and reproducibility metadata. Published Tesla T4
+  runs use the PR #80 adaptive candidate controller with
+  `gpu_batch_size="auto"`, a 512 maximum, and recorded controller telemetry.
 
 ### Breaking changes
 

@@ -1,0 +1,1699 @@
+{
+  "created_at": "2026-08-04T00:42:57.599431+00:00",
+  "evaluation_contract_id": "space-insertion-exact-match-v1",
+  "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+  "paired_comparisons": [
+    {
+      "accuracy_difference": -0.10357142857142858,
+      "ci_95": [
+        -0.14642857142857144,
+        -0.060714285714285714
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen3-0.6B (text-only, non-thinking)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "right_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.37142857142857144,
+      "ci_95": [
+        -0.43214285714285716,
+        -0.3107142857142857
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen3-0.6B (text-only, non-thinking)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Hashformers-GPT2",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.375,
+      "ci_95": [
+        -0.4357142857142857,
+        -0.3107142857142857
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen3-0.6B (text-only, non-thinking)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Hashformers-DistilGPT2",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.3,
+      "ci_95": [
+        -0.55,
+        -0.05
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen3-0.6B (text-only, non-thinking)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 20,
+      "right": "Hashformers-RuGPT3Small",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 20,
+      "shared_sample_ids_sha256": "2e72734714f59df5e67b2ffcede57954e073a5dd2b18a62f5588d416b03dfef4"
+    },
+    {
+      "accuracy_difference": -0.26785714285714285,
+      "ci_95": [
+        -0.33214285714285713,
+        -0.20357142857142857
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Hashformers-GPT2",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.2714285714285714,
+      "ci_95": [
+        -0.33214285714285713,
+        -0.21071428571428572
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Hashformers-DistilGPT2",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.3,
+      "ci_95": [
+        -0.55,
+        -0.05
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "left_protocol_id": "hashformers-qwen-space-insertion-v3",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 20,
+      "right": "Hashformers-RuGPT3Small",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 20,
+      "shared_sample_ids_sha256": "2e72734714f59df5e67b2ffcede57954e073a5dd2b18a62f5588d416b03dfef4"
+    },
+    {
+      "accuracy_difference": -0.0035714285714285713,
+      "ci_95": [
+        -0.039285714285714285,
+        0.03214285714285714
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Hashformers-GPT2",
+      "left_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "right": "Hashformers-DistilGPT2",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 280,
+      "shared_sample_ids_sha256": "6e4ce20b81433c6011ac5b69f612c24bd080aa56a0d746d7fcbaa12e642dec21"
+    },
+    {
+      "accuracy_difference": -0.1,
+      "ci_95": [
+        -0.3,
+        0.1
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Hashformers-GPT2",
+      "left_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 20,
+      "right": "Hashformers-RuGPT3Small",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 20,
+      "shared_sample_ids_sha256": "2e72734714f59df5e67b2ffcede57954e073a5dd2b18a62f5588d416b03dfef4"
+    },
+    {
+      "accuracy_difference": -0.1,
+      "ci_95": [
+        -0.3,
+        0.1
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "evaluation_contract_id": "space-insertion-exact-match-v1",
+      "left": "Hashformers-DistilGPT2",
+      "left_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "left_samples": 280,
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 20,
+      "right": "Hashformers-RuGPT3Small",
+      "right_protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "right_samples": 20,
+      "shared_sample_ids_sha256": "2e72734714f59df5e67b2ffcede57954e073a5dd2b18a62f5588d416b03dfef4"
+    }
+  ],
+  "runs": [
+    {
+      "actual_parameter_dtype": "torch.float16",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.37982917045799003,
+              0.555572107303257
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4666666666666667,
+            "successes": 56,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.008538174769902228,
+              0.0709300333278661
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.025,
+            "successes": 3,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 184.32785004167349,
+            "median": 169.13241300005666,
+            "p95": 338.2425867500728
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.008538174769902228,
+              0.0709300333278661
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.025,
+            "successes": 3,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.37982917045799003,
+              0.555572107303257
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4666666666666667,
+            "successes": 56,
+            "total": 120
+          },
+          "throughput_items_per_second": 5.425116170854901
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.1443956173664283,
+              0.35436270377601964
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.23333333333333334,
+            "successes": 14,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.01714950216439568,
+              0.1370051647634852
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.05,
+            "successes": 3,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 273.95628953334307,
+            "median": 245.5651895000983,
+            "p95": 443.1306468501815
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.01714950216439568,
+              0.1370051647634852
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.05,
+            "successes": 3,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.13123044048190308,
+              0.33620027573194783
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.21666666666666667,
+            "successes": 13,
+            "total": 60
+          },
+          "throughput_items_per_second": 3.6502173456334917
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.03431926106727268,
+              0.137495147390735
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.07,
+            "successes": 7,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0017674320641406505,
+              0.054486196178705315
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.01,
+            "successes": 1,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 206.84159231999953,
+            "median": 187.59709050004858,
+            "p95": 334.9824978498191
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0017674320641406505,
+              0.054486196178705315
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.01,
+            "successes": 1,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.03431926106727268,
+              0.137495147390735
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.07,
+            "successes": 7,
+            "total": 100
+          },
+          "throughput_items_per_second": 4.834617587225516
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "Qwen/Qwen3-0.6B",
+      "model_label": "Qwen3-0.6B (text-only, non-thinking)",
+      "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.2260107188553173,
+            0.330079499523966
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.275,
+          "successes": 77,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.012161668350597052,
+            0.050695459339000895
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.025,
+          "successes": 7,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 211.57456646071915,
+          "median": 185.76239950004947,
+          "p95": 390.7375574500293
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0006307232802881257,
+            0.01994928235019393
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0035714285714285713,
+          "successes": 1,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.009857032458149666,
+            0.04595390822159563
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.02142857142857143,
+          "successes": 6,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.22269585356855684,
+            0.3263481778008738
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.2714285714285714,
+          "successes": 76,
+          "total": 280
+        },
+        "throughput_items_per_second": 4.726466024382281
+      },
+      "protocol_id": "hashformers-qwen-space-insertion-v3",
+      "quantization": "none",
+      "requested_precision": "float16",
+      "resolved_device": "cuda:0"
+    },
+    {
+      "actual_parameter_dtype": "torch.float16",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.5105602479246307,
+              0.6832359187916286
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.6,
+            "successes": 72,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.30124527754856906,
+              0.47265919461579525
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.38333333333333336,
+            "successes": 46,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 135.2698551583103,
+            "median": 122.67221449997123,
+            "p95": 232.03733989971624
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.058133592026010775,
+              0.166681741108952
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 12,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.21040628091756453,
+              0.36970202453054035
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.2833333333333333,
+            "successes": 34,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.33238352140475963,
+              0.5061196729983577
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4166666666666667,
+            "successes": 50,
+            "total": 120
+          },
+          "throughput_items_per_second": 7.3926300788129815
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.21305867552366523,
+              0.44233767026176773
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.31666666666666665,
+            "successes": 19,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.5068300063010303,
+              0.7437908331277456
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.6333333333333333,
+            "successes": 38,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 202.1935098333112,
+            "median": 178.38231699988683,
+            "p95": 333.825815300065
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.08097440580167739,
+              0.2611458906977855
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 9,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.36175049539732784,
+              0.6069218996740751
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.48333333333333334,
+            "successes": 29,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.08097440580167739,
+              0.2611458906977855
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 9,
+            "total": 60
+          },
+          "throughput_items_per_second": 4.945757165125638
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.0930598528365663,
+              0.23283559590832364
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 15,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.24563122734128034,
+              0.4269465620490947
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.33,
+            "successes": 33,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 175.4165931299849,
+            "median": 140.75469899989912,
+            "p95": 298.18274679998916
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0552291370606751,
+              0.17436566150491345
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 10,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.15843265880303448,
+              0.3215438302287378
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.23,
+            "successes": 23,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.0552291370606751,
+              0.17436566150491345
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 10,
+            "total": 100
+          },
+          "throughput_items_per_second": 5.70071497887884
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "Qwen/Qwen2-0.5B-Instruct",
+      "model_label": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "model_revision": "c540970f9e29518b1d8f06ab8b24cba66ad77b6d",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.32376483749573304,
+            0.436664804169277
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.37857142857142856,
+          "successes": 106,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.3615809430307083,
+            0.4763567557426809
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.41785714285714287,
+          "successes": 117,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 163.94875900712287,
+          "median": 144.79760849985723,
+          "p95": 297.28267015002535
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0791012199412279,
+            0.1528643959848336
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.11071428571428571,
+          "successes": 31,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.25602314474941956,
+            0.3634827567185376
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.30714285714285716,
+          "successes": 86,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.1996107042999294,
+            0.3001100180005328
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.24642857142857144,
+          "successes": 69,
+          "total": 280
+        },
+        "throughput_items_per_second": 6.099466723969251
+      },
+      "protocol_id": "hashformers-qwen-space-insertion-v3",
+      "quantization": "none",
+      "requested_precision": "float16",
+      "resolved_device": "cuda:0"
+    },
+    {
+      "actual_parameter_dtype": "torch.float32",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.674498509525689,
+              0.8261415878246474
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7583333333333333,
+            "successes": 91,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 75.8499258750059,
+            "median": 61.61008150024827,
+            "p95": 189.0943318504014
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.674498509525689,
+              0.8261415878246474
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7583333333333333,
+            "successes": 91,
+            "total": 120
+          },
+          "throughput_items_per_second": 13.18392850703524
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.7008024625353194,
+              0.8944220311080237
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.8166666666666667,
+            "successes": 49,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 122.60074611666975,
+            "median": 92.08877299988671,
+            "p95": 335.25891035003474
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.7008024625353194,
+              0.8944220311080237
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.8166666666666667,
+            "successes": 49,
+            "total": 60
+          },
+          "throughput_items_per_second": 8.156557212534224
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.3186731302113651,
+              0.5079856994658921
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.41,
+            "successes": 41,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 103.06466899996849,
+            "median": 80.30383499976779,
+            "p95": 243.2423098997104
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.3186731302113651,
+              0.5079856994658921
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.41,
+            "successes": 41,
+            "total": 100
+          },
+          "throughput_items_per_second": 9.702646015389675
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "openai-community/gpt2",
+      "model_label": "Hashformers-GPT2",
+      "model_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.5887943502414602,
+            0.7000993171624984
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.6464285714285715,
+          "successes": 181,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 95.58750989999193,
+          "median": 71.35798800004522,
+          "p95": 268.04548110019374
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.5887943502414602,
+            0.7000993171624984
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.6464285714285715,
+          "successes": 181,
+          "total": 280
+        },
+        "throughput_items_per_second": 10.461617852021108
+      },
+      "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "quantization": "none",
+      "requested_precision": "library-default",
+      "resolved_device": "cuda:0"
+    },
+    {
+      "actual_parameter_dtype": "torch.float32",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.683445529241854,
+              0.833344248668171
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7666666666666667,
+            "successes": 92,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 56.54383354166536,
+            "median": 43.826874999695065,
+            "p95": 130.59819820000484
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.683445529241854,
+              0.833344248668171
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7666666666666667,
+            "successes": 92,
+            "total": 120
+          },
+          "throughput_items_per_second": 17.685394451777515
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.6637997242680521,
+              0.868769559518097
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7833333333333333,
+            "successes": 47,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 81.41847901665642,
+            "median": 59.47598549983013,
+            "p95": 210.84252160021592
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.6637997242680521,
+              0.868769559518097
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.7833333333333333,
+            "successes": 47,
+            "total": 60
+          },
+          "throughput_items_per_second": 12.282224036578013
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.33733298524110106,
+              0.5278461045078768
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.43,
+            "successes": 43,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 81.42109292997702,
+            "median": 64.80232600006275,
+            "p95": 158.95945789989116
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.33733298524110106,
+              0.5278461045078768
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.43,
+            "successes": 43,
+            "total": 100
+          },
+          "throughput_items_per_second": 12.281829732499542
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "distilbert/distilgpt2",
+      "model_label": "Hashformers-DistilGPT2",
+      "model_revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.5924445732527123,
+            0.7034952811610989
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.65,
+          "successes": 182,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 70.75885021070333,
+          "median": 51.5487679999751,
+          "p95": 162.76899600004538
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.5924445732527123,
+            0.7034952811610989
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.65,
+          "successes": 182,
+          "total": 280
+        },
+        "throughput_items_per_second": 14.132507764360694
+      },
+      "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "quantization": "none",
+      "requested_precision": "library-default",
+      "resolved_device": "cuda:0"
+    },
+    {
+      "actual_parameter_dtype": "torch.float32",
+      "groups": {
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.6395811352592431,
+              0.9476312541037835
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.85,
+            "successes": 17,
+            "total": 20
+          },
+          "count": 20,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0,
+              0.16112515805281938
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 20
+          },
+          "latency_ms": {
+            "mean": 78.8993225999775,
+            "median": 59.08608350000577,
+            "p95": 160.16940040001376
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.16112515805281938
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 20
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.16112515805281938
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 20
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.16112515805281938
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 20
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.0,
+              0.16112515805281938
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 20
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.6395811352592431,
+              0.9476312541037835
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.85,
+            "successes": 17,
+            "total": 20
+          },
+          "throughput_items_per_second": 12.674380045948395
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "ai-forever/rugpt3small_based_on_gpt2",
+      "model_label": "Hashformers-RuGPT3Small",
+      "model_revision": "a9307e696cd3c5b7f953ff4cb19d76a4d81821d5",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.6395811352592431,
+            0.9476312541037835
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.85,
+          "successes": 17,
+          "total": 20
+        },
+        "count": 20,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "latency_ms": {
+          "mean": 78.8993225999775,
+          "median": 59.08608350000577,
+          "p95": 160.16940040001376
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.6395811352592431,
+            0.9476312541037835
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.85,
+          "successes": 17,
+          "total": 20
+        },
+        "throughput_items_per_second": 12.674380045948395
+      },
+      "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+      "quantization": "none",
+      "requested_precision": "library-default",
+      "resolved_device": "cuda:0"
+    }
+  ],
+  "schema_version": 1,
+  "sources": [
+    {
+      "path": "/content/qwen-v3-results/qwen3/predictions.jsonl",
+      "sha256": "36aa5af63572a2056d04088b3135d015980f6ccb2d59ecc7d7206fbdfee3e836"
+    },
+    {
+      "path": "/content/qwen-v3-results/qwen2/predictions.jsonl",
+      "sha256": "fa5706930701d655aded0c929117cb4c4a1e43b428b0b9b0d227256311e9e9a9"
+    },
+    {
+      "path": "/content/hashformers-baselines-auto/gpt2/predictions.jsonl",
+      "sha256": "485db86dc5ed01da2851410978afaf5f906df50f0c5f57a1196727600e03f153"
+    },
+    {
+      "path": "/content/hashformers-baselines-auto/distilgpt2/predictions.jsonl",
+      "sha256": "906b85d23cb40a357b6cc306a5b3b1f3a37607d7bfe0a11425b38e28706e9f49"
+    },
+    {
+      "path": "/content/hashformers-baselines-auto/rugpt3small/predictions.jsonl",
+      "sha256": "fb1f4650b3ae64e7dd94663518ce7cf7e3c76d060a69907f5c58512ecceb00da"
+    }
+  ]
+}

@@ -1,0 +1,705 @@
+{
+  "created_at": "2026-08-04T00:11:59.222493+00:00",
+  "paired_comparisons": [
+    {
+      "accuracy_difference": -0.10357142857142858,
+      "ci_95": [
+        -0.14642857142857144,
+        -0.060714285714285714
+      ],
+      "ci_method": "paired percentile bootstrap (10,000 resamples, seed 42)",
+      "left": "Qwen3-0.6B (text-only, non-thinking)",
+      "left_configuration": {
+        "actual_parameter_dtype": "torch.float16",
+        "model_id": "Qwen/Qwen3-0.6B",
+        "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+        "quantization": "none",
+        "requested_precision": "float16",
+        "resolved_device": "cuda:0"
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "paired_samples": 280,
+      "protocol_id": "hashformers-qwen-space-insertion-v3",
+      "right": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "right_configuration": {
+        "actual_parameter_dtype": "torch.float16",
+        "model_id": "Qwen/Qwen2-0.5B-Instruct",
+        "model_revision": "c540970f9e29518b1d8f06ab8b24cba66ad77b6d",
+        "quantization": "none",
+        "requested_precision": "float16",
+        "resolved_device": "cuda:0"
+      }
+    }
+  ],
+  "runs": [
+    {
+      "actual_parameter_dtype": "torch.float16",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.37982917045799003,
+              0.555572107303257
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4666666666666667,
+            "successes": 56,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.008538174769902228,
+              0.0709300333278661
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.025,
+            "successes": 3,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 184.32785004167349,
+            "median": 169.13241300005666,
+            "p95": 338.2425867500728
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.008538174769902228,
+              0.0709300333278661
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.025,
+            "successes": 3,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.37982917045799003,
+              0.555572107303257
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4666666666666667,
+            "successes": 56,
+            "total": 120
+          },
+          "throughput_items_per_second": 5.425116170854901
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.1443956173664283,
+              0.35436270377601964
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.23333333333333334,
+            "successes": 14,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.01714950216439568,
+              0.1370051647634852
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.05,
+            "successes": 3,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 273.95628953334307,
+            "median": 245.5651895000983,
+            "p95": 443.1306468501815
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.01714950216439568,
+              0.1370051647634852
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.05,
+            "successes": 3,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.13123044048190308,
+              0.33620027573194783
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.21666666666666667,
+            "successes": 13,
+            "total": 60
+          },
+          "throughput_items_per_second": 3.6502173456334917
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.03431926106727268,
+              0.137495147390735
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.07,
+            "successes": 7,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.0017674320641406505,
+              0.054486196178705315
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.01,
+            "successes": 1,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 206.84159231999953,
+            "median": 187.59709050004858,
+            "p95": 334.9824978498191
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0017674320641406505,
+              0.054486196178705315
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.01,
+            "successes": 1,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.03431926106727268,
+              0.137495147390735
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.07,
+            "successes": 7,
+            "total": 100
+          },
+          "throughput_items_per_second": 4.834617587225516
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "Qwen/Qwen3-0.6B",
+      "model_label": "Qwen3-0.6B (text-only, non-thinking)",
+      "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.2260107188553173,
+            0.330079499523966
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.275,
+          "successes": 77,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.012161668350597052,
+            0.050695459339000895
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.025,
+          "successes": 7,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 211.57456646071915,
+          "median": 185.76239950004947,
+          "p95": 390.7375574500293
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0006307232802881257,
+            0.01994928235019393
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0035714285714285713,
+          "successes": 1,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.009857032458149666,
+            0.04595390822159563
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.02142857142857143,
+          "successes": 6,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.22269585356855684,
+            0.3263481778008738
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.2714285714285714,
+          "successes": 76,
+          "total": 280
+        },
+        "throughput_items_per_second": 4.726466024382281
+      },
+      "protocol_id": "hashformers-qwen-space-insertion-v3",
+      "quantization": "none",
+      "requested_precision": "float16",
+      "resolved_device": "cuda:0"
+    },
+    {
+      "actual_parameter_dtype": "torch.float16",
+      "groups": {
+        "English Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.5105602479246307,
+              0.6832359187916286
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.6,
+            "successes": 72,
+            "total": 120
+          },
+          "count": 120,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.30124527754856906,
+              0.47265919461579525
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.38333333333333336,
+            "successes": 46,
+            "total": 120
+          },
+          "latency_ms": {
+            "mean": 135.2698551583103,
+            "median": 122.67221449997123,
+            "p95": 232.03733989971624
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.058133592026010775,
+              0.166681741108952
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 12,
+            "total": 120
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.031019166418703486
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 120
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.21040628091756453,
+              0.36970202453054035
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.2833333333333333,
+            "successes": 34,
+            "total": 120
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.33238352140475963,
+              0.5061196729983577
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.4166666666666667,
+            "successes": 50,
+            "total": 120
+          },
+          "throughput_items_per_second": 7.3926300788129815
+        },
+        "Foreign Hashtags": {
+          "accuracy": {
+            "ci_95": [
+              0.21305867552366523,
+              0.44233767026176773
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.31666666666666665,
+            "successes": 19,
+            "total": 60
+          },
+          "count": 60,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.5068300063010303,
+              0.7437908331277456
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.6333333333333333,
+            "successes": 38,
+            "total": 60
+          },
+          "latency_ms": {
+            "mean": 202.1935098333112,
+            "median": 178.38231699988683,
+            "p95": 333.825815300065
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.08097440580167739,
+              0.2611458906977855
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 9,
+            "total": 60
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              0.0,
+              0.06017185214208986
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 60
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.36175049539732784,
+              0.6069218996740751
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.48333333333333334,
+            "successes": 29,
+            "total": 60
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.08097440580167739,
+              0.2611458906977855
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 9,
+            "total": 60
+          },
+          "throughput_items_per_second": 4.945757165125638
+        },
+        "Identifier Splitting": {
+          "accuracy": {
+            "ci_95": [
+              0.0930598528365663,
+              0.23283559590832364
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.15,
+            "successes": 15,
+            "total": 100
+          },
+          "count": 100,
+          "invalid_output_rate": {
+            "ci_95": [
+              0.24563122734128034,
+              0.4269465620490947
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.33,
+            "successes": 33,
+            "total": 100
+          },
+          "latency_ms": {
+            "mean": 175.4165931299849,
+            "median": 140.75469899989912,
+            "p95": 298.18274679998916
+          },
+          "output_wrapper_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "recovered_prediction_rate": {
+            "ci_95": [
+              0.0552291370606751,
+              0.17436566150491345
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 10,
+            "total": 100
+          },
+          "runtime_error_rate": {
+            "ci_95": [
+              3.469446951953614e-18,
+              0.03699349820698568
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.0,
+            "successes": 0,
+            "total": 100
+          },
+          "source_fallback_rate": {
+            "ci_95": [
+              0.15843265880303448,
+              0.3215438302287378
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.23,
+            "successes": 23,
+            "total": 100
+          },
+          "strict_output_accuracy": {
+            "ci_95": [
+              0.0552291370606751,
+              0.17436566150491345
+            ],
+            "ci_method": "Wilson score",
+            "rate": 0.1,
+            "successes": 10,
+            "total": 100
+          },
+          "throughput_items_per_second": 5.70071497887884
+        }
+      },
+      "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+      "model_id": "Qwen/Qwen2-0.5B-Instruct",
+      "model_label": "Qwen2-0.5B-Instruct (refreshed protocol)",
+      "model_revision": "c540970f9e29518b1d8f06ab8b24cba66ad77b6d",
+      "overall": {
+        "accuracy": {
+          "ci_95": [
+            0.32376483749573304,
+            0.436664804169277
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.37857142857142856,
+          "successes": 106,
+          "total": 280
+        },
+        "count": 280,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.3615809430307083,
+            0.4763567557426809
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.41785714285714287,
+          "successes": 117,
+          "total": 280
+        },
+        "latency_ms": {
+          "mean": 163.94875900712287,
+          "median": 144.79760849985723,
+          "p95": 297.28267015002535
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0791012199412279,
+            0.1528643959848336
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.11071428571428571,
+          "successes": 31,
+          "total": 280
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            8.673617379884035e-19,
+            0.013533818620629409
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 280
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.25602314474941956,
+            0.3634827567185376
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.30714285714285716,
+          "successes": 86,
+          "total": 280
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.1996107042999294,
+            0.3001100180005328
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.24642857142857144,
+          "successes": 69,
+          "total": 280
+        },
+        "throughput_items_per_second": 6.099466723969251
+      },
+      "protocol_id": "hashformers-qwen-space-insertion-v3",
+      "quantization": "none",
+      "requested_precision": "float16",
+      "resolved_device": "cuda:0"
+    }
+  ],
+  "schema_version": 3,
+  "sources": [
+    {
+      "path": "/content/qwen-v3-results/qwen3/predictions.jsonl",
+      "sha256": "36aa5af63572a2056d04088b3135d015980f6ccb2d59ecc7d7206fbdfee3e836"
+    },
+    {
+      "path": "/content/qwen-v3-results/qwen2/predictions.jsonl",
+      "sha256": "fa5706930701d655aded0c929117cb4c4a1e43b428b0b9b0d227256311e9e9a9"
+    }
+  ]
+}

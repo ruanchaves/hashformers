@@ -1,0 +1,443 @@
+{
+  "complete_manifest_count": 280,
+  "completed_at": "2026-08-04T00:42:05.125067+00:00",
+  "evaluation_contract_id": "space-insertion-exact-match-v1",
+  "hardware": {
+    "cpu": {
+      "architecture": "x86_64",
+      "logical_cores": 2,
+      "model_name": "x86_64"
+    },
+    "gpus_from_nvidia_smi": [
+      {
+        "driver": "580.82.07",
+        "memory_mib": "15360",
+        "name": "Tesla T4"
+      }
+    ],
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.35"
+  },
+  "manifest": "/content/hashformers-full/benchmarks/qwen/samples.jsonl",
+  "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+  "measurement": {
+    "baseline_gpu_memory": {
+      "baseline_allocated_bytes": 508782592,
+      "peak_allocated_bytes": 508782592,
+      "peak_reserved_bytes": 713031680
+    },
+    "batch_size": 1,
+    "candidate_batch_telemetry": {
+      "candidates_per_second": 661.9171686643601,
+      "configured_batch_size": "auto",
+      "effective_batch_size": 64,
+      "failed_upper_bound": null,
+      "free_memory_bytes": 13404798976,
+      "max_batch_size": 512,
+      "memory_headroom": 0.8572440413574012,
+      "oom_backoff_events": 0,
+      "peak_memory_bytes": 1115156480,
+      "total_memory_bytes": 15637086208,
+      "tuning_state": "converged"
+    },
+    "cuda_synchronize_before_and_after_segmentation_when_cuda_is_active": true,
+    "gpu_memory": {
+      "baseline_allocated_bytes": 508782592,
+      "peak_allocated_bytes": 1115156480,
+      "peak_reserved_bytes": 2095054848
+    },
+    "latency_scope": "complete TransformerWordSegmenter.segment call",
+    "measured_wall_seconds": 26.803876813999977,
+    "one_model_per_process": true,
+    "runtime_error_count": 0,
+    "throughput_items_per_wall_second": 10.446250068339097,
+    "warmup_items": 5,
+    "warmup_sample_ids": [
+      "ruanchaves/boun@test:3",
+      "ruanchaves/boun@test:11",
+      "ruanchaves/boun@test:13",
+      "ruanchaves/boun@test:25",
+      "ruanchaves/boun@test:59"
+    ]
+  },
+  "model": {
+    "label": "Hashformers-GPT2",
+    "model_id": "openai-community/gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "scope_dataset": null,
+    "status": "historical-hashformers-baseline-refreshed-protocol"
+  },
+  "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+  "repository_dirty": false,
+  "repository_revision": "d4180e11e383608387685d8f595103adfae8ee72",
+  "results": {
+    "actual_parameter_dtype": "torch.float32",
+    "groups": {
+      "English Hashtags": {
+        "accuracy": {
+          "ci_95": [
+            0.674498509525689,
+            0.8261415878246474
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.7583333333333333,
+          "successes": 91,
+          "total": 120
+        },
+        "count": 120,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "latency_ms": {
+          "mean": 75.8499258750059,
+          "median": 61.61008150024827,
+          "p95": 189.0943318504014
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.674498509525689,
+            0.8261415878246474
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.7583333333333333,
+          "successes": 91,
+          "total": 120
+        },
+        "throughput_items_per_second": 13.18392850703524
+      },
+      "Foreign Hashtags": {
+        "accuracy": {
+          "ci_95": [
+            0.7008024625353194,
+            0.8944220311080237
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.8166666666666667,
+          "successes": 49,
+          "total": 60
+        },
+        "count": 60,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "latency_ms": {
+          "mean": 122.60074611666975,
+          "median": 92.08877299988671,
+          "p95": 335.25891035003474
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.7008024625353194,
+            0.8944220311080237
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.8166666666666667,
+          "successes": 49,
+          "total": 60
+        },
+        "throughput_items_per_second": 8.156557212534224
+      },
+      "Identifier Splitting": {
+        "accuracy": {
+          "ci_95": [
+            0.3186731302113651,
+            0.5079856994658921
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.41,
+          "successes": 41,
+          "total": 100
+        },
+        "count": 100,
+        "invalid_output_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "latency_ms": {
+          "mean": 103.06466899996849,
+          "median": 80.30383499976779,
+          "p95": 243.2423098997104
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.3186731302113651,
+            0.5079856994658921
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.41,
+          "successes": 41,
+          "total": 100
+        },
+        "throughput_items_per_second": 9.702646015389675
+      }
+    },
+    "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+    "model_id": "openai-community/gpt2",
+    "model_label": "Hashformers-GPT2",
+    "model_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "overall": {
+      "accuracy": {
+        "ci_95": [
+          0.5887943502414602,
+          0.7000993171624984
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.6464285714285715,
+        "successes": 181,
+        "total": 280
+      },
+      "count": 280,
+      "invalid_output_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "latency_ms": {
+        "mean": 95.58750989999193,
+        "median": 71.35798800004522,
+        "p95": 268.04548110019374
+      },
+      "output_wrapper_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "recovered_prediction_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "runtime_error_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "source_fallback_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "strict_output_accuracy": {
+        "ci_95": [
+          0.5887943502414602,
+          0.7000993171624984
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.6464285714285715,
+        "successes": 181,
+        "total": 280
+      },
+      "throughput_items_per_second": 10.461617852021108
+    },
+    "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+    "quantization": "none",
+    "requested_precision": "library-default",
+    "resolved_device": "cuda:0"
+  },
+  "runner_sha256": "f2fbf73bfc15758b51541f21ba77c5ce4ea6859fdbdc1de66c3ae8439f11b3e6",
+  "runtime": {
+    "actual_parameter_dtype": "torch.float32",
+    "cuda_available": true,
+    "cuda_device": {
+      "compute_capability": [
+        7,
+        5
+      ],
+      "name": "Tesla T4",
+      "total_memory_bytes": 15637086208
+    },
+    "cuda_runtime": "12.8",
+    "hashformers_version": "3.0.0",
+    "huggingface_hub_version": "1.23.0",
+    "minicons_version": "0.3.39",
+    "model_commit": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "model_snapshot": "/root/.cache/huggingface/hub/models--openai-community--gpt2/snapshots/607a30d783dfa663caf39e06633721c8d4cfcd7e",
+    "python_version": "3.12.13",
+    "quantization": "none",
+    "requested_device": "cuda:0",
+    "requested_precision": "library-default",
+    "resolved_device": "cuda:0",
+    "torch_version": "2.11.0+cu128",
+    "transformers_version": "5.14.1"
+  },
+  "sample_count": 280,
+  "sample_scope_dataset": null,
+  "schema_version": 3,
+  "segmentation": {
+    "algorithm": "Hashformers beam search",
+    "gpu_batch_size": "auto",
+    "max_gpu_batch_size": 512,
+    "model_type": "incremental",
+    "output_contract": "may only insert ASCII spaces into the input",
+    "proposal_policy": "strict output, deterministic boundary projection, then source fallback",
+    "reranker": null,
+    "steps": 5,
+    "topk": 5
+  },
+  "started_at": "2026-08-04T00:41:27.593715+00:00",
+  "status": "completed"
+}

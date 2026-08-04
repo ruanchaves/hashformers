@@ -16,26 +16,62 @@ directory (`scripts/benchmark_script_focused.py` and
 provenance, statistical, and performance-measurement issues. It uses
 Qwen3-0.6B as the documented text-only, non-thinking fallback for Qwen3.5-0.8B.
 The August 2026 fixed-protocol artifacts are now published separately; they do
-not retrofit the archival table or create a comparison with the historical
-Hashformers runs.
+not retrofit the archival table. The Hashformers configurations were also
+rerun on the same fixed manifest, so the new section can make a current paired
+comparison without treating the incompatible January rows as evidence.
 
-## August 2026 fixed-protocol prompted comparison
+## August 2026 fixed-protocol comparison
 
-The [published artifacts](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16/)
+The [published artifacts](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/)
 contain all 280 raw generations for both prompted configurations. On the shared
-manifest, unquantized FP16 Qwen3-0.6B in non-thinking mode had 24/280 exact
-matches (8.57%, 95% Wilson CI 5.83%–12.44%) and a 66.07% invalid-output rate
-(95% CI 60.34%–71.37%). Qwen2-0.5B-Instruct under the same refreshed zero-shot
-protocol had 18/280 exact matches (6.43%, 95% CI 4.10%–9.93%) and an 86.07%
-invalid-output rate (95% CI 81.53%–89.64%).
+manifest, unquantized FP16 Qwen3-0.6B in non-thinking mode had 77/280 correct
+proposals (27.50%, 95% Wilson CI 22.60%–33.01%) and 76/280 strictly valid
+correct outputs (27.14%). Qwen2-0.5B-Instruct under the same refreshed
+zero-shot protocol had 106/280 correct proposals (37.86%, 95% CI
+32.38%–43.67%) and 69/280 strictly valid correct outputs (24.64%). Their
+invalid-output rates were 2.50% and 41.79%, respectively.
 
-The paired Qwen3-minus-Qwen2 accuracy difference was 2.14 percentage points
-(95% paired bootstrap CI −1.43 to 5.71 points). Because this interval includes
-zero, the run does not establish an accuracy difference between the two models.
-It also does not compare either prompted model with Hashformers: doing that
-requires rerunning the Hashformers configurations on the same fixed manifest.
-Hardware, latency, throughput, memory, revisions, and per-group results are in
-the [benchmark report](../benchmarks/qwen/README.md).
+The paired Qwen3-minus-Qwen2 proposal-accuracy difference was −10.36 percentage
+points (95% paired bootstrap CI −14.64 to −6.07 points), favoring Qwen2 for
+this protocol and recovery policy.
+
+The protocol-v3 audit distinguishes formatting from the scored proposal. It
+recovered one Qwen3 and 31 Qwen2 proposals from invalid generations, then used
+the unchanged source as an explicit fallback for six Qwen3 and 86 Qwen2
+records. Recovery contributed 17 correct Qwen2 predictions and fallback
+contributed another 20; the strict accuracy and invalid/recovery/fallback rates
+remain separate. No output used the accepted matching-quote envelope under the
+corrected prompt. Also, 266/273 valid Qwen3 predictions and 140/163 valid Qwen2
+predictions simply repeated the input. Only 70/280 gold labels need no spaces,
+so most such echoes are validly formatted but incorrect segmentations.
+
+The current Hashformers rerun used pinned GPT-2 and DistilGPT2 backbones on all
+280 records, plus a pinned RuGPT3Small backbone on only the 20 Russian records.
+It used top-k 5, five beam-search steps, no reranker, and the PR #80 adaptive
+candidate controller with `gpu_batch_size="auto"` and maximum 512. The
+controller selected effective batch size 64 for all three models with zero OOM
+backoffs.
+
+| Configuration | Scope | Exact-match accuracy (95% Wilson CI) |
+|---|---:|---:|
+| Hashformers-GPT2 | 280 | 181/280, 64.64% (58.88%–70.01%) |
+| Hashformers-DistilGPT2 | 280 | 182/280, 65.00% (59.24%–70.35%) |
+| Qwen2-0.5B-Instruct, refreshed | 280 | 106/280, 37.86% (32.38%–43.67%) |
+| Qwen3-0.6B, non-thinking | 280 | 77/280, 27.50% (22.60%–33.01%) |
+| Hashformers-RuGPT3Small | 20 Russian | 17/20, 85.00% (63.96%–94.76%) |
+
+On all 280 paired records, Qwen3 minus GPT-2 was −37.14 percentage points
+(95% paired bootstrap CI −43.21 to −31.07) and Qwen3 minus DistilGPT2 was
+−37.50 points (−43.57 to −31.07). Qwen2 minus GPT-2 was −26.79 points (−33.21
+to −20.36) and Qwen2 minus DistilGPT2 was −27.14 points (−33.21 to −21.07).
+GPT-2 minus DistilGPT2 was −0.36 points (−3.93 to 3.21). The RuGPT3Small
+comparisons cover only 20 Russian records and are reported separately in the
+[benchmark report](../benchmarks/qwen/README.md), together with hardware,
+latency, throughput, memory, revisions, and raw per-sample results.
+
+This current result compares the specified specialized beam-search and
+prompted-generative configurations under one fixed exact-match contract. It
+does not establish a general ranking of model classes.
 
 ---
 
@@ -182,7 +218,7 @@ an entire model class.
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
 | **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• An appropriate domain/language backbone is available, while a manual vocabulary is not. | Results depend on the backbone, language, dataset, and search configuration. |
-| **Prompted generative segmentation** | [Pinned Qwen protocol and artifacts](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The archival row covers one five-shot Qwen2 configuration; the separate fixed-protocol run covers Qwen3-0.6B and Qwen2-0.5B-Instruct only. |
+| **Prompted generative segmentation** | [Pinned Qwen protocol and artifacts](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The prompted side of the fixed-protocol comparison covers Qwen3-0.6B and Qwen2-0.5B-Instruct; both are paired with current Hashformers reruns on the same manifest. |
 
 ---
 

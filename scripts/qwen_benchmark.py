@@ -627,7 +627,7 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             or not isinstance(record["strict_correct"], bool)
             or not isinstance(record["correct"], bool)
         ):
-            raise ValueError(
+            raise TypeError(
                 f"{sample_id}: valid, strict_correct, and correct must be booleans"
             )
         for field in (
