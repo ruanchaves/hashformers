@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="310" viewBox="0 0 860 310" role="img" aria-labelledby="title description">
+  <title id="title">Exact-match accuracy benchmark</title>
+  <desc id="description">Hashformers with DistilGPT2 achieved 65.0 percent, Hashformers with GPT-2 achieved 64.6 percent, Qwen2-0.5B-Instruct achieved 37.9 percent, and Qwen3-0.6B achieved 27.5 percent.</desc>
+  <style>
+    .label { fill: #1f2328; font: 600 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .value { fill: #1f2328; font: 700 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .tick { fill: #656d76; font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .track { fill: #d0d7de; opacity: 0.45; }
+    .hashformers { fill: #1f883d; }
+    .qwen { fill: #8250df; }
+    @media (prefers-color-scheme: dark) {
+      .label, .value { fill: #f0f6fc; }
+      .tick { fill: #8c959f; }
+      .track { fill: #30363d; opacity: 1; }
+      .hashformers { fill: #3fb950; }
+      .qwen { fill: #a371f7; }
+    }
+  </style>
+
+  <text class="tick" x="260" y="20">0%</text>
+  <text class="tick" x="409" y="20">20%</text>
+  <text class="tick" x="558" y="20">40%</text>
+  <text class="tick" x="707" y="20">60%</text>
+
+  <text class="label" x="12" y="60">Hashformers + DistilGPT2</text>
+  <rect class="track" x="260" y="37" width="520" height="32" rx="6"/>
+  <rect class="hashformers" x="260" y="37" width="483" height="32" rx="6"/>
+  <text class="value" x="753" y="60">65.0%</text>
+
+  <text class="label" x="12" y="124">Hashformers + GPT-2</text>
+  <rect class="track" x="260" y="101" width="520" height="32" rx="6"/>
+  <rect class="hashformers" x="260" y="101" width="480" height="32" rx="6"/>
+  <text class="value" x="750" y="124">64.6%</text>
+
+  <text class="label" x="12" y="188">Qwen2-0.5B-Instruct</text>
+  <rect class="track" x="260" y="165" width="520" height="32" rx="6"/>
+  <rect class="qwen" x="260" y="165" width="281" height="32" rx="6"/>
+  <text class="value" x="551" y="188">37.9%</text>
+
+  <text class="label" x="12" y="252">Qwen3-0.6B</text>
+  <rect class="track" x="260" y="229" width="520" height="32" rx="6"/>
+  <rect class="qwen" x="260" y="229" width="204" height="32" rx="6"/>
+  <text class="value" x="474" y="252">27.5%</text>
+
+  <text class="tick" x="260" y="292">Exact-match accuracy on the fixed 280-item multilingual benchmark</text>
+</svg>
