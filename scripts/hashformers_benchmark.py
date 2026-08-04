@@ -73,6 +73,25 @@ MODEL_SPECS = {
 }
 
 
+def candidate_batch_size(value: str) -> int | str:
+    """Parse one positive fixed candidate microbatch size or ``auto``."""
+
+    normalized = value.strip().lower()
+    if normalized == "auto":
+        return normalized
+    try:
+        parsed = int(normalized)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            "candidate batch size must be a positive integer or auto"
+        ) from exc
+    if parsed < 1:
+        raise argparse.ArgumentTypeError(
+            "candidate batch size must be a positive integer or auto"
+        )
+    return parsed
+
+
 def resolve_model_snapshot(
     model_id: str,
     revision: str,
@@ -138,7 +157,7 @@ def load_segmenter(
         segmenter_model_type="incremental",
         segmenter_device=args.device,
         segmenter_gpu_batch_size=args.gpu_batch_size,
-        segmenter_max_gpu_batch_size=args.gpu_batch_size,
+        segmenter_max_gpu_batch_size=args.max_gpu_batch_size,
         reranker_model_name_or_path=None,
     )
     scorer = segmenter.segmenter_model.model.scorer
@@ -245,6 +264,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
             "steps": args.steps,
             "reranker": None,
             "gpu_batch_size": args.gpu_batch_size,
+            "max_gpu_batch_size": args.max_gpu_batch_size,
             "output_contract": "may only insert ASCII spaces into the input",
             "proposal_policy": (
                 "strict output, deterministic boundary projection, then source fallback"
@@ -370,6 +390,9 @@ def run_benchmark(args: argparse.Namespace) -> None:
     memory = memory_snapshot(torch, runtime_device)
     memory["baseline_allocated_bytes"] = baseline_memory["baseline_allocated_bytes"]
     metadata["measurement"]["gpu_memory"] = memory
+    metadata["measurement"]["candidate_batch_telemetry"] = (
+        segmenter.segmenter_model.model.batch_telemetry
+    )
     metadata["measurement"]["runtime_error_count"] = runtime_error_count
     metadata["results"] = summarize_records(completed)
     write_json(metadata_path, metadata)
@@ -481,7 +504,8 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     run.add_argument("--output-dir", type=Path, required=True)
     run.add_argument("--device", type=single_device, default="cuda:0")
-    run.add_argument("--gpu-batch-size", type=int, default=64)
+    run.add_argument("--gpu-batch-size", type=candidate_batch_size, default="auto")
+    run.add_argument("--max-gpu-batch-size", type=int, default=512)
     run.add_argument("--topk", type=int, default=5)
     run.add_argument("--steps", type=int, default=5)
     run.add_argument("--warmup", type=int, default=5)
@@ -501,7 +525,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     """CLI entry point."""
 
     args = build_parser().parse_args(argv)
-    for field in ("warmup", "topk", "steps", "gpu_batch_size"):
+    for field in ("warmup", "topk", "steps", "max_gpu_batch_size"):
         value = getattr(args, field, 1)
         if value < (0 if field == "warmup" else 1):
             raise SystemExit(f"--{field.replace('_', '-')} must be positive")

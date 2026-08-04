@@ -1,5 +1,6 @@
 import subprocess
 import sys
+from argparse import ArgumentTypeError
 from types import SimpleNamespace
 
 import pytest
@@ -8,6 +9,7 @@ from scripts.hashformers_benchmark import (
     EVALUATION_CONTRACT_ID,
     MODEL_SPECS,
     PROTOCOL_ID,
+    candidate_batch_size,
     compare_runs,
     resolve_model_snapshot,
     segment_once,
@@ -79,6 +81,15 @@ def test_hashformers_model_pins_and_scopes_are_explicit():
             "status": "historical-russian-baseline-refreshed-protocol",
         },
     }
+
+
+def test_candidate_batch_size_accepts_pr_80_auto_or_a_positive_integer():
+    assert candidate_batch_size("auto") == "auto"
+    assert candidate_batch_size("AUTO") == "auto"
+    assert candidate_batch_size("64") == 64
+    for value in ("0", "-1", "not-a-size"):
+        with pytest.raises(ArgumentTypeError, match="positive integer or auto"):
+            candidate_batch_size(value)
 
 
 def test_runner_is_executable_directly_from_its_script_path():
