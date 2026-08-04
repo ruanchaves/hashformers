@@ -2,9 +2,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
 
-**Hashformers** is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
-
-**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. Historical benchmarks compare specific Hashformers, heuristic, and prompted-model configurations; their conclusions are scoped to the evaluated samples and settings.
+**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. It is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
 
 <p align="center">
 <h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Google Colab Tutorial </a> </h3>
@@ -61,6 +59,8 @@ ws = WordSegmenter(
 
 ### MCP and Agent Skill
 
+#### Install the MCP Server
+
 Install and start the optional local MCP server:
 
 ```bash
@@ -71,7 +71,9 @@ hashformers-mcp \
   --file-root /path/to/project
 ```
 
-Add it to Codex or Claude Code:
+#### Connect an MCP Client
+
+Add the server to Codex or Claude Code:
 
 ```bash
 codex mcp add hashformers -- hashformers-mcp --model distilgpt2
@@ -79,7 +81,9 @@ claude mcp add --transport stdio --scope user hashformers -- \
   hashformers-mcp --model distilgpt2
 ```
 
-For interactive segmentation, call the `segment_hashtags` MCP tool:
+#### Segment Hashtags Interactively
+
+Call the `segment_hashtags` MCP tool:
 
 ```text
 segment_hashtags({
@@ -87,6 +91,8 @@ segment_hashtags({
   "max_candidates": 3
 })
 ```
+
+#### Process Large Files
 
 For a large text, CSV, or JSON Lines file, authorize its directory when adding
 the server:
@@ -110,6 +116,8 @@ continue_hashtag_file_job({
 })
 ```
 
+#### Select a Model for an Unknown Language
+
 If the language is unknown, let the agent sample the file and select a public
 Hugging Face model before segmentation:
 
@@ -127,6 +135,8 @@ configure_models({
   "segmenter_revision": "REVISION_FROM_DISCOVERY"
 })
 ```
+
+#### Install the Agent Skill
 
 The repository includes a `segment-hashtags` Agent Skill. Install it globally
 for Codex or Claude Code with:
