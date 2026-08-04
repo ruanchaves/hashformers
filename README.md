@@ -31,17 +31,6 @@ without spaces into words. It fills a gap in the NLP ecosystem between
 heuristic-based splitters and LLM prompt-based segmentation, and it can use
 language models from the [Hugging Face Model Hub](https://huggingface.co/models).
 
-## Benchmark Snapshot
-
-[![Exact-match accuracy for Hashformers and Qwen configurations](docs/assets/hashformers-qwen-benchmark.svg)](benchmarks/qwen/README.md)
-
-On the fixed 280-record benchmark, Hashformers with DistilGPT2 reached 65.0%
-exact-match accuracy, exceeding Qwen3-0.6B by **37.5 percentage points**. The
-chart compares the published configurations and does not make a general claim
-about all LLMs. Hashformers and generative-model throughput measure different
-inference paths; see the [full protocol and artifacts](benchmarks/qwen/README.md)
-for the scoped interpretation.
-
 ---
 
 ## 🚀 Quick Start
@@ -203,12 +192,6 @@ pip install hashformers[spacy]
 Hashformers occupies the middle ground between CPU heuristics and hosted LLM
 APIs: it provides model-backed segmentation while keeping inference local and
 scalable on consumer GPUs.
-
-| Approach | Compute | Domain adaptability | Local/private | Throughput | Agent integration |
-|---|---|---|---|---|---|
-| Heuristic splitters | CPU | Limited by their vocabulary and rules | Yes | High | Limited |
-| Hosted LLM APIs | Remote provider | Broad | Provider-dependent | Cost and rate-limit dependent | Provider-dependent |
-| **Hashformers** | GPU recommended | Selectable Hugging Face backbone | Yes | **14.1 hashtags/s on a T4** | **MCP and Agent Skill** |
 
 Hashformers is a strong fit when you have access to GPU compute and work in a
 niche domain where [SymSpell](https://github.com/wolfgarbe/SymSpell),
