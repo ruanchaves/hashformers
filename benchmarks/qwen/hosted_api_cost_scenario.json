@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "scenario_id": "hosted-api-vs-hashformers-t4-v1",
+  "pricing_retrieved_date": "2026-08-03",
+  "currency": "USD",
+  "t4": {
+    "hourly_rate": 0.35,
+    "minimum_billable_seconds": 60,
+    "price_scope": "GPU accelerator only; VM, CPU, memory, storage, network, model loading, idle time, and taxes are excluded",
+    "pricing_source": "https://cloud.google.com/products/compute/gpus-pricing?hl=en",
+    "billing_source": "https://cloud.google.com/products/compute/pricing"
+  },
+  "api_token_profile": {
+    "batch_size": 100,
+    "input_tokens_per_hashtag": 10.810714285714285,
+    "output_tokens_per_hashtag": 11.464285714285714,
+    "tokenizer_proxy": "o200k_base",
+    "system_instruction": "Insert spaces into each input without changing, deleting, or reordering any non-space characters. Return only a JSON array of objects with id and segmentation.",
+    "input_record_shape": {
+      "id": "zero-based integer within the request",
+      "text": "unsegmented input string"
+    },
+    "output_record_shape": {
+      "id": "matching zero-based integer",
+      "segmentation": "space-insertion-only output string"
+    },
+    "calibration_manifest": "benchmarks/qwen/samples.jsonl",
+    "calibration_sample_count": 280,
+    "calibration_description": "Projection from the fixed manifest using batches of up to 100 records and a compact JSON insertion-only prompt; provider tokenizers and real outputs can differ"
+  },
+  "api_time_scenario": {
+    "concurrent_requests": 10,
+    "fixed_request_latency_seconds": 0.5,
+    "output_tokens_per_second_per_request": 100,
+    "description": "Illustrative hosted-API throughput scenario, not a provider SLA or measured benchmark; rate limits, retries, queueing, and network variance are excluded"
+  },
+  "quality_scenario": {
+    "hosted_api_exact_match_accuracy": 0.9,
+    "status": "illustrative assumption, not measured on the fixed manifest",
+    "description": "Used only for the quality-adjusted cost projection; replace with paired provider benchmark results before making an empirical quality claim"
+  },
+  "providers": [
+    {
+      "key": "openai-gpt-5.6-terra",
+      "label": "OpenAI GPT-5.6 Terra",
+      "input_usd_per_million_tokens": 2.5,
+      "output_usd_per_million_tokens": 15.0,
+      "pricing_tier": "standard",
+      "pricing_source": "https://developers.openai.com/api/docs/models/compare"
+    },
+    {
+      "key": "anthropic-claude-haiku-4.5",
+      "label": "Anthropic Claude Haiku 4.5",
+      "input_usd_per_million_tokens": 1.0,
+      "output_usd_per_million_tokens": 5.0,
+      "pricing_tier": "standard",
+      "pricing_source": "https://www.anthropic.com/claude/haiku"
+    },
+    {
+      "key": "google-gemini-3-flash-preview",
+      "label": "Google Gemini 3 Flash Preview",
+      "input_usd_per_million_tokens": 0.5,
+      "output_usd_per_million_tokens": 3.0,
+      "pricing_tier": "standard paid",
+      "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing?hl=en"
+    }
+  ],
+  "projection_volumes": [
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000,
+    10000000
+  ]
+}

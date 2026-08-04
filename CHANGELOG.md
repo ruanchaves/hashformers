@@ -23,6 +23,12 @@
   cross-protocol statistics, and reproducibility metadata. Published Tesla T4
   runs use the PR #80 adaptive candidate controller with
   `gpu_batch_size="auto"`, a 512 maximum, and recorded controller telemetry.
+- Added a reproducible cost, time, and quality-adjusted volume projection for
+  Hashformers-DistilGPT2 on a rented T4 versus representative OpenAI,
+  Anthropic, and Google hosted API pricing. All token, concurrency, latency,
+  provider-quality, GPU-price, and billing assumptions are explicit and
+  machine-readable; hosted API accuracy and latency are not presented as
+  measured benchmark results.
 
 ### Breaking changes
 

@@ -72,6 +72,37 @@ LLMs generally. Qwen generation latency and Hashformers segmentation latency
 cover different inference paths; their values are reported for reproducibility,
 not as an architecture-independent speed claim.
 
+## Hosted provider projection
+
+[`hosted-api-cost-projection.svg`](hosted-api-cost-projection.svg) projects
+batch time, total cost, and quality-adjusted cost for
+Hashformers-DistilGPT2 on a rented T4 versus representative hosted API prices.
+This figure does not use Qwen. The Hashformers input is the measured 14.11
+items/s wall throughput and 65.00% exact-match accuracy from the run in this
+directory. API cost uses the standard list prices and token profile recorded in
+[`hosted_api_cost_scenario.json`](../../hosted_api_cost_scenario.json).
+
+The default scenario assumes 10 concurrent 100-item API requests, 0.5 seconds
+of fixed request latency, 100 output tokens/s/request, and 90% hosted-provider
+exact-match accuracy. API latency and accuracy are explicitly hypothetical;
+they were not measured on this manifest. Hashformers cost uses $0.35 per T4
+accelerator-hour with a 60-second minimum and excludes all VM and operational
+costs.
+
+| Hosted API price scenario | Projected cost / 1M hashtags | First volume where fresh-job Hashformers spend is lower | First volume where Hashformers cost / expected correct is lower |
+|---|---:|---:|---:|
+| OpenAI GPT-5.6 Terra | $198.99 | 30 | 41 |
+| Anthropic Claude Haiku 4.5 | $68.13 | 86 | 119 |
+| Google Gemini 3 Flash Preview | $39.80 | 147 | 203 |
+| Hashformers-DistilGPT2 on one T4 | $6.89 | — | — |
+
+The API time scenario first becomes faster at 169 hashtags because it assumes
+parallel requests. At one million hashtags it projects 3.32 hours for the API
+scenario versus 19.69 hours on one T4. The machine-readable calculations and
+caveats are in
+[`hosted-api-cost-projection.json`](hosted-api-cost-projection.json), and the
+projection can be regenerated with `scripts/segmentation_cost_projection.py`.
+
 ## Environment
 
 All runs used one Google Colab Tesla T4. The Qwen environment used Python
@@ -85,6 +116,9 @@ its intended sample scope with zero runtime errors.
 ## SHA-256 checksums
 
 ```text
+f0a32b8c8a65995a1202bd10e693fa6b4cfb97b4a46dbed830c848ff835e0cd4  ../../hosted_api_cost_scenario.json
+85a495529cfdd63de6ee85689aa26ff4aa21434ad86a8ade76c9953bebcf871f  hosted-api-cost-projection.json
+3379419b23c07e5a88b2252344a0cca206c4e5430c278d645d65efe3fb9b390d  hosted-api-cost-projection.svg
 9bcb65487c20498cb2ad1960fefaf76767c269fa2b1a8de1fd37ac509deee5ac  comparison.json
 ce4abae9afdc7a601c3ee3669a7c4967467ca63f4e62a50b94ff2294e935d8dc  combined_comparison.json
 fa5706930701d655aded0c929117cb4c4a1e43b428b0b9b0d227256311e9e9a9  qwen2/predictions.jsonl

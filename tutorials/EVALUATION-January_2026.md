@@ -73,6 +73,29 @@ This current result compares the specified specialized beam-search and
 prompted-generative configurations under one fixed exact-match contract. It
 does not establish a general ranking of model classes.
 
+### Deployment projection: hosted APIs versus one T4
+
+The separate
+[cost/time/volume projection](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
+compares Hashformers-DistilGPT2 on a rented T4 with representative OpenAI,
+Anthropic, and Google hosted API pricing. It does not use the local Qwen runs.
+At the default $0.35/T4-hour accelerator-only rate, Hashformers is projected to
+cost $6.89 per million hashtags. The hosted price scenarios range from $39.80
+to $198.99 per million under the calibrated token profile.
+
+For a newly billed T4 job, raw-spend crossovers range from 30 to 147 hashtags.
+Under the deliberately favorable assumption that hosted APIs achieve 90%
+exact-match accuracy versus the measured 65% for Hashformers-DistilGPT2, the
+quality-adjusted crossovers range from 41 to 203 hashtags. The API time scenario
+assumes ten-way concurrency and becomes faster after 169 hashtags, illustrating
+the expected tradeoff: parallel hosted APIs can reduce elapsed time while one
+warmed T4 provides lower marginal cost at sustained volume.
+
+Provider accuracy, latency, rate limits, and reliability were not measured.
+The [scenario file](../benchmarks/qwen/hosted_api_cost_scenario.json) records all
+assumptions and official price sources so the projection can be revised without
+presenting them as benchmark evidence.
+
 ---
 
 ## 📋 Datasets Used

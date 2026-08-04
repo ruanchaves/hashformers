@@ -1,0 +1,233 @@
+{
+  "api_time_scenario": {
+    "concurrent_requests": 10,
+    "description": "Illustrative hosted-API throughput scenario, not a provider SLA or measured benchmark; rate limits, retries, queueing, and network variance are excluded",
+    "fixed_request_latency_seconds": 0.5,
+    "output_tokens_per_second_per_request": 100
+  },
+  "api_token_profile": {
+    "batch_size": 100,
+    "calibration_description": "Projection from the fixed manifest using batches of up to 100 records and a compact JSON insertion-only prompt; provider tokenizers and real outputs can differ",
+    "calibration_manifest": "benchmarks/qwen/samples.jsonl",
+    "calibration_sample_count": 280,
+    "input_record_shape": {
+      "id": "zero-based integer within the request",
+      "text": "unsegmented input string"
+    },
+    "input_tokens_per_hashtag": 10.810714285714285,
+    "output_record_shape": {
+      "id": "matching zero-based integer",
+      "segmentation": "space-insertion-only output string"
+    },
+    "output_tokens_per_hashtag": 11.464285714285714,
+    "system_instruction": "Insert spaces into each input without changing, deleting, or reordering any non-space characters. Return only a JSON array of objects with id and segmentation.",
+    "tokenizer_proxy": "o200k_base"
+  },
+  "assumed_api_accuracy": 0.9,
+  "caveats": [
+    "Hosted provider exact-match accuracy is an illustrative assumption, not a measured result.",
+    "Hosted API wall time is an explicit concurrency and token-speed scenario, not a provider SLA.",
+    "Hashformers time excludes model loading and uses warmed measured wall throughput.",
+    "The T4 price is accelerator-only; a complete deployment must add VM and operational costs.",
+    "Provider token counts use one tokenizer proxy and fixed-manifest averages; actual bills depend on the provider tokenizer, prompt, response, caching, retries, and processing tier."
+  ],
+  "currency": "USD",
+  "hashformers": {
+    "billing_source": "https://cloud.google.com/products/compute/pricing",
+    "label": "Hashformers-DistilGPT2",
+    "measured_exact_match_accuracy": 0.65,
+    "measured_wall_throughput_items_per_second": 14.105325172561523,
+    "measurement_source": "benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hashformers-distilgpt2/run_metadata.json",
+    "minimum_billable_seconds": 60,
+    "price_scope": "GPU accelerator only; VM, CPU, memory, storage, network, model loading, idle time, and taxes are excluded",
+    "pricing_source": "https://cloud.google.com/products/compute/gpus-pricing?hl=en",
+    "projected_cost_per_expected_correct_at_scale_usd": 1.0604102564102563e-05,
+    "projected_cost_per_million_hashtags_usd": 6.892666666666666,
+    "projected_processing_hours_per_million_hashtags": 19.693114081348998,
+    "repository_revision": "d4180e11e383608387685d8f595103adfae8ee72",
+    "sample_count": 280,
+    "t4_hourly_rate": 0.35
+  },
+  "max_projected_volume": 10000000,
+  "pricing_retrieved_date": "2026-08-03",
+  "projection_not_measurement": true,
+  "providers": [
+    {
+      "first_volume_hashformers_quality_adjusted_cost_is_lower": 41,
+      "first_volume_hashformers_total_cost_is_lower": 30,
+      "input_usd_per_million_tokens": 2.5,
+      "key": "openai-gpt-5.6-terra",
+      "label": "OpenAI GPT-5.6 Terra",
+      "output_usd_per_million_tokens": 15.0,
+      "pricing_source": "https://developers.openai.com/api/docs/models/compare",
+      "pricing_tier": "standard",
+      "projected_cost_per_expected_correct_at_scale_usd": 0.00022110119047619045,
+      "projected_cost_per_million_hashtags_usd": 198.99107142857142
+    },
+    {
+      "first_volume_hashformers_quality_adjusted_cost_is_lower": 119,
+      "first_volume_hashformers_total_cost_is_lower": 86,
+      "input_usd_per_million_tokens": 1.0,
+      "key": "anthropic-claude-haiku-4.5",
+      "label": "Anthropic Claude Haiku 4.5",
+      "output_usd_per_million_tokens": 5.0,
+      "pricing_source": "https://www.anthropic.com/claude/haiku",
+      "pricing_tier": "standard",
+      "projected_cost_per_expected_correct_at_scale_usd": 7.570238095238094e-05,
+      "projected_cost_per_million_hashtags_usd": 68.13214285714285
+    },
+    {
+      "first_volume_hashformers_quality_adjusted_cost_is_lower": 203,
+      "first_volume_hashformers_total_cost_is_lower": 147,
+      "input_usd_per_million_tokens": 0.5,
+      "key": "google-gemini-3-flash-preview",
+      "label": "Google Gemini 3 Flash Preview",
+      "output_usd_per_million_tokens": 3.0,
+      "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing?hl=en",
+      "pricing_tier": "standard paid",
+      "projected_cost_per_expected_correct_at_scale_usd": 4.422023809523808e-05,
+      "projected_cost_per_million_hashtags_usd": 39.79821428571427
+    }
+  ],
+  "quality_scenario": {
+    "description": "Used only for the quality-adjusted cost projection; replace with paired provider benchmark results before making an empirical quality claim",
+    "hosted_api_exact_match_accuracy": 0.9,
+    "status": "illustrative assumption, not measured on the fixed manifest"
+  },
+  "scenario_id": "hosted-api-vs-hashformers-t4-v1",
+  "schema_version": 1,
+  "selected_volumes": [
+    {
+      "hashformers": {
+        "billed_seconds": 60,
+        "cost_per_expected_correct_usd": 0.008974358974358974,
+        "cost_usd": 0.005833333333333334,
+        "processing_seconds": 0.07089521069285638,
+        "volume": 1
+      },
+      "hosted_api_scenario_seconds": 0.6146428571428572,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 6.813214285714285e-05,
+        "google-gemini-3-flash-preview": 3.979821428571428e-05,
+        "openai-gpt-5.6-terra": 0.00019899107142857142
+      },
+      "volume": 1
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 60,
+        "cost_per_expected_correct_usd": 0.0008974358974358974,
+        "cost_usd": 0.005833333333333334,
+        "processing_seconds": 0.7089521069285638,
+        "volume": 10
+      },
+      "hosted_api_scenario_seconds": 1.6464285714285714,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 0.0006813214285714286,
+        "google-gemini-3-flash-preview": 0.0003979821428571429,
+        "openai-gpt-5.6-terra": 0.001989910714285714
+      },
+      "volume": 10
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 60,
+        "cost_per_expected_correct_usd": 8.974358974358975e-05,
+        "cost_usd": 0.005833333333333334,
+        "processing_seconds": 7.089521069285638,
+        "volume": 100
+      },
+      "hosted_api_scenario_seconds": 11.964285714285714,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 0.006813214285714285,
+        "google-gemini-3-flash-preview": 0.003979821428571428,
+        "openai-gpt-5.6-terra": 0.019899107142857142
+      },
+      "volume": 100
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 71,
+        "cost_per_expected_correct_usd": 1.0619658119658118e-05,
+        "cost_usd": 0.006902777777777777,
+        "processing_seconds": 70.89521069285638,
+        "volume": 1000
+      },
+      "hosted_api_scenario_seconds": 11.964285714285714,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 0.06813214285714285,
+        "google-gemini-3-flash-preview": 0.03979821428571429,
+        "openai-gpt-5.6-terra": 0.19899107142857142
+      },
+      "volume": 1000
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 709,
+        "cost_per_expected_correct_usd": 1.0604700854700854e-05,
+        "cost_usd": 0.06893055555555555,
+        "processing_seconds": 708.9521069285638,
+        "volume": 10000
+      },
+      "hosted_api_scenario_seconds": 119.64285714285714,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 0.6813214285714285,
+        "google-gemini-3-flash-preview": 0.3979821428571428,
+        "openai-gpt-5.6-terra": 1.989910714285714
+      },
+      "volume": 10000
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 7090,
+        "cost_per_expected_correct_usd": 1.0604700854700854e-05,
+        "cost_usd": 0.6893055555555555,
+        "processing_seconds": 7089.521069285638,
+        "volume": 100000
+      },
+      "hosted_api_scenario_seconds": 1196.4285714285713,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 6.813214285714285,
+        "google-gemini-3-flash-preview": 3.979821428571428,
+        "openai-gpt-5.6-terra": 19.89910714285714
+      },
+      "volume": 100000
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 70896,
+        "cost_per_expected_correct_usd": 1.0604102564102563e-05,
+        "cost_usd": 6.892666666666666,
+        "processing_seconds": 70895.21069285639,
+        "volume": 1000000
+      },
+      "hosted_api_scenario_seconds": 11964.285714285714,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 68.13214285714285,
+        "google-gemini-3-flash-preview": 39.79821428571427,
+        "openai-gpt-5.6-terra": 198.99107142857142
+      },
+      "volume": 1000000
+    },
+    {
+      "hashformers": {
+        "billed_seconds": 708953,
+        "cost_per_expected_correct_usd": 1.0603997863247864e-05,
+        "cost_usd": 68.92598611111111,
+        "processing_seconds": 708952.1069285638,
+        "volume": 10000000
+      },
+      "hosted_api_scenario_seconds": 119642.85714285713,
+      "provider_costs_usd": {
+        "anthropic-claude-haiku-4.5": 681.3214285714284,
+        "google-gemini-3-flash-preview": 397.98214285714283,
+        "openai-gpt-5.6-terra": 1989.9107142857142
+      },
+      "volume": 10000000
+    }
+  ],
+  "time_projection": {
+    "first_volume_hosted_api_scenario_is_faster": 169,
+    "status": "scenario only; provider latency and rate limits were not measured"
+  }
+}

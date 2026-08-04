@@ -100,6 +100,55 @@ an architecture-independent speed result. See the
 checksums and the committed
 [`Colab notebook`](issue_78_qwen_benchmark_colab.ipynb) for the GPU workflow.
 
+## Hosted LLM API cost projection
+
+The following figure is a scenario projection for common hosted providers; it
+is not a Qwen comparison or a provider benchmark. Hashformers-DistilGPT2 uses
+its measured 14.11 items/s wall throughput and 65.00% exact-match accuracy from
+the T4 run above. Provider cost uses standard token list prices retrieved on
+August 3, 2026 for
+[OpenAI GPT-5.6 Terra](https://developers.openai.com/api/docs/models/compare),
+[Anthropic Claude Haiku 4.5](https://www.anthropic.com/claude/haiku), and
+[Google Gemini 3 Flash Preview](https://ai.google.dev/gemini-api/docs/pricing?hl=en).
+
+![Projected batch time, total cost, and quality-adjusted cost for hosted LLM APIs versus Hashformers on a T4](results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
+
+The default scenario assumes 10.81 input and 11.46 output tokens per hashtag,
+calibrated from the fixed manifest with compact 100-record JSON requests. API
+wall time assumes ten concurrent requests, 0.5 seconds of fixed request
+latency, and 100 output tokens/s/request. The illustrative quality calculation
+assumes 90% hosted-API exact-match accuracy. Neither API latency nor API
+accuracy was measured; the scenario exists to show how conclusions change if
+the hosted model is materially more accurate.
+
+Hashformers cost uses the current
+[Google Cloud T4 accelerator price](https://cloud.google.com/products/compute/gpus-pricing?hl=en)
+of $0.35/hour and the
+[one-minute Compute Engine billing minimum](https://cloud.google.com/products/compute/pricing).
+It excludes the VM, CPU, memory, storage, network, loading, idle, and operating
+costs. For a fresh job, the projected raw-spend crossover occurs at 30 hashtags
+versus GPT-5.6 Terra, 86 versus Claude Haiku 4.5, and 147 versus Gemini 3 Flash
+Preview. After adjusting for the hypothetical 90% API accuracy versus the
+measured 65% Hashformers accuracy, those crossover volumes become 41, 119, and
+203. If the T4 is already running and its one-minute minimum is already paid,
+Hashformers has the lower marginal inference cost from the first item.
+
+At one million hashtags, the projection is $6.89 and 19.69 GPU-hours for
+Hashformers, versus $198.99 for GPT-5.6 Terra, $68.13 for Claude Haiku 4.5, and
+$39.80 for Gemini 3 Flash Preview. Under the illustrative ten-request API
+concurrency, hosted processing first becomes faster at 169 hashtags and takes
+3.32 hours at one million, versus 19.69 hours on one T4. Provider rate limits,
+queueing, retries, and network variance can change that result.
+
+All assumptions are editable in
+[`hosted_api_cost_scenario.json`](hosted_api_cost_scenario.json). Regenerate the
+auditable JSON and SVG with:
+
+```bash
+python -m pip install matplotlib
+python scripts/segmentation_cost_projection.py
+```
+
 ## Fixed samples
 
 [`samples.jsonl`](samples.jsonl) commits 20 physical rows from each of the 14
