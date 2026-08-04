@@ -83,14 +83,10 @@ claude mcp add --transport stdio --scope user hashformers -- \
 
 #### Segment Hashtags Interactively
 
-Call the `segment_hashtags` MCP tool:
+Ask the agent directly:
 
-```text
-segment_hashtags({
-  "hashtags": ["#weneedanationalpark", "#icecold"],
-  "max_candidates": 3
-})
-```
+> Use Hashformers to segment `#weneedanationalpark` and `#icecold`. Return up
+> to three candidates for each hashtag.
 
 #### Process Large Files
 
@@ -103,18 +99,11 @@ codex mcp add hashformers -- hashformers-mcp \
   --file-root /path/to/project
 ```
 
-Then start a resumable job and continue it until `status` is `completed`:
+Then ask the agent to run the resumable workflow:
 
-```text
-start_hashtag_file_job({
-  "input_path": "/path/to/project/hashtags.csv",
-  "output_path": "/path/to/project/segmented.jsonl"
-})
-
-continue_hashtag_file_job({
-  "job_path": "/path/to/project/segmented.jsonl.job.sqlite3"
-})
-```
+> Use Hashformers to segment the hashtags in
+> `/path/to/project/hashtags.csv`. Save the results to
+> `/path/to/project/segmented.jsonl` and continue until the job is complete.
 
 #### Select a Model for an Unknown Language
 
@@ -127,14 +116,8 @@ codex mcp add hashformers -- hashformers-mcp \
   --file-root /path/to/project
 ```
 
-```text
-sample_hashtag_file({"input_path": "/path/to/project/hashtags.csv"})
-discover_huggingface_models({"language": "tr", "role": "segmenter"})
-configure_models({
-  "segmenter_model": "MODEL_ID_FROM_DISCOVERY",
-  "segmenter_revision": "REVISION_FROM_DISCOVERY"
-})
-```
+> Sample `/path/to/project/hashtags.csv`, identify its language, select a
+> compatible public Hugging Face model, and segment the file with Hashformers.
 
 #### Install the Agent Skill
 
