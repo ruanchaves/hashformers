@@ -79,12 +79,54 @@ claude mcp add --transport stdio --scope user hashformers -- \
   hashformers-mcp --model distilgpt2
 ```
 
-Use `segment_hashtags` for interactive requests. For large text, CSV, or JSON
-Lines datasets, give the agent a local path and use `start_hashtag_file_job`
-followed by `continue_hashtag_file_job`; this keeps the dataset out of the
-agent's context and provides resumable checkpoints. If the language is unknown,
-start the server with `--defer-model-selection` so the agent can sample the file
-and choose a suitable public Hugging Face model before segmentation.
+For interactive segmentation, call the `segment_hashtags` MCP tool:
+
+```text
+segment_hashtags({
+  "hashtags": ["#weneedanationalpark", "#icecold"],
+  "max_candidates": 3
+})
+```
+
+For a large text, CSV, or JSON Lines file, authorize its directory when adding
+the server:
+
+```bash
+codex mcp add hashformers -- hashformers-mcp \
+  --model distilgpt2 \
+  --file-root /path/to/project
+```
+
+Then start a resumable job and continue it until `status` is `completed`:
+
+```text
+start_hashtag_file_job({
+  "input_path": "/path/to/project/hashtags.csv",
+  "output_path": "/path/to/project/segmented.jsonl"
+})
+
+continue_hashtag_file_job({
+  "job_path": "/path/to/project/segmented.jsonl.job.sqlite3"
+})
+```
+
+If the language is unknown, let the agent sample the file and select a public
+Hugging Face model before segmentation:
+
+```bash
+codex mcp add hashformers -- hashformers-mcp \
+  --defer-model-selection \
+  --file-root /path/to/project
+```
+
+```text
+sample_hashtag_file({"input_path": "/path/to/project/hashtags.csv"})
+discover_huggingface_models({"language": "tr", "role": "segmenter"})
+configure_models({
+  "segmenter_model": "MODEL_ID_FROM_DISCOVERY",
+  "segmenter_revision": "REVISION_FROM_DISCOVERY"
+})
+```
 
 The repository includes a `segment-hashtags` Agent Skill. Install it globally
 for Codex or Claude Code with:
@@ -136,7 +178,7 @@ pip install hashformers[spacy]
 ## When to Use Hashformers?
 
 Hashformers is designed to perform hashtag segmentation primarily on consumer
-GPUs. Its Transformer models often outperform language models that can run
+GPUs. Its Transformer models often outperform LLMs that can run
 locally on GPUs at the same speed and scale, as shown in the
 [Qwen benchmark](benchmarks/qwen/README.md). It can be especially useful when
 both of the following are true:
@@ -213,6 +255,9 @@ pip install -e .
 
 ## 📖 Resources
 
+- [Qwen and Hashformers Benchmark (August 2026)](benchmarks/qwen/README.md)
+- [Hosted LLM API Cost Projections (August 2026)](benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
+- [Benchmark Results and Reproducibility Artifacts (August 2026)](benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/README.md)
 - [15 Datasets for Word Segmentation on the Hugging Face Hub](https://medium.com/@ruanchaves/15-datasets-for-word-segmentation-on-the-hugging-face-hub-4f24cb971e48)
 - [Benchmark Scripts](scripts/)
 - [Evaluation Report (January 2026)](tutorials/EVALUATION-January_2026.md)
