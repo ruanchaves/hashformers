@@ -121,7 +121,14 @@ For `segment_hashtags` and file jobs:
 - `ranking_strategy` can be `auto`, `segmenter`, `reranker`, or `ensemble`.
   Reranker and ensemble strategies require a reranker configured for the MCP
   process, either at startup or through authorized deferred selection.
-- `alpha` and `beta` configure ensemble selection.
+- `fusion_method` defaults to `top2`, where `alpha` and `beta` configure the
+  legacy ensemble. Set `fusion_method="rrf"` only with `ensemble` selection and
+  a configured reranker.
+- RRF defaults to `rrf_k=60` and equal `fusion_weights` of `segmenter=1.0` and
+  `reranker=1.0`. Custom weights must contain exactly those two nonnegative
+  values and cannot both be zero. RRF combines full component rankings, and
+  its serialized score is negative because Hashformers scores are
+  lower-is-better.
 - `lower`, `remove_hashtag`, and `hashtag_character` configure preprocessing.
 - `include_component_rankings=true` returns segmenter, reranker, and ensemble
   rankings that actually ran.
@@ -186,6 +193,10 @@ Call `rank_candidates` with candidate sets shaped as:
 
 Use `segmenter` to select from supplied scores without loading a model. Use
 `reranker` or `ensemble` only when the server has a configured reranker.
+For full-list RRF, use `ranking_strategy="ensemble"`, `fusion_method="rrf"`,
+and optionally `rrf_k` plus `fusion_weights`. Request
+`include_component_rankings=true` when the user needs to inspect how the
+segmenter, reranker, and fused ranks produced the selection.
 
 ## Examples
 

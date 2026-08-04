@@ -18,6 +18,7 @@ StdioServerParameters = pytest.importorskip("mcp").StdioServerParameters
 stdio_client = pytest.importorskip("mcp").stdio_client
 
 import hashformers.mcp_server as mcp_server
+from hashformers.beamsearch.data_structures import ProbabilityDictionary
 from hashformers.mcp_server import (
     ServerConfig,
     configure_server,
@@ -138,6 +139,39 @@ def _mock_batch_output(_segmenter, inputs, **kwargs):
         ]
     )
     return WordSegmenterOutput(output=normalized, segmenter_rank=rank)
+
+
+class _RrfSegmenterModel:
+    """Return three deterministic candidates for every three-character input."""
+
+    def run(self, word_list, **_kwargs):
+        scores = {}
+        for word in word_list:
+            scores[word] = 1.0
+            scores[f"{word[0]} {word[1:]}"] = 2.0
+            scores[f"{word[:2]} {word[2:]}"] = 3.0
+        return ProbabilityDictionary(scores)
+
+
+class _RrfRerankerModel:
+    """Prefer the segmenter's third candidate without changing its scores."""
+
+    def rerank(self, segmenter_run, **_kwargs):
+        scores = {}
+        for row in segmenter_run.to_dataframe().itertuples(index=False):
+            first_token_length = len(row.segmentation.split()[0])
+            scores[row.segmentation] = {2: 1.0, 3: 2.0, 1: 3.0}[
+                first_token_length
+            ]
+        return ProbabilityDictionary(scores)
+
+
+def _rrf_segmenter():
+    return BaseWordSegmenter(
+        segmenter=_RrfSegmenterModel(),
+        reranker=_RrfRerankerModel(),
+        ensembler=object(),
+    )
 
 
 def test_get_segmenter_forwards_complete_startup_configuration_once():
@@ -296,6 +330,9 @@ def test_run_transformer_pipeline_delegates_every_option_to_base_segmenter():
             steps=9,
             alpha=0.4,
             beta=0.6,
+            fusion_method="top2",
+            rrf_k=60,
+            fusion_weights=None,
             strategy="reranker",
             preprocessing_kwargs=preprocessing_kwargs,
             segmenter_run=segmenter_run,
@@ -309,6 +346,7 @@ def test_run_transformer_pipeline_delegates_every_option_to_base_segmenter():
         preprocessing_kwargs=preprocessing_kwargs,
         segmenter_kwargs={"topk": 20, "steps": 9},
         ensembler_kwargs={"alpha": 0.4, "beta": 0.6},
+        fusion_method="top2",
         use_reranker=True,
         use_ensembler=False,
         return_ranks=True,
@@ -342,6 +380,7 @@ def test_segment_hashtags_separates_beam_width_from_response_limit():
                 "normalized_input": "icecold",
                 "selected_segmentation": "ice cold",
                 "ranking_strategy": "segmenter",
+                "fusion_method": "top2",
                 "candidates": [
                     {"segmentation": "ice cold", "score": 1.0, "rank": 1},
                     {"segmentation": "i ce cold", "score": 2.0, "rank": 2},
@@ -372,6 +411,9 @@ def test_segment_hashtags_separates_beam_width_from_response_limit():
         steps=9,
         alpha=0.222,
         beta=0.111,
+        fusion_method="top2",
+        rrf_k=60,
+        fusion_weights=None,
         strategy="segmenter",
         preprocessing_kwargs={
             "lower": True,
@@ -403,6 +445,7 @@ def test_segment_hashtags_returns_all_component_rankings():
 
     item = result["results"][0]
     assert item["ranking_strategy"] == "ensemble"
+    assert item["fusion_method"] == "top2"
     assert [candidate["segmentation"] for candidate in item["candidates"]] == [
         "ice cold",
         "i ce cold",
@@ -417,6 +460,9 @@ def test_segment_hashtags_returns_all_component_rankings():
         steps=5,
         alpha=0.222,
         beta=0.111,
+        fusion_method="top2",
+        rrf_k=60,
+        fusion_weights=None,
         strategy="ensemble",
         preprocessing_kwargs={
             "lower": False,
@@ -424,6 +470,91 @@ def test_segment_hashtags_returns_all_component_rankings():
             "hashtag_character": "#",
         },
     )
+
+
+def test_segment_hashtags_runs_full_list_weighted_rrf_without_models():
+    """Verify MCP RRF can select beyond the segmenter's top two candidates."""
+    configure_server(ServerConfig(reranker_model="custom/bert"))
+
+    with patch(
+        "hashformers.mcp_server.get_segmenter",
+        return_value=_rrf_segmenter(),
+    ):
+        result = segment_hashtags(
+            ["#abc"],
+            ranking_strategy="ensemble",
+            fusion_method="rrf",
+            rrf_k=0,
+            fusion_weights={"segmenter": 1.0, "reranker": 2.0},
+            max_candidates=3,
+            include_component_rankings=True,
+        )
+
+    item = result["results"][0]
+    assert item["selected_segmentation"] == "ab c"
+    assert item["fusion_method"] == "rrf"
+    assert [candidate["segmentation"] for candidate in item["candidates"]] == [
+        "ab c",
+        "abc",
+        "a bc",
+    ]
+    assert [candidate["score"] for candidate in item["candidates"]] == (
+        pytest.approx([-7 / 3, -2.0, -7 / 6])
+    )
+    assert [
+        candidate["segmentation"]
+        for candidate in item["component_rankings"]["segmenter"]
+    ] == ["abc", "a bc", "ab c"]
+    assert [
+        candidate["segmentation"]
+        for candidate in item["component_rankings"]["reranker"]
+    ] == ["ab c", "abc", "a bc"]
+    assert item["component_rankings"]["ensemble"] == item["candidates"]
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"fusion_method": "unknown"},
+        {"fusion_method": "rrf", "rrf_k": -1},
+        {"fusion_method": "rrf", "rrf_k": float("inf")},
+        {"fusion_method": "rrf", "rrf_k": True},
+        {"fusion_method": "rrf", "fusion_weights": {}},
+        {
+            "fusion_method": "rrf",
+            "fusion_weights": {"segmenter": 1.0, "reranker": -1.0},
+        },
+        {
+            "fusion_method": "rrf",
+            "fusion_weights": {"segmenter": 0.0, "reranker": 0.0},
+        },
+    ],
+)
+def test_segment_hashtags_rejects_invalid_fusion_before_model_loading(options):
+    """Verify malformed fusion options fail before the lazy model boundary."""
+    configure_server(ServerConfig(reranker_model="custom/bert"))
+
+    with patch("hashformers.mcp_server.get_segmenter") as get_model:
+        with pytest.raises(ValueError):
+            segment_hashtags(
+                ["#abc"],
+                ranking_strategy="ensemble",
+                **options,
+            )
+
+    get_model.assert_not_called()
+
+
+def test_rrf_requires_an_ensemble_capable_configuration_before_model_loading():
+    """Verify RRF cannot be labeled as active when no ensemble will run."""
+    with patch("hashformers.mcp_server.get_segmenter") as get_model:
+        with pytest.raises(
+            ValueError,
+            match="fusion_method=rrf requires ranking_strategy=ensemble",
+        ):
+            segment_hashtags(["#abc"], fusion_method="rrf")
+
+    get_model.assert_not_called()
 
 
 def test_auto_strategy_uses_reranker_only_when_configured():
@@ -629,6 +760,7 @@ def test_hashtag_file_job_resumes_deduplicates_and_returns_only_summary(tmp_path
         "reranker_model": None,
         "reranker_revision": None,
         "ranking_strategy": "segmenter",
+        "fusion_method": "top2",
     }
     assert [call.args[1] for call in pipeline.call_args_list] == [
         ["#icecold", "#benfica"],
@@ -659,6 +791,122 @@ def test_hashtag_file_job_resumes_deduplicates_and_returns_only_summary(tmp_path
         repeated = asyncio.run(continue_hashtag_file_job(summary["job_path"]))
     assert repeated["status"] == "completed"
     assert repeated["processed_this_call"] == 0
+    get_model.assert_not_called()
+
+
+@requires_secure_file_jobs
+def test_rrf_file_job_persists_and_restores_fusion_contract(tmp_path):
+    """Verify an interrupted RRF job resumes with identical weighted results."""
+    input_path = tmp_path / "hashtags.txt"
+    input_path.write_text("#abc\n#xyz\n", encoding="utf-8")
+    configure_server(
+        ServerConfig(
+            reranker_model="custom/bert",
+            file_roots=(str(tmp_path),),
+        )
+    )
+
+    started = start_hashtag_file_job(
+        str(input_path),
+        ranking_strategy="ensemble",
+        fusion_method="rrf",
+        rrf_k=0,
+        fusion_weights={"segmenter": 1, "reranker": 2},
+        max_candidates=3,
+        include_component_rankings=True,
+    )
+
+    assert started["fusion_method"] == "rrf"
+    with sqlite3.connect(started["job_path"]) as connection:
+        serialized = connection.execute(
+            "SELECT value FROM metadata WHERE key = 'run_options'"
+        ).fetchone()[0]
+    persisted = json.loads(serialized)
+    assert persisted["fusion_method"] == "rrf"
+    assert persisted["rrf_k"] == 0.0
+    assert persisted["fusion_weights"] == {"segmenter": 1.0, "reranker": 2.0}
+
+    with patch(
+        "hashformers.mcp_server.get_segmenter",
+        return_value=_rrf_segmenter(),
+    ):
+        interrupted = asyncio.run(
+            continue_hashtag_file_job(
+                started["job_path"],
+                max_unique_hashtags=1,
+            )
+        )
+    assert interrupted["status"] == "in_progress"
+    assert interrupted["fusion_method"] == "rrf"
+
+    with patch(
+        "hashformers.mcp_server.get_segmenter",
+        return_value=_rrf_segmenter(),
+    ):
+        completed = asyncio.run(
+            continue_hashtag_file_job(
+                started["job_path"],
+                max_unique_hashtags=1,
+            )
+        )
+
+    assert completed["status"] == "completed"
+    assert completed["fusion_method"] == "rrf"
+    records = [
+        json.loads(line)
+        for line in Path(completed["output_path"])
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert [record["selected_segmentation"] for record in records] == [
+        "ab c",
+        "xy z",
+    ]
+    assert all(record["fusion_method"] == "rrf" for record in records)
+    assert all(record["candidates"][0]["score"] < 0 for record in records)
+    assert all(
+        record["component_rankings"]["ensemble"] == record["candidates"]
+        for record in records
+    )
+
+
+@requires_secure_file_jobs
+def test_file_job_rejects_tampered_rrf_configuration_before_model_loading(
+    tmp_path,
+):
+    """Verify checkpoint edits cannot make RRF silently use default options."""
+    input_path = tmp_path / "hashtags.txt"
+    input_path.write_text("#abc\n", encoding="utf-8")
+    configure_server(
+        ServerConfig(
+            reranker_model="custom/bert",
+            file_roots=(str(tmp_path),),
+        )
+    )
+    started = start_hashtag_file_job(
+        str(input_path),
+        ranking_strategy="ensemble",
+        fusion_method="rrf",
+        fusion_weights={"segmenter": 1.0, "reranker": 2.0},
+    )
+    with sqlite3.connect(started["job_path"]) as connection:
+        serialized = connection.execute(
+            "SELECT value FROM metadata WHERE key = 'run_options'"
+        ).fetchone()[0]
+        run_options = json.loads(serialized)
+        del run_options["fusion_weights"]
+        connection.execute(
+            "UPDATE metadata SET value = ? WHERE key = 'run_options'",
+            (json.dumps(run_options, sort_keys=True),),
+        )
+
+    with patch("hashformers.mcp_server.get_segmenter") as get_model:
+        with pytest.raises(
+            ValueError,
+            match="job checkpoint contains invalid run options",
+        ):
+            asyncio.run(continue_hashtag_file_job(started["job_path"]))
+
     get_model.assert_not_called()
 
 
@@ -1537,6 +1785,82 @@ def test_rank_candidates_selects_precomputed_scores_without_loading_model():
     get_model.assert_not_called()
 
 
+def test_rank_candidates_uses_default_and_custom_rrf_options():
+    """Verify MCP candidate fusion exposes equal defaults and weighted RRF."""
+    configure_server(ServerConfig(reranker_model="custom/bert"))
+    candidate_sets = [
+        {
+            "input": "abc",
+            "candidates": [
+                {"segmentation": "abc", "score": 1.0},
+                {"segmentation": "a bc", "score": 2.0},
+                {"segmentation": "ab c", "score": 3.0},
+            ],
+        }
+    ]
+
+    with patch(
+        "hashformers.mcp_server.get_segmenter",
+        return_value=_rrf_segmenter(),
+    ):
+        defaults = rank_candidates(
+            candidate_sets,
+            ranking_strategy="ensemble",
+            fusion_method="rrf",
+            max_candidates=3,
+        )
+        explicit_defaults = rank_candidates(
+            candidate_sets,
+            ranking_strategy="ensemble",
+            fusion_method="rrf",
+            rrf_k=60,
+            fusion_weights={"segmenter": 1.0, "reranker": 1.0},
+            max_candidates=3,
+        )
+        weighted = rank_candidates(
+            candidate_sets,
+            ranking_strategy="ensemble",
+            fusion_method="rrf",
+            rrf_k=0,
+            fusion_weights={"segmenter": 1.0, "reranker": 2.0},
+            max_candidates=3,
+            include_component_rankings=True,
+        )
+
+    assert defaults["results"] == explicit_defaults["results"]
+    assert defaults["results"][0]["selected_segmentation"] == "abc"
+    item = weighted["results"][0]
+    assert item["selected_segmentation"] == "ab c"
+    assert item["fusion_method"] == "rrf"
+    assert [candidate["score"] for candidate in item["candidates"]] == (
+        pytest.approx([-7 / 3, -2.0, -7 / 6])
+    )
+    assert [
+        candidate["segmentation"]
+        for candidate in item["component_rankings"]["segmenter"]
+    ] == ["abc", "a bc", "ab c"]
+    assert [
+        candidate["segmentation"]
+        for candidate in item["component_rankings"]["reranker"]
+    ] == ["ab c", "abc", "a bc"]
+
+
+def test_rank_candidates_rejects_invalid_rrf_before_model_loading():
+    """Verify candidate RRF validation does not cross the lazy model boundary."""
+    configure_server(ServerConfig(reranker_model="custom/bert"))
+
+    with patch("hashformers.mcp_server.get_segmenter") as get_model:
+        with pytest.raises(ValueError, match="fusion_weights"):
+            rank_candidates(
+                [{"input": "abc", "candidates": []}],
+                ranking_strategy="ensemble",
+                fusion_method="rrf",
+                fusion_weights={"segmenter": 1.0},
+            )
+
+    get_model.assert_not_called()
+
+
 def test_rank_candidates_preserves_selected_tie_order():
     """Verify serialized ties match ProbabilityDictionary selection order."""
     candidate_sets = [
@@ -1898,6 +2222,20 @@ def test_mcp_server_exposes_complete_structured_surface():
     assert hashtag_schema["steps"]["default"] == 5
     assert hashtag_schema["max_candidates"]["default"] == 5
     assert hashtag_schema["ranking_strategy"]["default"] == "auto"
+    for tool_name in (
+        "segment_hashtags",
+        "start_hashtag_file_job",
+        "rank_candidates",
+    ):
+        schema = tools_by_name[tool_name].input_schema["properties"]
+        assert schema["fusion_method"]["default"] == "top2"
+        assert schema["fusion_method"]["enum"] == ["top2", "rrf"]
+        assert schema["rrf_k"]["default"] == 60
+        assert schema["fusion_weights"]["default"] is None
+        assert {variant["type"] for variant in schema["fusion_weights"]["anyOf"]} == {
+            "object",
+            "null",
+        }
     file_schema = tools_by_name["continue_hashtag_file_job"].input_schema["properties"]
     assert "context" not in file_schema
     sample_schema = tools_by_name["sample_hashtag_file"].input_schema["properties"]

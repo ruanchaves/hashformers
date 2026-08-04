@@ -99,6 +99,18 @@ class BaseWordSegmenter(BaseSegmenter):
         Returns:
             Returns the segmented words. If return_ranks is True, also returns the segmenter_rank, reranker_rank, and ensemble_rank.
         """
+        if fusion_method not in {"top2", "rrf"}:
+            raise ValueError("fusion_method must be top2 or rrf")
+        if fusion_method == "rrf" and not (
+            use_reranker
+            and self.reranker_model
+            and use_ensembler
+            and self.ensembler
+        ):
+            raise ValueError(
+                "fusion_method=rrf requires an active reranker and ensembler"
+            )
+
         word_list = super().preprocess(word_list, **preprocessing_kwargs)
 
         if segmenter_run is None:
@@ -116,9 +128,6 @@ class BaseWordSegmenter(BaseSegmenter):
 
         if use_reranker and self.reranker_model:
             reranker_run = self.reranker_model.rerank(segmenter_run, **reranker_kwargs)
-
-        if fusion_method not in {"top2", "rrf"}:
-            raise ValueError("fusion_method must be top2 or rrf")
 
         if use_reranker and self.reranker_model and use_ensembler and self.ensembler:
             ensembler = (
