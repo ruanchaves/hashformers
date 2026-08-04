@@ -260,14 +260,16 @@ itself, so the MCP server must also be installed and configured.
 The table below describes the practical trade-offs between Hashformers,
 vocabulary-based splitters, and direct prompted generation. The January 2026
 Qwen2 result is a single historical configuration, not evidence about LLMs as a
-class. A pinned, auditable [Qwen3 benchmark protocol](benchmarks/qwen/README.md)
-is ready for a fresh run; no new result is reported yet.
+class. A pinned, auditable [Qwen3/Qwen2 fixed-protocol result](benchmarks/qwen/README.md)
+is published with raw generations, confidence intervals, invalid-output rates,
+and GPU measurements. It compares those two prompted configurations only; the
+Hashformers configurations were not rerun on the fixed manifest.
 
 | Approach | Examples | Recommended When... | Notes |
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
 | **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• You are working in a domain or language where an appropriate backbone is available, but compiling a manual vocabulary is too burdensome. | Accuracy and performance depend on the selected backbone, language, dataset, and search settings. |
-| **Prompted generative segmentation** | [Qwen3 benchmark protocol](benchmarks/qwen/README.md) | • You want to test a generative model under an explicit insertion-only output contract.<br><br>• Generation latency and invalid outputs are acceptable and measured. | The published report evaluated only one five-shot Qwen2-0.5B configuration. It does not establish a general size or quality threshold for prompted models. |
+| **Prompted generative segmentation** | [Pinned Qwen benchmark and artifacts](benchmarks/qwen/README.md) | • You want to test a generative model under an explicit insertion-only output contract.<br><br>• Generation latency and invalid outputs are acceptable and measured. | The fixed-protocol run covers Qwen3-0.6B and Qwen2-0.5B-Instruct on one 280-record manifest. It does not establish a general size or quality threshold for prompted models. |
 
 ---
 

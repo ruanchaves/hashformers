@@ -15,7 +15,86 @@ directory (`scripts/benchmark_script_focused.py` and
 [Qwen3 protocol](../benchmarks/qwen/README.md) fixes the sampling, output,
 provenance, statistical, and performance-measurement issues. It uses
 Qwen3-0.6B as the documented text-only, non-thinking fallback for Qwen3.5-0.8B.
-No refreshed model result is reported until its raw artifacts are published.
+The August 2026 fixed-protocol artifacts are now published separately; they do
+not retrofit the archival table. The Hashformers configurations were also
+rerun on the same fixed manifest, so the new section can make a current paired
+comparison without treating the incompatible January rows as evidence.
+
+## August 2026 fixed-protocol comparison
+
+The [published artifacts](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/)
+contain all 280 raw generations for both prompted configurations. On the shared
+manifest, unquantized FP16 Qwen3-0.6B in non-thinking mode had 77/280 correct
+proposals (27.50%, 95% Wilson CI 22.60%–33.01%) and 76/280 strictly valid
+correct outputs (27.14%). Qwen2-0.5B-Instruct under the same refreshed
+zero-shot protocol had 106/280 correct proposals (37.86%, 95% CI
+32.38%–43.67%) and 69/280 strictly valid correct outputs (24.64%). Their
+invalid-output rates were 2.50% and 41.79%, respectively.
+
+The paired Qwen3-minus-Qwen2 proposal-accuracy difference was −10.36 percentage
+points (95% paired bootstrap CI −14.64 to −6.07 points), favoring Qwen2 for
+this protocol and recovery policy.
+
+The protocol-v3 audit distinguishes formatting from the scored proposal. It
+recovered one Qwen3 and 31 Qwen2 proposals from invalid generations, then used
+the unchanged source as an explicit fallback for six Qwen3 and 86 Qwen2
+records. Recovery contributed 17 correct Qwen2 predictions and fallback
+contributed another 20; the strict accuracy and invalid/recovery/fallback rates
+remain separate. No output used the accepted matching-quote envelope under the
+corrected prompt. Also, 266/273 valid Qwen3 predictions and 140/163 valid Qwen2
+predictions simply repeated the input. Only 70/280 gold labels need no spaces,
+so most such echoes are validly formatted but incorrect segmentations.
+
+The current Hashformers rerun used pinned GPT-2 and DistilGPT2 backbones on all
+280 records, plus a pinned RuGPT3Small backbone on only the 20 Russian records.
+It used top-k 5, five beam-search steps, no reranker, and the PR #80 adaptive
+candidate controller with `gpu_batch_size="auto"` and maximum 512. The
+controller selected effective batch size 64 for all three models with zero OOM
+backoffs.
+
+| Configuration | Scope | Exact-match accuracy (95% Wilson CI) |
+|---|---:|---:|
+| Hashformers-GPT2 | 280 | 181/280, 64.64% (58.88%–70.01%) |
+| Hashformers-DistilGPT2 | 280 | 182/280, 65.00% (59.24%–70.35%) |
+| Qwen2-0.5B-Instruct, refreshed | 280 | 106/280, 37.86% (32.38%–43.67%) |
+| Qwen3-0.6B, non-thinking | 280 | 77/280, 27.50% (22.60%–33.01%) |
+| Hashformers-RuGPT3Small | 20 Russian | 17/20, 85.00% (63.96%–94.76%) |
+
+On all 280 paired records, Qwen3 minus GPT-2 was −37.14 percentage points
+(95% paired bootstrap CI −43.21 to −31.07) and Qwen3 minus DistilGPT2 was
+−37.50 points (−43.57 to −31.07). Qwen2 minus GPT-2 was −26.79 points (−33.21
+to −20.36) and Qwen2 minus DistilGPT2 was −27.14 points (−33.21 to −21.07).
+GPT-2 minus DistilGPT2 was −0.36 points (−3.93 to 3.21). The RuGPT3Small
+comparisons cover only 20 Russian records and are reported separately in the
+[benchmark report](../benchmarks/qwen/README.md), together with hardware,
+latency, throughput, memory, revisions, and raw per-sample results.
+
+This current result compares the specified specialized beam-search and
+prompted-generative configurations under one fixed exact-match contract. It
+does not establish a general ranking of model classes.
+
+### Deployment projection: hosted APIs versus one T4
+
+The separate
+[cost/time/volume projection](../benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
+compares Hashformers-DistilGPT2 on a rented T4 with representative OpenAI,
+Anthropic, and Google hosted API pricing. It does not use the local Qwen runs.
+At the default $0.35/T4-hour accelerator-only rate, Hashformers is projected to
+cost $6.89 per million hashtags. The hosted price scenarios range from $39.80
+to $198.99 per million under the calibrated token profile.
+
+For a newly billed T4 job, raw-spend crossovers range from 30 to 147 hashtags.
+Under the deliberately favorable assumption that hosted APIs achieve 90%
+exact-match accuracy versus the measured 65% for Hashformers-DistilGPT2, the
+quality-adjusted crossovers range from 41 to 203 hashtags. The API time scenario
+assumes ten-way concurrency and becomes faster after 169 hashtags, illustrating
+the expected tradeoff: parallel hosted APIs can reduce elapsed time while one
+warmed T4 provides lower marginal cost at sustained volume.
+
+Provider accuracy, latency, rate limits, and reliability were not measured.
+The [scenario file](../benchmarks/qwen/hosted_api_cost_scenario.json) records all
+assumptions and official price sources so the projection can be revised without
+presenting them as benchmark evidence.
 
 ---
 
@@ -162,7 +241,7 @@ an entire model class.
 |----------|----------|---------------------|-------|
 | **Heuristic-based** | [SymSpell](https://github.com/wolfgarbe/SymSpell), [Ekphrasis](https://github.com/cbaziotis/ekphrasis), [WordNinja](https://github.com/keredson/wordninja), [Spiral (Ronin)](https://github.com/casics/spiral) | • **Scalability** is a primary requirement.<br><br>• The segmentation domain works well with a standard pre-built vocabulary. | Fast and efficient, but requires a pre-built vocabulary which can be limiting for niche domains or languages. |
 | **Hashformers** | [Hashformers](https://github.com/ruanchaves/hashformers) | • You want beam-search segmentation backed by a language model.<br><br>• An appropriate domain/language backbone is available, while a manual vocabulary is not. | Results depend on the backbone, language, dataset, and search configuration. |
-| **Prompted generative segmentation** | [Pinned Qwen protocol](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The historical row covers one Qwen2-0.5B prompt/configuration only. A current Qwen3 fallback run is pending publication of raw artifacts. |
+| **Prompted generative segmentation** | [Pinned Qwen protocol and artifacts](../benchmarks/qwen/README.md) | • You want to evaluate direct generation under an insertion-only contract.<br><br>• Invalid outputs, generation latency, and memory are explicitly measured. | The prompted side of the fixed-protocol comparison covers Qwen3-0.6B and Qwen2-0.5B-Instruct; both are paired with current Hashformers reruns on the same manifest. |
 
 ---
 
@@ -178,7 +257,7 @@ an entire model class.
 | **Hashformers** | [Hashformers-DistilGPT2](https://github.com/ruanchaves/hashformers) | Smaller GPT-2 variant used by the historical beam-search configuration |
 | **Hashformers** | [Hashformers-RuGPT3Small](https://github.com/ruanchaves/hashformers) | Russian-language GPT-3 backbone for Cyrillic text: [ai-forever/rugpt3small_based_on_gpt2](https://huggingface.co/ai-forever/rugpt3small_based_on_gpt2) |
 | **Prompted generative (historical)** | [LLM-Qwen2 (0.5B)](https://huggingface.co/Qwen/Qwen2-0.5B-Instruct) | Five-shot, 4-bit NF4 `Qwen/Qwen2-0.5B-Instruct`; raw outputs, fixed IDs, confidence intervals, and invalid-output rates were not retained. |
-| **Prompted generative (refresh pending)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; see the [reproducible protocol](../benchmarks/qwen/README.md). No result is claimed yet. |
+| **Prompted generative (fixed-protocol refresh)** | [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) | Pinned text-only Qwen3 fallback with `enable_thinking=False`; raw outputs and measured results are published under the [reproducible protocol](../benchmarks/qwen/README.md). |
 
 ---
 

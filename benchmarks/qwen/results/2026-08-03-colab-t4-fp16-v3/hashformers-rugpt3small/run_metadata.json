@@ -1,0 +1,285 @@
+{
+  "complete_manifest_count": 280,
+  "completed_at": "2026-08-04T00:42:49.032788+00:00",
+  "evaluation_contract_id": "space-insertion-exact-match-v1",
+  "hardware": {
+    "cpu": {
+      "architecture": "x86_64",
+      "logical_cores": 2,
+      "model_name": "x86_64"
+    },
+    "gpus_from_nvidia_smi": [
+      {
+        "driver": "580.82.07",
+        "memory_mib": "15360",
+        "name": "Tesla T4"
+      }
+    ],
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.35"
+  },
+  "manifest": "/content/hashformers-full/benchmarks/qwen/samples.jsonl",
+  "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+  "measurement": {
+    "baseline_gpu_memory": {
+      "baseline_allocated_bytes": 511797248,
+      "peak_allocated_bytes": 511797248,
+      "peak_reserved_bytes": 1035993088
+    },
+    "batch_size": 1,
+    "candidate_batch_telemetry": {
+      "candidates_per_second": 813.0524027989152,
+      "configured_batch_size": "auto",
+      "effective_batch_size": 64,
+      "failed_upper_bound": null,
+      "free_memory_bytes": 14463860736,
+      "max_batch_size": 512,
+      "memory_headroom": 0.9249716055539956,
+      "oom_backoff_events": 0,
+      "peak_memory_bytes": 761896960,
+      "total_memory_bytes": 15637086208,
+      "tuning_state": "tuning"
+    },
+    "cuda_synchronize_before_and_after_segmentation_when_cuda_is_active": true,
+    "gpu_memory": {
+      "baseline_allocated_bytes": 511797248,
+      "peak_allocated_bytes": 761896960,
+      "peak_reserved_bytes": 1035993088
+    },
+    "latency_scope": "complete TransformerWordSegmenter.segment call",
+    "measured_wall_seconds": 1.5808845000001384,
+    "one_model_per_process": true,
+    "runtime_error_count": 0,
+    "throughput_items_per_wall_second": 12.651145608675554,
+    "warmup_items": 5,
+    "warmup_sample_ids": [
+      "ruanchaves/nru_hse@test:98",
+      "ruanchaves/nru_hse@test:152",
+      "ruanchaves/nru_hse@test:178",
+      "ruanchaves/nru_hse@test:255",
+      "ruanchaves/nru_hse@test:296"
+    ]
+  },
+  "model": {
+    "label": "Hashformers-RuGPT3Small",
+    "model_id": "ai-forever/rugpt3small_based_on_gpt2",
+    "revision": "a9307e696cd3c5b7f953ff4cb19d76a4d81821d5",
+    "scope_dataset": "ruanchaves/nru_hse",
+    "status": "historical-russian-baseline-refreshed-protocol"
+  },
+  "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+  "repository_dirty": false,
+  "repository_revision": "d4180e11e383608387685d8f595103adfae8ee72",
+  "results": {
+    "actual_parameter_dtype": "torch.float32",
+    "groups": {
+      "Foreign Hashtags": {
+        "accuracy": {
+          "ci_95": [
+            0.6395811352592431,
+            0.9476312541037835
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.85,
+          "successes": 17,
+          "total": 20
+        },
+        "count": 20,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "latency_ms": {
+          "mean": 78.8993225999775,
+          "median": 59.08608350000577,
+          "p95": 160.16940040001376
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.0,
+            0.16112515805281938
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 20
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.6395811352592431,
+            0.9476312541037835
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.85,
+          "successes": 17,
+          "total": 20
+        },
+        "throughput_items_per_second": 12.674380045948395
+      }
+    },
+    "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+    "model_id": "ai-forever/rugpt3small_based_on_gpt2",
+    "model_label": "Hashformers-RuGPT3Small",
+    "model_revision": "a9307e696cd3c5b7f953ff4cb19d76a4d81821d5",
+    "overall": {
+      "accuracy": {
+        "ci_95": [
+          0.6395811352592431,
+          0.9476312541037835
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.85,
+        "successes": 17,
+        "total": 20
+      },
+      "count": 20,
+      "invalid_output_rate": {
+        "ci_95": [
+          0.0,
+          0.16112515805281938
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 20
+      },
+      "latency_ms": {
+        "mean": 78.8993225999775,
+        "median": 59.08608350000577,
+        "p95": 160.16940040001376
+      },
+      "output_wrapper_rate": {
+        "ci_95": [
+          0.0,
+          0.16112515805281938
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 20
+      },
+      "recovered_prediction_rate": {
+        "ci_95": [
+          0.0,
+          0.16112515805281938
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 20
+      },
+      "runtime_error_rate": {
+        "ci_95": [
+          0.0,
+          0.16112515805281938
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 20
+      },
+      "source_fallback_rate": {
+        "ci_95": [
+          0.0,
+          0.16112515805281938
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 20
+      },
+      "strict_output_accuracy": {
+        "ci_95": [
+          0.6395811352592431,
+          0.9476312541037835
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.85,
+        "successes": 17,
+        "total": 20
+      },
+      "throughput_items_per_second": 12.674380045948395
+    },
+    "protocol_id": "hashformers-beam-search-fixed-manifest-v1",
+    "quantization": "none",
+    "requested_precision": "library-default",
+    "resolved_device": "cuda:0"
+  },
+  "runner_sha256": "f2fbf73bfc15758b51541f21ba77c5ce4ea6859fdbdc1de66c3ae8439f11b3e6",
+  "runtime": {
+    "actual_parameter_dtype": "torch.float32",
+    "cuda_available": true,
+    "cuda_device": {
+      "compute_capability": [
+        7,
+        5
+      ],
+      "name": "Tesla T4",
+      "total_memory_bytes": 15637086208
+    },
+    "cuda_runtime": "12.8",
+    "hashformers_version": "3.0.0",
+    "huggingface_hub_version": "1.23.0",
+    "minicons_version": "0.3.39",
+    "model_commit": "a9307e696cd3c5b7f953ff4cb19d76a4d81821d5",
+    "model_snapshot": "/root/.cache/huggingface/hub/models--ai-forever--rugpt3small_based_on_gpt2/snapshots/a9307e696cd3c5b7f953ff4cb19d76a4d81821d5",
+    "python_version": "3.12.13",
+    "quantization": "none",
+    "requested_device": "cuda:0",
+    "requested_precision": "library-default",
+    "resolved_device": "cuda:0",
+    "torch_version": "2.11.0+cu128",
+    "transformers_version": "5.14.1"
+  },
+  "sample_count": 20,
+  "sample_scope_dataset": "ruanchaves/nru_hse",
+  "schema_version": 3,
+  "segmentation": {
+    "algorithm": "Hashformers beam search",
+    "gpu_batch_size": "auto",
+    "max_gpu_batch_size": 512,
+    "model_type": "incremental",
+    "output_contract": "may only insert ASCII spaces into the input",
+    "proposal_policy": "strict output, deterministic boundary projection, then source fallback",
+    "reranker": null,
+    "steps": 5,
+    "topk": 5
+  },
+  "started_at": "2026-08-04T00:42:37.200555+00:00",
+  "status": "completed"
+}

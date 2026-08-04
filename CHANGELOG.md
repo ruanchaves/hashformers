@@ -11,7 +11,24 @@
   reranker controllers, throughput/memory tuning, OOM backoff, and telemetry.
 - Added a pinned Qwen3-0.6B benchmark protocol, fixed auditable samples, strict
   insertion-only validation, confidence intervals, and reproducibility
-  metadata while retaining Qwen2 as a historical comparison.
+  metadata while retaining Qwen2 as a historical comparison. Published the
+  complete protocol-v3 FP16 Tesla T4 run with raw generations and paired
+  statistics. Protocol v3 records benign quote envelopes separately from the
+  strict insertion-only content check, uses an explicit zero-shot input format
+  that does not encourage quoted echoes, and independently reports strict
+  validity, deterministic boundary-projection recovery, source fallback, and
+  scored proposal accuracy.
+- Added a fixed-manifest Hashformers benchmark runner with pinned GPT-2,
+  DistilGPT2, and RuGPT3Small snapshots, raw per-sample predictions, paired
+  cross-protocol statistics, and reproducibility metadata. Published Tesla T4
+  runs use the PR #80 adaptive candidate controller with
+  `gpu_batch_size="auto"`, a 512 maximum, and recorded controller telemetry.
+- Added a reproducible cost, time, and quality-adjusted volume projection for
+  Hashformers-DistilGPT2 on a rented T4 versus representative OpenAI,
+  Anthropic, and Google hosted API pricing. All token, concurrency, latency,
+  provider-quality, GPU-price, and billing assumptions are explicit and
+  machine-readable; hosted API accuracy and latency are not presented as
+  measured benchmark results.
 
 ### Breaking changes
 

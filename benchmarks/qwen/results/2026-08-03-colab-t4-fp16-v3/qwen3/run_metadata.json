@@ -1,0 +1,434 @@
+{
+  "completed_at": "2026-08-04T00:10:59.189027+00:00",
+  "generation": {
+    "accepted_output_envelopes": [
+      "plain_text",
+      "one_matching_pair_of_ascii_quotes"
+    ],
+    "do_sample": false,
+    "few_shot_examples": 0,
+    "invalid_output_handling": {
+      "character_policy": "proposals always preserve source non-space characters exactly",
+      "fallback": "unchanged input when no recoverable boundary exists",
+      "maximum_normalized_recovery_edit_distance": 0.5,
+      "recovery": "extract a bounded answer candidate and project its word boundaries onto the original source with global edit alignment",
+      "strict_validity_reported_separately": true
+    },
+    "max_new_tokens": 64,
+    "system_prompt": "You perform word segmentation. For each user message of the form 'Input: TEXT', return TEXT with ASCII spaces inserted at word boundaries. Preserve every non-space character, its case, and its order exactly. If TEXT is one word, return it unchanged. Return plain text only, without quotes, labels, backticks, code fences, or explanation.",
+    "user_prompt_template": "Input: {source}"
+  },
+  "hardware": {
+    "cpu": {
+      "architecture": "x86_64",
+      "logical_cores": 2,
+      "model_name": "x86_64"
+    },
+    "gpus_from_nvidia_smi": [
+      {
+        "driver": "580.82.07",
+        "memory_mib": "15360",
+        "name": "Tesla T4"
+      }
+    ],
+    "platform": "Linux-6.6.122+-x86_64-with-glibc2.35"
+  },
+  "manifest": "/content/hashformers-v3/benchmarks/qwen/samples.jsonl",
+  "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+  "measurement": {
+    "baseline_gpu_memory": {
+      "baseline_allocated_bytes": 1201159168,
+      "peak_allocated_bytes": 1201159168,
+      "peak_reserved_bytes": 1684013056
+    },
+    "batch_size": 1,
+    "cuda_synchronize_before_and_after_generation_when_cuda_is_active": true,
+    "gpu_memory": {
+      "baseline_allocated_bytes": 1201159168,
+      "peak_allocated_bytes": 1221031936,
+      "peak_reserved_bytes": 1688207360
+    },
+    "latency_scope": "model.generate only; preprocessing reported separately",
+    "measured_wall_seconds": 59.61838809300002,
+    "one_model_per_process": true,
+    "runtime_error_count": 0,
+    "throughput_items_per_wall_second": 4.696537577688647,
+    "warmup_items": 5,
+    "warmup_sample_ids": [
+      "ruanchaves/boun@test:3",
+      "ruanchaves/boun@test:11",
+      "ruanchaves/boun@test:13",
+      "ruanchaves/boun@test:25",
+      "ruanchaves/boun@test:59"
+    ]
+  },
+  "model": {
+    "enable_thinking": false,
+    "label": "Qwen3-0.6B (text-only, non-thinking)",
+    "model_id": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "status": "current-fallback"
+  },
+  "protocol_id": "hashformers-qwen-space-insertion-v3",
+  "repository_dirty": false,
+  "repository_revision": "59910585795306ca68aefeeba50b30827ae27d12",
+  "results": {
+    "actual_parameter_dtype": "torch.float16",
+    "groups": {
+      "English Hashtags": {
+        "accuracy": {
+          "ci_95": [
+            0.37982917045799003,
+            0.555572107303257
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.4666666666666667,
+          "successes": 56,
+          "total": 120
+        },
+        "count": 120,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.008538174769902228,
+            0.0709300333278661
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.025,
+          "successes": 3,
+          "total": 120
+        },
+        "latency_ms": {
+          "mean": 184.32785004167349,
+          "median": 169.13241300005666,
+          "p95": 338.2425867500728
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.031019166418703486
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 120
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.008538174769902228,
+            0.0709300333278661
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.025,
+          "successes": 3,
+          "total": 120
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.37982917045799003,
+            0.555572107303257
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.4666666666666667,
+          "successes": 56,
+          "total": 120
+        },
+        "throughput_items_per_second": 5.425116170854901
+      },
+      "Foreign Hashtags": {
+        "accuracy": {
+          "ci_95": [
+            0.1443956173664283,
+            0.35436270377601964
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.23333333333333334,
+          "successes": 14,
+          "total": 60
+        },
+        "count": 60,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.01714950216439568,
+            0.1370051647634852
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.05,
+          "successes": 3,
+          "total": 60
+        },
+        "latency_ms": {
+          "mean": 273.95628953334307,
+          "median": 245.5651895000983,
+          "p95": 443.1306468501815
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            0.0,
+            0.06017185214208986
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 60
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            0.01714950216439568,
+            0.1370051647634852
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.05,
+          "successes": 3,
+          "total": 60
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.13123044048190308,
+            0.33620027573194783
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.21666666666666667,
+          "successes": 13,
+          "total": 60
+        },
+        "throughput_items_per_second": 3.6502173456334917
+      },
+      "Identifier Splitting": {
+        "accuracy": {
+          "ci_95": [
+            0.03431926106727268,
+            0.137495147390735
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.07,
+          "successes": 7,
+          "total": 100
+        },
+        "count": 100,
+        "invalid_output_rate": {
+          "ci_95": [
+            0.0017674320641406505,
+            0.054486196178705315
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.01,
+          "successes": 1,
+          "total": 100
+        },
+        "latency_ms": {
+          "mean": 206.84159231999953,
+          "median": 187.59709050004858,
+          "p95": 334.9824978498191
+        },
+        "output_wrapper_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "recovered_prediction_rate": {
+          "ci_95": [
+            0.0017674320641406505,
+            0.054486196178705315
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.01,
+          "successes": 1,
+          "total": 100
+        },
+        "runtime_error_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "source_fallback_rate": {
+          "ci_95": [
+            3.469446951953614e-18,
+            0.03699349820698568
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.0,
+          "successes": 0,
+          "total": 100
+        },
+        "strict_output_accuracy": {
+          "ci_95": [
+            0.03431926106727268,
+            0.137495147390735
+          ],
+          "ci_method": "Wilson score",
+          "rate": 0.07,
+          "successes": 7,
+          "total": 100
+        },
+        "throughput_items_per_second": 4.834617587225516
+      }
+    },
+    "manifest_sha256": "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d",
+    "model_id": "Qwen/Qwen3-0.6B",
+    "model_label": "Qwen3-0.6B (text-only, non-thinking)",
+    "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "overall": {
+      "accuracy": {
+        "ci_95": [
+          0.2260107188553173,
+          0.330079499523966
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.275,
+        "successes": 77,
+        "total": 280
+      },
+      "count": 280,
+      "invalid_output_rate": {
+        "ci_95": [
+          0.012161668350597052,
+          0.050695459339000895
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.025,
+        "successes": 7,
+        "total": 280
+      },
+      "latency_ms": {
+        "mean": 211.57456646071915,
+        "median": 185.76239950004947,
+        "p95": 390.7375574500293
+      },
+      "output_wrapper_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "recovered_prediction_rate": {
+        "ci_95": [
+          0.0006307232802881257,
+          0.01994928235019393
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0035714285714285713,
+        "successes": 1,
+        "total": 280
+      },
+      "runtime_error_rate": {
+        "ci_95": [
+          8.673617379884035e-19,
+          0.013533818620629409
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.0,
+        "successes": 0,
+        "total": 280
+      },
+      "source_fallback_rate": {
+        "ci_95": [
+          0.009857032458149666,
+          0.04595390822159563
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.02142857142857143,
+        "successes": 6,
+        "total": 280
+      },
+      "strict_output_accuracy": {
+        "ci_95": [
+          0.22269585356855684,
+          0.3263481778008738
+        ],
+        "ci_method": "Wilson score",
+        "rate": 0.2714285714285714,
+        "successes": 76,
+        "total": 280
+      },
+      "throughput_items_per_second": 4.726466024382281
+    },
+    "protocol_id": "hashformers-qwen-space-insertion-v3",
+    "quantization": "none",
+    "requested_precision": "float16",
+    "resolved_device": "cuda:0"
+  },
+  "runner_sha256": "eb7220dccf554ddad06c46f47db0302f901946e40a301bdda4e77f23dcac6228",
+  "runtime": {
+    "accelerate_version": "1.14.0",
+    "actual_parameter_dtype": "torch.float16",
+    "bitsandbytes_version": null,
+    "cuda_available": true,
+    "cuda_device": {
+      "compute_capability": [
+        7,
+        5
+      ],
+      "name": "Tesla T4",
+      "total_memory_bytes": 15637086208
+    },
+    "cuda_runtime": "12.8",
+    "model_commit": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "python_version": "3.12.13",
+    "quantization": "none",
+    "requested_device": "cuda:0",
+    "requested_precision": "float16",
+    "resolved_device": "cuda:0",
+    "resolved_device_map": null,
+    "tokenizer_commit": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "torch_version": "2.11.0+cu128",
+    "transformers_version": "5.14.1"
+  },
+  "sample_count": 280,
+  "schema_version": 3,
+  "started_at": "2026-08-04T00:09:47.046155+00:00",
+  "status": "completed"
+}
