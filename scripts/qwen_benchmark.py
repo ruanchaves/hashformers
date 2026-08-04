@@ -741,7 +741,10 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             record.get("prediction_source") == "source_fallback" for record in subset
         )
         generation_seconds = (
-            sum(float(record.get("generation_ms") or 0.0) for record in subset) / 1000
+            math.fsum(
+                float(record.get("generation_ms") or 0.0) for record in subset
+            )
+            / 1000
         )
         latencies = [
             float(record["generation_ms"])

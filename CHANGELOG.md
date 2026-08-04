@@ -1,48 +1,86 @@
 # Changelog
 
-## v3.0.0 (Unreleased)
+## v3.0.0 (2026-08-04)
 
-### Added
+Hashformers 3 is an agent-ready release centered on Transformer segmentation,
+bounded local workflows, efficient inference, and reproducible evaluation.
 
-- Added bounded local file sampling plus deferred, one-time discovery and
-  exact-revision configuration of language-appropriate public Hugging Face
-  models in the MCP server.
+### MCP and agent workflows
+
+- Added the optional `hashformers[mcp]` installation and `hashformers-mcp`
+  command for interactive segmentation, candidate ranking, and resumable local
+  file jobs.
+- Added bounded batches, payloads, beam expansion, file sampling, and inference
+  chunks. File jobs preserve source order and duplicates, checkpoint before
+  publication, publish atomically, and validate authorized paths against
+  symlink and descriptor swaps.
+- Added the `segment-hashtags` Agent Skill for Codex and Claude Code workflows,
+  including bulk files that remain outside the agent context.
+- Added deferred, one-time discovery of language-appropriate public Hugging
+  Face models. Selected models are validated, pinned to exact Hub revisions,
+  and loaded only when inference begins.
+- Deferred the ML and Hub runtime imports required by the MCP server. Stdio
+  initialization now completes before common client startup deadlines while
+  the historical top-level Python imports remain available.
+
+### Ranking and inference
+
+- Added opt-in weighted reciprocal rank fusion over complete segmenter and
+  reranker candidate lists. Existing callers continue to use `top2` fusion by
+  default; RRF is available consistently through Python, MCP, candidate
+  ranking, and resumable jobs.
 - Added opt-in adaptive CUDA microbatching with independent segmenter and
-  reranker controllers, throughput/memory tuning, OOM backoff, and telemetry.
-- Added a pinned Qwen3-0.6B benchmark protocol, fixed auditable samples, strict
-  insertion-only validation, confidence intervals, and reproducibility
-  metadata while retaining Qwen2 as a historical comparison. Published the
-  complete protocol-v3 FP16 Tesla T4 run with raw generations and paired
-  statistics. Protocol v3 records benign quote envelopes separately from the
-  strict insertion-only content check, uses an explicit zero-shot input format
-  that does not encourage quoted echoes, and independently reports strict
-  validity, deterministic boundary-projection recovery, source fallback, and
-  scored proposal accuracy.
-- Added a fixed-manifest Hashformers benchmark runner with pinned GPT-2,
-  DistilGPT2, and RuGPT3Small snapshots, raw per-sample predictions, paired
-  cross-protocol statistics, and reproducibility metadata. Published Tesla T4
-  runs use the PR #80 adaptive candidate controller with
-  `gpu_batch_size="auto"`, a 512 maximum, and recorded controller telemetry.
-- Added a reproducible cost, time, and quality-adjusted volume projection for
-  Hashformers-DistilGPT2 on a rented T4 versus representative OpenAI,
-  Anthropic, and Google hosted API pricing. All token, concurrency, latency,
-  provider-quality, GPU-price, and billing assumptions are explicit and
-  machine-readable; hosted API accuracy and latency are not presented as
-  measured benchmark results.
+  reranker controllers, throughput-based growth, telemetry, and exact-slice
+  OOM recovery.
+- Reduced default scorer batches from 1,000 to 64 and the default beam search
+  from `topk=20, steps=13` to `topk=5, steps=5`. The previous search budget
+  remains available through explicit options.
+- Deduplicated equivalent candidates before scoring and beam pruning so
+  duplicate hypotheses no longer consume scorer work or beam slots.
+
+### Fixes and compatibility
+
+- Fixed reranker score direction so masked and sequence-to-sequence language
+  models follow Hashformers' lower-is-better cost convention.
+- Honored CPU and explicit CUDA device selection in the masked reranker.
+- Restored masked reranking on Transformers 5 while retaining compatibility
+  with Transformers 4.46.1 and newer 4.x releases.
+- Fixed precomputed segmenter-run handling and ensured reranker output is used
+  when ensemble selection is disabled.
+- Added explicit dependency ranges for Minicons and Transformers and extensive
+  regression coverage for package imports, scoring, model selection, adaptive
+  batching, RRF, and MCP workflows.
+
+### Benchmarks and documentation
+
+- Published a fixed 280-item multilingual benchmark with pinned model
+  revisions, raw predictions, checksums, confidence intervals, and paired
+  statistics. Hashformers-DistilGPT2 reached 65.00% exact match versus 27.50%
+  for the measured Qwen3-0.6B prompt configuration, a 37.5 percentage-point
+  advantage; measured DistilGPT2 throughput was 14.11 hashtags/second on a T4.
+- Added reproducible Hashformers, Qwen, and hosted-API cost projection tooling
+  with machine-readable assumptions. Hosted-provider accuracy and latency
+  remain explicitly illustrative rather than measured results.
+- Added a Colab tutorial for Python, Codex, Claude Code, MCP, resumable file
+  jobs, and deferred model selection.
+- Reworked the README around copyable workflows, decision guidance, benchmark
+  evidence, research references, and an animated terminal demonstration.
 
 ### Breaking changes
 
-- Removed the legacy `RegexWordSegmenter`, `TweetSegmenter`, and
-  `TwitterTextMatcher` APIs together with their tweet-only result containers.
-  Regex callers should use Python's `re` module or a dedicated heuristic
-  splitter. Applications processing complete posts should extract hashtags,
-  pass them to `TransformerWordSegmenter`, and replace them in application
-  code.
-- Removed the corresponding regex and tweet MCP tools. The MCP server remains
-  focused on Transformer segmentation, file workflows, model discovery, and
-  candidate ranking.
-- Removed the mandatory `twitter-text-python` dependency and the MCP-only
-  `regex` dependency after their final consumers were deleted.
+- Python 3.10 or newer is now required. Python 3.8 and 3.9 users should remain
+  on Hashformers 2.2.0.
+- Removed `RegexWordSegmenter`, `TweetSegmenter`, and `TwitterTextMatcher`,
+  together with the tweet-only result containers. Extract hashtags in
+  application code, segment them with `TransformerWordSegmenter`, and replace
+  them in application code when processing complete posts.
+- Removed the corresponding regex and tweet MCP tools. The MCP server now
+  focuses on Transformer segmentation, candidate ranking, model discovery,
+  and file workflows.
+- Removed the unused `twitter-text-python` and MCP-only `regex` dependencies.
+- The smaller default beam and batch settings can change exact outputs or
+  throughput relative to 2.2.0. Pass the former values explicitly when that
+  behavior is required.
 
 ## v2.2.0 (2026-01-08)
 

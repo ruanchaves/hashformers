@@ -158,6 +158,6 @@ def test_readme_documents_mcp_and_agent_skill_setup():
     assert ".agents/skills/segment-hashtags" in readme
     assert "~/.claude/skills" in readme
     assert "--defer-model-selection" in readme
-    assert "sample_hashtag_file" in readme
-    assert "discover_huggingface_models" in readme
-    assert "configure_models" in readme
+    assert "Sample `/path/to/project/hashtags.csv`" in readme
+    assert "compatible public Hugging Face model" in readme
+    assert "segment the file with Hashformers" in readme
