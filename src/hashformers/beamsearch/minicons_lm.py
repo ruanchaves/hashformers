@@ -6,12 +6,17 @@ import warnings
 import torch
 from minicons import scorer
 
+from hashformers.batching import (
+    AUTO_BATCH_SIZE,
+    DEFAULT_AUTO_BATCH_SIZE,
+    DEFAULT_MAX_BATCH_SIZE,
+    validate_batch_size,
+    validate_max_batch_size,
+)
+
 
 LOGGER = logging.getLogger(__name__)
 
-AUTO_BATCH_SIZE = "auto"
-DEFAULT_AUTO_BATCH_SIZE = 64
-DEFAULT_MAX_BATCH_SIZE = 512
 MIN_THROUGHPUT_IMPROVEMENT = 0.05
 MIN_MEMORY_HEADROOM = 0.20
 
@@ -28,20 +33,6 @@ def ensure_tokenizer_compatibility(tokenizer):
     if not callable(getattr(tokenizer, "batch_encode_plus", None)):
         tokenizer.batch_encode_plus = tokenizer.__call__
     return tokenizer
-
-
-def validate_batch_size(value, name="gpu_batch_size"):
-    """Validate an explicit batch size or the adaptive ``auto`` sentinel."""
-    if value == AUTO_BATCH_SIZE:
-        return
-    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
-        raise ValueError(f"{name} must be a positive integer or 'auto'")
-
-
-def validate_max_batch_size(value, name="max_gpu_batch_size"):
-    """Validate an adaptive batching upper bound."""
-    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
-        raise ValueError(f"{name} must be a positive integer")
 
 
 class MiniconsLM(object):
