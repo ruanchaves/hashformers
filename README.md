@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/pypi/l/hashformers)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
+[![Open the Codex and Claude Code MCP tutorial in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers_agents_mcp_tutorial.ipynb)
 
 **Fast, local, multilingual hashtag and identifier segmentation using
 Transformer language models and beam search.**
@@ -19,6 +20,7 @@ Transformer language models and beam search.**
 
 [Quick start](#-quick-start) ·
 [Colab tutorial](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) ·
+[Codex + Claude Code MCP Colab tutorial](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers_agents_mcp_tutorial.ipynb) ·
 [Agent workflows](#mcp-and-agent-skill) ·
 [Benchmark](benchmarks/qwen/README.md) ·
 [Hashformers paper](https://arxiv.org/abs/2112.03213) ·
