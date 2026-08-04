@@ -21,6 +21,7 @@ from scripts.qwen_benchmark import (
     paired_bootstrap_interval,
     paired_comparisons,
     parse_insertion_only,
+    propose_segmentation,
     resolve_hub_file_commit,
     single_device,
     summarize_records,
@@ -33,7 +34,9 @@ from scripts.qwen_benchmark import (
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = REPOSITORY_ROOT / "benchmarks/qwen/samples.jsonl"
 MANIFEST_SHA256 = "743e7519eb4ef760f45a7b5b6a34fea3b0f7394b85e9fed7609b27864cd8497d"
-PUBLISHED_RESULTS = REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v2"
+PUBLISHED_RESULTS = (
+    REPOSITORY_ROOT / "benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3"
+)
 
 
 def load_manifest():
@@ -66,9 +69,12 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
         "gold": gold,
         "raw_output": raw_output,
         "output_wrapper": None,
-        "prediction": raw_output if valid else None,
+        "prediction": raw_output if valid else source,
+        "prediction_source": "model_output" if valid else "source_fallback",
+        "recovery_method": None if valid else "unchanged_input",
         "valid": valid,
         "invalid_reason": None if valid else "changed_non_space_characters",
+        "strict_correct": bool(valid and correct),
         "correct": correct,
         "generation_ms": 10.0,
         "group": group,
@@ -101,7 +107,7 @@ def prediction(sample_id, *, model="left", valid=True, correct=False, group="Eng
         ("icecream", None, (False, None, "missing_output")),
     ],
 )
-def test_output_contract_never_repairs_characters_or_falls_back(
+def test_strict_output_contract_does_not_hide_character_changes(
     source, raw_output, expected
 ):
     assert validate_insertion_only(source, raw_output) == expected
@@ -124,6 +130,92 @@ def test_output_contract_records_only_a_matching_quote_envelope():
         False,
         None,
         "changed_non_space_characters",
+        None,
+    )
+
+
+@pytest.mark.parametrize(
+    ("source", "raw_output", "expected_prediction", "expected_source", "method"),
+    [
+        (
+            "CamelCase",
+            "camel Case",
+            "Camel Case",
+            "recovered_model_output",
+            "case_preserving_projection",
+        ),
+        (
+            "PleaseDontSuck",
+            "Please Do Not Suck",
+            "Please Do nt Suck",
+            "recovered_model_output",
+            "edit_alignment_projection",
+        ),
+        (
+            "drawingday",
+            "drawing_day",
+            "drawing day",
+            "recovered_model_output",
+            "case_preserving_projection",
+        ),
+        (
+            "icecream",
+            "Result: ice cream",
+            "ice cream",
+            "recovered_model_output",
+            "case_preserving_projection",
+        ),
+        (
+            "icecream",
+            "```\nice cream\n```",
+            "ice cream",
+            "recovered_model_output",
+            "case_preserving_projection",
+        ),
+        (
+            "icecream",
+            "unrelated",
+            "icecream",
+            "source_fallback",
+            "unchanged_input",
+        ),
+        (
+            "icecream",
+            "",
+            "icecream",
+            "source_fallback",
+            "unchanged_input",
+        ),
+    ],
+)
+def test_invalid_output_still_produces_an_auditable_segmentation_proposal(
+    source, raw_output, expected_prediction, expected_source, method
+):
+    (
+        valid,
+        prediction_value,
+        invalid_reason,
+        output_wrapper,
+        prediction_source,
+        recovery_method,
+    ) = propose_segmentation(source, raw_output)
+
+    assert valid is False
+    assert prediction_value == expected_prediction
+    assert invalid_reason in {"changed_non_space_characters", "empty_output"}
+    assert output_wrapper is None
+    assert prediction_source == expected_source
+    assert recovery_method == method
+    assert prediction_value.replace(" ", "") == source
+
+
+def test_valid_output_bypasses_recovery_and_preserves_wrapper_audit():
+    assert propose_segmentation("icecream", '"ice cream"') == (
+        True,
+        "ice cream",
+        None,
+        "matching_ascii_quotes",
+        "model_output",
         None,
     )
 
@@ -200,7 +292,9 @@ def test_tokenizer_revision_falls_back_to_hub_snapshot_path():
             "revision": revision,
             "token": False,
         }
-        return f"/cache/models--example--model/snapshots/{revision}/tokenizer_config.json"
+        return (
+            f"/cache/models--example--model/snapshots/{revision}/tokenizer_config.json"
+        )
 
     assert (
         resolve_hub_file_commit(
@@ -285,7 +379,7 @@ def test_wilson_interval_and_paired_bootstrap_are_bounded_and_deterministic():
     assert paired_bootstrap_interval([True, False], [True, False]) == (0.0, 0.0)
 
 
-def test_summary_counts_invalid_outputs_as_incorrect_and_reports_rate_ci():
+def test_summary_scores_fallbacks_but_reports_strict_validity_separately():
     records = [
         prediction("one", valid=True, correct=True),
         prediction("two", valid=False, correct=False),
@@ -297,6 +391,9 @@ def test_summary_counts_invalid_outputs_as_incorrect_and_reports_rate_ci():
     assert summary["accuracy"]["rate"] == 0.5
     assert summary["invalid_output_rate"]["successes"] == 1
     assert summary["invalid_output_rate"]["rate"] == 0.5
+    assert summary["strict_output_accuracy"]["successes"] == 1
+    assert summary["source_fallback_rate"]["successes"] == 1
+    assert summary["recovered_prediction_rate"]["successes"] == 0
     assert summary["runtime_error_rate"]["successes"] == 0
     assert summary["output_wrapper_rate"]["successes"] == 0
     assert summary["throughput_items_per_second"] == pytest.approx(100.0)
@@ -314,11 +411,35 @@ def test_summary_reports_accepted_output_wrappers_separately_from_invalid_output
     assert summary["output_wrapper_rate"]["successes"] == 1
 
 
+def test_summary_scores_recovered_invalid_output_without_calling_it_valid():
+    record = prediction("one", valid=False, correct=True)
+    record.update(
+        {
+            "raw_output": "One value",
+            "prediction": "one value",
+            "prediction_source": "recovered_model_output",
+            "recovery_method": "case_preserving_projection",
+        }
+    )
+
+    summary = summarize_records([record])["overall"]
+
+    assert summary["accuracy"]["successes"] == 1
+    assert summary["strict_output_accuracy"]["successes"] == 0
+    assert summary["invalid_output_rate"]["successes"] == 1
+    assert summary["recovered_prediction_rate"]["successes"] == 1
+    assert summary["source_fallback_rate"]["successes"] == 0
+
+
 def test_summary_separates_runtime_errors_from_invalid_model_outputs():
     record = prediction("one", valid=False, correct=False)
     record["error"] = "RuntimeError: backend failed"
     record["generation_ms"] = None
     record["raw_output"] = None
+    record["prediction"] = None
+    record["prediction_source"] = None
+    record["recovery_method"] = None
+    record["invalid_reason"] = "runtime_error"
 
     summary = summarize_records([record])["overall"]
 
@@ -336,6 +457,11 @@ def test_summary_rejects_missing_or_inconsistent_prediction_fields():
     inconsistent["correct"] = False
     with pytest.raises(ValueError, match="correct does not match"):
         summarize_records([inconsistent])
+
+    inconsistent_source = prediction("one", valid=False, correct=False)
+    inconsistent_source["prediction_source"] = "model_output"
+    with pytest.raises(ValueError, match="inconsistent segmentation proposal"):
+        summarize_records([inconsistent_source])
 
     unsupported_wrapper = prediction("one", valid=True, correct=True)
     unsupported_wrapper["output_wrapper"] = "code_fence"
@@ -406,12 +532,11 @@ def test_published_gpu_results_are_complete_clean_and_recomputable():
         assert metadata["status"] == "completed"
         assert metadata["repository_dirty"] is False
         assert metadata["measurement"]["runtime_error_count"] == 0
-        assert metadata["runtime"]["model_commit"] == MODEL_SPECS[model_key][
-            "revision"
-        ]
-        assert metadata["runtime"]["tokenizer_commit"] == MODEL_SPECS[model_key][
-            "revision"
-        ]
+        assert metadata["runtime"]["model_commit"] == MODEL_SPECS[model_key]["revision"]
+        assert (
+            metadata["runtime"]["tokenizer_commit"]
+            == MODEL_SPECS[model_key]["revision"]
+        )
         assert metadata["results"] == summary
         runs.append(predictions)
 

@@ -27,8 +27,8 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 2
-PROTOCOL_ID = "hashformers-qwen-space-insertion-v2"
+SCHEMA_VERSION = 3
+PROTOCOL_ID = "hashformers-qwen-space-insertion-v3"
 REVISION_PATTERN = re.compile(r"[0-9a-f]{40}")
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path("benchmarks/qwen/samples.jsonl")
@@ -133,7 +133,11 @@ def validate_manifest(records: Sequence[Mapping[str, Any]]) -> None:
                 raise ValueError(f"{sample_id}: {field} must be a non-empty string")
         validate_revision(record["dataset_revision"], "dataset revision")
         row_index = record["row_index"]
-        if isinstance(row_index, bool) or not isinstance(row_index, int) or row_index < 0:
+        if (
+            isinstance(row_index, bool)
+            or not isinstance(row_index, int)
+            or row_index < 0
+        ):
             raise ValueError(f"{sample_id}: row_index must be a non-negative integer")
         if record["gold"].replace(" ", "") != record["input"]:
             raise ValueError(
@@ -209,8 +213,9 @@ def parse_insertion_only(
     A model may wrap its entire answer in one matching pair of ASCII quotes.
     That presentation envelope is recorded separately and removed only when
     the enclosed text already satisfies the insertion-only contract. Invalid
-    generations are never repaired or silently replaced with the input. The
-    exact generation remains in ``raw_output``.
+    generations are not repaired by this strict parser. Recovery and fallback
+    are handled separately by :func:`propose_segmentation`, while the exact
+    generation remains in ``raw_output``.
     """
 
     if raw_output is None:
@@ -220,11 +225,7 @@ def parse_insertion_only(
 
     candidates: list[tuple[str, str | None]] = [(raw_output, None)]
     stripped = raw_output.strip(" ")
-    if (
-        len(stripped) >= 2
-        and stripped[0] == stripped[-1]
-        and stripped[0] in {'"', "'"}
-    ):
+    if len(stripped) >= 2 and stripped[0] == stripped[-1] and stripped[0] in {'"', "'"}:
         candidates.append((stripped[1:-1], "matching_ascii_quotes"))
 
     for candidate, output_wrapper in candidates:
@@ -234,6 +235,238 @@ def parse_insertion_only(
         if prediction:
             return True, prediction, None, output_wrapper
     return False, None, "changed_non_space_characters", None
+
+
+RECOVERY_LABEL_PATTERN = re.compile(
+    r"^(?:output|result|answer|segmentation|segmented(?:\s+text)?):\s*(.*)$",
+    re.IGNORECASE,
+)
+
+
+def _recovery_candidates(raw_output: str) -> list[str]:
+    """Extract bounded candidate answers from a non-conforming generation."""
+
+    stripped = raw_output.strip()
+    if not stripped:
+        return []
+
+    candidates: list[str] = []
+
+    def add(value: str) -> None:
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1].strip()
+        elif value.startswith('\\"') and value.endswith('\\"') and len(value) >= 4:
+            value = value[2:-2].strip()
+        if value and value not in candidates:
+            candidates.append(value)
+
+    lines = [line.strip() for line in stripped.splitlines() if line.strip()]
+    if stripped.startswith("```") and stripped.endswith("```") and len(lines) >= 2:
+        lines = lines[1:-1]
+        if lines and lines[0].casefold() in {"text", "plaintext", "txt"}:
+            lines = lines[1:]
+
+    if len(lines) == 1:
+        match = RECOVERY_LABEL_PATTERN.fullmatch(lines[0])
+        add(match.group(1) if match else lines[0])
+    else:
+        for index, line in enumerate(lines):
+            match = RECOVERY_LABEL_PATTERN.fullmatch(line)
+            if match and match.group(1):
+                add(match.group(1))
+            elif match and index + 1 < len(lines):
+                add(lines[index + 1])
+            elif ":" not in line:
+                add(line)
+    return candidates
+
+
+def _candidate_boundaries(candidate: str) -> tuple[str, list[int]]:
+    """Return non-separator characters and proposed boundaries between them."""
+
+    characters: list[str] = []
+    boundaries: list[int] = []
+    pending_boundary = False
+    for character in candidate:
+        if character.isspace() or character == "_":
+            pending_boundary = bool(characters)
+            continue
+        if pending_boundary and characters:
+            boundaries.append(len(characters))
+        characters.append(character)
+        pending_boundary = False
+    compact = "".join(characters)
+    return compact, sorted(set(boundaries))
+
+
+def _project_candidate_boundaries(
+    source: str, candidate: str
+) -> tuple[str, str, float] | None:
+    """Align candidate characters to source and project its space boundaries.
+
+    Character edits are never copied into the proposal. A global edit-distance
+    alignment maps only the candidate's boundary locations back onto the exact
+    original source string. Candidates with no boundary signal, no characters,
+    or more than 50% normalized edit distance are rejected.
+    """
+
+    compact, candidate_boundaries = _candidate_boundaries(candidate)
+    if not compact or not candidate_boundaries:
+        return None
+
+    source_length = len(source)
+    candidate_length = len(compact)
+    distance: list[list[int]] = [
+        [0] * (candidate_length + 1) for _ in range(source_length + 1)
+    ]
+    operation: list[list[str | None]] = [
+        [None] * (candidate_length + 1) for _ in range(source_length + 1)
+    ]
+    for source_index in range(1, source_length + 1):
+        distance[source_index][0] = source_index
+        operation[source_index][0] = "delete_source"
+    for candidate_index in range(1, candidate_length + 1):
+        distance[0][candidate_index] = candidate_index
+        operation[0][candidate_index] = "insert_candidate"
+
+    for source_index in range(1, source_length + 1):
+        for candidate_index in range(1, candidate_length + 1):
+            substitution_cost = int(
+                source[source_index - 1].casefold()
+                != compact[candidate_index - 1].casefold()
+            )
+            choices = (
+                (
+                    distance[source_index - 1][candidate_index - 1] + substitution_cost,
+                    0,
+                    "diagonal",
+                ),
+                (distance[source_index - 1][candidate_index] + 1, 1, "delete_source"),
+                (
+                    distance[source_index][candidate_index - 1] + 1,
+                    2,
+                    "insert_candidate",
+                ),
+            )
+            best_cost, _, best_operation = min(choices)
+            distance[source_index][candidate_index] = best_cost
+            operation[source_index][candidate_index] = best_operation
+
+    edit_distance = distance[source_length][candidate_length]
+    normalized_distance = edit_distance / max(source_length, candidate_length)
+    if normalized_distance > 0.5:
+        return None
+
+    reversed_operations: list[str] = []
+    source_index = source_length
+    candidate_index = candidate_length
+    while source_index or candidate_index:
+        current = operation[source_index][candidate_index]
+        if current is None:
+            raise RuntimeError("alignment traceback reached an incomplete cell")
+        reversed_operations.append(current)
+        if current == "diagonal":
+            source_index -= 1
+            candidate_index -= 1
+        elif current == "delete_source":
+            source_index -= 1
+        else:
+            candidate_index -= 1
+
+    candidate_prefix_to_source = {0: 0}
+    source_index = 0
+    candidate_index = 0
+    for current in reversed(reversed_operations):
+        if current in {"diagonal", "delete_source"}:
+            source_index += 1
+        if current in {"diagonal", "insert_candidate"}:
+            candidate_index += 1
+        candidate_prefix_to_source[candidate_index] = source_index
+
+    projected_boundaries = sorted(
+        {
+            candidate_prefix_to_source[boundary]
+            for boundary in candidate_boundaries
+            if 0 < candidate_prefix_to_source[boundary] < source_length
+        }
+    )
+    if not projected_boundaries:
+        return None
+    pieces = []
+    previous = 0
+    for boundary in projected_boundaries:
+        pieces.append(source[previous:boundary])
+        previous = boundary
+    pieces.append(source[previous:])
+    proposal = " ".join(piece for piece in pieces if piece)
+    method = (
+        "case_preserving_projection"
+        if candidate_length == source_length
+        and all(
+            left.casefold() == right.casefold() for left, right in zip(source, compact)
+        )
+        else "edit_alignment_projection"
+    )
+    return proposal, method, normalized_distance
+
+
+def propose_segmentation(
+    source: str, raw_output: str | None
+) -> tuple[
+    bool,
+    str,
+    str | None,
+    str | None,
+    str,
+    str | None,
+]:
+    """Return strict validity plus an always-available segmentation proposal.
+
+    Strictly valid model output is used directly. Otherwise, the closest
+    bounded answer candidate with a usable boundary signal is aligned onto the
+    original source characters. If no such signal exists, the unchanged source
+    is returned as an explicit, measurable fallback.
+    """
+
+    valid, prediction, invalid_reason, output_wrapper = parse_insertion_only(
+        source, raw_output
+    )
+    if valid:
+        assert prediction is not None
+        return (
+            True,
+            prediction,
+            None,
+            output_wrapper,
+            "model_output",
+            None,
+        )
+
+    projected = []
+    for position, candidate in enumerate(_recovery_candidates(raw_output or "")):
+        result = _project_candidate_boundaries(source, candidate)
+        if result is not None:
+            proposal, method, normalized_distance = result
+            projected.append((normalized_distance, position, proposal, method))
+    if projected:
+        _, _, proposal, method = min(projected)
+        return (
+            False,
+            proposal,
+            invalid_reason,
+            None,
+            "recovered_model_output",
+            method,
+        )
+    return (
+        False,
+        source,
+        invalid_reason,
+        None,
+        "source_fallback",
+        "unchanged_input",
+    )
 
 
 def validate_insertion_only(
@@ -354,8 +587,11 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "raw_output",
         "output_wrapper",
         "prediction",
+        "prediction_source",
+        "recovery_method",
         "valid",
         "invalid_reason",
+        "strict_correct",
         "correct",
         "generation_ms",
         "error",
@@ -385,17 +621,21 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             raise ValueError(f"{sample_id}: unsupported prediction schema version")
         for field in singleton_fields:
             if not isinstance(record[field], str) or not record[field]:
-                raise ValueError(
-                    f"prediction record {position} has an invalid {field}"
-                )
-        if not isinstance(record["valid"], bool) or not isinstance(
-            record["correct"], bool
+                raise ValueError(f"prediction record {position} has an invalid {field}")
+        if (
+            not isinstance(record["valid"], bool)
+            or not isinstance(record["strict_correct"], bool)
+            or not isinstance(record["correct"], bool)
         ):
-            raise ValueError(f"{sample_id}: valid and correct must be booleans")
+            raise ValueError(
+                f"{sample_id}: valid, strict_correct, and correct must be booleans"
+            )
         for field in (
             "raw_output",
             "output_wrapper",
             "prediction",
+            "prediction_source",
+            "recovery_method",
             "invalid_reason",
             "error",
         ):
@@ -403,6 +643,20 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
                 raise ValueError(f"{sample_id}: {field} must be text or null")
         if record["output_wrapper"] not in (None, "matching_ascii_quotes"):
             raise ValueError(f"{sample_id}: unsupported output_wrapper")
+        if record["prediction_source"] not in (
+            None,
+            "model_output",
+            "recovered_model_output",
+            "source_fallback",
+        ):
+            raise ValueError(f"{sample_id}: unsupported prediction_source")
+        if record["recovery_method"] not in (
+            None,
+            "case_preserving_projection",
+            "edit_alignment_projection",
+            "unchanged_input",
+        ):
+            raise ValueError(f"{sample_id}: unsupported recovery_method")
         generation_ms = record["generation_ms"]
         if generation_ms is not None and (
             isinstance(generation_ms, bool)
@@ -413,26 +667,50 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             raise ValueError(
                 f"{sample_id}: generation_ms must be a non-negative number or null"
             )
-        if record["valid"]:
-            valid, prediction, _, output_wrapper = parse_insertion_only(
-                record["input"], record["raw_output"]
-            )
+        if record["error"]:
             if (
-                not valid
-                or prediction != record["prediction"]
-                or output_wrapper != record["output_wrapper"]
-                or record["error"]
+                any(
+                    record[field] is not None
+                    for field in (
+                        "raw_output",
+                        "output_wrapper",
+                        "prediction",
+                        "prediction_source",
+                        "recovery_method",
+                    )
+                )
+                or record["invalid_reason"] != "runtime_error"
             ):
-                raise ValueError(f"{sample_id}: inconsistent valid prediction record")
-        elif record["prediction"] is not None or record["output_wrapper"] is not None:
-            raise ValueError(
-                f"{sample_id}: invalid output must not have a prediction or wrapper"
-            )
+                raise ValueError(f"{sample_id}: inconsistent runtime-error record")
+        else:
+            (
+                valid,
+                prediction,
+                invalid_reason,
+                output_wrapper,
+                prediction_source,
+                recovery_method,
+            ) = propose_segmentation(record["input"], record["raw_output"])
+            expected_fields = {
+                "valid": valid,
+                "prediction": prediction,
+                "invalid_reason": invalid_reason,
+                "output_wrapper": output_wrapper,
+                "prediction_source": prediction_source,
+                "recovery_method": recovery_method,
+            }
+            if any(record[field] != value for field, value in expected_fields.items()):
+                raise ValueError(f"{sample_id}: inconsistent segmentation proposal")
         expected_correct = bool(
-            record["valid"]
-            and normalize_segmentation(record["prediction"] or "")
+            record["prediction"] is not None
+            and normalize_segmentation(record["prediction"])
             == normalize_segmentation(record["gold"])
         )
+        expected_strict_correct = bool(record["valid"] and expected_correct)
+        if record["strict_correct"] != expected_strict_correct:
+            raise ValueError(
+                f"{sample_id}: strict_correct does not match strict validation"
+            )
         if record["correct"] != expected_correct:
             raise ValueError(f"{sample_id}: correct does not match the prediction")
 
@@ -448,12 +726,20 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
     def summarize_subset(subset: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         correct = sum(bool(record.get("correct")) for record in subset)
+        strict_correct = sum(bool(record.get("strict_correct")) for record in subset)
         invalid = sum(
             not bool(record.get("valid")) and not record.get("error")
             for record in subset
         )
         runtime_errors = sum(bool(record.get("error")) for record in subset)
         wrapped_outputs = sum(bool(record.get("output_wrapper")) for record in subset)
+        recovered_predictions = sum(
+            record.get("prediction_source") == "recovered_model_output"
+            for record in subset
+        )
+        source_fallbacks = sum(
+            record.get("prediction_source") == "source_fallback" for record in subset
+        )
         generation_seconds = (
             sum(float(record.get("generation_ms") or 0.0) for record in subset) / 1000
         )
@@ -465,9 +751,14 @@ def summarize_records(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         return {
             "count": len(subset),
             "accuracy": rate_summary(correct, len(subset)),
+            "strict_output_accuracy": rate_summary(strict_correct, len(subset)),
             "invalid_output_rate": rate_summary(invalid, len(subset)),
             "runtime_error_rate": rate_summary(runtime_errors, len(subset)),
             "output_wrapper_rate": rate_summary(wrapped_outputs, len(subset)),
+            "recovered_prediction_rate": rate_summary(
+                recovered_predictions, len(subset)
+            ),
+            "source_fallback_rate": rate_summary(source_fallbacks, len(subset)),
             "latency_ms": {
                 "mean": statistics.fmean(latencies) if latencies else None,
                 "median": statistics.median(latencies) if latencies else None,
@@ -512,14 +803,10 @@ def paired_comparisons(
             summarize_records(right)
             right_by_id = {str(record["sample_id"]): record for record in right}
             if set(left_by_id) != set(right_by_id):
-                raise ValueError(
-                    "paired runs must contain exactly the same sample IDs"
-                )
+                raise ValueError("paired runs must contain exactly the same sample IDs")
             for field in ("protocol_id", "manifest_sha256"):
                 if left[0][field] != right[0][field]:
-                    raise ValueError(
-                        f"paired runs must use the same {field}"
-                    )
+                    raise ValueError(f"paired runs must use the same {field}")
             shared_ids = sorted(left_by_id)
             provenance_fields = (
                 "dataset",
@@ -532,9 +819,9 @@ def paired_comparisons(
             )
             for sample_id in shared_ids:
                 for field in provenance_fields:
-                    if left_by_id[sample_id].get(field) != right_by_id[
-                        sample_id
-                    ].get(field):
+                    if left_by_id[sample_id].get(field) != right_by_id[sample_id].get(
+                        field
+                    ):
                         raise ValueError(
                             f"paired sample {sample_id!r} differs in {field}"
                         )
@@ -673,7 +960,9 @@ def cpu_metadata() -> dict[str, Any]:
     cpuinfo = Path("/proc/cpuinfo")
     if model_name is None and cpuinfo.is_file():
         try:
-            for line in cpuinfo.read_text(encoding="utf-8", errors="replace").splitlines():
+            for line in cpuinfo.read_text(
+                encoding="utf-8", errors="replace"
+            ).splitlines():
                 field, separator, value = line.partition(":")
                 if separator and field.strip() in {"model name", "Hardware"}:
                     model_name = value.strip() or None
@@ -943,6 +1232,18 @@ def run_benchmark(args: argparse.Namespace) -> None:
                 "plain_text",
                 "one_matching_pair_of_ascii_quotes",
             ],
+            "invalid_output_handling": {
+                "strict_validity_reported_separately": True,
+                "recovery": (
+                    "extract a bounded answer candidate and project its word "
+                    "boundaries onto the original source with global edit alignment"
+                ),
+                "maximum_normalized_recovery_edit_distance": 0.5,
+                "fallback": "unchanged input when no recoverable boundary exists",
+                "character_policy": (
+                    "proposals always preserve source non-space characters exactly"
+                ),
+            },
         },
         "measurement": {
             "warmup_items": min(args.warmup, len(manifest)),
@@ -997,9 +1298,14 @@ def run_benchmark(args: argparse.Namespace) -> None:
                         args.max_new_tokens,
                     )
                 )
-                valid, prediction, invalid_reason, output_wrapper = parse_insertion_only(
-                    sample["input"], raw_output
-                )
+                (
+                    valid,
+                    prediction,
+                    invalid_reason,
+                    output_wrapper,
+                    prediction_source,
+                    recovery_method,
+                ) = propose_segmentation(sample["input"], raw_output)
             # Record arbitrary backend/model failures per sample so a partial
             # hardware run remains auditable instead of losing prior outputs.
             except Exception as exc:  # noqa: BLE001
@@ -1011,10 +1317,12 @@ def run_benchmark(args: argparse.Namespace) -> None:
                 prediction = None
                 invalid_reason = "runtime_error"
                 output_wrapper = None
+                prediction_source = None
+                recovery_method = None
                 error = f"{type(exc).__name__}: {exc}"
             correct = bool(
-                valid
-                and normalize_segmentation(prediction or "")
+                prediction is not None
+                and normalize_segmentation(prediction)
                 == normalize_segmentation(sample["gold"])
             )
             record = {
@@ -1032,8 +1340,11 @@ def run_benchmark(args: argparse.Namespace) -> None:
                 "raw_output": raw_output,
                 "output_wrapper": output_wrapper,
                 "prediction": prediction,
+                "prediction_source": prediction_source,
+                "recovery_method": recovery_method,
                 "valid": valid,
                 "invalid_reason": invalid_reason,
+                "strict_correct": bool(valid and correct),
                 "correct": correct,
                 "preprocessing_ms": preprocessing_ms,
                 "generation_ms": generation_ms,
