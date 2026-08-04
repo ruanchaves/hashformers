@@ -10,6 +10,8 @@
 **Fast, local, multilingual hashtag and identifier segmentation using
 Transformer language models and beam search.**
 
+![Hashformers terminal demo](docs/assets/demo-8s.gif)
+
 - **+37.5 percentage-point accuracy advantage** over Qwen3-0.6B on a
   [fixed 280-item multilingual benchmark](benchmarks/qwen/README.md)
 - **14.1 hashtags/second** on a single NVIDIA T4
@@ -76,6 +78,36 @@ ws = WordSegmenter(
 )
 ```
 
+### Reciprocal Rank Fusion
+
+When both a segmenter and reranker are configured, full-list reciprocal rank
+fusion (RRF) can combine every candidate instead of using the default legacy
+`top2` fusion:
+
+```python
+ranked = ws.segment(
+    ["#icecold"],
+    fusion_method="rrf",
+    rrf_k=60,
+    fusion_weights={"segmenter": 1.0, "reranker": 2.0},
+    return_ranks=True,
+)
+```
+
+For candidate `c`, Hashformers computes
+`RRF(c) = sum(w_i / (rrf_k + rank_i(c)))`. Ranks are one-based competition
+ranks within each input, so tied component scores share the same rank. A
+candidate missing from one component contributes zero for that component.
+Fused ties fall back to the segmenter rank, then reranker rank, then stable
+input order.
+
+Hashformers stores `-RRF(c)` because all its public ranking tables use
+lower-is-better scores. The defaults are `rrf_k=60` and equal
+`segmenter=1.0`, `reranker=1.0` weights. `fusion_method="top2"` remains the
+default and continues to use `alpha` and `beta`; RRF only affects selection
+when a reranker is present and ensemble selection is active. Requesting RRF
+without both raises `ValueError` rather than reporting fusion that did not run.
+
 ### MCP and Agent Skill
 
 #### Install the MCP Server
@@ -106,6 +138,29 @@ Ask the agent directly:
 
 > Use Hashformers to segment `#weneedanationalpark` and `#icecold`. Return up
 > to three candidates for each hashtag.
+
+To request default RRF through MCP, configure the server with
+`--reranker-model` and pass:
+
+```json
+{
+  "hashtags": ["#weneedanationalpark", "#icecold"],
+  "ranking_strategy": "ensemble",
+  "fusion_method": "rrf"
+}
+```
+
+Custom rank damping and weights use the same contract for
+`segment_hashtags`, `start_hashtag_file_job`, and `rank_candidates`:
+
+```json
+{
+  "ranking_strategy": "ensemble",
+  "fusion_method": "rrf",
+  "rrf_k": 0,
+  "fusion_weights": {"segmenter": 1.0, "reranker": 2.0}
+}
+```
 
 #### Process Large Files
 

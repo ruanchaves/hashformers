@@ -46,7 +46,12 @@ def _competition_ranks(probability_dictionary):
 
 
 def reciprocal_rank_fusion(rankings: Sequence, weights=None, rrf_k=60):
-    """Fuse complete lower-is-better rankings and return lower-is-better scores."""
+    """Fuse complete rankings with ``sum(weight / (k + rank))``.
+
+    Component ranks are one-based competition ranks. Missing candidates add
+    zero, fused ties fall back to component ranks and stable input order, and
+    scores are negated to preserve Hashformers' lower-is-better convention.
+    """
     if (
         not isinstance(rankings, Sequence)
         or isinstance(rankings, (str, bytes))

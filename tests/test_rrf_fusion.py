@@ -7,6 +7,25 @@ from hashformers.ensemble.rrf_fusion import (
     ReciprocalRankFusionEnsembler,
     reciprocal_rank_fusion,
 )
+from hashformers.segmenter import BaseWordSegmenter
+
+
+class _FixedSegmenter:
+    def run(self, _word_list, **_kwargs):
+        return ProbabilityDictionary({"abc": 1.0, "a bc": 2.0, "ab c": 3.0})
+
+
+class _FixedReranker:
+    def rerank(self, _segmenter_run, **_kwargs):
+        return ProbabilityDictionary({"ab c": 1.0, "abc": 2.0, "a bc": 3.0})
+
+
+def _model_free_segmenter(ensembler):
+    return BaseWordSegmenter(
+        segmenter=_FixedSegmenter(),
+        reranker=_FixedReranker(),
+        ensembler=ensembler,
+    )
 
 
 def test_known_rrf_scores_and_full_list_order():
@@ -32,6 +51,79 @@ def test_rrf_can_select_candidate_outside_segmenter_top_two():
     )
 
     assert next(iter(result.get_top_k(k=1))) == "ab c"
+
+
+def test_base_segmenter_runs_weighted_rrf_and_exposes_every_ranking():
+    segmenter = _model_free_segmenter(ensembler=object())
+
+    output = segmenter.segment(
+        ["abc"],
+        fusion_method="rrf",
+        ensembler_kwargs={
+            "rrf_k": 0,
+            "fusion_weights": {"segmenter": 1.0, "reranker": 2.0},
+        },
+        return_ranks=True,
+    )
+
+    assert output.output == ["ab c"]
+    assert output.fusion_method == "rrf"
+    assert output.segmenter_rank["segmentation"].tolist() == [
+        "abc",
+        "a bc",
+        "ab c",
+    ]
+    assert output.reranker_rank["segmentation"].tolist() == [
+        "ab c",
+        "abc",
+        "a bc",
+    ]
+    assert output.ensemble_rank["segmentation"].tolist() == [
+        "ab c",
+        "abc",
+        "a bc",
+    ]
+    assert output.ensemble_rank["score"].tolist() == pytest.approx(
+        [-7 / 3, -2.0, -7 / 6]
+    )
+
+
+def test_base_segmenter_preserves_top2_fusion_contract():
+    class RecordingTop2:
+        def __init__(self):
+            self.call = None
+
+        def run(self, segmenter_run, reranker_run, **kwargs):
+            self.call = (segmenter_run, reranker_run, kwargs)
+            return ProbabilityDictionary({"a bc": 0.0, "abc": 1.0})
+
+    top2 = RecordingTop2()
+    segmenter = _model_free_segmenter(ensembler=top2)
+
+    output = segmenter.segment(
+        ["abc"],
+        fusion_method="top2",
+        ensembler_kwargs={"alpha": 0.4, "beta": 0.6},
+        return_ranks=True,
+    )
+
+    assert output.output == ["a bc"]
+    assert output.fusion_method == "top2"
+    assert top2.call[2] == {"alpha": 0.4, "beta": 0.6}
+
+
+def test_rrf_requires_an_active_reranker_and_ensembler_before_segmentation():
+    class UnusedSegmenter:
+        def run(self, _word_list, **_kwargs):
+            raise AssertionError("segmenter should not run")
+
+    segmenter = BaseWordSegmenter(segmenter=UnusedSegmenter())
+
+    with pytest.raises(
+        ValueError,
+        match="fusion_method=rrf requires an active reranker and ensembler",
+    ):
+        segmenter.segment(["abc"], fusion_method="rrf")
 
 
 def test_rrf_depends_on_rank_not_score_magnitude():

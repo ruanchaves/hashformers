@@ -98,6 +98,21 @@ JOB_METADATA_KEYS = (
     "server_config",
     "run_options",
 )
+JOB_RUN_OPTION_KEYS = (
+    "top_k",
+    "steps",
+    "ranking_strategy",
+    "alpha",
+    "beta",
+    "fusion_method",
+    "rrf_k",
+    "fusion_weights",
+    "lower",
+    "remove_hashtag",
+    "hashtag_character",
+    "max_candidates",
+    "include_component_rankings",
+)
 JOB_TABLE_SCHEMAS = {
     "metadata": (
         ("key", "TEXT", 0, 1),
@@ -172,6 +187,7 @@ class SegmentationResult(TypedDict):
         normalized_input: Text after Hashformers preprocessing.
         selected_segmentation: Highest-ranked segmentation.
         ranking_strategy: Component that selected the result.
+        fusion_method: Fusion algorithm requested for ensemble selection.
         candidates: Ranked candidates from the selected component.
         component_rankings: Optional rankings for every component that ran.
     """
@@ -300,6 +316,7 @@ class FileJobStatus(TypedDict):
         reranker_model: Optional model used for reranking.
         reranker_revision: Exact Hub revision used by the reranker, when pinned.
         ranking_strategy: Component used to select output segmentations.
+        fusion_method: Fusion algorithm persisted for ensemble selection.
     """
 
     job_path: str
@@ -2043,6 +2060,63 @@ def _validate_fusion_options(
         raise ValueError("fusion weights must not all be zero")
 
 
+def _validate_fusion_strategy(
+    fusion_method: FusionMethod,
+    strategy: ResolvedRankingStrategy,
+) -> None:
+    """Ensure an RRF request will actually execute an ensemble."""
+    if fusion_method == "rrf" and strategy != "ensemble":
+        raise ValueError(
+            "fusion_method=rrf requires ranking_strategy=ensemble and a "
+            "configured reranker"
+        )
+
+
+def _normalized_fusion_weights(
+    fusion_weights: Mapping[str, float] | None,
+) -> dict[str, float]:
+    """Return explicit, JSON-safe segmenter and reranker weights."""
+    weights = (
+        {"segmenter": 1.0, "reranker": 1.0}
+        if fusion_weights is None
+        else fusion_weights
+    )
+    return {name: float(weights[name]) for name in ("segmenter", "reranker")}
+
+
+def _load_job_run_options(serialized: str) -> dict[str, Any]:
+    """Load and validate the immutable inference contract in a checkpoint."""
+    try:
+        run_options = json.loads(serialized)
+        if not isinstance(run_options, dict) or set(run_options) != set(
+            JOB_RUN_OPTION_KEYS
+        ):
+            raise ValueError
+        if any(
+            not isinstance(run_options[name], bool)
+            for name in ("lower", "remove_hashtag", "include_component_rankings")
+        ):
+            raise ValueError
+        strategy = run_options["ranking_strategy"]
+        if strategy not in {"segmenter", "reranker", "ensemble"}:
+            raise ValueError
+        _validate_runtime_options(
+            run_options["top_k"],
+            run_options["steps"],
+            run_options["alpha"],
+            run_options["beta"],
+            run_options["max_candidates"],
+            run_options["hashtag_character"],
+            run_options["fusion_method"],
+            run_options["rrf_k"],
+            run_options["fusion_weights"],
+        )
+        _validate_fusion_strategy(run_options["fusion_method"], strategy)
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("job checkpoint contains invalid run options") from error
+    return run_options
+
+
 def _resolve_ranking_strategy(strategy: RankingStrategy) -> ResolvedRankingStrategy:
     """Resolve an explicit pipeline component for result selection.
 
@@ -2106,6 +2180,9 @@ def _run_transformer_pipeline(
         steps: Number of beam-search expansion steps.
         alpha: Segmenter-score ensemble weight.
         beta: Reranker-score ensemble weight.
+        fusion_method: ``top2`` compatibility fusion or full-list RRF.
+        rrf_k: Nonnegative RRF rank constant.
+        fusion_weights: Optional RRF component weights.
         strategy: Component used for final selection.
         preprocessing_kwargs: Options forwarded to input preprocessing.
         segmenter_run: Optional precomputed candidate scores.
@@ -2228,6 +2305,7 @@ def _serialize_word_output(
         strategy: Component that selected each result.
         max_candidates: Maximum candidates returned per component.
         include_component_rankings: Whether to include every component rank.
+        fusion_method: Fusion algorithm reported in each serialized result.
 
     Returns:
         Per-input JSON-safe segmentation results.
@@ -2676,7 +2754,7 @@ def _file_job_status(
     total, unique, processed = _job_counts(connection)
     remaining = unique - processed
     server_config = json.loads(metadata["server_config"])
-    run_options = json.loads(metadata["run_options"])
+    run_options = _load_job_run_options(metadata["run_options"])
     return {
         "job_path": str(job_path),
         "input_path": metadata["input_path"],
@@ -3228,6 +3306,9 @@ def segment_hashtags(
         ranking_strategy: Component used to select the final segmentation.
         alpha: Segmenter-score weight used by the ensemble.
         beta: Reranker-score weight used by the ensemble.
+        fusion_method: ``top2`` compatibility fusion or full-list RRF.
+        rrf_k: Nonnegative constant added to each reciprocal rank.
+        fusion_weights: Optional segmenter and reranker RRF weights.
         lower: Whether to lowercase inputs before segmentation.
         remove_hashtag: Whether to strip leading hashtag characters.
         hashtag_character: Character stripped during preprocessing.
@@ -3256,6 +3337,7 @@ def segment_hashtags(
     )
     _require_models_configured()
     strategy = _resolve_ranking_strategy(ranking_strategy)
+    _validate_fusion_strategy(fusion_method, strategy)
     normalized = _normalize_inputs(
         hashtags,
         lower=lower,
@@ -3334,6 +3416,9 @@ def start_hashtag_file_job(
         ranking_strategy: Component used to select final segmentations.
         alpha: Segmenter-score weight used by the ensemble.
         beta: Reranker-score weight used by the ensemble.
+        fusion_method: ``top2`` compatibility fusion or full-list RRF.
+        rrf_k: Nonnegative constant added to each reciprocal rank.
+        fusion_weights: Optional segmenter and reranker RRF weights.
         lower: Whether to lowercase inputs before segmentation.
         remove_hashtag: Whether to strip leading hashtag characters.
         hashtag_character: Character stripped during preprocessing.
@@ -3373,6 +3458,7 @@ def start_hashtag_file_job(
     )
     _require_models_configured()
     resolved_strategy = _resolve_ranking_strategy(ranking_strategy)
+    _validate_fusion_strategy(fusion_method, resolved_strategy)
 
     source = _resolve_file_path(input_path, "input_path", must_exist=True)
     if not source.is_file():
@@ -3414,11 +3500,7 @@ def start_hashtag_file_job(
         "beta": float(beta),
         "fusion_method": fusion_method,
         "rrf_k": float(rrf_k),
-        "fusion_weights": dict(
-            {"segmenter": 1.0, "reranker": 1.0}
-            if fusion_weights is None
-            else fusion_weights
-        ),
+        "fusion_weights": _normalized_fusion_weights(fusion_weights),
         "lower": lower,
         "remove_hashtag": remove_hashtag,
         "hashtag_character": hashtag_character,
@@ -3653,7 +3735,7 @@ def _continue_file_job_sync(
             raise ValueError(
                 "MCP model configuration changed since the job was started"
             )
-        run_options = json.loads(metadata["run_options"])
+        run_options = _load_job_run_options(metadata["run_options"])
         pending_rows = connection.execute(
             """
             SELECT substr(normalized, 1, ?),
@@ -3811,6 +3893,9 @@ def rank_candidates(
         ranking_strategy: Component used to select each result.
         alpha: Segmenter-score weight used by the ensemble.
         beta: Reranker-score weight used by the ensemble.
+        fusion_method: ``top2`` compatibility fusion or full-list RRF.
+        rrf_k: Nonnegative constant added to each reciprocal rank.
+        fusion_weights: Optional segmenter and reranker RRF weights.
         max_candidates: Response limit per ranking, capped at 64.
         include_component_rankings: Whether to return every component rank.
 
@@ -3828,6 +3913,7 @@ def rank_candidates(
     _validate_fusion_options(fusion_method, rrf_k, fusion_weights)
     _validate_max_candidates(max_candidates)
     strategy = _resolve_ranking_strategy(ranking_strategy)
+    _validate_fusion_strategy(fusion_method, strategy)
 
     prepared = []
     total_candidates = 0
