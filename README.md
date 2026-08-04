@@ -1,16 +1,44 @@
-# ✂️ hashformers
+# ✂️ Hashformers
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) [![PyPi license](https://badgen.net/pypi/license/pip/)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE) [![stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
+[![PyPI](https://img.shields.io/pypi/v/hashformers)](https://pypi.org/project/hashformers/)
+[![Python](https://img.shields.io/pypi/pyversions/hashformers)](https://pypi.org/project/hashformers/)
+[![License](https://img.shields.io/pypi/l/hashformers)](https://github.com/ruanchaves/hashformers/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/ruanchaves/hashformers)](https://github.com/ruanchaves/hashformers)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb)
 
-**Hashformers** uses language models and a beam search algorithm to segment text without spaces into words. It is a word segmentation library that fills a gap in the NLP ecosystem between heuristic-based splitters and LLM prompt-based segmentation. It can be used with any language model from the [Hugging Face Model Hub](https://huggingface.co/models), from auto-regressive models like GPT-2 to recent large language models (LLMs).
+**Fast, local, multilingual hashtag and identifier segmentation using
+Transformer language models and beam search.**
 
-<p align="center">
-<h3> <a href="https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb"> ✂️ Google Colab Tutorial </a> </h3>
-</p>
+- **+37.5 percentage-point accuracy advantage** over Qwen3-0.6B on a
+  [fixed 280-item multilingual benchmark](benchmarks/qwen/README.md)
+- **14.1 hashtags/second** on a single NVIDIA T4
+- Available as a **Python library, spaCy component, MCP server, and Agent Skill**
+- Introduced in the [original Hashformers paper](https://arxiv.org/abs/2112.03213)
+  and recognized as **state of the art at
+  [LREC 2022](https://aclanthology.org/2022.lrec-1.782/)**
 
-<p align="center">
-<h3> <a href="https://github.com/ruanchaves/hashformers/blob/master/tutorials/EVALUATION-January_2026.md"> ✂️ Evaluation Report </a> </h3>
-</p>
+[Quick start](#-quick-start) ·
+[Colab tutorial](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) ·
+[Agent workflows](#mcp-and-agent-skill) ·
+[Benchmark](benchmarks/qwen/README.md) ·
+[Hashformers paper](https://arxiv.org/abs/2112.03213) ·
+[LREC 2022 recognition](https://aclanthology.org/2022.lrec-1.782/)
+
+Hashformers uses language models and a beam search algorithm to segment text
+without spaces into words. It fills a gap in the NLP ecosystem between
+heuristic-based splitters and LLM prompt-based segmentation, and it can use
+language models from the [Hugging Face Model Hub](https://huggingface.co/models).
+
+## Benchmark Snapshot
+
+[![Exact-match accuracy for Hashformers and Qwen configurations](docs/assets/hashformers-qwen-benchmark.svg)](benchmarks/qwen/README.md)
+
+On the fixed 280-record benchmark, Hashformers with DistilGPT2 reached 65.0%
+exact-match accuracy, exceeding Qwen3-0.6B by **37.5 percentage points**. The
+chart compares the published configurations and does not make a general claim
+about all LLMs. Hashformers and generative-model throughput measure different
+inference paths; see the [full protocol and artifacts](benchmarks/qwen/README.md)
+for the scoped interpretation.
 
 ---
 
@@ -170,32 +198,28 @@ pip install hashformers[spacy]
 
 ## When to Use Hashformers?
 
-Hashformers is designed to perform hashtag segmentation primarily on consumer
-GPUs. Its Transformer models often outperform LLMs that can run
-locally on GPUs at the same speed and scale, as shown in the
-[Qwen benchmark](benchmarks/qwen/README.md). It can be especially useful when
-both of the following are true:
+Hashformers occupies the middle ground between CPU heuristics and hosted LLM
+APIs: it provides model-backed segmentation while keeping inference local and
+scalable on consumer GPUs.
 
-- You have access to GPU compute. Even when renting a GPU, our
-  [cost projections](benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
-  show Hashformers can be cheaper than major LLM providers at volumes of
-  roughly 120 hashtags or more.
-- Your hashtag segmentation domain is niche enough that heuristic methods such
-  as [SymSpell](https://github.com/wolfgarbe/SymSpell),
-  [Ekphrasis](https://github.com/cbaziotis/ekphrasis),
-  [WordNinja](https://github.com/keredson/wordninja), or
-  [Spiral (Ronin)](https://github.com/casics/spiral) are not accurate enough.
+| Approach | Compute | Domain adaptability | Local/private | Throughput | Agent integration |
+|---|---|---|---|---|---|
+| Heuristic splitters | CPU | Limited by their vocabulary and rules | Yes | High | Limited |
+| Hosted LLM APIs | Remote provider | Broad | Provider-dependent | Cost and rate-limit dependent | Provider-dependent |
+| **Hashformers** | GPU recommended | Selectable Hugging Face backbone | Yes | **14.1 hashtags/s on a T4** | **MCP and Agent Skill** |
 
-Conversely, you may not wish to use Hashformers if:
+Hashformers is a strong fit when you have access to GPU compute and work in a
+niche domain where [SymSpell](https://github.com/wolfgarbe/SymSpell),
+[Ekphrasis](https://github.com/cbaziotis/ekphrasis),
+[WordNinja](https://github.com/keredson/wordninja), or
+[Spiral (Ronin)](https://github.com/casics/spiral) is not accurate enough. The
+[cost projections](benchmarks/qwen/results/2026-08-03-colab-t4-fp16-v3/hosted-api-cost-projection.svg)
+show that even a rented GPU can become competitive with major LLM providers at
+moderate batch sizes.
 
-- Your domain is simple enough for a CPU-based heuristic method.
-- You are segmenting a low volume of hashtags, which may not justify using a
-  local GPU instead of a major LLM provider.
-- You are targeting maximum accuracy at any cost, in which case a cutting-edge
-  model from a major LLM provider may be a better fit.
-
-Hashformers therefore sits in the middle ground between heuristic methods and
-LLM APIs for users with consumer GPUs.
+For simple domains, a CPU heuristic may be the better choice. For low-volume
+jobs or maximum accuracy regardless of cost and privacy, a cutting-edge hosted
+LLM may be a better fit.
 
 ---
 
