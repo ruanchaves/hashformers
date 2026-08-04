@@ -18,6 +18,10 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
+
 from scripts.qwen_benchmark import (
     SCHEMA_VERSION,
     canonical_json,

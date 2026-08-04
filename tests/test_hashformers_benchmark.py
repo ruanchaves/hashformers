@@ -1,3 +1,5 @@
+import subprocess
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -77,6 +79,17 @@ def test_hashformers_model_pins_and_scopes_are_explicit():
             "status": "historical-russian-baseline-refreshed-protocol",
         },
     }
+
+
+def test_runner_is_executable_directly_from_its_script_path():
+    result = subprocess.run(
+        [sys.executable, "scripts/hashformers_benchmark.py", "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "fixed issue #78 samples" in result.stdout
 
 
 def test_model_snapshot_must_resolve_to_requested_commit():
