@@ -96,8 +96,8 @@ class ProbabilityDictionary(object):
             score_field=score_field
         )
         df = df\
-        .sort_values(by=score_field, ascending=True)\
-        .groupby(characters_field)\
+        .sort_values(by=score_field, ascending=True, kind='stable')\
+        .groupby(characters_field, sort=False)\
         .head(k)
         if fill == False and return_dataframe == True:
             return df
@@ -146,9 +146,10 @@ class ProbabilityDictionary(object):
         df = pd.DataFrame(df)
         df = df.sort_values(
             by=[
-                characters_field, 
+                characters_field,
                 score_field
-            ]
+            ],
+            kind='stable'
         )
         return df
     

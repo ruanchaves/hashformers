@@ -2,6 +2,7 @@ from hashformers.beamsearch.data_structures import enforce_prob_dict
 from typing import Any
 from hashformers.segmenter.base_segmenter import BaseSegmenter
 from hashformers.segmenter.data_structures import WordSegmenterOutput
+from hashformers.ensemble.rrf_fusion import ReciprocalRankFusionEnsembler
 
 
 class BaseWordSegmenter(BaseSegmenter):
@@ -76,6 +77,7 @@ class BaseWordSegmenter(BaseSegmenter):
             segmenter_kwargs: dict = {},
             ensembler_kwargs: dict = {},
             reranker_kwargs: dict = {},
+            fusion_method: str = "top2",
             use_reranker: bool = True,
             use_ensembler: bool = True,
             return_ranks: bool = False) -> Any :
@@ -115,8 +117,16 @@ class BaseWordSegmenter(BaseSegmenter):
         if use_reranker and self.reranker_model:
             reranker_run = self.reranker_model.rerank(segmenter_run, **reranker_kwargs)
 
+        if fusion_method not in {"top2", "rrf"}:
+            raise ValueError("fusion_method must be top2 or rrf")
+
         if use_reranker and self.reranker_model and use_ensembler and self.ensembler:
-            ensemble_prob_dict = self.ensembler.run(
+            ensembler = (
+                ReciprocalRankFusionEnsembler()
+                if fusion_method == "rrf"
+                else self.ensembler
+            )
+            ensemble_prob_dict = ensembler.run(
                 segmenter_run,
                 reranker_run,
                 **ensembler_kwargs
@@ -155,5 +165,6 @@ class BaseWordSegmenter(BaseSegmenter):
                 segmenter_rank=segmenter_df,
                 reranker_rank=reranker_df,
                 ensemble_rank=ensembler_df,
-                output=segs
+                output=segs,
+                fusion_method=fusion_method,
             )
