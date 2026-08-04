@@ -20,13 +20,19 @@ Transformer language models and beam search.**
   and recognized as **state of the art at
   [LREC 2022](https://aclanthology.org/2022.lrec-1.782/)**
 
-[Quick start](#-quick-start) ·
-[Colab tutorial](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) ·
-[Codex + Claude Code MCP Colab tutorial](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers_agents_mcp_tutorial.ipynb) ·
-[Agent workflows](#mcp-and-agent-skill) ·
-[Benchmark](benchmarks/qwen/README.md) ·
-[Hashformers paper](https://arxiv.org/abs/2112.03213) ·
-[LREC 2022 recognition](https://aclanthology.org/2022.lrec-1.782/)
+**On this page:** [Quick start](#-quick-start) ·
+[MCP and Agent Skill](#mcp-and-agent-skill) ·
+[When to use Hashformers](#when-to-use-hashformers) ·
+[Research and citations](#-research--citations) ·
+[Contributing](#-contributing) ·
+[Resources](#-resources)
+
+**Try it:** [Python Colab ↗](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers.ipynb) ·
+[Codex + Claude Code MCP Colab ↗](https://colab.research.google.com/github/ruanchaves/hashformers/blob/master/hashformers_agents_mcp_tutorial.ipynb)
+
+**Results and recognition:** [Qwen benchmark](benchmarks/qwen/README.md) ·
+[Original paper ↗](https://arxiv.org/abs/2112.03213) ·
+[LREC 2022 recognition ↗](https://aclanthology.org/2022.lrec-1.782/)
 
 Hashformers uses language models and a beam search algorithm to segment text
 without spaces into words. It fills a gap in the NLP ecosystem between
@@ -78,35 +84,34 @@ ws = WordSegmenter(
 )
 ```
 
-### Reciprocal Rank Fusion
-
-When both a segmenter and reranker are configured, full-list reciprocal rank
-fusion (RRF) can combine every candidate instead of using the default legacy
-`top2` fusion:
+### Optional Reranking and Fusion
 
 ```python
-ranked = ws.segment(
-    ["#icecold"],
+hashtags = ["#icecold"]
+
+# Segmenter only
+segmenter_only = ws.segment(
+    hashtags,
+    use_reranker=False,
+)
+
+# Segmenter and reranker with top2 fusion
+top2 = ws.segment(
+    hashtags,
+    fusion_method="top2",
+)
+
+# Segmenter and reranker with reciprocal rank fusion
+rrf = ws.segment(
+    hashtags,
     fusion_method="rrf",
     rrf_k=60,
-    fusion_weights={"segmenter": 1.0, "reranker": 2.0},
-    return_ranks=True,
+    fusion_weights={
+        "segmenter": 1.0,
+        "reranker": 1.0,
+    },
 )
 ```
-
-For candidate `c`, Hashformers computes
-`RRF(c) = sum(w_i / (rrf_k + rank_i(c)))`. Ranks are one-based competition
-ranks within each input, so tied component scores share the same rank. A
-candidate missing from one component contributes zero for that component.
-Fused ties fall back to the segmenter rank, then reranker rank, then stable
-input order.
-
-Hashformers stores `-RRF(c)` because all its public ranking tables use
-lower-is-better scores. The defaults are `rrf_k=60` and equal
-`segmenter=1.0`, `reranker=1.0` weights. `fusion_method="top2"` remains the
-default and continues to use `alpha` and `beta`; RRF only affects selection
-when a reranker is present and ensemble selection is active. Requesting RRF
-without both raises `ValueError` rather than reporting fusion that did not run.
 
 ### MCP and Agent Skill
 
