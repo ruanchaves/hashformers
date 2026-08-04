@@ -1,7 +1,10 @@
 import asyncio
 import json
+import os
 import sqlite3
 import stat
+import subprocess
+import sys
 from pathlib import Path
 from threading import Event, get_ident
 from unittest.mock import AsyncMock, Mock, patch
@@ -10,6 +13,9 @@ import pandas as pd
 import pytest
 
 Client = pytest.importorskip("mcp").Client
+ClientSession = pytest.importorskip("mcp").ClientSession
+StdioServerParameters = pytest.importorskip("mcp").StdioServerParameters
+stdio_client = pytest.importorskip("mcp").stdio_client
 
 import hashformers.mcp_server as mcp_server
 from hashformers.mcp_server import (
@@ -24,12 +30,27 @@ from hashformers.mcp_server import (
     segment_hashtags,
     start_hashtag_file_job,
 )
+from hashformers.segmenter import BaseWordSegmenter
 from hashformers.segmenter.data_structures import WordSegmenterOutput
 
 requires_secure_file_jobs = pytest.mark.skipif(
     not mcp_server.SUPPORTS_SECURE_FILE_JOBS,
     reason="requires Linux descriptor-backed file operations",
 )
+ROOT = Path(__file__).parent.parent
+
+
+def _source_environment():
+    """Return an environment that imports this checkout in child processes."""
+    environment = os.environ.copy()
+    source_path = str(ROOT / "src")
+    existing_path = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = (
+        f"{source_path}{os.pathsep}{existing_path}"
+        if existing_path
+        else source_path
+    )
+    return environment
 
 
 @pytest.fixture(autouse=True)
@@ -138,7 +159,9 @@ def test_get_segmenter_forwards_complete_startup_configuration_once():
         )
     )
 
-    with patch("hashformers.mcp_server.TransformerWordSegmenter") as segmenter_class:
+    with patch(
+        "hashformers.mcp_server._create_transformer_segmenter"
+    ) as segmenter_class:
         first = get_segmenter()
         second = get_segmenter()
 
@@ -164,8 +187,10 @@ def test_get_segmenter_resolves_auto_device_for_both_models():
     configure_server(ServerConfig(reranker_model="custom/bert"))
 
     with (
-        patch("hashformers.mcp_server.torch.cuda.is_available", return_value=True),
-        patch("hashformers.mcp_server.TransformerWordSegmenter") as segmenter_class,
+        patch("hashformers.mcp_server._cuda_is_available", return_value=True),
+        patch(
+            "hashformers.mcp_server._create_transformer_segmenter"
+        ) as segmenter_class,
     ):
         get_segmenter()
 
@@ -250,7 +275,7 @@ def test_run_transformer_pipeline_delegates_every_option_to_base_segmenter():
     """Verify the compatibility helper forwards every library option exactly.
 
     """
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     segmenter_run = object()
     preprocessing_kwargs = {
         "lower": True,
@@ -260,7 +285,7 @@ def test_run_transformer_pipeline_delegates_every_option_to_base_segmenter():
     expected = _mock_output()
 
     with patch.object(
-        mcp_server.BaseWordSegmenter,
+        BaseWordSegmenter,
         "segment",
         return_value=expected,
     ) as base_segment:
@@ -294,7 +319,7 @@ def test_segment_hashtags_separates_beam_width_from_response_limit():
     """Verify asking for fewer results does not narrow beam search.
 
     """
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     pipeline = Mock(return_value=_mock_output())
 
     with (
@@ -362,7 +387,7 @@ def test_segment_hashtags_returns_all_component_rankings():
 
     """
     configure_server(ServerConfig(reranker_model="custom/bert"))
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     pipeline = Mock(return_value=_mock_output(include_pipeline=True))
 
     with (
@@ -405,7 +430,7 @@ def test_auto_strategy_uses_reranker_only_when_configured():
     """Verify auto preserves the Python pipeline's default selection.
 
     """
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     pipeline = Mock(return_value=_mock_output())
 
     with (
@@ -546,7 +571,7 @@ def test_hashtag_file_job_resumes_deduplicates_and_returns_only_summary(tmp_path
         "#icecold\n#benfica\n#icecold\n#mouraria\n#benfica\n",
         encoding="utf-8",
     )
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     pipeline = Mock(side_effect=_mock_batch_output)
     context = Mock()
     context.report_progress = AsyncMock()
@@ -975,7 +1000,7 @@ def test_continue_hashtag_file_job_uses_checkpoint_after_source_changes(tmp_path
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch("hashformers.mcp_server._run_transformer_pipeline", pipeline),
     ):
@@ -999,7 +1024,7 @@ def test_continue_hashtag_file_job_reconciles_completed_output(tmp_path):
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch(
             "hashformers.mcp_server._run_transformer_pipeline",
@@ -1065,7 +1090,7 @@ def test_file_job_never_overwrites_a_destination_created_during_publish(tmp_path
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch(
             "hashformers.mcp_server._run_transformer_pipeline",
@@ -1196,7 +1221,7 @@ def test_file_job_publication_stays_bound_to_authorized_directory(tmp_path):
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch(
             "hashformers.mcp_server._run_transformer_pipeline",
@@ -1261,7 +1286,7 @@ def test_concurrent_continuations_do_not_duplicate_inference(tmp_path):
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch("hashformers.mcp_server._run_transformer_pipeline", pipeline),
     ):
@@ -1340,7 +1365,7 @@ def test_cancelled_continuation_keeps_its_checkpoint_claim(tmp_path):
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch("hashformers.mcp_server._run_transformer_pipeline", pipeline),
     ):
@@ -1384,7 +1409,7 @@ def test_large_file_finalization_runs_outside_the_event_loop(tmp_path):
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch(
             "hashformers.mcp_server._run_transformer_pipeline",
@@ -1573,7 +1598,7 @@ def test_rank_candidates_passes_precomputed_run_to_reranker_pipeline():
 
     """
     configure_server(ServerConfig(reranker_model="custom/bert"))
-    segmenter = mcp_server.BaseWordSegmenter()
+    segmenter = BaseWordSegmenter()
     pipeline = Mock(
         return_value=WordSegmenterOutput(
             output=["i ce cold"],
@@ -1637,7 +1662,7 @@ def test_rank_candidates_batches_candidate_sets_for_reranking():
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch("hashformers.mcp_server._run_transformer_pipeline", pipeline),
     ):
@@ -1698,7 +1723,7 @@ def test_rank_candidates_isolates_colliding_candidate_sets():
     with (
         patch(
             "hashformers.mcp_server.get_segmenter",
-            return_value=mcp_server.BaseWordSegmenter(),
+            return_value=BaseWordSegmenter(),
         ),
         patch("hashformers.mcp_server._run_transformer_pipeline", pipeline),
     ):
@@ -1777,6 +1802,65 @@ def test_rank_candidates_rejects_invalid_candidate_sets(candidate_sets):
             rank_candidates(candidate_sets, ranking_strategy="segmenter")
 
     get_model.assert_not_called()
+
+
+def test_mcp_module_import_does_not_load_model_runtime():
+    """Keep the MCP handshake independent of ML and Hub imports."""
+    code = """
+import sys
+import hashformers.mcp_server
+
+blocked = {"huggingface_hub", "minicons", "pandas", "torch", "transformers"}
+loaded = sorted(blocked.intersection(sys.modules))
+if loaded:
+    raise SystemExit(f"eagerly loaded runtime dependencies: {loaded}")
+"""
+
+    subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=_source_environment(),
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+
+
+def test_spawned_stdio_server_initializes_within_startup_budget(tmp_path):
+    """Exercise the real console bootstrap below the client timeout."""
+
+    async def list_tools():
+        parameters = StdioServerParameters(
+            command=sys.executable,
+            args=[
+                "-m",
+                "hashformers.mcp_server",
+                "--file-root",
+                str(tmp_path),
+            ],
+            cwd=ROOT,
+            env=_source_environment(),
+        )
+        async with stdio_client(
+            parameters,
+            errlog=subprocess.DEVNULL,
+        ) as streams:
+            async with ClientSession(*streams) as session:
+                await session.initialize()
+                return await session.list_tools()
+
+    listed = asyncio.run(asyncio.wait_for(list_tools(), timeout=10))
+
+    assert {tool.name for tool in listed.tools} == {
+        "sample_hashtag_file",
+        "discover_huggingface_models",
+        "configure_models",
+        "segment_hashtags",
+        "start_hashtag_file_job",
+        "continue_hashtag_file_job",
+        "rank_candidates",
+    }
 
 
 def test_mcp_server_exposes_complete_structured_surface():

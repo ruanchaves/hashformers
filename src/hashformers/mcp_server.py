@@ -2,6 +2,8 @@
 
 """
 
+from __future__ import annotations
+
 import csv
 import hashlib
 import inspect
@@ -20,25 +22,29 @@ from fnmatch import fnmatchcase
 from itertools import islice
 from pathlib import Path
 from threading import Lock
-from typing import Literal, TextIO
+from typing import TYPE_CHECKING, Any, Literal, TextIO
 
 import anyio
-import torch
-from huggingface_hub import HfApi, snapshot_download
 from mcp.server import MCPServer
 from mcp.server.mcpserver import Context
 from mcp.types import ToolAnnotations
 from typing_extensions import NotRequired, TypedDict
 
-from hashformers.beamsearch.data_structures import ProbabilityDictionary
-from hashformers.beamsearch.minicons_lm import (
+from hashformers.batching import (
     DEFAULT_MAX_BATCH_SIZE,
     validate_batch_size,
     validate_max_batch_size,
 )
-from hashformers.segmenter import BaseWordSegmenter
-from hashformers.segmenter.auto import TransformerWordSegmenter
-from hashformers.segmenter.data_structures import WordSegmenterOutput
+
+if TYPE_CHECKING:
+    from huggingface_hub import HfApi
+
+    from hashformers.segmenter.auto import TransformerWordSegmenter
+    from hashformers.segmenter.data_structures import WordSegmenterOutput
+else:
+    HfApi = Any
+    TransformerWordSegmenter = Any
+    WordSegmenterOutput = Any
 
 RankingStrategy = Literal["auto", "segmenter", "reranker", "ensemble"]
 ResolvedRankingStrategy = Literal["segmenter", "reranker", "ensemble"]
@@ -78,9 +84,6 @@ HUB_MODEL_FILE_PATTERNS = (
 )
 SUPPORTED_SCORER_TYPES = frozenset(
     {"gpt2", "bert", "incremental", "masked", "seq2seq"}
-)
-HUB_SUPPORTS_PARAMETER_FILTER = (
-    "num_parameters" in inspect.signature(HfApi.list_models).parameters
 )
 JOB_APPLICATION_ID = 0x48464D52
 JOB_SCHEMA_VERSION = 1
@@ -1279,12 +1282,19 @@ def _resolve_device(device: str, inherited_device: str | None = None) -> str:
         Concrete device string accepted by Hashformers.
     """
     if device == "auto":
-        return "cuda" if torch.cuda.is_available() else "cpu"
+        return "cuda" if _cuda_is_available() else "cpu"
     if device == "inherit":
         if inherited_device is None:
             raise ValueError("inherit requires a resolved segmenter device")
         return inherited_device
     return device
+
+
+def _cuda_is_available() -> bool:
+    """Load PyTorch only when automatic device selection is requested."""
+    import torch
+
+    return torch.cuda.is_available()
 
 
 def _validate_hub_revision(revision: str, name: str) -> None:
@@ -1697,12 +1707,40 @@ def _fetch_and_validate_hub_model(
     )
 
 
+def _create_hub_api() -> HfApi:
+    """Construct the anonymous Hub client only for model operations."""
+    from huggingface_hub import HfApi
+
+    return HfApi()
+
+
+def _hub_supports_parameter_filter() -> bool:
+    """Inspect the installed Hub API lazily for server-side size filtering."""
+    from huggingface_hub import HfApi
+
+    return "num_parameters" in inspect.signature(HfApi.list_models).parameters
+
+
+def _download_model_snapshot(**kwargs) -> str:
+    """Download one pinned model snapshot without importing Hub at startup."""
+    from huggingface_hub import snapshot_download
+
+    return snapshot_download(**kwargs)
+
+
+def _create_transformer_segmenter(**kwargs) -> TransformerWordSegmenter:
+    """Construct the Transformer runtime only for the first inference call."""
+    from hashformers.segmenter.auto import TransformerWordSegmenter
+
+    return TransformerWordSegmenter(**kwargs)
+
+
 def _pinned_model_path(repository_id: str, revision: str | None) -> str:
     """Resolve an exact validated Hub revision into the local cache lazily."""
     if revision is None:
         return repository_id
     try:
-        return snapshot_download(
+        return _download_model_snapshot(
             repo_id=repository_id,
             revision=revision,
             token=False,
@@ -1744,7 +1782,7 @@ def get_segmenter() -> TransformerWordSegmenter:
                     if _server_config.reranker_model is not None
                     else None
                 )
-                _segmenter = TransformerWordSegmenter(
+                _segmenter = _create_transformer_segmenter(
                     segmenter_model_name_or_path=segmenter_path,
                     segmenter_model_type=_server_config.segmenter_model_type,
                     segmenter_device=segmenter_device,
@@ -2075,6 +2113,8 @@ def _run_transformer_pipeline(
     Returns:
         Selected segmentations and every component ranking that ran.
     """
+    from hashformers.segmenter import BaseWordSegmenter
+
     use_reranker, use_ensembler = _strategy_flags(strategy)
     return BaseWordSegmenter.segment(
         segmenter,
@@ -2965,7 +3005,7 @@ def discover_huggingface_models(
     if role not in {"segmenter", "reranker"}:
         raise ValueError("role must be segmenter or reranker")
     _validate_at_most(limit, MAX_MODEL_CANDIDATES, "limit")
-    api = HfApi()
+    api = _create_hub_api()
     list_options = {
         "filter": ("transformers", normalized_language),
         "gated": False,
@@ -2976,7 +3016,7 @@ def discover_huggingface_models(
         "fetch_config": True,
         "token": False,
     }
-    if HUB_SUPPORTS_PARAMETER_FILTER:
+    if _hub_supports_parameter_filter():
         list_options["num_parameters"] = (
             f"max:{_server_config.max_model_parameters}"
         )
@@ -3123,7 +3163,7 @@ def configure_models(
                 )
             return {"configured": True, "models": _selected_models_payload()}
 
-        api = HfApi()
+        api = _create_hub_api()
         segmenter_metadata = _fetch_and_validate_hub_model(
             api,
             segmenter_model,
@@ -3876,6 +3916,9 @@ def rank_candidates(
         Returns:
             None.
         """
+        from hashformers.beamsearch.data_structures import ProbabilityDictionary
+        from hashformers.segmenter.data_structures import WordSegmenterOutput
+
         combined_scores = {
             segmentation: score
             for item in batch

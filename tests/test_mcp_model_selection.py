@@ -264,7 +264,7 @@ def test_discover_huggingface_models_validates_languages_and_exact_revisions(
         language=language,
     )
 
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         result = discover_huggingface_models(language, "segmenter")
 
     assert result["language"] == language
@@ -286,7 +286,7 @@ def test_discover_huggingface_models_validates_languages_and_exact_revisions(
         fetch_config=True,
         token=False,
     )
-    if mcp_server.HUB_SUPPORTS_PARAMETER_FILTER:
+    if mcp_server._hub_supports_parameter_filter():
         expected_list_options["num_parameters"] = (
             f"max:{mcp_server.DEFAULT_MAX_MODEL_PARAMETERS}"
         )
@@ -346,7 +346,7 @@ def test_discovery_skips_unavailable_gated_oversize_custom_and_unloadable_models
         return info
 
     api.model_info.side_effect = model_info
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         result = discover_huggingface_models("en", "segmenter")
 
     assert result["candidates"] == []
@@ -360,7 +360,7 @@ def test_failed_discovery_leaves_deferred_server_unconfigured(tmp_path):
     api = Mock()
     api.list_models.side_effect = OSError("Hub unavailable")
 
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         with pytest.raises(ValueError, match="model discovery failed"):
             discover_huggingface_models("en", "segmenter")
 
@@ -390,7 +390,7 @@ def test_discovery_is_deterministic_and_hard_caps_results(tmp_path):
         repository_id
     ]
 
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         result = discover_huggingface_models("en", "segmenter", limit=2)
 
     assert [candidate["repository_id"] for candidate in result["candidates"]] == [
@@ -406,9 +406,11 @@ def test_configure_models_is_validated_lazy_idempotent_and_immutable(tmp_path):
     _enable_deferred(tmp_path)
     api = _configured_api(include_reranker=True)
     with (
-        patch("hashformers.mcp_server.HfApi", return_value=api),
-        patch("hashformers.mcp_server.snapshot_download") as download,
-        patch("hashformers.mcp_server.TransformerWordSegmenter") as constructor,
+        patch("hashformers.mcp_server._create_hub_api", return_value=api),
+        patch("hashformers.mcp_server._download_model_snapshot") as download,
+        patch(
+            "hashformers.mcp_server._create_transformer_segmenter"
+        ) as constructor,
     ):
         first = configure_models(
             "example/segmenter",
@@ -454,7 +456,7 @@ def test_configuration_failure_does_not_publish_a_partial_selection(tmp_path):
         reranker,
     ]
 
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         with pytest.raises(ValueError, match="gated Hub models"):
             configure_models(
                 "example/segmenter",
@@ -500,7 +502,7 @@ def test_configuration_fails_closed_for_unsupported_or_unbounded_models(
     api = Mock()
     api.model_info.return_value = info
 
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         with pytest.raises(ValueError, match=message):
             configure_models("example/segmenter", SEGMENTER_REVISION)
 
@@ -512,7 +514,7 @@ def test_concurrent_identical_configuration_validates_and_publishes_once(tmp_pat
     """Serialize concurrent configuration calls around one atomic validation."""
     _enable_deferred(tmp_path)
     api = _configured_api()
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         with ThreadPoolExecutor(max_workers=4) as executor:
             results = list(
                 executor.map(
@@ -532,17 +534,17 @@ def test_concurrent_lazy_loading_retains_one_pinned_segmenter_instance(tmp_path)
     """Ensure concurrent inference cannot create multiple resident models."""
     _enable_deferred(tmp_path)
     api = _configured_api()
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         configure_models("example/segmenter", SEGMENTER_REVISION)
 
     resident = object()
     with (
         patch(
-            "hashformers.mcp_server.snapshot_download",
+            "hashformers.mcp_server._download_model_snapshot",
             return_value="/cache/exact-segmenter",
         ) as download,
         patch(
-            "hashformers.mcp_server.TransformerWordSegmenter",
+            "hashformers.mcp_server._create_transformer_segmenter",
             return_value=resident,
         ) as constructor,
     ):
@@ -566,7 +568,7 @@ def test_segmentation_response_records_selected_repository_and_revision(tmp_path
     """Expose exact model identity with every interactive model result."""
     _enable_deferred(tmp_path)
     api = _configured_api()
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         configure_models("example/segmenter", SEGMENTER_REVISION)
 
     rank = pd.DataFrame(
@@ -595,7 +597,7 @@ def test_file_job_status_checkpoint_and_output_record_exact_revision(tmp_path):
     input_path.write_text("#icecold\n", encoding="utf-8")
     _enable_deferred(tmp_path)
     api = _configured_api()
-    with patch("hashformers.mcp_server.HfApi", return_value=api):
+    with patch("hashformers.mcp_server._create_hub_api", return_value=api):
         configure_models("example/segmenter", SEGMENTER_REVISION)
 
     started = start_hashtag_file_job(

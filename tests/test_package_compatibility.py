@@ -1,4 +1,7 @@
+import os
 import runpy
+import subprocess
+import sys
 from pathlib import Path
 
 import setuptools
@@ -7,6 +10,19 @@ import hashformers
 
 
 ROOT = Path(__file__).parent.parent
+
+
+def _source_environment():
+    """Return an environment that imports this checkout instead of an old wheel."""
+    environment = os.environ.copy()
+    source_path = str(ROOT / "src")
+    existing_path = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = (
+        f"{source_path}{os.pathsep}{existing_path}"
+        if existing_path
+        else source_path
+    )
+    return environment
 
 
 def read_setup_kwargs(monkeypatch):
@@ -44,6 +60,64 @@ def test_legacy_regex_and_tweet_apis_are_not_exported():
         "HashtagContainer",
     ):
         assert not hasattr(hashformers, name)
+
+
+def test_package_import_does_not_load_model_runtime():
+    """Keep lightweight submodules usable without importing the ML stack."""
+    code = """
+import sys
+import hashformers
+
+blocked = {"minicons", "pandas", "torch", "transformers"}
+loaded = sorted(blocked.intersection(sys.modules))
+if loaded:
+    raise SystemExit(f"eagerly loaded model dependencies: {loaded}")
+"""
+
+    subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=_source_environment(),
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+
+
+def test_documented_transformer_export_resolves_lazily():
+    """Preserve the documented top-level model import after lazy loading."""
+    from hashformers import TransformerWordSegmenter
+    from hashformers.segmenter.auto import (
+        TransformerWordSegmenter as DirectTransformerWordSegmenter,
+    )
+
+    assert TransformerWordSegmenter is DirectTransformerWordSegmenter
+
+
+def test_lazy_package_preserves_historical_public_names():
+    """Keep the pre-lazy top-level import surface discoverable."""
+    assert set(hashformers.__all__) == {
+        "Any",
+        "BaseSegmenter",
+        "BaseWordSegmenter",
+        "Beamsearch",
+        "DEFAULT_MAX_BATCH_SIZE",
+        "ReciprocalRankFusionEnsembler",
+        "Reranker",
+        "Top2_Ensembler",
+        "TransformerWordSegmenter",
+        "WordSegmenterOutput",
+        "base_segmenter",
+        "beamsearch",
+        "data_structures",
+        "enforce_prob_dict",
+        "ensemble",
+        "evaluation",
+        "experiments",
+        "segmenter",
+    }
+    assert set(hashformers.__all__).issubset(dir(hashformers))
 
 
 def test_mcp_server_is_an_optional_extra(monkeypatch):
